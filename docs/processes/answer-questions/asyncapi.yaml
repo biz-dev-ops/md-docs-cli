@@ -1,0 +1,26 @@
+asyncapi: '2.1.0'
+
+info:
+  title: Contact center service
+  version: 0.0.1
+
+channels:
+
+  questions/answered:
+    subscribe:
+      message:
+        $ref: '#/components/messages/question_answered'
+        
+components:
+
+  messages:
+
+    question_answered:
+      payload:
+        type: object
+        properties:
+          question_id:
+            type: string
+            format: uuid
+        required:
+          - question_id
