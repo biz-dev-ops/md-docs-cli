@@ -1,5 +1,4 @@
 const fs = require("fs").promises;
-const { execSync } = require('child_process');
 const { v4: uuidv4 } = require('uuid');
 const MarkdownIt = require('markdown-it'), md = new MarkdownIt();
 
@@ -8,15 +7,18 @@ md.use(require("markdown-it-table-of-contents"));
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
-
+const SwaggerParser = require("@apidevtools/swagger-parser");
 
 async function run() {
     await init(SRC_ROOT, DIST_ROOT);
     await copyFiles(SRC_ROOT, DIST_ROOT);
-    await transformFiles(SRC_ROOT);
+    await transformFiles(DIST_ROOT);
+    await copyFiles(`${ROOT}/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
+    await copyFiles(`${ROOT}/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
 }
 
 async function copyFiles(src, dst) {
+    await fs.mkdir(dst, { recursive: true });
     await fs.access(src);
     const entries = await fs.readdir(src, { withFileTypes: true });
 
@@ -25,7 +27,6 @@ async function copyFiles(src, dst) {
         const dstEntry = `${dst}/${entry.name}`;
 
         if (entry.isDirectory()) {
-            await fs.mkdir(dstEntry);
             await copyFiles(srcEntry, dstEntry);
         } 
         else {
@@ -51,8 +52,6 @@ async function transformFiles(dir, root = "") {
 }
 
 async function transformFile(file, root) {
-    console.log(file)
-
     await transformMarkDown(file, root);
 }
 
@@ -63,7 +62,7 @@ async function transformMarkDown(file, root) {
     const dst = file.replace(/\.md$/, ".html");
     let html = await renderMarkdown(file, root);
     html = await parseHtml(html, dst, root);
-    html = await addTemplate(html, root);
+    html = HTML_TEMPLATE(root, html, "TODO");
     
     await fs.writeFile(file, html);    
     await fs.rename(file, dst);
@@ -84,10 +83,6 @@ async function parseHtml(html, file, root) {
     await removeEmptyParagraphs(fragment, file);
     
     return fragment.firstChild.outerHTML;
-}
-
-async function addTemplate(html) {
-    return HTML_TEMPLATE(html);
 }
 
 async function parseAnchors(fragment, file, root) {
@@ -114,7 +109,7 @@ async function parseBPMNAnchor(anchor, file) {
     if(!anchor.href.endsWith(".bpmn"))
         return;
 
-    const id = uuidv4();
+    const id = `bpmn-container-${uuidv4()}`;
     const xml = (await readFileAsString(relativeFileLocation(file, anchor.href)))
         .replace(/(\r\n|\n|\r)/gm, "")
         .replace("'", "\'");
@@ -139,13 +134,16 @@ async function parseOpenapiAnchor(anchor, file, root) {
     if(!anchor.href.endsWith("openapi.yaml"))
         return;
 
-    const src = getRelativePath(relativeFileLocation(file, anchor.href));    
-
     const parent = anchor.parentNode;
     const container = parent.parentNode;
-    const fragment = JSDOM.fragment(OPENAPI_TEMPLATE(root, `${src}`));
+    const fragment = JSDOM.fragment(OPENAPI_TEMPLATE());
     container.insertBefore(fragment, parent);
     parent.removeChild(anchor);
+
+    const id = `openapi-container-${uuidv4()}`;
+    const dst = relativeFileLocation(file, `${anchor.href.substring(0, anchor.href.length - 5)}.html`);
+    const json = await SwaggerParser.validate(relativeFileLocation(file, anchor.href));
+    fs.writeFile(dst, SWAGGER_UI_TEMPLATE(id, root, JSON.stringify(json)));
 
     console.log(`Parsed openapi anchor in ${file}`);    
 }
@@ -160,20 +158,7 @@ async function parseAsyncApiAnchor(anchor, file) {
 async function init(src, dst) {
     await fs.rm(dst, { recursive: true, force: true });
     await fs.access(src);
-    await fs.mkdir(dst);
-    await copySwaggerUiFiles(`${ROOT}/node_modules/swagger-ui-dist`, `${dst}/assets/swagger-ui-dist`);    
-}
-
-async function copySwaggerUiFiles(src, dst) {
-    await fs.access(src);
-    await fs.mkdir(dst, { recursive: true });
-    const entries = await fs.readdir(src, { withFileTypes: true });
-
-    for (let entry of entries) {
-        const srcEntry = `${src}/${entry.name}`;
-        const dstEntry = `${dst}/${entry.name}`;
-        await fs.copyFile(srcEntry, dstEntry);
-    }
+    await fs.mkdir(dst);    
 }
 
 function getPath(file) {
@@ -181,7 +166,7 @@ function getPath(file) {
 }
 
 function getRelativePath(path, root = DIST_ROOT) {
-    return path.replace(root, "");
+    return path.replace(root, "").substr(1);
 }
 
 function relativeFileLocation(src, ref) {
@@ -194,11 +179,28 @@ async function readFileAsString(file, encoding = "utf8") {
 }
 
 const ROOT = require('path').resolve('./');
-const SRC_ROOT = require('path').resolve('./docs');
-const DIST_ROOT = require('path').resolve('./dist');
-const MARKDOWN_TEMPLATE = (markdown) => `[[toc]]${markdown}`;
-const HTML_CONTENT_TEMPLATE = (html) => `<div class="content">${html}</div>`;
-const HTML_TEMPLATE = (content) => content;
+const SRC_ROOT = require('path').resolve('./docs/');
+const DIST_ROOT = require('path').resolve('./dist/');
+const MARKDOWN_TEMPLATE = (markdown) => `[[toc]]\n${markdown}`;
+const HTML_CONTENT_TEMPLATE = (html) => `<div id="canvas">${html}</div>`;
+const HTML_TEMPLATE = (root, content, title) => `<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>${title}</title>
+    <script src="${root}assets/bpmn-js-dist/bpmn-viewer.production.min.js"></script>
+    <style>
+        html, body, #canvas {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    ${content}
+</body>
+</html>`;
 const BPMN_TEMPLATE = (id, xml, href) => `<div id="${id}" class="bpmn"></div>
 <script>
     const xml = '${xml}';
@@ -206,17 +208,75 @@ const BPMN_TEMPLATE = (id, xml, href) => `<div id="${id}" class="bpmn"></div>
         container: "#${id}"
     });
 
-    try {
-        const { warnings } = await viewer.importXML(xml);
-        if(warnings) {
-            console.log("Warnings while rendering bpmn file: ${href}", warnings);
-        }
-    } 
-    catch (err) {
-        console.log("Error rendering bpmn file: ${href}", err);
-    }
+    viewer.importXML(xml)
+        .then(response => {
+            if(response.warnings.length > 0) {
+                console.log("Warnings while rendering bpmn file: ${href}", response.warnings);
+            }            
+        })
+        .catch(error => {
+            console.log("Error rendering bpmn file: ${href}", error);
+        });
 </script>`;
-const OPENAPI_TEMPLATE = (root, url) => `<iframe src="${root}assets/swagger-ui-dist/index.html?yaml=${url}" />`
+const OPENAPI_TEMPLATE = () => `<iframe class="openapi" src="openapi.html" />`
+const SWAGGER_UI_TEMPLATE = (id, root, json) => `<!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="${root}assets/swagger-ui-dist/swagger-ui.css" />
+    <link rel="icon" type="image/png" href="${root}assets/swagger-ui-dist/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="${root}assets/swagger-ui-dist/favicon-16x16.png" sizes="16x16" />
+    <style>
+      html
+      {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
+      }
+
+      *,
+      *:before,
+      *:after
+      {
+        box-sizing: inherit;
+      }
+
+      body
+      {
+        margin:0;
+        background: #fafafa;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="${id}"></div>
+
+    <script src="${root}assets/swagger-ui-dist/swagger-ui-bundle.js" charset="UTF-8"> </script>
+    <script src="${root}assets/swagger-ui-dist/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+    <script>
+    window.onload = function() {
+      // Begin Swagger UI call region
+      const ui = SwaggerUIBundle({
+        spec: ${json},
+        dom_id: '#${id}',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ]
+      });
+      // End Swagger UI call region
+
+      window.ui = ui;
+    };
+  </script>
+  </body>
+</html>`;
 
 run();
 
