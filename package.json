@@ -16,13 +16,20 @@
   },
   "homepage": "https://github.com/arjangeertsema/living-documentation#readme",
   "devDependencies": {
+    "@asyncapi/html-template": "^0.23.7",
+    "@asyncapi/parser": "^1.9.0",
     "bpmn-js": "^8.7.3",
     "jsdom": "^17.0.0",
     "markdown-it": "^12.2.0",
     "markdown-it-anchor": "^8.3.0",
-    "markdown-it-table-of-contents": "^0.5.2",
+    "markdown-it-container": "^3.0.0",
+    "markdown-it-multimd-table": "^4.1.0",
+    "markdown-it-plantuml-ex": "^1.0.0",
+    "markdown-it-toc-done-right": "^4.2.0",
+    "mustache": "^4.2.0",
     "swagger-parser": "^10.0.3",
     "swagger-ui-dist": "^3.52.2",
     "uuid": "^8.3.2"
-  }
+  },
+  "dependencies": {}
 }
