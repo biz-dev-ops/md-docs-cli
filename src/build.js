@@ -173,6 +173,7 @@ async function parseHtml(html, file, root) {
     
     await parseAnchors(fragment, file, root);
     await removeEmptyParagraphs(fragment, file);
+    await addHeadingContainers(fragment)
     
     return fragment;
 }
@@ -188,13 +189,48 @@ async function parseAnchors(fragment, file, root) {
     }
 }
 
-async  function removeEmptyParagraphs(framents, file) {
-    const paragraphs = framents.querySelectorAll("p");
+async  function removeEmptyParagraphs(fragment, file) {
+    const paragraphs = fragment.querySelectorAll("p");
     for (let p of paragraphs) {
         if(p.innerHTML === "") {            
             p.parentNode.removeChild(p);
             console.log(`Removed empty paragraph from ${file}`);
         }
+    }
+}
+
+async function addHeadingContainers(fragment) {
+    const el = fragment.firstChild.firstChild;
+    const container = JSDOM.fragment("<div></div>").firstChild;    
+    addToHeadingContainer(el, container, 0);
+    el.parentNode.appendChild(container);
+}
+
+function addToHeadingContainer(el, container, level) {
+    while (el) {
+        let next = el.nextSibling;        
+        if(el.localName && el.localName.match(/^h\d{1,}$/)) {            
+            const newLevel = Number.parseInt(el.localName.substring((1)));
+            
+            if(newLevel > level) {
+                const newContainer = JSDOM.fragment(HEADER_CONTAINER_TEMPLATE(el.localName)).firstChild;
+                container.appendChild(newContainer);
+                newContainer.appendChild(el);
+                next = addToHeadingContainer(next, newContainer, newLevel);
+            }
+            else {
+                return el;
+            }
+        }
+        else {
+            if(level === 0 && el.localName && el.localName === "nav") {
+                //skip level 0 nav element
+            }
+            else {
+                container.appendChild(el);
+            }
+        }
+        el = next;
     }
 }
 
@@ -311,6 +347,8 @@ const MARKDOWN_TEMPLATE = (markdown) => `[[toc]]
 ${markdown}`;
 
 const HTML_CONTENT_TEMPLATE = `<article>{{{html}}}</article>`;
+
+const HEADER_CONTAINER_TEMPLATE = (h) => `<div class="header-container ${h}"></div>`;
 
 const MENU_TEMPLATE = (root) => `
 {{#has_items}}
