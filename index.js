@@ -31,9 +31,9 @@ async function run() {
     await copyFiles(SRC_ROOT, DIST_ROOT);
     const menu = await getMenu(DIST_ROOT)    
     await transformFiles(DIST_ROOT, menu);
-    await copyFiles(`${ROOT}/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
-    await copyFiles(`${ROOT}/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
-    await copyFiles(`${ROOT}/node_modules/@asyncapi/html-template/template`, `${DIST_ROOT}/assets/asyncapi/html-template`);
+    await copyFiles(`${ROOT}/node_modules/living-documentation/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
+    await copyFiles(`${ROOT}/node_modules/living-documentation/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
+    await copyFiles(`${ROOT}/node_modules/living-documentation/node_modules/@asyncapi/html-template/template`, `${DIST_ROOT}/assets/asyncapi/html-template`);
 }
 
 async function copyFiles(src, dst) {

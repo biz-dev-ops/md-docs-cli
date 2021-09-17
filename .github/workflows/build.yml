@@ -1,4 +1,4 @@
-name: Node.js CI
+name: PUBLISH
 
 on:
   push:
@@ -14,33 +14,13 @@ jobs:
     steps:
       - name: Checkout git repo
         uses: actions/checkout@v2
-      - name: Azure login
-        uses: azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: '14.x'
       - name: Install dependencies
         run: npm install
-      - name: Build website
-        run: npm run build
-      - name: Upload to blob storage
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.0.72
-          inlineScript: |
-            az storage blob upload-batch --account-name synionstorage -d 'www-live-documentation-nl' -s ./dist
-      #- name: Purge CDN endpoint
-      #  uses: azure/CLI@v1
-      #  with:
-      #    azcliversion: 2.0.72
-      #    inlineScript: |
-      #      az cdn endpoint purge --content-paths  "/*" --profile-name "synion-cdn" --name "live-documentation-www" --resource-group "synion"
-      - name: Azure logout
-        run: |
-          az logout
-        if: always()
-
-
+      - name: Publish package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM }}

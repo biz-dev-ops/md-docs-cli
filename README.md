@@ -1,4 +1,4 @@
-# Living documentation example
+# Living documentation
 
 This script copies every file and directory from the **docs** directory into the **dist** directory. After copying it transforms every `*.md` file into a html file while adding the following features:
 
@@ -15,18 +15,16 @@ This script copies every file and directory from the **docs** directory into the
 
 All links are relative so you do not need a webserver.
 
-## To run
-
-1. npm install
-1. npm run build
-
 ## To get started
 
 ```
-npm install
+mkdir documentation
+cd documentation
+npm init
+npm install living-documentation -D
 mkdir docs
 echo "# It works!" > docs/index.md
-npm run build
+node node_modules/living-documentation
 google-chrome dist/index.html
 ```
 
