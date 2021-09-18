@@ -1,6 +1,6 @@
 {
   "name": "@synion/md-docs",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
   "keywords": [
     "cli",
@@ -27,7 +27,7 @@
     "url": "https://github.com/arjangeertsema/living-documentation/issues"
   },
   "homepage": "https://github.com/arjangeertsema/living-documentation#readme",
-  "devDependencies": {
+  "dependencies": {
     "@asyncapi/html-template": "^0.23.7",
     "@asyncapi/parser": "^1.9.0",
     "bpmn-js": "^8.7.3",
@@ -42,6 +42,5 @@
     "swagger-parser": "^10.0.3",
     "swagger-ui-dist": "^3.52.2",
     "uuid": "^8.3.2"
-  },
-  "dependencies": {}
+  }
 }
