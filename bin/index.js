@@ -6,11 +6,8 @@ const { v4: uuidv4 } = require('uuid');
 const markdown_it_anchor = require('markdown-it-anchor')
 const md = require('markdown-it')({  html: true, linkify: true, typographer: true })
     .use(markdown_it_anchor, {  
-        permalink: markdown_it_anchor.permalink.linkAfterHeader({
-            symbol: "¶",
-            style: 'visually-hidden',
-            assistiveText: title => `Permalink to “${title}”`,
-            visuallyHiddenClass: 'visually-hidden'
+        permalink: markdown_it_anchor.permalink.linkInsideHeader({
+            symbol: "¶"            
         })
     })
     .use(require("markdown-it-multimd-table"))
@@ -21,6 +18,7 @@ const md = require('markdown-it')({  html: true, linkify: true, typographer: tru
         level: [1,2,3]
     })
     .use(require('markdown-it-plantuml-ex'));
+
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const SwaggerParser = require("@apidevtools/swagger-parser");
@@ -217,10 +215,10 @@ function addToHeadingContainer(el, container, level) {
             const newLevel = Number.parseInt(el.localName.substring((1)));
             
             if(newLevel > level) {
-                const newContainer = JSDOM.fragment(HEADER_CONTAINER_TEMPLATE(el.localName)).firstChild;
-                container.appendChild(newContainer);
-                newContainer.appendChild(el);
-                next = addToHeadingContainer(next, newContainer, newLevel);
+                const headerContainer = JSDOM.fragment(HEADER_CONTAINER_TEMPLATE(el.localName)).firstChild;
+                container.appendChild(headerContainer);
+                headerContainer.getElementsByClassName("header")[0].appendChild(el);
+                next = addToHeadingContainer(next, headerContainer.getElementsByClassName("container")[0], newLevel);
             }
             else {
                 return el;
@@ -353,7 +351,10 @@ ${markdown}`;
 
 const HTML_CONTENT_TEMPLATE = `<article>{{{html}}}</article>`;
 
-const HEADER_CONTAINER_TEMPLATE = (h) => `<div class="header-container ${h}"></div>`;
+const HEADER_CONTAINER_TEMPLATE = (h) => `<div class="header-container ${h}">
+    <div class="header"></div>
+    <div class="container"></div>
+</div>`;
 
 const MENU_TEMPLATE = (root) => `
 {{#has_items}}
