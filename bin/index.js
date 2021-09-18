@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 const fs = require("fs").promises;
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
@@ -27,13 +29,13 @@ const AsyncApiParser = require("@asyncapi/parser");
 
 
 async function run() {
-    await init(SRC_ROOT, DIST_ROOT);
-    await copyFiles(SRC_ROOT, DIST_ROOT);
+    await init(DOCS_ROOT, DIST_ROOT);
+    await copyFiles(DOCS_ROOT, DIST_ROOT);
     const menu = await getMenu(DIST_ROOT)    
     await transformFiles(DIST_ROOT, menu);
-    await copyFiles(`${ROOT}/node_modules/living-documentation/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
-    await copyFiles(`${ROOT}/node_modules/living-documentation/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
-    await copyFiles(`${ROOT}/node_modules/living-documentation/node_modules/@asyncapi/html-template/template`, `${DIST_ROOT}/assets/asyncapi/html-template`);
+    await copyFiles(`${MODULE_ROOT}/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
+    await copyFiles(`${MODULE_ROOT}/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
+    await copyFiles(`${MODULE_ROOT}/node_modules/@asyncapi/html-template/template`, `${DIST_ROOT}/assets/asyncapi/html-template`);
 }
 
 async function copyFiles(src, dst) {
@@ -144,6 +146,8 @@ async function transformMarkDown(file, menu, root) {
     
     await fs.writeFile(file, html);    
     await fs.rename(file, dst);
+
+    console.log(`Transformed markdown file ${file}`);
 }
 
 function createTitleFromPath(file) {
@@ -339,9 +343,10 @@ async function readFileAsString(file, encoding = "utf8") {
     return content.toString(encoding);
 }
 
-const ROOT = require('path').resolve('./');
-const SRC_ROOT = require('path').resolve('./docs/');
-const DIST_ROOT = require('path').resolve('./dist/');
+const MODULE_ROOT = `${__dirname}/..`
+const ROOT = path.resolve('./');
+const DOCS_ROOT = `${ROOT}/docs`;
+const DIST_ROOT = `${ROOT}/dist`;
 
 const MARKDOWN_TEMPLATE = (markdown) => `[[toc]]
 ${markdown}`;
@@ -508,4 +513,3 @@ const ASYNCAPI_TEMPLATE = `<!DOCTYPE html>
 </html>`;
 
 run();
-

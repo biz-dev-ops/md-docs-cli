@@ -1,9 +1,21 @@
 {
-  "name": "living-documentation",
+  "name": "@synion/md-docs",
   "version": "0.0.1",
   "description": "",
-  "scripts": {
-    "build": "node index.js"
+  "keywords": [
+    "cli",
+    "markdown",
+    "md",
+    "openapi",
+    "asyncapi",
+    "bpmn",
+    "bdd",
+    "feature",
+    "documentation",
+    "generator"
+  ],
+  "bin": {
+    "md-docs": "./bin/index.js"
   },
   "repository": {
     "type": "git",

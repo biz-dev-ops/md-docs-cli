@@ -18,13 +18,12 @@ All links are relative so you do not need a webserver.
 ## To get started
 
 ```
+npm install @synion/md-docs -g
 mkdir documentation
 cd documentation
-npm init
-npm install living-documentation -D
 mkdir docs
 echo "# It works!" > docs/index.md
-node node_modules/living-documentation
+md-docs
 google-chrome dist/index.html
 ```
 
