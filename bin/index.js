@@ -31,6 +31,7 @@ async function run() {
     await copyFiles(DOCS_ROOT, DIST_ROOT);
     const menu = await getMenu(DIST_ROOT)    
     await transformFiles(DIST_ROOT, menu);
+    await copyFiles(`${MODULE_ROOT}/assets`, `${DIST_ROOT}/assets`);
     await copyFiles(`${MODULE_ROOT}/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
     await copyFiles(`${MODULE_ROOT}/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
     await copyFiles(`${MODULE_ROOT}/node_modules/@asyncapi/html-template/template`, `${DIST_ROOT}/assets/asyncapi/html-template`);
@@ -379,15 +380,11 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>{{title}}</title>
+	<title>{{title}}</title>    
+    <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />
+    <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-16x16.png" sizes="16x16" />
     <script src="{{{root}}}assets/bpmn-js-dist/bpmn-viewer.production.min.js"></script>
-    <style>
-        html, body, #canvas {
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -400,6 +397,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     <footer>
 
     </footer>
+    <script src="{{{root}}}assets/script.js" charset="UTF-8"> </script>
 </body>
 </html>`;
 
