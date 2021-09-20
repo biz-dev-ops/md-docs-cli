@@ -216,7 +216,12 @@ function getTitleFromFileName(file) {
 
 function formatTitle(title) {
     if(title === "dist")
-    return index === -1 ? repository : repository.substr(index + 1);e.slice(1)
+        title = "home";
+
+    if(title.indexOf(".") > -1)
+        title = title.substring(0, title.indexOf("."))
+
+    return title.charAt(0).toUpperCase() + title.slice(1)
         .replace("-", " ");
 }
 
