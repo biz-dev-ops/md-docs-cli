@@ -158,6 +158,9 @@ function getGitInfo() {
     const repository = getGitRepository(origin);
     const main_branch = execSync(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`).toString("utf8").trim();
 
+    console.log(`**************************origin: ${origin}`);
+    console.log(`**************************repository: ${repository}`);
+
     return { branch, main_branch, is_feature_branch: branch != main_branch, repository  };
 }
 
