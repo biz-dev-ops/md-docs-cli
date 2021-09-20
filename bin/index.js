@@ -24,13 +24,14 @@ const { JSDOM } = jsdom;
 const SwaggerParser = require("@apidevtools/swagger-parser");
 const Mustache = require('mustache');
 const AsyncApiParser = require("@asyncapi/parser");
-
+const { execSync } = require('child_process');
 
 async function run() {
     await init(DOCS_ROOT, DIST_ROOT);
     await copyFiles(DOCS_ROOT, DIST_ROOT);
-    const menu = await getMenu(DIST_ROOT)    
-    await transformFiles(DIST_ROOT, menu);
+    const menu = await getMenu(DIST_ROOT);
+    const git = getGitInfo();
+    await transformFiles(DIST_ROOT, menu, git);
     await copyFiles(`${MODULE_ROOT}/assets`, `${DIST_ROOT}/assets`);
     await copyFiles(`${MODULE_ROOT}/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
     await copyFiles(`${MODULE_ROOT}/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
@@ -55,7 +56,7 @@ async function copyFiles(src, dst) {
     }
 }
 
-async function transformFiles(dir, menu, root = "") {
+async function transformFiles(dir, menu, git, root = "") {
     await fs.access(dir);
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -63,10 +64,10 @@ async function transformFiles(dir, menu, root = "") {
         const src = `${dir}/${entry.name}`;
 
         if (entry.isDirectory()) {
-            await transformFiles(src, menu, `${root}../`);
+            await transformFiles(src, menu, git, `${root}../`);
         } 
         else {
-            await transformFile(src, menu, root);
+            await transformFile(src, menu, git, root);
         }
     }
 }
@@ -129,11 +130,11 @@ function renderMenu(root, menu) {
     });
 }
 
-async function transformFile(file, menu, root) {
-    var html = await transformMarkDown(file, menu, root);
+async function transformFile(file, menu, git, root) {
+    var html = await transformMarkDown(file, menu, git, root);
 }
 
-async function transformMarkDown(file, menu, root) {
+async function transformMarkDown(file, menu, git, root) {
     if(!file.endsWith(".md"))
         return;    
 
@@ -142,12 +143,22 @@ async function transformMarkDown(file, menu, root) {
     const dst = file.replace(/\.md$/, ".html");
     await parseHtml(response.template, dst, root);
     
-    const html = Mustache.render(HTML_TEMPLATE, { root, menu: renderMenu(root, menu), content: response.template.innerHTML, title: response.title });
+    const html = Mustache.render(HTML_TEMPLATE, { git, git_string: JSON.stringify(git), root, menu: renderMenu(root, menu), content: response.template.innerHTML, title: response.title });
     
     await fs.writeFile(file, html);    
     await fs.rename(file, dst);
 
     console.log(`Transformed markdown file ${file}`);
+}
+
+function getGitInfo() {
+    const branch = execSync(`git rev-parse --abbrev-ref HEAD`).toString("utf8").trim();
+    const remote = execSync(`git remote`).toString("utf8").trim();
+    const origin = execSync(`git config --get remote.origin.url`).toString("utf8").trim();
+    const repository = origin.substring(origin.indexOf(":") + 1, origin.lastIndexOf(".git"));
+    const main_branch = execSync(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`).toString("utf8").trim();
+
+    return { branch, main_branch, is_feature_branch: branch != main_branch, repository  };
 }
 
 function getTitle(file, markdown) {
@@ -308,7 +319,7 @@ async function parseOpenapiAnchor(anchor, file, root) {
     parent.removeChild(anchor);
     
     const json = await SwaggerParser.validate(relativeFileLocation(file, anchor.href));
-    const html = Mustache.render(OPENAPI_TEMPLATE, { root, json: JSON.stringify(json) });
+    const html = Mustache.render(OPENAPI_TEMPLATE, { root, json_string: JSON.stringify(json) });
     fs.writeFile(dst, html);
 
     console.log(`Parsed openapi anchor in ${file}`);    
@@ -423,39 +434,49 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />
     <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-16x16.png" sizes="16x16" />
-    <script src="{{{root}}}assets/bpmn-js-dist/bpmn-viewer.production.min.js"></script>
 </head>
-<body>
+<body class="{{#git.is_feature_branch}}is_feature_branch{{/git.is_feature_branch}}">
     <header>
         <span class="title">{{title}}</title>
-        <nav>
+        <nav id="main_menu">
             {{{menu}}}
         </nav>
+        <nav id="git_branch_menu">
+            <span>{{git.branch}}</span>
+        </nav>
+        <a href="https://github.com/{{git.repository}}/tree/{{git.branch}}" class="github">GitHub</a>
     </header>    
     {{{content}}}
     <footer>
 
     </footer>
+    <script src="{{{root}}}assets/bpmn-js-dist/bpmn-viewer.production.min.js"></script>
     <script src="{{{root}}}assets/script.js" charset="UTF-8"> </script>
+    <script type="module">  
+        import { Octokit } from "https://cdn.skypack.dev/@octokit/core";      
+        useOctokit(Octokit, "{{{root}}}", {{{git_string}}});
+    </script>
 </body>
 </html>`;
 
 const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
 <script>
-    const xml = '{{{xml}}}';
-    const viewer = new BpmnJS({
-        container: "#{{id}}"
-    });
-
-    viewer.importXML(xml)
-        .then(response => {
-            if(response.warnings.length > 0) {
-                console.log("Warnings while rendering bpmn file: {{href}}", response.warnings);
-            }            
-        })
-        .catch(error => {
-            console.log("Error rendering bpmn file: {{href}}", error);
+    window.onload = function() {
+        const xml = '{{{xml}}}';
+        const viewer = new BpmnJS({
+            container: "#{{id}}"
         });
+
+        viewer.importXML(xml)
+            .then(response => {
+                if(response.warnings.length > 0) {
+                    console.log("Warnings while rendering bpmn file: {{href}}", response.warnings);
+                }            
+            })
+            .catch(error => {
+                console.log("Error rendering bpmn file: {{href}}", error);
+            });
+    };
 </script>`;
 
 const FEATURE_TEMPLATE = `<pre><code class="feature">{{feature}}</code></pre>`;
@@ -505,7 +526,7 @@ const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
     window.onload = function() {
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
-        spec: {{{json}}},
+        spec: {{{json_string}}},
         dom_id: '#root',
         deepLinking: true,
         presets: [
