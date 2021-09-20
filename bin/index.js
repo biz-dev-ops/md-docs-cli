@@ -90,7 +90,7 @@ async function getMenu(src, parent = null, path = "") {
         const dir = `${src}/${entry.name}`;
         if (entry.isDirectory()) {
             const subItems = await getMenu(dir,  entry.name, `${path}${entry.name}/`);
-            const name = entry.name.replace("-", " ");
+            const name = formatTitle(entry.name.replace("-", " "));
 
             try {
                 await fs.access(`${dir}/index.md`);
@@ -137,11 +137,12 @@ async function transformMarkDown(file, menu, root) {
     if(!file.endsWith(".md"))
         return;    
 
+    const response = await renderMarkdown(file, root);
+    
     const dst = file.replace(/\.md$/, ".html");
-    const renderedHtml = await renderMarkdown(file, root);
-    const fragment = await parseHtml(renderedHtml, dst, root);
-    const title = createTitleFromPath(dst);
-    const html = Mustache.render(HTML_TEMPLATE, { root, menu: renderMenu(root, menu), content: fragment.firstChild.outerHTML, title });
+    await parseHtml(response.template, dst, root);
+    
+    const html = Mustache.render(HTML_TEMPLATE, { root, menu: renderMenu(root, menu), content: response.template.innerHTML, title: response.title });
     
     await fs.writeFile(file, html);    
     await fs.rename(file, dst);
@@ -149,40 +150,77 @@ async function transformMarkDown(file, menu, root) {
     console.log(`Transformed markdown file ${file}`);
 }
 
-function createTitleFromPath(file) {
-    let title = null;
-    if(file.endsWith("index.html")) {
-        title = path.basename(path.dirname(file));
-    }
-    else {
-        title = path.basename(file);
-        title = title.substring(0, title.lastIndexOf("."));
+function getTitle(file, markdown) {
+    let response = getTitleFromMarkdown(markdown);
+    if(response.title != undefined)
+        return response;
+
+    response.title = getTitleFromFileName(file);
+    return response;
+}
+
+function getTitleFromMarkdown(markdown) {
+    let response = { title: null, markdown: null };
+    if(markdown == undefined)
+        return response;
+
+    const lines = markdown.split("\n");    
+    if(lines.length == 0) {
+        lines.push(markdown);
+    }    
+    
+    if(!lines[0].startsWith("# ")) {
+        response.markdown = markdown;
+        return response;
     }
 
-    title = title.replace("-", " ");
-    return title;
+    response.title = lines.shift().substring(2).trim();
+    response.markdown = lines.join("\n").trim();
+    return response;
+}
+
+function getTitleFromFileName(file) {
+    if(file.endsWith("index.md")) {
+        return formatTitle(path.basename(path.dirname(file)));
+    }
+    else {    
+        return formatTitle(path.basename(file));
+    }
+}
+
+function formatTitle(title) {
+    if(title === "dist")
+        title = "home";
+
+    if(title.indexOf(".") > -1)
+        title = title.substring(0, title.indexOf("."))
+
+    return title.charAt(0).toUpperCase() + title.slice(1)
+        .replace("-", " ");
 }
 
 async function renderMarkdown(file) {
     const content = await readFileAsString(file);
-    const markdown = MARKDOWN_TEMPLATE(content)
-    let html = md.render(markdown);
+    const response = getTitle(file, content);
+    let html = md.render(MARKDOWN_TEMPLATE(response.markdown));
     html = Mustache.render(HTML_CONTENT_TEMPLATE, { html });
-    return html;
+
+    const template = JSDOM.fragment("<div></div>").firstElementChild;
+    template.innerHTML = html;
+
+    return { template, title: response.title };
 }
 
-async function parseHtml(html, file, root) {
-    const fragment = JSDOM.fragment(html);
+async function parseHtml(template, file, root) {    
+    await parseAnchors(template, file, root);
+    await removeEmptyParagraphs(template, file);
+    await addHeadingContainers(template)
     
-    await parseAnchors(fragment, file, root);
-    await removeEmptyParagraphs(fragment, file);
-    await addHeadingContainers(fragment)
-    
-    return fragment;
+    return template;
 }
 
-async function parseAnchors(fragment, file, root) {
-    const anchors = fragment.querySelectorAll("a");
+async function parseAnchors(template, file, root) {
+    const anchors = template.querySelectorAll("a");
     for (let anchor of anchors) {
         await parseBPMNAnchor(anchor, file, root);
         await parseOpenapiAnchor(anchor, file, root);
@@ -192,8 +230,8 @@ async function parseAnchors(fragment, file, root) {
     }
 }
 
-async  function removeEmptyParagraphs(fragment, file) {
-    const paragraphs = fragment.querySelectorAll("p");
+async  function removeEmptyParagraphs(template, file) {
+    const paragraphs = template.querySelectorAll("p");
     for (let p of paragraphs) {
         if(p.innerHTML === "") {            
             p.parentNode.removeChild(p);
@@ -202,11 +240,12 @@ async  function removeEmptyParagraphs(fragment, file) {
     }
 }
 
-async function addHeadingContainers(fragment) {
-    const el = fragment.firstChild.firstChild;
-    const container = JSDOM.fragment("<div></div>").firstChild;    
+async function addHeadingContainers(template) {
+    const el = template.querySelector("article").firstChild;
+    const container = JSDOM.fragment("<div></div>").firstElementChild;    
     addToHeadingContainer(el, container, 0);
-    el.parentNode.appendChild(container);
+    if(container.childNodes.length > 0)
+        el.parentNode.appendChild(container);
 }
 
 function addToHeadingContainer(el, container, level) {
@@ -216,7 +255,7 @@ function addToHeadingContainer(el, container, level) {
             const newLevel = Number.parseInt(el.localName.substring((1)));
             
             if(newLevel > level) {
-                const headerContainer = JSDOM.fragment(HEADER_CONTAINER_TEMPLATE(el.localName)).firstChild;
+                const headerContainer = JSDOM.fragment(HEADER_CONTAINER_TEMPLATE(el.localName)).firstElementChild;
                 container.appendChild(headerContainer);
                 headerContainer.getElementsByClassName("header")[0].appendChild(el);
                 next = addToHeadingContainer(next, headerContainer.getElementsByClassName("container")[0], newLevel);
