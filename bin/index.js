@@ -158,18 +158,22 @@ function getGitInfo() {
     const repository = getGitRepository(origin);
     const main_branch = execSync(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`).toString("utf8").trim();
 
-    console.log(`**************************origin: ${origin}`);
-    console.log(`**************************repository: ${repository}`);
+    console.log(`Git origin: ${origin}`);
 
     return { branch, main_branch, is_feature_branch: branch != main_branch, repository  };
 }
 
 function getGitRepository(origin) {
-    const parts = origin.substring(0, origin.lastIndexOf(".git")).split("/");
+    const parts = origin.trim().split("/");
+    let repository = `${parts[parts.length - 2]}/${parts[parts.length - 1]}`;
+    if(repository.endsWith(".git"))
+        repository = repository.substring(0, repository.length - 4);
 
-    const repository = `${parts[parts.length - 2]}/${parts[parts.length - 1]}`;
     const index = repository.indexOf(":");
-    return index === -1 ? repository : repository.substr(index + 1);
+    if(index > -1)
+        repository = repository.substr(index + 1);
+
+    return repository;
 }
 
 function getTitle(file, markdown) {
@@ -212,12 +216,7 @@ function getTitleFromFileName(file) {
 
 function formatTitle(title) {
     if(title === "dist")
-        title = "home";
-
-    if(title.indexOf(".") > -1)
-        title = title.substring(0, title.indexOf("."))
-
-    return title.charAt(0).toUpperCase() + title.slice(1)
+    return index === -1 ? repository : repository.substr(index + 1);e.slice(1)
         .replace("-", " ");
 }
 
