@@ -155,10 +155,18 @@ function getGitInfo() {
     const branch = execSync(`git rev-parse --abbrev-ref HEAD`).toString("utf8").trim();
     const remote = execSync(`git remote`).toString("utf8").trim();
     const origin = execSync(`git config --get remote.origin.url`).toString("utf8").trim();
-    const repository = origin.substring(origin.indexOf(":") + 1, origin.lastIndexOf(".git"));
+    const repository = getGitRepository(origin);
     const main_branch = execSync(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`).toString("utf8").trim();
 
     return { branch, main_branch, is_feature_branch: branch != main_branch, repository  };
+}
+
+function getGitRepository(origin) {
+    const parts = origin.substring(0, origin.lastIndexOf(".git")).split("/");
+
+    const repository = `${parts[parts.length - 2]}/${parts[parts.length - 1]}`;
+    const index = repository.indexOf(":");
+    return index === -1 ? repository : repository.substr(index + 1);
 }
 
 function getTitle(file, markdown) {
