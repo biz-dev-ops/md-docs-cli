@@ -1,7 +1,13 @@
 function useOctokit(Octokit, root, git) {        
     const octokit = new Octokit();
-    const base_href = new URL(root, window.location.href).href;
-    const path = window.location.href.substr(base_href.length);
+
+    let base_url = new URL(`${root}`, window.location.href).href;
+    if(base_url.endsWith("index.html")) {
+        base_url = base_url.substr(0, base_url.lastIndexOf("index.html"));
+    }
+
+    const path = window.location.href.substr(base_url.length);
+    const root_url = git.is_feature_branch ? new URL(`../`, base_url).href : base_url;
 
     const menu = document.getElementById("git_branch_menu");    
     menu
@@ -21,14 +27,14 @@ function useOctokit(Octokit, root, git) {
 
             for (let branch of branches.data) {
                 branch.is_main_branch = branch.name === git.main_branch;
-                branch.base_url = `${base_href}${branch.is_main_branch ? "" : branchToPath(branch.name)}`;
+                branch.base_url = `${root_url}${branch.is_main_branch ? "" : featureBranchToPath(branch.name) + "/"}`;
                 branch.url = `${branch.base_url}${path}`;
                 branch.url_exists = await urlExists(branch.url);
 
                 const li = document.createElement("li");
                 
                 const a = document.createElement("a");
-                a.href = branch.url_exists ? branch.url : branch.base_url;
+                a.href = branch.url_exists ? branch.url : `${branch.base_url}index.html`;
                 a.innerText = branch.name;
 
                 li.appendChild(a);
@@ -40,13 +46,6 @@ function useOctokit(Octokit, root, git) {
             
             menu.classList.remove("loading");
         };
-};
-
-function branchToPath(branch) {
-    return branch
-        .replace("/", "-")
-        .replace(" ", "-")
-        .toLowerCase() + "/";
 };
 
 const urlExists = url => new Promise((resolve) => {
@@ -64,6 +63,9 @@ const urlExists = url => new Promise((resolve) => {
             case '2':
                 request.abort();
                 resolve(true);
+            case '3':
+                request.abort();
+                resolve(true);
             default:
                 request.abort();
                 resolve(false);
@@ -72,3 +74,10 @@ const urlExists = url => new Promise((resolve) => {
     
     request.send('');
 });
+
+function featureBranchToPath(branch) {
+    return "x-" + branch
+        .replace("/", "-")
+        .replace(" ", "-")
+        .toLowerCase();
+};

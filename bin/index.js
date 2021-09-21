@@ -27,11 +27,10 @@ const AsyncApiParser = require("@asyncapi/parser");
 const { execSync } = require('child_process');
 
 async function run() {
+    const menu_data = await getMenu(DOCS_ROOT);
     await init(DOCS_ROOT, DIST_ROOT);
-    await copyFiles(DOCS_ROOT, DIST_ROOT);
-    const menu = await getMenu(DIST_ROOT);
-    const git = getGitInfo();
-    await transformFiles(DIST_ROOT, menu, git);
+    await copyFiles(DOCS_ROOT, DIST_ROOT);    
+    await transformFiles(DIST_ROOT, menu_data);
     await copyFiles(`${MODULE_ROOT}/assets`, `${DIST_ROOT}/assets`);
     await copyFiles(`${MODULE_ROOT}/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
     await copyFiles(`${MODULE_ROOT}/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
@@ -56,7 +55,7 @@ async function copyFiles(src, dst) {
     }
 }
 
-async function transformFiles(dir, menu, git, root = "") {
+async function transformFiles(dir, menu_data, root = "") {
     await fs.access(dir);
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -64,165 +63,43 @@ async function transformFiles(dir, menu, git, root = "") {
         const src = `${dir}/${entry.name}`;
 
         if (entry.isDirectory()) {
-            await transformFiles(src, menu, git, `${root}../`);
+            await transformFiles(src, menu_data, `${root}../`);
         } 
         else {
-            await transformFile(src, menu, git, root);
+            await transformFile(src, menu_data, root);
         }
     }
 }
 
-async function getMenu(src, parent = null, path = "") {
-    const items = [];
-
-    if(parent == undefined) {
-        items.push({
-            name: "home",
-            url: `index.html`,
-            has_url: true,
-            has_items: false,
-            items: false
-        });
-    }
-
-    const entries = await fs.readdir(src, { withFileTypes: true });
-
-    for (let entry of entries) {
-        const dir = `${src}/${entry.name}`;
-        if (entry.isDirectory()) {
-            const subItems = await getMenu(dir,  entry.name, `${path}${entry.name}/`);
-            const name = formatTitle(entry.name.replace("-", " "));
-
-            try {
-                await fs.access(`${dir}/index.md`);
-
-                items.push({
-                    name: name,
-                    url: `${path}${entry.name}/index.html`,
-                    has_url: true,
-                    has_items: subItems.has_items,
-                    items: subItems.items
-                });
-            }
-            catch {
-                if(subItems.has_items) {
-                    items.push({
-                        name: name,
-                        has_url: false,
-                        has_items: subItems.has_items,
-                        items: subItems.items
-                    });
-                }
-            }            
-        } 
-    }
-    
-    return {
-        has_items: items.length > 0,
-        items: items.length === 0 ? false : items
-    };
+async function transformFile(file, menu_data, root) {
+    var html = await transformMarkDown(file, menu_data, root);
 }
 
-function renderMenu(root, menu) {
-    const template = MENU_TEMPLATE(root);
-    return Mustache.render(template, menu, {
-        "sub_menu": template
-    });
-}
-
-async function transformFile(file, menu, git, root) {
-    var html = await transformMarkDown(file, menu, git, root);
-}
-
-async function transformMarkDown(file, menu, git, root) {
+async function transformMarkDown(file, menu_data, root) {
     if(!file.endsWith(".md"))
         return;    
 
     const response = await renderMarkdown(file, root);
     
     const dst = file.replace(/\.md$/, ".html");
+
     await parseHtml(response.template, dst, root);
-    
-    const html = Mustache.render(HTML_TEMPLATE, { git, git_string: JSON.stringify(git), root, menu: renderMenu(root, menu), content: response.template.innerHTML, title: response.title });
+   
+    const data = { 
+        git: GIT, 
+        git_string: JSON.stringify(GIT), 
+        root, 
+        menu: renderMenu(root, menu_data), 
+        content: response.template.innerHTML, 
+        title: response.title 
+    };
+
+    const html = Mustache.render(HTML_TEMPLATE, data);
     
     await fs.writeFile(file, html);    
     await fs.rename(file, dst);
 
     console.log(`Transformed markdown file ${file}`);
-}
-
-function getGitInfo() {
-    const branch = execSync(`git rev-parse --abbrev-ref HEAD`).toString("utf8").trim();
-    const remote = execSync(`git remote`).toString("utf8").trim();
-    const origin = execSync(`git config --get remote.origin.url`).toString("utf8").trim();
-    const repository = getGitRepository(origin);
-    const main_branch = execSync(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`).toString("utf8").trim();
-
-    console.log(`Git origin: ${origin}`);
-
-    return { branch, main_branch, is_feature_branch: branch != main_branch, repository  };
-}
-
-function getGitRepository(origin) {
-    const parts = origin.trim().split("/");
-    let repository = `${parts[parts.length - 2]}/${parts[parts.length - 1]}`;
-    if(repository.endsWith(".git"))
-        repository = repository.substring(0, repository.length - 4);
-
-    const index = repository.indexOf(":");
-    if(index > -1)
-        repository = repository.substr(index + 1);
-
-    return repository;
-}
-
-function getTitle(file, markdown) {
-    let response = getTitleFromMarkdown(markdown);
-    if(response.title != undefined)
-        return response;
-
-    response.title = getTitleFromFileName(file);
-    return response;
-}
-
-function getTitleFromMarkdown(markdown) {
-    let response = { title: null, markdown: null };
-    if(markdown == undefined)
-        return response;
-
-    const lines = markdown.split("\n");    
-    if(lines.length == 0) {
-        lines.push(markdown);
-    }    
-    
-    if(!lines[0].startsWith("# ")) {
-        response.markdown = markdown;
-        return response;
-    }
-
-    response.title = lines.shift().substring(2).trim();
-    response.markdown = lines.join("\n").trim();
-    return response;
-}
-
-function getTitleFromFileName(file) {
-    if(file.endsWith("index.md")) {
-        return formatTitle(path.basename(path.dirname(file)));
-    }
-    else {    
-        return formatTitle(path.basename(file));
-    }
-}
-
-function formatTitle(title) {
-    if(title === "dist")
-        title = "home";
-
-    if(title.indexOf(".") > -1)
-        title = title.substring(0, title.indexOf("."))
-
-    return title.charAt(0).toUpperCase() + title.slice(1)
-        .replace("-", " ");
 }
 
 async function renderMarkdown(file) {
@@ -380,18 +257,72 @@ async function parseMarkdownAnchor(anchor, file) {
     if(!anchor.href.endsWith(".md") && !anchor.href.includes(".md#"))
         return;
 
-    if(anchor.href.endsWith(".md"))
+    if(anchor.href.endsWith(".md")) {
         anchor.href = `${anchor.href.substring(0, anchor.href.length - 3)}.html`;
-    else
+    }
+    else {
         anchor.href = anchor.href.replace(".md#", ".html#");
+    }
 
     console.log(`Parsed markdown anchor in ${file}`);
 }
 
-async function init(src, dst) {
-    await fs.rm(dst, { recursive: true, force: true });
-    await fs.access(src);
-    await fs.mkdir(dst);    
+async function getMenu(src, parent = null, path = "") {
+    const items = [];
+
+    if(parent == undefined) {
+        items.push({
+            name: "home",
+            url: `index.html`,
+            has_url: true,
+            has_items: false,
+            items: false
+        });
+    }
+
+    const entries = await fs.readdir(src, { withFileTypes: true });
+
+    for (let entry of entries) {
+        const dir = `${src}/${entry.name}`;
+        if (entry.isDirectory()) {
+            const subItems = await getMenu(dir,  entry.name, `${path}${entry.name}/`);
+            const name = formatTitle(entry.name.replace("-", " "));
+
+            try {
+                await fs.access(`${dir}/index.md`);
+
+                items.push({
+                    name: name,
+                    url: `${path}${entry.name}/index.html`,
+                    has_url: true,
+                    has_items: subItems.has_items,
+                    items: subItems.items
+                });
+            }
+            catch {
+                if(subItems.has_items) {
+                    items.push({
+                        name: name,
+                        has_url: false,
+                        has_items: subItems.has_items,
+                        items: subItems.items
+                    });
+                }
+            }            
+        } 
+    }
+    
+    return {
+        has_items: items.length > 0,
+        items: items.length === 0 ? false : items
+    };
+}
+
+function renderMenu(root, menu_data) {
+    const template = MENU_TEMPLATE(root);
+    return Mustache.render(template, menu_data, {
+        "sub_menu": template
+    });
 }
 
 function getPath(file) {
@@ -407,10 +338,103 @@ async function readFileAsString(file, encoding = "utf8") {
     return content.toString(encoding);
 }
 
+function getGitInfo() {
+    const branch = execSync(`git rev-parse --abbrev-ref HEAD`).toString("utf8").trim();
+    const remote = execSync(`git remote`).toString("utf8").trim();
+    const origin = execSync(`git config --get remote.origin.url`).toString("utf8").trim();
+    const repository = getGitRepository(origin);
+    const main_branch = execSync(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`).toString("utf8").trim();
+    const path = branch != main_branch ? featureBranchToPath(branch) : "";
+
+    return { 
+        branch, 
+        main_branch, 
+        is_feature_branch: branch != main_branch, 
+        repository,
+        path
+    };
+}
+
+function getGitRepository(origin) {
+    const parts = origin.trim().split("/");
+    let repository = `${parts[parts.length - 2]}/${parts[parts.length - 1]}`;
+    if(repository.endsWith(".git"))
+        repository = repository.substring(0, repository.length - 4);
+
+    const index = repository.indexOf(":");
+    if(index > -1)
+        repository = repository.substr(index + 1);
+
+    return repository;
+}
+
+function featureBranchToPath(branch) {
+    return "/x-" + branch
+        .replace("/", "-")
+        .replace(" ", "-")
+        .toLowerCase();
+}
+
+function getTitle(file, markdown) {
+    let response = getTitleFromMarkdown(markdown);
+    if(response.title != undefined)
+        return response;
+
+    response.title = getTitleFromFileName(file);
+    return response;
+}
+
+function getTitleFromMarkdown(markdown) {
+    let response = { title: null, markdown: null };
+    if(markdown == undefined)
+        return response;
+
+    const lines = markdown.split("\n");    
+    if(lines.length == 0) {
+        lines.push(markdown);
+    }    
+    
+    if(!lines[0].startsWith("# ")) {
+        response.markdown = markdown;
+        return response;
+    }
+
+    response.title = lines.shift().substring(2).trim();
+    response.markdown = lines.join("\n").trim();
+    return response;
+}
+
+function getTitleFromFileName(file) {
+    if(file.endsWith("index.md")) {
+        return formatTitle(path.basename(path.dirname(file)));
+    }
+    else {    
+        return formatTitle(path.basename(file));
+    }
+}
+
+function formatTitle(title) {
+    if(title === "dist")
+        title = "home";
+
+    if(title.indexOf(".") > -1)
+        title = title.substring(0, title.indexOf("."))
+
+    return title.charAt(0).toUpperCase() + title.slice(1)
+        .replace("-", " ");
+}
+
+async function init(src, dst) {
+    await fs.rm(dst, { recursive: true, force: true });
+    await fs.access(src);
+    await fs.mkdir(dst, { recursive: true });
+}
+
+const GIT = getGitInfo();
 const MODULE_ROOT = `${__dirname}/..`
 const ROOT = path.resolve('./');
 const DOCS_ROOT = `${ROOT}/docs`;
-const DIST_ROOT = `${ROOT}/dist`;
+const DIST_ROOT = `${ROOT}/dist${GIT.path}`;
 
 const MARKDOWN_TEMPLATE = (markdown) => `[[toc]]
 ${markdown}`;
@@ -450,16 +474,16 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-16x16.png" sizes="16x16" />
 </head>
-<body class="{{#git.is_feature_branch}}is_feature_branch{{/git.is_feature_branch}}">
+<body class="{{#git.is_feature_branch}}feature{{/git.is_feature_branch}}">
     <header>
         <span class="title">{{title}}</title>
         <nav id="main_menu">
             {{{menu}}}
         </nav>
         <nav id="git_branch_menu">
-            <span>{{git.branch}}</span>
+            <span>{{{git.branch}}}</span>
         </nav>
-        <a href="https://github.com/{{git.repository}}/tree/{{git.branch}}" class="github">GitHub</a>
+        <a href="https://github.com/{{{git.repository}}}/tree/{{{git.branch}}}" class="github">GitHub</a>
     </header>    
     {{{content}}}
     <footer>
