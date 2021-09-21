@@ -7,10 +7,10 @@ function __init(root, git) {
     const path = window.location.href.substr(base_url.length);
     const root_url = git.is_feature_branch ? new URL(`../`, base_url).href : base_url;
 
-    const menu = document.getElementById("git_branch_menu");    
+    const menu = document.getElementById("git-branch-menu");    
     menu
         .onclick = async () => {
-            const items_el = document.getElementById("git_branch_menu_items");
+            const items_el = document.getElementById("git-branch-menu-items");
             if(items_el != undefined) {
                 items_el.style.visibility = items_el.style.visibility == "visible" ? "hidden" : "visible";
                 return;
@@ -21,7 +21,7 @@ function __init(root, git) {
             const branches = await getBranches(`${root_url}branches.json`) ?? git.branches;
 
             const ul = document.createElement("ul");
-            ul.id = "git_branch_menu_items";
+            ul.id = "git-branch-menu-items";
 
             for (let branch of branches) {
                 branch.base_url = `${root_url}${branch.is_feature_branch ? featureBranchToPath(branch.name) + "/" : ""}`;

@@ -111,7 +111,7 @@ async function transformMarkDown(file, menu_data, git, root) {
 async function renderMarkdown(file) {
     const content = await readFileAsString(file);
     const response = getTitle(file, content);
-    let html = md.render(MARKDOWN_TEMPLATE(response.markdown));
+    let html = md.render(`[[toc]] ${response.markdown}`);
     html = Mustache.render(HTML_CONTENT_TEMPLATE, { html });
 
     const template = JSDOM.fragment("<div></div>").firstElementChild;
@@ -175,7 +175,10 @@ function addToHeadingContainer(el, container, level) {
         }
         else {
             if(level === 0 && el.localName && el.localName === "nav") {
-                //skip level 0 nav element
+                const parentNode = el.parentNode;
+                const tocContainer =  JSDOM.fragment(TOC_CONTAINER_TEMPLATE);
+                parentNode.insertBefore(tocContainer, el);
+                parentNode.querySelector("#toc-container").appendChild(el);
             }
             else {
                 container.appendChild(el);
@@ -461,8 +464,12 @@ const MODULE_ROOT = `${__dirname}/..`
 const DOCS_ROOT = path.resolve(`./docs`);
 const DIST_ROOT = path.resolve(`./dist`);
 
-const MARKDOWN_TEMPLATE = (markdown) => `[[toc]]
-${markdown}`;
+const TOC_CONTAINER_TEMPLATE = `<div>
+    <div>
+        <h2>on this page</h2>
+    </div>
+    <div id="toc-container"></div>
+</div>`;
 
 const HTML_CONTENT_TEMPLATE = `<article>{{{html}}}</article>`;
 
@@ -502,10 +509,10 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 <body class="{{#git.is_feature_branch}}feature{{/git.is_feature_branch}}">
     <header>
         <span class="title">{{title}}</title>
-        <nav id="main_menu">
+        <nav class="main-menu">
             {{{menu}}}
         </nav>
-        <nav id="git_branch_menu">
+        <nav id="git-branch-menu">
             <span>{{{git.branch}}}</span>
         </nav>
         <a href="https://github.com/{{{git.repository}}}/tree/{{{git.branch}}}" class="github">GitHub</a>
