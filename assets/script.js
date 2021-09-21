@@ -1,6 +1,4 @@
-function useOctokit(Octokit, root, git) {        
-    const octokit = new Octokit();
-
+function __init(root, git) {        
     let base_url = new URL(`${root}`, window.location.href).href;
     if(base_url.endsWith("index.html")) {
         base_url = base_url.substr(0, base_url.lastIndexOf("index.html"));
@@ -20,14 +18,13 @@ function useOctokit(Octokit, root, git) {
 
             menu.classList.add("loading");
 
-            const branches = await octokit.request(`GET /repos/${git.repository}/branches`);
+            const branches = await getBranches(`${root_url}branches.json`) ?? git.branches;
 
             const ul = document.createElement("ul");
             ul.id = "git_branch_menu_items";
 
-            for (let branch of branches.data) {
-                branch.is_main_branch = branch.name === git.main_branch;
-                branch.base_url = `${root_url}${branch.is_main_branch ? "" : featureBranchToPath(branch.name) + "/"}`;
+            for (let branch of branches) {
+                branch.base_url = `${root_url}${branch.is_feature_branch ? featureBranchToPath(branch.name) + "/" : ""}`;
                 branch.url = `${branch.base_url}${path}`;
                 branch.url_exists = await urlExists(branch.url);
 
@@ -48,31 +45,36 @@ function useOctokit(Octokit, root, git) {
         };
 };
 
-const urlExists = url => new Promise((resolve) => {
-    let request = new XMLHttpRequest;
-    request.open('GET', url, true);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    request.setRequestHeader('Accept', '*/*');
-    request.onerror = () => {
-        resolve(false);
-    };
-    request.onprogress = (event) => {
-        let status = event.target.status;
-        let statusFirstNumber = (status).toString()[0];
-        switch (statusFirstNumber) {
-            case '2':
-                request.abort();
-                resolve(true);
-            case '3':
-                request.abort();
-                resolve(true);
-            default:
-                request.abort();
-                resolve(false);
+const urlExists = url => new Promise((resolve, reject) => {
+    try {
+        let request = new XMLHttpRequest;
+        request.open('GET', url, true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        request.setRequestHeader('Accept', '*/*');
+        request.onerror = () => {
+            resolve(false);
         };
-    };
-    
-    request.send('');
+        request.onprogress = (event) => {
+            let status = event.target.status;
+            let statusFirstNumber = (status).toString()[0];
+            switch (statusFirstNumber) {
+                case '2':
+                    request.abort();
+                    resolve(true);
+                case '3':
+                    request.abort();
+                    resolve(true);
+                default:
+                    request.abort();
+                    resolve(false);
+            };
+        };
+        
+        request.send('');
+    }
+    catch(ex) {
+        reject(ex);
+    }
 });
 
 function featureBranchToPath(branch) {
@@ -81,3 +83,14 @@ function featureBranchToPath(branch) {
         .replace(" ", "-")
         .toLowerCase();
 };
+
+async function getBranches(url) {
+    try {
+        const data = await fetch(url);
+        console.log(data);
+        return JSON.parse(data);
+    }
+    catch {
+        return null
+    }
+}

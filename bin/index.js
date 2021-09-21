@@ -21,20 +21,26 @@ const md = require('markdown-it')({  html: true, linkify: true, typographer: tru
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
-const SwaggerParser = require("@apidevtools/swagger-parser");
+const SwaggerParser = require("@apidevtools/swagger-parser");``
 const Mustache = require('mustache');
 const AsyncApiParser = require("@asyncapi/parser");
-const { execSync } = require('child_process');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+const { Octokit } = require("octokit");
 
 async function run() {
     const menu_data = await getMenu(DOCS_ROOT);
-    await init(DOCS_ROOT, DIST_ROOT);
-    await copyFiles(DOCS_ROOT, DIST_ROOT);    
-    await transformFiles(DIST_ROOT, menu_data);
-    await copyFiles(`${MODULE_ROOT}/assets`, `${DIST_ROOT}/assets`);
-    await copyFiles(`${MODULE_ROOT}/node_modules/swagger-ui-dist`, `${DIST_ROOT}/assets/swagger-ui-dist`);
-    await copyFiles(`${MODULE_ROOT}/node_modules/bpmn-js/dist`, `${DIST_ROOT}/assets/bpmn-js-dist`);
-    await copyFiles(`${MODULE_ROOT}/node_modules/@asyncapi/html-template/template`, `${DIST_ROOT}/assets/asyncapi/html-template`);
+    const git = await getGitInfo();
+    const DIST_BRANCH_ROOT = path.resolve(`./dist${git.path}`);
+
+    await init(DOCS_ROOT, DIST_BRANCH_ROOT);
+    await createGitBranchFile(DIST_ROOT, git.branches);
+    await copyFiles(DOCS_ROOT, DIST_BRANCH_ROOT);    
+    await transformFiles(DIST_BRANCH_ROOT, menu_data, git);
+    await copyFiles(`${MODULE_ROOT}/assets`, `${DIST_BRANCH_ROOT}/assets`);
+    await copyFiles(`${MODULE_ROOT}/node_modules/swagger-ui-dist`, `${DIST_BRANCH_ROOT}/assets/swagger-ui-dist`);
+    await copyFiles(`${MODULE_ROOT}/node_modules/bpmn-js/dist`, `${DIST_BRANCH_ROOT}/assets/bpmn-js-dist`);
+    await copyFiles(`${MODULE_ROOT}/node_modules/@asyncapi/html-template/template`, `${DIST_BRANCH_ROOT}/assets/asyncapi/html-template`);
 }
 
 async function copyFiles(src, dst) {
@@ -55,7 +61,7 @@ async function copyFiles(src, dst) {
     }
 }
 
-async function transformFiles(dir, menu_data, root = "") {
+async function transformFiles(dir, menu_data, git, root = "") {
     await fs.access(dir);
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -63,19 +69,19 @@ async function transformFiles(dir, menu_data, root = "") {
         const src = `${dir}/${entry.name}`;
 
         if (entry.isDirectory()) {
-            await transformFiles(src, menu_data, `${root}../`);
+            await transformFiles(src, menu_data, git, `${root}../`);
         } 
         else {
-            await transformFile(src, menu_data, root);
+            await transformFile(src, menu_data, git, root);
         }
     }
 }
 
-async function transformFile(file, menu_data, root) {
-    var html = await transformMarkDown(file, menu_data, root);
+async function transformFile(file, menu_data, git, root) {
+    var html = await transformMarkDown(file, menu_data, git, root);
 }
 
-async function transformMarkDown(file, menu_data, root) {
+async function transformMarkDown(file, menu_data, git, root) {
     if(!file.endsWith(".md"))
         return;    
 
@@ -86,8 +92,8 @@ async function transformMarkDown(file, menu_data, root) {
     await parseHtml(response.template, dst, root);
    
     const data = { 
-        git: GIT, 
-        git_string: JSON.stringify(GIT), 
+        git,
+        git_string: JSON.stringify(git), 
         root, 
         menu: renderMenu(root, menu_data), 
         content: response.template.innerHTML, 
@@ -338,20 +344,28 @@ async function readFileAsString(file, encoding = "utf8") {
     return content.toString(encoding);
 }
 
-function getGitInfo() {
-    const branch = execSync(`git rev-parse --abbrev-ref HEAD`).toString("utf8").trim();
-    const remote = execSync(`git remote`).toString("utf8").trim();
-    const origin = execSync(`git config --get remote.origin.url`).toString("utf8").trim();
+async function getGitInfo() {
+    const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
+    const remote = await __exec(`git remote`);
+    const origin = await __exec(`git config --get remote.origin.url`);
     const repository = getGitRepository(origin);
-    const main_branch = execSync(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`).toString("utf8").trim();
+    const main_branch = await __exec(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`);
     const path = branch != main_branch ? featureBranchToPath(branch) : "";
+    const branches = (await new Octokit().request(`GET /repos/${repository}/branches`))
+        .data
+            .map(b => ({
+                name: b.name,
+                is_feature_branch: b.name != main_branch 
+            }))
+            .sort((a, b) => `${a.is_feature_branch ? "z" : "a"}${a.name}`.localeCompare(`${b.is_feature_branch ? "z" : "a"}${b.name}`));
 
     return { 
         branch, 
         main_branch, 
         is_feature_branch: branch != main_branch, 
         repository,
-        path
+        path,
+        branches
     };
 }
 
@@ -424,17 +438,28 @@ function formatTitle(title) {
         .replace("-", " ");
 }
 
+async function createGitBranchFile(dst, branches) {
+    await fs.writeFile(`${dst}/branches.json`, JSON.stringify(branches));
+}
+
+async function __exec(command) {
+    const { stdout, stderr } = await exec(command);
+    
+    if(stderr.trim() != "")
+        throw stderr.trim();
+
+    return stdout.trim();
+}
+
 async function init(src, dst) {
     await fs.rm(dst, { recursive: true, force: true });
     await fs.access(src);
     await fs.mkdir(dst, { recursive: true });
 }
 
-const GIT = getGitInfo();
 const MODULE_ROOT = `${__dirname}/..`
-const ROOT = path.resolve('./');
-const DOCS_ROOT = `${ROOT}/docs`;
-const DIST_ROOT = `${ROOT}/dist${GIT.path}`;
+const DOCS_ROOT = path.resolve(`./docs`);
+const DIST_ROOT = path.resolve(`./dist`);
 
 const MARKDOWN_TEMPLATE = (markdown) => `[[toc]]
 ${markdown}`;
@@ -491,9 +516,8 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     </footer>
     <script src="{{{root}}}assets/bpmn-js-dist/bpmn-viewer.production.min.js"></script>
     <script src="{{{root}}}assets/script.js" charset="UTF-8"> </script>
-    <script type="module">  
-        import { Octokit } from "https://cdn.skypack.dev/@octokit/core";      
-        useOctokit(Octokit, "{{{root}}}", {{{git_string}}});
+    <script> 
+        __init("{{{root}}}", {{{git_string}}});
     </script>
 </body>
 </html>`;
