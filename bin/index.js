@@ -364,6 +364,7 @@ async function getGitInfo() {
         .data
             .map(b => ({
                 name: b.name,
+                path: b.name == main_branch ? "" : featureBranchToPath(b.name),
                 is_feature_branch: b.name != main_branch 
             }))
             .sort((a, b) => `${a.is_feature_branch ? "z" : "a"}${a.name}`.localeCompare(`${b.is_feature_branch ? "z" : "a"}${b.name}`));

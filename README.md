@@ -18,8 +18,8 @@ All links are relative so you do not need a webserver.
 ## To get started
 
 ```
-npm install @synion/md-docs -g
-mkdir documentation
+npm link
+mkdir ../documentation
 cd documentation
 mkdir docs
 echo "# It works!" > docs/index.md

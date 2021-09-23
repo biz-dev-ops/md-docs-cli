@@ -24,7 +24,7 @@ function __init(root, git) {
             ul.id = "git-branch-menu-items";
 
             for (let branch of branches) {
-                branch.base_url = `${root_url}${branch.is_feature_branch ? featureBranchToPath(branch.name) + "/" : ""}`;
+                branch.base_url = `${root_url}${branch.path}`;
                 branch.url = `${branch.base_url}${path}`;
                 branch.url_exists = await urlExists(branch.url);
 
@@ -76,13 +76,6 @@ const urlExists = url => new Promise((resolve, reject) => {
         reject(ex);
     }
 });
-
-function featureBranchToPath(branch) {
-    return "x-" + branch
-        .replace("/", "-")
-        .replace(" ", "-")
-        .toLowerCase();
-};
 
 async function getBranches(url) {
     try {
