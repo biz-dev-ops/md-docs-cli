@@ -24,7 +24,7 @@ function __init(root, git) {
             ul.id = "git-branch-menu-items";
 
             for (let branch of branches) {
-                branch.base_url = `${root_url}${branch.path}`;
+                branch.base_url = `${root_url}${branch.path === "" ? "" : branch.path + "/"}`;
                 branch.url = `${branch.base_url}${path}`;
                 branch.url_exists = await urlExists(branch.url);
 

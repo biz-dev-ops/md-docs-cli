@@ -359,7 +359,7 @@ async function getGitInfo() {
     const origin = await __exec(`git config --get remote.origin.url`);
     const repository = getGitRepository(origin);
     const main_branch = await __exec(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`);
-    const path = branch != main_branch ? featureBranchToPath(branch) : "";
+    const path = branch != main_branch ? "/" + featureBranchToPath(branch) : "";
     const branches = (await new Octokit().request(`GET /repos/${repository}/branches`))
         .data
             .map(b => ({
@@ -370,7 +370,7 @@ async function getGitInfo() {
             .sort((a, b) => `${a.is_feature_branch ? "z" : "a"}${a.name}`.localeCompare(`${b.is_feature_branch ? "z" : "a"}${b.name}`));
 
     return { 
-        branch, 
+        branch,
         main_branch, 
         is_feature_branch: branch != main_branch, 
         repository,
@@ -393,7 +393,7 @@ function getGitRepository(origin) {
 }
 
 function featureBranchToPath(branch) {
-    return "/x-" + branch
+    return "x-" + branch
         .replace("/", "-")
         .replace(" ", "-")
         .toLowerCase();
