@@ -111,7 +111,7 @@ async function transformMarkDown(file, menu_data, git, root) {
 async function renderMarkdown(file) {
     const content = await readFileAsString(file);
     const response = getTitle(file, content);
-    let html = md.render(`[[toc]] ${response.markdown}`);
+    let html = md.render(`[[toc]]\n${response.markdown}`);
     html = Mustache.render(HTML_CONTENT_TEMPLATE, { html });
 
     const template = JSDOM.fragment("<div></div>").firstElementChild;
@@ -150,11 +150,12 @@ async  function removeEmptyParagraphs(template, file) {
 }
 
 async function addHeadingContainers(template) {
-    const el = template.querySelector("article").firstChild;
+    const article = template.querySelector("article");
     const container = JSDOM.fragment("<div></div>").firstElementChild;    
-    addToHeadingContainer(el, container, 0);
-    if(container.childNodes.length > 0)
-        el.parentNode.appendChild(container);
+    addToHeadingContainer(article.firstChild, container, 0);
+    if(container.childNodes.length > 0) {
+        article.appendChild(container);
+    }
 }
 
 function addToHeadingContainer(el, container, level) {
@@ -175,10 +176,15 @@ function addToHeadingContainer(el, container, level) {
         }
         else {
             if(level === 0 && el.localName && el.localName === "nav") {
-                const parentNode = el.parentNode;
-                const tocContainer =  JSDOM.fragment(TOC_CONTAINER_TEMPLATE);
-                parentNode.insertBefore(tocContainer, el);
-                parentNode.querySelector("#toc-container").appendChild(el);
+                if(el.querySelectorAll("a").length === 0) {
+                    el.parentNode.removeChild(el);
+                }
+                else {
+                    const parentNode = el.parentNode;
+                    const tocContainer =  JSDOM.fragment(TOC_CONTAINER_TEMPLATE);
+                    parentNode.insertBefore(tocContainer, el);
+                    parentNode.querySelector("#toc-container").appendChild(el);
+                }
             }
             else {
                 container.appendChild(el);
@@ -415,8 +421,8 @@ function getTitleFromMarkdown(markdown) {
         response.markdown = markdown;
         return response;
     }
-
-    response.title = lines.shift().substring(2).trim();
+    
+    response.title = lines.shift().substring(2).trim();    
     response.markdown = lines.join("\n").trim();
     return response;
 }
@@ -531,7 +537,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 
 const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
 <script>
-    window.onload = function() {
+    window.addEventListener("load", function() {
         const xml = '{{{xml}}}';
         const viewer = new BpmnJS({
             container: "#{{id}}"
@@ -546,7 +552,7 @@ const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
             .catch(error => {
                 console.log("Error rendering bpmn file: {{href}}", error);
             });
-    };
+    });
 </script>`;
 
 const FEATURE_TEMPLATE = `<pre><code class="feature">{{feature}}</code></pre>`;
@@ -593,7 +599,7 @@ const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
     <script src="{{{root}}}assets/swagger-ui-dist/swagger-ui-bundle.js" charset="UTF-8"> </script>
     <script src="{{{root}}}assets/swagger-ui-dist/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
     <script>
-    window.onload = function() {
+    window.addEventListener("load", function() {
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
         spec: {{{json_string}}},
@@ -609,8 +615,8 @@ const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
       // End Swagger UI call region
 
       window.ui = ui;
-    };
-  </script>
+    });
+    </script>
   </body>
 </html>`;
 

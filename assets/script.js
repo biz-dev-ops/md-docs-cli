@@ -87,7 +87,6 @@ function featureBranchToPath(branch) {
 async function getBranches(url) {
     try {
         const data = await fetch(url);
-        console.log(data);
         return JSON.parse(data);
     }
     catch {
