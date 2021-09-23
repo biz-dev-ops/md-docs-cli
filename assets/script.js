@@ -79,8 +79,9 @@ const urlExists = url => new Promise((resolve, reject) => {
 
 async function getBranches(url) {
     try {
-        const data = await fetch(url);
-        return JSON.parse(data);
+        const response = await fetch(url);
+        const json = await response.json();
+        return json;
     }
     catch {
         return null
