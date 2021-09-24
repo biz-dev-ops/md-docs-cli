@@ -78,7 +78,7 @@ async function transformFiles(dir, menu_data, git, root = "") {
 }
 
 async function transformFile(file, menu_data, git, root) {
-    var html = await transformMarkDown(file, menu_data, git, root);
+    await transformMarkDown(file, menu_data, git, root);
 }
 
 async function transformMarkDown(file, menu_data, git, root) {
