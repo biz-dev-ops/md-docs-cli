@@ -12,6 +12,8 @@ This script copies every file and directory from the **docs** directory into the
 1. Every `*asyncapi.yaml` anchor is automaticly converted into a html documentation site;
 1. Every `*.feature` anchor is automaticly converted into a code block;
 1. Every markdown anchor is automaticly converted into an html link;
+1. Images are wrapped in figures;
+1. Images can be alligned by adding align=center or align=left or align=right to the url;
 
 All links are relative so you do not need a webserver.
 

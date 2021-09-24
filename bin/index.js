@@ -121,11 +121,46 @@ async function renderMarkdown(file) {
 }
 
 async function parseHtml(template, file, root) {    
+    await parseImages(template, file, root);
     await parseAnchors(template, file, root);
     await removeEmptyParagraphs(template, file);
     await addHeadingContainers(template)
     
     return template;
+}
+
+async function parseImages(template, file, root) {
+    const images = template.querySelectorAll("img");
+    for (let img of images) {
+        const fig = JSDOM.fragment("<figure></figure>").firstElementChild;
+        
+        let ref = img;
+        let container = img.parentNode;
+
+        if(container.nodeName === "P") {
+            ref = container;
+            container = container.parentNode;
+        }
+
+        container.insertBefore(fig, ref);
+        
+        await setFigureAlignment(fig, img, file, root);
+
+        fig.appendChild(img);
+
+        console.log(`Wrapped image with figure in ${file}`);
+    }
+}
+
+async function setFigureAlignment(fig, img, file, root) {
+    const align = getUrlParameter(img.src, "align");
+    
+    if(align == undefined)
+        return;
+
+    fig.classList.add(align);
+
+    console.log(`Set figure alignment in ${file}`);
 }
 
 async function parseAnchors(template, file, root) {
@@ -450,6 +485,19 @@ function formatTitle(title) {
 
 async function createGitBranchFile(dst, branches) {
     await fs.writeFile(`${dst}/branches.json`, JSON.stringify(branches));
+}
+
+function getUrlParameter(url, name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    try {
+        const results = regex.exec(url);
+        return results === null || results.length === 0 ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+    catch (ex) {
+        console.log(ex);
+        return null;
+    }
 }
 
 async function __exec(command) {
