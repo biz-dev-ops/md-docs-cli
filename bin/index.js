@@ -575,7 +575,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 </head>
 <body class="{{#git.is_feature_branch}}feature{{/git.is_feature_branch}}">
     <header>
-        <span class="title">{{title}}</title>
+        <span class="title">{{title}}</title></span>
         <nav class="main-menu">
             {{{menu}}}
         </nav>
