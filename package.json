@@ -42,6 +42,7 @@
     "octokit": "^1.5.0",
     "swagger-parser": "^10.0.3",
     "swagger-ui-dist": "^3.52.2",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yargs": "^13.2.4"
   }
 }

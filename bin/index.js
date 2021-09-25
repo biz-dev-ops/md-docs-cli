@@ -27,6 +27,11 @@ const AsyncApiParser = require("@asyncapi/parser");
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const { Octokit } = require("octokit");
+const yargs = require("yargs");
+const options = yargs
+ .usage("Usage: -b")
+ .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
+ .argv;
 
 async function run() {
     const menu_data = await getMenu(DOCS_ROOT);
@@ -35,6 +40,11 @@ async function run() {
 
     await init(DOCS_ROOT, DIST_BRANCH_ROOT);
     await createGitBranchFile(DIST_ROOT, git.branches);
+
+    if(options.branches) {
+        return;
+    }
+
     await copyFiles(DOCS_ROOT, DIST_BRANCH_ROOT);    
     await transformFiles(DIST_BRANCH_ROOT, menu_data, git);
     await copyFiles(`${MODULE_ROOT}/assets`, `${DIST_BRANCH_ROOT}/assets`);
@@ -485,6 +495,8 @@ function formatTitle(title) {
 
 async function createGitBranchFile(dst, branches) {
     await fs.writeFile(`${dst}/branches.json`, JSON.stringify(branches));
+
+    console.log(`Created branches.json in ${dst}`);
 }
 
 function getUrlParameter(url, name) {
