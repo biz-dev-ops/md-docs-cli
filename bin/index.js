@@ -17,7 +17,8 @@ const md = require('markdown-it')({  html: true, linkify: true, typographer: tru
     .use(require("markdown-it-toc-done-right"), {
         level: [1,2,3]
     })
-    .use(require('markdown-it-plantuml-ex'));
+    .use(require("markdown-it-plantuml-ex"))
+    .use(require("markdown-it-abbr"));
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
