@@ -573,7 +573,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     <!--
     <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />
     -->
-    <link rel="stylesheet" type="text/css" href="/living-documentation/assets/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -616,12 +616,12 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     <!--    
     <script src="{{{root}}}assets/script/iframeResizer.min.js"></script>
     -->
-    <script src="/living-documentation/assets/script/iframeResizer.min.js"></script>
+    <script src="{{{root}}}assets/script/iframeResizer.min.js"></script>
     <script src="{{{root}}}assets/bpmn-js-dist/bpmn-viewer.production.min.js"></script>
     <!--    
     <script src="{{{root}}}assets/script.js" charset="UTF-8"></script>
     -->
-    <script src="/living-documentation/assets/script.js" charset="UTF-8"></script>
+    <script src="{{{root}}}assets/script.js" charset="UTF-8"></script>
     <script> 
         __init("{{{root}}}", {{{git_string}}});
     </script>
@@ -689,7 +689,7 @@ const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
   <body>
     <div id="root"></div>
 
-    <script src="/living-documentation/assets/script/iframeResizer.contentWindow.min.js"></script>
+    <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
     <script src="{{{root}}}assets/swagger-ui-dist/swagger-ui-bundle.js" charset="UTF-8"> </script>
     <script src="{{{root}}}assets/swagger-ui-dist/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
     <script>
@@ -726,7 +726,7 @@ const ASYNCAPI_TEMPLATE = `<!DOCTYPE html>
   <body>
     <div id="root"></div>
     
-    <script src="/living-documentation/assets/script/iframeResizer.contentWindow.min.js"></script>
+    <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
     <script src="{{{root}}}assets/asyncapi/html-template/js/asyncapi-ui.min.js" type="application/javascript"></script> 
     <script>
       var schema = {{{json}}};
