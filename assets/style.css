@@ -1,0 +1,438 @@
+@import "style/reset.css";
+@import "style/theme.css";
+
+/* Basic elements */
+html {
+    background-color: var(--background-color-base);
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + var(--space-lg));
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-family-heading);
+    color: var(--text-color-base);
+    line-height: var(--line-height-base);
+    margin: 0;
+}
+
+p, figure, table, ul, ol, dl, pre, blockquote {
+    margin: 0;
+}
+
+:is(p, figure, table, ul, ol, dl, pre, blockquote):not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    margin: 0;
+    line-height: var(--line-height-heading);
+}
+
+:is(h1, h2, h3, h4, h5, h6):not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * .5em);
+}
+
+h1, .heading-size-1 {
+    font-size: var(--heading-1-size);
+}
+
+h2, .heading-size-2 {
+    font-size: var(--heading-2-size);
+}
+
+h3, .heading-size-3 {
+    font-size: var(--heading-3-size);
+}
+
+h4, .heading-size-4 {
+    font-size: var(--heading-4-size);
+}
+
+h5, .heading-size-5 {
+    font-size: var(--heading-5-size);
+}
+
+h6, .heading-size-6 {
+    font-size: var(--heading-6-size);
+}
+
+a {
+    color: currentColor;
+}
+
+a:hover,
+a:focus {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+:is(img, svg):not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+ul, ol {
+    padding-left: var(--space-md);
+}
+
+iframe {
+    box-shadow: var(--drop-shadow-base);
+    border: 0;
+    width: 1px;
+    min-width: 100%;
+}
+
+blockquote {
+    padding-right: var(--space-md);
+    padding-left: calc(var(--space-md));
+    position: relative;
+}
+
+blockquote::before {
+    background: var(--background-color-base);
+    border-radius: var(--space-xss);
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    width: var(--space-xs);
+}
+
+pre {
+    background-color: var(--background-color-base);
+    border-radius: var(--radius-base);
+    padding: var(--space-md);
+}
+
+table tr * {
+    text-align: left;
+    padding: var(--space-xs) var(--space-sm);
+    border-bottom: var(--line-base) solid var(--background-color-base);
+}
+
+table tr *:first-child{
+    padding-left: 0;
+}
+
+table tr *:last-child {
+    padding-right: 0;
+}
+
+
+/* Layout: Header */
+header {
+    background-color: var(--header-background-color);
+    box-shadow: var(--drop-shadow-base);
+    color: var(--header-text-color);
+    /*max-height: var(--header-height);*/
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+}
+
+header .bar {
+    align-items: center;
+    display: flex;
+    gap: var(--space-md);
+    justify-content: space-between;
+    min-height: var(--header-height);
+}
+
+header .bar h1 {
+    font-size: var(--header-title-size);
+    margin-bottom: 0;
+}
+
+header .nav {
+    display: flex;
+}
+
+header .menu-toggle {
+    transition: all 250ms;
+    border-radius: 50%;
+    display: block;
+    height: var(--space-lg);
+    width: var(--space-lg);
+    padding: var(--space-sm);
+}
+
+header .menu-toggle svg {
+    fill: currentColor;
+}
+
+header .menu-toggle span {
+    display: block;
+    height: 1rem;
+    width: 1rem;
+    overflow: hidden;
+    text-indent: 100%;
+    border: 2px solid currentColor;
+    border-width: 2px 0;
+    margin: var(--space-xss);
+    position: relative;
+}
+
+header .menu-toggle span::before {
+    content: "";
+    background-color: currentColor;
+    height: 2px;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 50%;
+    margin-top: -1px;
+}
+
+header .menu-toggle[aria-expanded="true"] {
+    background-color: var(--color-white);
+    color: var(--header-background-color);
+}
+
+header .container {
+    margin: 0 auto;
+    max-width: var(--grid-max-width);
+    padding: 0 var(--space-md);
+    position: relative;
+}
+
+header nav {
+    background-color: var(--menu-background-color);
+    border-radius: var(--radius-base);
+    box-shadow: var(--drop-shadow-level2);
+    color: var(--menu-text-color);
+    display: none;
+    position: absolute;
+    top: 100%;
+    margin-top: calc(var(--space-md) * -3/2);
+    right: var(--space-md);
+}
+
+header nav[aria-hidden] {
+    display: none;
+}
+
+header nav[aria-hidden="false"] {
+    display: block;
+}
+
+header nav > ul {
+    padding-left: 0;
+}
+
+header nav > ul > li {
+    list-style: none;
+}
+
+header nav li span {
+    font-style: italic;
+}
+
+@media (min-width: 40rem) {
+    header .container {
+        padding-right: var(--space-lg);
+        padding-left: var(--space-lg);
+    }
+
+    header .bar {
+        gap: var(--space-lg);
+    }
+
+    header nav {
+        right: var(--space-lg);
+    }
+}
+
+
+/* Layout: Nav */
+nav a {
+    text-decoration: none;
+}
+
+nav a:hover,
+nav a:focus {
+    text-decoration: underline;
+}
+
+
+/* Layout: Main */
+main {
+    padding: var(--space-md);
+    margin: 0 auto;
+    max-width: var(--grid-max-width);
+}
+
+@media (min-width: 40rem) {
+    main {
+        padding: var(--space-lg);
+    }
+}
+
+@media (min-width: 60rem) {
+    main {
+        display: grid;
+        column-gap: var(--grid-column-gap);
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas:
+        "article article aside"
+        "article article .";
+    }
+}
+
+
+/* Layout: Aside */
+main > aside {
+    background-color: var(--aside-background-color);
+    border-radius: var(--radius-base);
+    box-shadow: var(--drop-shadow-base);
+    color: var(--aside-text-color);
+    margin-bottom: var(--space-md);
+}
+
+@media (min-width: 60rem) {
+    main > aside {
+        grid-area: aside;
+        order: 2;
+        position: sticky;
+        top: calc(var(--header-height) + var(--space-lg));
+    }
+}
+
+main > aside > div {
+    padding: var(--space-md) var(--space-lg);
+}
+
+main > aside > div:first-child {
+    border-bottom: var(--line-base) solid var(--color-white-a90);
+}
+
+main > aside h2 {
+    font-size: var(--heading-5-size);
+}
+
+main > aside a {
+    text-decoration: none;
+}
+
+main > aside a:hover,
+main > aside a:focus {
+    text-decoration: underline;
+}
+
+
+/* Layout: Article */
+main > article {
+    background-color: var(--color-white);
+    border-radius: var(--radius-base);
+    box-shadow: var(--drop-shadow-base);
+    color: var(--article-text-color);
+    box-shadow: var(--drop-shadow-base);
+    grid-area: article;
+    order: 1;
+}
+
+article {
+    padding: var(--space-lg);
+}
+
+article div.info,
+article div.success,
+article div.warning,
+article div.error {
+    padding: var(--space-md);
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+article div.info {
+    background-color: var(--color-info-100);
+    color: var(--color-info);
+}
+
+article div.success {
+    background-color: var(--color-success-100);
+    color: var(--color-success);
+}
+
+article div.warning {
+    background-color: var(--color-warning-100);
+    color: var(--color-warning);
+}
+
+article div.error {
+    background-color: var(--color-error-100);
+    color: var(--color-error);
+}
+
+
+/* Module: Table of contents */
+nav.table-of-contents {
+}
+
+
+/* Module: Header container */
+.header-container:not(:last-child) {
+    margin-bottom: var(--space-md);
+}
+
+.header-container > * {
+    margin: 0 calc(var(--space-lg) * -1);
+    padding: 0 var(--space-lg);
+}
+
+.header-container .header * {
+    margin-bottom: calc(var(--line-height-base) * .5em);
+}
+
+* > .header-anchor {
+    visibility: hidden;
+    text-decoration: none;
+    opacity: .5;
+    font-size: calc(100% / var(--line-height-base));
+}
+
+* > .header-anchor:hover,
+* > .header-anchor:focus{
+    opacity: 1;
+}
+
+*:hover > .header-anchor {
+    visibility: visible;
+}
+
+
+/* Module: Header container - level 2 */
+.header-container.h2:not(:first-child) {
+    margin-top: var(--space-lg);
+}
+
+.header-container.h2:not(:last-child) {
+    margin-bottom: var(--space-lg);
+}
+
+
+.header-container.h2 > .header {
+    border-bottom: var(--line-base) solid var(--color-black-a10);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+}
+
+.header-container.h2 > .header * {
+    margin-bottom: 0;
+}
+
+/* Module: Main menu */
+#menu {
+    padding: var(--space-md);
+}
+
+/* Module: Git branh menu */
+#git-branch-menu {
+    padding: var(--space-md);
+    position: absolute;
+    margin-right: 48px;
+}
