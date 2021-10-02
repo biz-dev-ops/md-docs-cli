@@ -653,7 +653,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 </body>
 </html>`;
 
-const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
+const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn" style="height: 500px"></div>
 <script>
     window.addEventListener("load", function() {
         const xml = '{{{xml}}}';
@@ -665,7 +665,15 @@ const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
             .then(response => {
                 if(response.warnings.length > 0) {
                     console.log("Warnings while rendering bpmn file: {{href}}", response.warnings);
-                }            
+                }
+                
+                const canvas = viewer.get("canvas");
+                const viewbox = canvas.viewbox();
+
+                document.getElementById("{{id}}").style.height = viewbox.outer.height + "px";
+
+                canvas.zoom("fit-viewport");
+                
             })
             .catch(error => {
                 console.log("Error rendering bpmn file: {{href}}", error);
