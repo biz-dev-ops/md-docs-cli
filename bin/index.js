@@ -72,7 +72,7 @@ async function copyFiles(src, dst) {
     }
 }
 
-async function transformFiles(dir, menu_data, git, root = "") {
+async function transformFiles(dir, menu_data, git) {
     await fs.access(dir);
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -80,27 +80,28 @@ async function transformFiles(dir, menu_data, git, root = "") {
         const src = `${dir}/${entry.name}`;
 
         if (entry.isDirectory()) {
-            await transformFiles(src, menu_data, git, `${root}../`);
+            await transformFiles(src, menu_data, git);
         } 
         else {
-            await transformFile(src, menu_data, git, root);
+            await transformFile(src, menu_data, git);
         }
     }
 }
 
-async function transformFile(file, menu_data, git, root) {
-    await transformMarkDown(file, menu_data, git, root);
+async function transformFile(file, menu_data, git) {
+    await transformMarkDown(file, menu_data, git);
 }
 
-async function transformMarkDown(file, menu_data, git, root) {
+async function transformMarkDown(file, menu_data, git) {
     if(!file.endsWith(".md"))
         return;    
 
-    const response = await renderMarkdown(file, root);
+    const response = await renderMarkdown(file);
     
     const dst = file.replace(/\.md$/, ".html");
+    const root = getRelativeRootFromFile(dst);
 
-    await parseHtml(response.template, dst, root);
+    await parseHtml(response.template, dst);
    
     const data = { 
         git,
@@ -131,16 +132,16 @@ async function renderMarkdown(file) {
     return { template, title: response.title };
 }
 
-async function parseHtml(template, file, root) {    
-    await parseImages(template, file, root);
-    await parseAnchors(template, file, root);
+async function parseHtml(template, file) {    
+    await parseImages(template, file);
+    await parseAnchors(template, file);
     await removeEmptyParagraphs(template, file);
     await addHeadingContainers(template)
     
     return template;
 }
 
-async function parseImages(template, file, root) {
+async function parseImages(template, file) {
     const images = template.querySelectorAll("img");
     for (let img of images) {
         const fig = JSDOM.fragment("<figure></figure>").firstElementChild;
@@ -155,7 +156,7 @@ async function parseImages(template, file, root) {
 
         container.insertBefore(fig, ref);
         
-        await setFigureAlignment(fig, img, file, root);
+        await setFigureAlignment(fig, img, file);
 
         fig.appendChild(img);
 
@@ -163,7 +164,7 @@ async function parseImages(template, file, root) {
     }
 }
 
-async function setFigureAlignment(fig, img, file, root) {
+async function setFigureAlignment(fig, img, file) {
     const align = getUrlParameter(img.src, "align");
     
     if(align == undefined)
@@ -174,14 +175,14 @@ async function setFigureAlignment(fig, img, file, root) {
     console.log(`Set figure alignment in ${file}`);
 }
 
-async function parseAnchors(template, file, root) {
+async function parseAnchors(template, file) {
     const anchors = template.querySelectorAll("a");
     for (let anchor of anchors) {
-        await parseBPMNAnchor(anchor, file, root);
-        await parseOpenapiAnchor(anchor, file, root);
-        await parseAsyncApiAnchor(anchor, file, root);
-        await parseFeatureAnchor(anchor, file, root);
-        await parseMarkdownAnchor(anchor, file, root);
+        await parseBPMNAnchor(anchor, file);
+        await parseOpenapiAnchor(anchor, file);
+        await parseAsyncApiAnchor(anchor, file);
+        await parseFeatureAnchor(anchor, file);
+        await parseMarkdownAnchor(anchor, file);
     }
 }
 
@@ -198,7 +199,7 @@ async  function removeEmptyParagraphs(template, file) {
 async function addHeadingContainers(template) {
     const main = template.querySelector("main");
     const container = JSDOM.fragment("<article></article>").firstElementChild;
-    addToHeadingContainer(main.firstChild, container, 0);
+    addToHeadingContainer(main.firstChild, container, -1);
     if(container.childNodes.length > 0) {
         main.appendChild(container);
     }
@@ -221,15 +222,22 @@ function addToHeadingContainer(el, container, level) {
             }
         }
         else {
-            if(level === 0 && el.localName && el.localName === "nav") {
-                if(el.querySelectorAll("a").length === 0) {
-                    el.parentNode.removeChild(el);
+            if(level === -1) {
+                if(el.localName && el.localName === "nav") {
+                    if(el.querySelectorAll("a").length === 0) {
+                        el.parentNode.removeChild(el);
+                    }
+                    else {
+                        const parentNode = el.parentNode;
+                        const tocContainer =  JSDOM.fragment(TOC_CONTAINER_TEMPLATE);
+                        parentNode.insertBefore(tocContainer, el);
+                        parentNode.querySelector("#toc-container").appendChild(el);
+                    }
                 }
                 else {
-                    const parentNode = el.parentNode;
-                    const tocContainer =  JSDOM.fragment(TOC_CONTAINER_TEMPLATE);
-                    parentNode.insertBefore(tocContainer, el);
-                    parentNode.querySelector("#toc-container").appendChild(el);
+                    const headlessContainer = JSDOM.fragment(HEADLESS_CONTAINER_TEMPLATE).firstElementChild;
+                    container.appendChild(headlessContainer);
+                    next = addToHeadingContainer(el, headlessContainer, 999999);
                 }
             }
             else {
@@ -258,16 +266,17 @@ async function parseBPMNAnchor(anchor, file) {
     console.log(`Parsed bpmn anchor in ${file}`);
 }
 
-async function parseOpenapiAnchor(anchor, file, root) {
+async function parseOpenapiAnchor(anchor, file) {
     if(!anchor.href.endsWith("openapi.yaml"))
         return;
 
     const src =  `${anchor.href.substring(0, anchor.href.length - 5)}.html`;
     const dst = relativeFileLocation(file, src);
+    const root = getRelativeRootFromFile(dst);
 
     const parent = anchor.parentNode;
     const container = parent.parentNode;
-    const fragment = JSDOM.fragment(Mustache.render(OPENAPI_IFRAME_TEMPLATE, { src: src }));
+    const fragment = JSDOM.fragment(Mustache.render(OPENAPI_IFRAME_TEMPLATE, { src }));
     container.insertBefore(fragment, parent);
     parent.removeChild(anchor);
     
@@ -278,12 +287,13 @@ async function parseOpenapiAnchor(anchor, file, root) {
     console.log(`Parsed openapi anchor in ${file}`);    
 }
 
-async function parseAsyncApiAnchor(anchor, file, root) {
+async function parseAsyncApiAnchor(anchor, file) {
     if(!anchor.href.endsWith("asyncapi.yaml"))
         return;
     
     const src =  `${anchor.href.substring(0, anchor.href.length - 5)}.html`;
     const dst = relativeFileLocation(file, src);
+    const root = getRelativeRootFromFile(dst);
 
     const parent = anchor.parentNode;
     const container = parent.parentNode;
@@ -392,6 +402,15 @@ function getPath(file) {
 
 function relativeFileLocation(src, ref) {
     return `${getPath(src)}/${ref}`;
+}
+
+function getRelativeRootFromFile(file) {
+    const root = path.relative(path.parse(file).dir, DIST_ROOT);
+    
+    if(root.endsWith(".."))
+        return root + "/";
+    else
+        return root;
 }
 
 async function readFileAsString(file, encoding = "utf8") {
@@ -541,6 +560,8 @@ const TOC_CONTAINER_TEMPLATE = `<aside>
 
 const HTML_CONTENT_TEMPLATE = `<main>{{{html}}}</main>`;
 
+const HEADLESS_CONTAINER_TEMPLATE = `<div class="headless-container"></div>`;
+
 const HEADER_CONTAINER_TEMPLATE = (h) => `<div class="header-container ${h}">
     <div class="header"></div>
     <div class="container"></div>
@@ -570,19 +591,19 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>{{title}}</title>
-    <!--
-    <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />
-    -->
     <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
     
     <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-16x16.png" sizes="16x16" />
 </head>
-<body class="{{#git.is_feature_branch}}feature{{/git.is_feature_branch}}">
+<body class="line-numbers {{#git.is_feature_branch}}feature{{/git.is_feature_branch}}">
     <header>
         <div class="container">
             <div class="bar">
@@ -613,14 +634,14 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     
     <footer></footer>
     
-    <!--    
     <script src="{{{root}}}assets/script/iframeResizer.min.js"></script>
-    -->
-    <script src="{{{root}}}assets/script/iframeResizer.min.js"></script>
-    <script src="{{{root}}}assets/bpmn-js-dist/bpmn-viewer.production.min.js"></script>
-    <!--    
-    <script src="{{{root}}}assets/script.js" charset="UTF-8"></script>
-    -->
+    
+    <script src="{{{root}}}assets/bpmn-js-dist/bpmn-viewer.production.min.js"></script>    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
     <script src="{{{root}}}assets/script.js" charset="UTF-8"></script>
     <script> 
         __init("{{{root}}}", {{{git_string}}});
