@@ -620,9 +620,13 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
                 </div>
             </div>
             
+            <!-- Tekst in span tonen met branch icoon ervoor en dropdown pijl erachter. Bij klikken moet er een menu uitschuiven met a hrefs. -->
             <nav id="git-branch-menu">
                 <span>{{{git.branch}}}</span>
             </nav>
+
+            <!-- Hier moet het GitHub icon gebruikt worden. -->
+            <a href="https://github.com/{{{git.repository}}}/tree/{{{git.branch}}}" class="github">GitHub</a>
 
             <nav id="menu">
                 {{{menu}}}
