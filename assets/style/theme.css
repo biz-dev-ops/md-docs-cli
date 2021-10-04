@@ -74,6 +74,7 @@
 
   /* Lines */
   --line-base: .0625rem;
+  --line-thin: .125rem;
 
   /* Radii */
   --radius-base: .5rem;

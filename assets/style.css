@@ -20,7 +20,7 @@ p, figure, table, ul, ol, dl, pre, blockquote {
     margin: 0;
 }
 
-:is(p, figure, table, ul, ol, dl, pre, blockquote):not(:last-child) {
+:where(p, figure, table, ul, ol, dl, pre, blockquote):not(:last-child) {
     margin-bottom: calc(var(--line-height-base) * 1rem);
 }
 
@@ -30,7 +30,7 @@ h1, h2, h3, h4, h5, h6 {
     line-height: var(--line-height-heading);
 }
 
-:is(h1, h2, h3, h4, h5, h6):not(:last-child) {
+:where(h1, h2, h3, h4, h5, h6):not(:last-child) {
     margin-bottom: calc(var(--line-height-base) * .5em);
 }
 
@@ -72,7 +72,7 @@ img {
     height: auto;
 }
 
-:is(img, svg):not(:last-child) {
+:where(img, svg):not(:last-child) {
     margin-bottom: calc(var(--line-height-base) * 1rem);
 }
 
@@ -165,45 +165,64 @@ header .nav {
     display: flex;
 }
 
-header .menu-toggle {
+header .nav a {
     transition: all 250ms;
-    border-radius: 50%;
+    border-radius: var(--radius-base);
     display: block;
     height: var(--space-lg);
-    width: var(--space-lg);
+    margin-left: var(--space-xss);
     padding: var(--space-sm);
+    text-decoration: none;
 }
 
-header .menu-toggle svg {
+header .nav .icon {
+    vertical-align: middle;
+}
+
+header .nav .label {
+    /*text-decoration: underline;*/
+}
+
+header .nav svg {
     fill: currentColor;
 }
 
-header .menu-toggle span {
+header a:active,
+header a:focus {
+    background-color: var(--color-white-a10);
+    outline: none;
+}
+
+header a[aria-expanded="true"] {
+    background-color: var(--color-white);
+    color: var(--header-background-color);
+}
+
+header .nav .menu-toggle-pages {
+    margin-left: var(--space-md);
+}
+
+header .menu-toggle-pages span {
     display: block;
     height: 1rem;
     width: 1rem;
     overflow: hidden;
     text-indent: 100%;
-    border: 2px solid currentColor;
+    border: var(--line-thin) solid currentColor;
     border-width: 2px 0;
     margin: var(--space-xss);
     position: relative;
 }
 
-header .menu-toggle span::before {
+header .menu-toggle-pages span::before {
     content: "";
     background-color: currentColor;
-    height: 2px;
+    height: var(--line-thin);
     width: 100%;
     display: block;
     position: absolute;
     top: 50%;
     margin-top: -1px;
-}
-
-header .menu-toggle[aria-expanded="true"] {
-    background-color: var(--color-white);
-    color: var(--header-background-color);
 }
 
 header .container {
@@ -446,5 +465,5 @@ nav.table-of-contents {
 #git-branch-menu {
     padding: var(--space-md);
     position: absolute;
-    margin-right: 48px;
+    margin-right: calc(var(--space-lg) + var(--space-md));
 }
