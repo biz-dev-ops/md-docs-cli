@@ -358,17 +358,9 @@ main > aside a:focus {
 
 /* Layout: Article */
 main > article {
-    background-color: var(--color-white);
-    border-radius: var(--radius-base);
-    box-shadow: var(--drop-shadow-base);
     color: var(--article-text-color);
-    box-shadow: var(--drop-shadow-base);
     grid-area: article;
     order: 1;
-}
-
-article {
-    padding: var(--space-lg);
 }
 
 article div.info,
@@ -400,12 +392,22 @@ article div.error {
 }
 
 
-/* Module: Table of contents */
-nav.table-of-contents {
+/* Module: Headless container */
+.headless-container {
+    background-color: var(--color-white);
+    border-radius: var(--radius-base);
+    box-shadow: var(--drop-shadow-base);
+    padding: var(--space-lg);
 }
 
-
 /* Module: Header container */
+article > .header-container {
+    background-color: var(--color-white);
+    border-radius: var(--radius-base);
+    box-shadow: var(--drop-shadow-base);
+    padding: var(--space-lg);
+}
+
 .header-container:not(:last-child) {
     margin-bottom: var(--space-md);
 }
@@ -438,11 +440,11 @@ nav.table-of-contents {
 
 /* Module: Header container - level 2 */
 .header-container.h2:not(:first-child) {
-    margin-top: var(--space-lg);
+    margin-top: var(--space-md);
 }
 
 .header-container.h2:not(:last-child) {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
 }
 
 
