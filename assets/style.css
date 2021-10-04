@@ -80,6 +80,18 @@ ul, ol {
     padding-left: var(--space-md);
 }
 
+figure.left {
+    text-align: left;
+}
+
+figure.center {
+    text-align: center;
+}
+
+figure.right {
+    text-align: right;
+}
+
 iframe {
     box-shadow: var(--drop-shadow-base);
     border: 0;
