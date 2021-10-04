@@ -724,6 +724,11 @@ const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
         margin:0;
         background: #fafafa;
       }
+
+      .swagger-ui .info {
+        margin-top: 0;
+        padding-top: 50px;
+      }
     </style>
   </head>
 
