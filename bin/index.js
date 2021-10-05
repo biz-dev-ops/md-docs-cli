@@ -682,16 +682,15 @@ const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
                 const viewbox = canvas.viewbox();
 
                 document.getElementById("{{id}}").style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + "%";
-
-                canvas.zoom("fit-viewport");
                 
+                canvas.zoom("fit-viewport");
+                setTimeout(() => canvas.zoom("fit-viewport"), 1);
             })
             .catch(error => {
                 console.log("Error rendering bpmn file: {{href}}", error);
             });
         
         window.addEventListener("resize", function() {
-            console.log('fit-viewport');
             canvas.zoom("fit-viewport");
         });
     });
