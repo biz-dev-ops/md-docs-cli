@@ -198,6 +198,20 @@ header a[aria-expanded="true"] {
     color: var(--header-background-color);
 }
 
+.menu-toggle-branches::after {
+    content: "";
+    display: inline-block;
+    border-color: currentColor;
+    border-width: 0 0 var(--line-thin) var(--line-thin);
+    border-style: solid;
+    height: var(--space-xs);
+    margin: 0 var(--space-xss);
+    width: var(--space-xs);
+    position: relative;
+    top: calc(var(--space-xss) / -2);
+    transform: rotate(-45deg);
+}
+
 header .nav .menu-toggle-pages {
     margin-left: var(--space-md);
 }
@@ -467,5 +481,5 @@ article > .header-container {
 #git-branch-menu {
     padding: var(--space-md);
     position: absolute;
-    margin-right: calc(var(--space-lg) + var(--space-md));
+    margin-right: calc(var(--space-lg) + var(--space-lg) + var(--space-md) + var(--space-xss));
 }
