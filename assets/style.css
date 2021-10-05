@@ -477,9 +477,20 @@ article > .header-container {
     padding: var(--space-md);
 }
 
-/* Module: Git branh menu */
+/* Module: Git branch menu */
 #git-branch-menu {
     padding: var(--space-md);
     position: absolute;
     margin-right: calc(var(--space-lg) + var(--space-lg) + var(--space-md) + var(--space-xss));
+}
+
+/* Module: BPMN */
+.bpmn {
+    height: 0;
+    position: relative;
+}
+
+.bpmn > .bjs-container {
+    position: absolute !important;
+    top: 0;
 }

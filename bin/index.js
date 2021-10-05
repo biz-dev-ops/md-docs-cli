@@ -663,13 +663,14 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 </body>
 </html>`;
 
-const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn" style="height: 500px"></div>
+const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
 <script>
     window.addEventListener("load", function() {
         const xml = '{{{xml}}}';
         const viewer = new BpmnJS({
             container: "#{{id}}"
         });
+        let canvas;
 
         viewer.importXML(xml)
             .then(response => {
@@ -677,10 +678,10 @@ const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn" style="height: 500px"></div
                     console.log("Warnings while rendering bpmn file: {{href}}", response.warnings);
                 }
                 
-                const canvas = viewer.get("canvas");
+                canvas = viewer.get("canvas");
                 const viewbox = canvas.viewbox();
 
-                document.getElementById("{{id}}").style.height = viewbox.outer.height + "px";
+                document.getElementById("{{id}}").style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + "%";
 
                 canvas.zoom("fit-viewport");
                 
@@ -688,6 +689,11 @@ const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn" style="height: 500px"></div
             .catch(error => {
                 console.log("Error rendering bpmn file: {{href}}", error);
             });
+        
+        window.addEventListener("resize", function() {
+            console.log('fit-viewport');
+            canvas.zoom("fit-viewport");
+        });
     });
 </script>`;
 
