@@ -60,7 +60,7 @@
   --space-xss: .25rem;
 
   /* Grid */
-  --grid-column-width: 24.75rem;
+  --grid-column-width: 30rem;
   --grid-column-count: 3;
   --grid-column-gap: var(--space-lg);
   --grid-max-width: calc(
