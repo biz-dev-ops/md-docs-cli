@@ -591,8 +591,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>{{title}}</title>
-<!--    <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />-->
-    <link rel="stylesheet" type="text/css" href="/living-documentation/assets/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -655,8 +654,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
-<!--    <script src="{{{root}}}assets/script.js" charset="UTF-8"></script>-->
-    <script src="/living-documentation/assets/script.js" charset="UTF-8"></script>
+    <script src="{{{root}}}assets/script.js" charset="UTF-8"></script>
     <script> 
         __init("{{{root}}}", {{{git_string}}});
     </script>
