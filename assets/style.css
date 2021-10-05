@@ -93,10 +93,16 @@ figure.right {
 }
 
 iframe {
-    box-shadow: var(--drop-shadow-base);
     border: 0;
     width: 1px;
     min-width: 100%;
+}
+
+iframe.openapi,
+iframe.asyncapi{
+    margin-right: calc(var(--space-lg) * -1);
+    margin-left: calc(var(--space-lg) * -1);
+    width: calc(100% + var(--space-lg) + var(--space-lg));
 }
 
 blockquote {
@@ -487,6 +493,7 @@ article > .header-container {
 /* Module: BPMN */
 .bpmn {
     height: 0;
+    padding-top: 75%;
     position: relative;
 }
 
