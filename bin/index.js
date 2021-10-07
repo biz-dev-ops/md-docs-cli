@@ -426,7 +426,12 @@ async function getGitInfo() {
     const remote = await __exec(`git remote`);
     const origin = await __exec(`git config --get remote.origin.url`);
     const repository = getGitRepository(origin);
-    const main_branch = await __exec(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`);
+    const main_branch = (await __exec(`git remote show ${remote}`))
+        .split(`\n`)
+        .filter(l => l.includes("HEAD branch"))
+        .map(l => l.substr(l.indexOf(":") + 1).trim())
+        [0];
+
     const path = branch != main_branch ? "/" + featureBranchToPath(branch) : "";
 
     const remote_branches = (await new Octokit().request(`GET /repos/${repository}/branches`))
