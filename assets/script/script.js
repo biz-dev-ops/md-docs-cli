@@ -1,4 +1,5 @@
-function __init(root, git) {        
+function __init(root, git) {
+    // Branches
     let base_url = new URL(`${root}`, window.location.href).href;
     if(base_url.endsWith("index.html")) {
         base_url = base_url.substr(0, base_url.lastIndexOf("index.html"));
@@ -36,6 +37,8 @@ function __init(root, git) {
         menu.classList.remove("loading");
     };
 
+
+    // Menu
     const toggleMenu = (button, expand) => {
         const menuId = button.hash;
         const target = document.querySelector(menuId);
@@ -72,6 +75,52 @@ function __init(root, git) {
             };
     });
 
+
+    // Fullscreen containers
+    const fsTitle = (isFullscreen) => {
+        if (isFullscreen) {
+            return 'Sluit weergave';
+        } else {
+            return 'Toon beeldvullend';
+        }
+    }
+    const fsSources = document.querySelectorAll('[data-fullscreen]')
+    const fsHeader = document.createElement('header');
+    const fsFooter = document.createElement('footer');
+    const fsButton = document.createElement('button');
+    fsButton.setAttribute('type', 'button');
+    fsButton.setAttribute('title', fsTitle(false));
+
+    const fsButtonLabel = document.createElement('span');
+    fsButtonLabel.classList.add('label');
+    fsButtonLabel.textContent = "Zoom";
+
+    fsButton.appendChild(fsButtonLabel);
+
+    fsHeader.appendChild(fsButton.cloneNode(true));
+    fsFooter.appendChild(fsButton.cloneNode(true));
+
+    fsSources.forEach(fsSource => {
+        fsSource.prepend(fsHeader.cloneNode(true));
+        fsSource.append(fsFooter.cloneNode(true));
+
+        fsSource.querySelectorAll('button').forEach(fsButton => {
+            fsButton.onclick = () => {
+                const show = fsSource.getAttribute('data-fullscreen') === 'true';
+                fsSource.setAttribute('data-fullscreen', !show);
+
+                fsSource.querySelectorAll('button').forEach(
+                  button => button.setAttribute('title', fsTitle(!show))
+                );
+
+                // Trigger resize for BPMN.io container
+                // Resizing twice results in a beter viewport calculation
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 1);
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 2);
+            }
+        });
+
+    })
 };
 
 const urlExists = url => new Promise((resolve, reject) => {
@@ -98,7 +147,7 @@ const urlExists = url => new Promise((resolve, reject) => {
                     resolve(false);
             };
         };
-        
+
         request.send('');
     }
     catch(ex) {

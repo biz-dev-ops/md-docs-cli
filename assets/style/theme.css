@@ -5,6 +5,7 @@
   --color-white-b: 255;
   --color-white: rgb(var(--color-white-r), var(--color-white-g), var(--color-white-b));
   --color-white-a10: rgba(var(--color-white-r), var(--color-white-g), var(--color-white-b), .1);
+  --color-white-a20: rgba(var(--color-white-r), var(--color-white-g), var(--color-white-b), .2);
   --color-white-a90: rgba(var(--color-white-r), var(--color-white-g), var(--color-white-b), .9);
 
   --color-black-r: 0;
@@ -12,6 +13,7 @@
   --color-black-b: 0;
   --color-black: rgb(var(--color-black-r), var(--color-black-g), var(--color-black-b));
   --color-black-a10: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .1);
+  --color-black-a20: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .2);
   --color-black-a90: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .9);
 
   --color-grey-100: rgb(229, 229, 229);
@@ -71,6 +73,8 @@
   /* z-indexes */
   --z-header: 900;
   --z-nav: 901;
+  --z-fullscreen: 902;
+  --z-fullscreen-button: 100;
 
   /* Lines */
   --line-base: .0625rem;

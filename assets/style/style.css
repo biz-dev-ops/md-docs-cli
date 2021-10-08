@@ -70,6 +70,7 @@ a:focus {
 img {
     max-width: 100%;
     height: auto;
+    vertical-align: middle;
 }
 
 :where(img, svg):not(:last-child) {
@@ -96,13 +97,6 @@ iframe {
     border: 0;
     width: 1px;
     min-width: 100%;
-}
-
-iframe.openapi,
-iframe.asyncapi{
-    margin-right: calc(var(--space-lg) * -1);
-    margin-left: calc(var(--space-lg) * -1);
-    width: calc(100% + var(--space-lg) + var(--space-lg));
 }
 
 blockquote {
@@ -144,7 +138,7 @@ table tr *:last-child {
 
 
 /* Layout: Header */
-header {
+body > header {
     background-color: var(--header-background-color);
     box-shadow: var(--drop-shadow-base);
     color: var(--header-text-color);
@@ -185,18 +179,19 @@ header .nav .icon {
     vertical-align: middle;
 }
 
-header .nav .label {
-    /*text-decoration: underline;*/
-}
-
 header .nav svg {
     fill: currentColor;
 }
 
 header a:active,
-header a:focus {
+header a:focus,
+header a:hover {
     background-color: var(--color-white-a10);
     outline: none;
+}
+
+header a:active {
+    background-color: transparent;
 }
 
 header a[aria-expanded="true"] {
@@ -504,4 +499,121 @@ article > .header-container {
 .bpmn > .bjs-container {
     position: absolute !important;
     top: 0;
+}
+
+/* Module: Zoom */
+[data-fullscreen] {
+    position: relative;
+    overflow: hidden;
+}
+
+[data-fullscreen] button {
+    --icon-padding: calc(var(--space-sm) + var(--space-xss));
+
+    background-color: var(--color-black-a10);
+    box-shadow: var(--drop-shadow-base);
+    color: currentColor;
+    border: 0;
+    border-radius: var(--radius-base);
+    display: block;
+    height: var(--space-lg);
+    outline: none;
+    padding: var(--space-sm);
+    position: relative;
+    text-decoration: none;
+    transition: background-color 250ms, color 250ms;
+    transform: translateX(200%);
+    width: var(--space-lg);
+}
+
+[data-fullscreen] button:active,
+[data-fullscreen] button:focus,
+[data-fullscreen]:hover button {
+    transform: none;
+}
+
+[data-fullscreen] button:hover,
+[data-fullscreen] button:focus {
+    background-color: var(--color-black-a20);
+}
+
+[data-fullscreen] button:active {
+    background-color: transparent;
+}
+
+[data-fullscreen] button .label {
+    display: none;
+}
+
+[data-fullscreen] button::before,
+[data-fullscreen] button::after {
+    border-style: solid;
+    border-color: currentColor;
+    content: "";
+    display: block;
+    height: var(--space-xs);
+    width: var(--space-xs);
+    position: absolute;
+}
+
+[data-fullscreen] button::before {
+    border-width: 0 0 var(--line-thin) var(--line-thin);
+    bottom: var(--icon-padding);
+    left: var(--icon-padding);
+}
+
+[data-fullscreen] button::after {
+    border-width: var(--line-thin) var(--line-thin) 0 0;
+    right: var(--icon-padding);
+    top: var(--icon-padding);
+}
+
+[data-fullscreen] header,
+[data-fullscreen] footer {
+    position: absolute;
+    right: var(--space-md);
+    top: var(--space-md);
+    z-index: var(--z-fullscreen-button);
+}
+
+[data-fullscreen] footer {
+    bottom: var(--space-md);
+    top: auto;
+}
+
+[data-fullscreen="true"] {
+    background-color: #fff;
+    height: 100%;
+    left: 0;
+    overflow: auto;
+    position: fixed;
+    scroll-behavior: smooth;
+    top: 0;
+    width: 100%;
+    z-index: var(--z-fullscreen);
+}
+
+[data-fullscreen="true"] header,
+[data-fullscreen="true"] footer {
+    position: fixed;
+}
+
+[data-fullscreen="true"] button {
+    --icon-padding: calc(var(--space-sm));
+    transform: none;
+}
+
+[data-fullscreen="true"] button::before,
+[data-fullscreen="true"] button::after {
+    transform: rotate(180deg);
+}
+
+[data-fullscreen="true"] figure,
+[data-fullscreen="true"] iframe {
+    margin: var(--space-md) 0;
+}
+
+[data-fullscreen="true"] figure {
+    margin: var(--space-md);
+    text-align: center;
 }

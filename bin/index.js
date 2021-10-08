@@ -108,8 +108,8 @@ async function transformMarkDown(file, menu_data, git, root) {
     const data = { 
         git,
         git_string: JSON.stringify(git), 
-        root: relativeRoot, 
-        menu: renderMenu(relativeRoot, menu_data), 
+        root: relativeRoot,
+        menu: renderMenu(relativeRoot, menu_data),
         content: response.template.innerHTML, 
         title: response.title 
     };
@@ -134,7 +134,7 @@ async function renderMarkdown(file) {
     return { template, title: response.title };
 }
 
-async function parseHtml(template, file, root) {    
+async function parseHtml(template, file, root) {
     await parseImages(template, file);
     await parseAnchors(template, file, root);
     await removeEmptyParagraphs(template, file);
@@ -146,6 +146,7 @@ async function parseHtml(template, file, root) {
 async function parseImages(template, file) {
     const images = template.querySelectorAll("img");
     for (let img of images) {
+        const fsWrapper = JSDOM.fragment("<div data-fullscreen></div>").firstElementChild;
         const fig = JSDOM.fragment("<figure></figure>").firstElementChild;
         
         let ref = img;
@@ -156,11 +157,12 @@ async function parseImages(template, file) {
             container = container.parentNode;
         }
 
-        container.insertBefore(fig, ref);
+        container.insertBefore(fsWrapper, ref);
         
         await setFigureAlignment(fig, img, file);
 
         fig.appendChild(img);
+        fsWrapper.appendChild(fig);
 
         console.log(`Wrapped image with figure in ${file}`);
     }
@@ -446,7 +448,7 @@ async function getGitInfo() {
         .map(b => ({
             name: b,
             path: b == main_branch ? "" : featureBranchToPath(b),
-            is_feature_branch: b != main_branch 
+            is_feature_branch: b != main_branch
         }))
         .sort((a, b) => `${a.is_feature_branch ? "z" : "a"}${a.name}`.localeCompare(`${b.is_feature_branch ? "z" : "a"}${b.name}`));
 
@@ -677,8 +679,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 </body>
 </html>`;
 
-const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
-<script>
+const BPMN_TEMPLATE = `<script>
     window.addEventListener("load", function() {
         const xml = '{{{xml}}}';
         const viewer = new BpmnJS({
@@ -708,13 +709,13 @@ const BPMN_TEMPLATE = `<div id="{{id}}" class="bpmn"></div>
             canvas.zoom("fit-viewport");
         });
     });
-</script>`;
+</script><div data-fullscreen><div id="{{id}}" class="bpmn"></div></div>`;
 
 const FEATURE_TEMPLATE = `<pre><code class="feature">{{feature}}</code></pre>`;
 
-const OPENAPI_IFRAME_TEMPLATE = `<iframe class="openapi" src="{{src}}" />`;
+const OPENAPI_IFRAME_TEMPLATE = `<div data-fullscreen><iframe class="openapi" src="{{src}}" /></div>`;
 
-const ASYNCAPI_IFRAME_TEMPLATE = `<iframe class="asyncapi" src="{{src}}" />`;
+const ASYNCAPI_IFRAME_TEMPLATE = `<div data-fullscreen><iframe class="asyncapi" src="{{src}}" /></div>`;
 
 const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
