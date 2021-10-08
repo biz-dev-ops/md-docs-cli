@@ -82,7 +82,8 @@ ul, ol {
 }
 
 figure.left {
-    text-align: left;
+    float: left;
+    margin: 0 var(--space-md) var(--space-md) 0;
 }
 
 figure.center {
@@ -90,7 +91,8 @@ figure.center {
 }
 
 figure.right {
-    text-align: right;
+    float: right;
+    margin: 0 0 var(--space-md) var(--space-md);
 }
 
 iframe {
@@ -623,7 +625,9 @@ article > .header-container {
 }
 
 [data-fullscreen="true"] figure {
+    float: none;
     margin: var(--space-md);
+    padding: 0;
     text-align: center;
 }
 
