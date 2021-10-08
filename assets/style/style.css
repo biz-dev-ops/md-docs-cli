@@ -379,6 +379,7 @@ main > aside a:focus {
 main > article {
     color: var(--article-text-color);
     grid-area: article;
+    min-width: 0; /* Fix: Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1418727 */
     order: 1;
 }
 
