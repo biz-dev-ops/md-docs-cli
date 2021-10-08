@@ -99,6 +99,13 @@ iframe {
     min-width: 100%;
 }
 
+iframe.openapi,
+iframe.asyncapi {
+    min-width: calc(100% + (var(--space-lg) * 2));
+    margin-left: calc(var(--space-lg) * -1);
+    margin-right: calc(var(--space-lg) * -1);
+}
+
 blockquote {
     padding-right: var(--space-md);
     padding-left: calc(var(--space-md));
@@ -506,6 +513,9 @@ article > .header-container {
 [data-fullscreen] {
     position: relative;
     overflow: hidden;
+    margin-left: calc(var(--space-lg) * -1);
+    margin-right: calc(var(--space-lg) * -1);
+    padding: 0 var(--space-lg);
 }
 
 [data-fullscreen] button {
@@ -523,7 +533,7 @@ article > .header-container {
     position: relative;
     text-decoration: none;
     transition: background-color 250ms, color 250ms;
-    transform: translateX(200%);
+    transform: translateX(calc(var(--space-lg) * 3));
     width: var(--space-lg);
 }
 
@@ -572,7 +582,7 @@ article > .header-container {
 [data-fullscreen] header,
 [data-fullscreen] footer {
     position: absolute;
-    right: var(--space-md);
+    right: calc(var(--space-lg) + var(--space-md));
     top: var(--space-md);
     z-index: var(--z-fullscreen-button);
 }
@@ -586,7 +596,9 @@ article > .header-container {
     background-color: #fff;
     height: 100%;
     left: 0;
+    margin: 0;
     overflow: auto;
+    padding: 0;
     position: fixed;
     scroll-behavior: smooth;
     top: 0;
@@ -597,6 +609,7 @@ article > .header-container {
 [data-fullscreen="true"] header,
 [data-fullscreen="true"] footer {
     position: fixed;
+    right: var(--space-md);
 }
 
 [data-fullscreen="true"] button {
@@ -609,12 +622,16 @@ article > .header-container {
     transform: rotate(180deg);
 }
 
-[data-fullscreen="true"] figure,
-[data-fullscreen="true"] iframe {
-    margin: var(--space-md) 0;
-}
-
 [data-fullscreen="true"] figure {
     margin: var(--space-md);
     text-align: center;
+}
+
+[data-fullscreen="true"]  iframe.openapi,
+[data-fullscreen="true"]  iframe.asyncapi {
+    min-width: 100%;
+    min-height: 100vh;
+    margin-left: 0;
+    margin-right: 0;
+    vertical-align: middle;
 }
