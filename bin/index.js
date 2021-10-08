@@ -3,8 +3,9 @@
 const fs = require("fs").promises;
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const markdown_it_anchor = require('markdown-it-anchor')
-const md = require('markdown-it')({  html: true, linkify: true, typographer: true })
+const markdown_it_anchor = require('markdown-it-anchor');
+const md = require('markdown-it')
+    ({  html: true, linkify: true, typographer: true })
     .use(markdown_it_anchor, {  
         permalink: markdown_it_anchor.permalink.linkInsideHeader({
             symbol: "¶"            
@@ -18,7 +19,8 @@ const md = require('markdown-it')({  html: true, linkify: true, typographer: tru
         level: [1,2,3]
     })
     .use(require("markdown-it-plantuml-ex"))
-    .use(require("markdown-it-abbr"));
+    .use(require("markdown-it-abbr"))
+    .use(require("markdown-it-codetabs"));
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;

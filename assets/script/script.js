@@ -79,9 +79,9 @@ function __init(root, git) {
     // Fullscreen containers
     const fsTitle = (isFullscreen) => {
         if (isFullscreen) {
-            return 'Sluit weergave';
+            return 'Close';
         } else {
-            return 'Toon beeldvullend';
+            return 'Maximize';
         }
     }
     const fsSources = document.querySelectorAll('[data-fullscreen]')
