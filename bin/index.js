@@ -39,6 +39,8 @@ async function run() {
     const git = await getGitInfo();
     const DIST_BRANCH_ROOT = path.resolve(`./dist${git.path}`);
 
+    console.log(DIST_BRANCH_ROOT)
+
     await init(DOCS_ROOT, DIST_BRANCH_ROOT);
     await createGitBranchFile(DIST_ROOT, git.branches);
 
@@ -47,7 +49,7 @@ async function run() {
     }
 
     await copyFiles(DOCS_ROOT, DIST_BRANCH_ROOT);    
-    await transformFiles(DIST_BRANCH_ROOT, menu_data, git);
+    await transformFiles(DIST_BRANCH_ROOT, menu_data, git, DIST_BRANCH_ROOT);
     await copyFiles(`${MODULE_ROOT}/assets`, `${DIST_BRANCH_ROOT}/assets`);
     await copyFiles(`${MODULE_ROOT}/node_modules/swagger-ui-dist`, `${DIST_BRANCH_ROOT}/assets/swagger-ui-dist`);
     await copyFiles(`${MODULE_ROOT}/node_modules/bpmn-js/dist`, `${DIST_BRANCH_ROOT}/assets/bpmn-js-dist`);
@@ -72,7 +74,7 @@ async function copyFiles(src, dst) {
     }
 }
 
-async function transformFiles(dir, menu_data, git) {
+async function transformFiles(dir, menu_data, git, root) {
     await fs.access(dir);
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -80,34 +82,34 @@ async function transformFiles(dir, menu_data, git) {
         const src = `${dir}/${entry.name}`;
 
         if (entry.isDirectory()) {
-            await transformFiles(src, menu_data, git);
+            await transformFiles(src, menu_data, git, root);
         } 
         else {
-            await transformFile(src, menu_data, git);
+            await transformFile(src, menu_data, git, root);
         }
     }
 }
 
-async function transformFile(file, menu_data, git) {
-    await transformMarkDown(file, menu_data, git);
+async function transformFile(file, menu_data, git, root) {
+    await transformMarkDown(file, menu_data, git, root);
 }
 
-async function transformMarkDown(file, menu_data, git) {
+async function transformMarkDown(file, menu_data, git, root) {
     if(!file.endsWith(".md"))
         return;    
 
     const response = await renderMarkdown(file);
     
     const dst = file.replace(/\.md$/, ".html");
-    const root = getRelativeRootFromFile(dst);
+    const relativeRoot = getRelativeRootFromFile(dst, root);
 
-    await parseHtml(response.template, dst);
+    await parseHtml(response.template, dst, root);
    
     const data = { 
         git,
         git_string: JSON.stringify(git), 
-        root, 
-        menu: renderMenu(root, menu_data), 
+        root: relativeRoot, 
+        menu: renderMenu(relativeRoot, menu_data), 
         content: response.template.innerHTML, 
         title: response.title 
     };
@@ -132,9 +134,9 @@ async function renderMarkdown(file) {
     return { template, title: response.title };
 }
 
-async function parseHtml(template, file) {    
+async function parseHtml(template, file, root) {    
     await parseImages(template, file);
-    await parseAnchors(template, file);
+    await parseAnchors(template, file, root);
     await removeEmptyParagraphs(template, file);
     await addHeadingContainers(template)
     
@@ -175,14 +177,14 @@ async function setFigureAlignment(fig, img, file) {
     console.log(`Set figure alignment in ${file}`);
 }
 
-async function parseAnchors(template, file) {
+async function parseAnchors(template, file, root) {
     const anchors = template.querySelectorAll("a");
     for (let anchor of anchors) {
-        await parseBPMNAnchor(anchor, file);
-        await parseOpenapiAnchor(anchor, file);
-        await parseAsyncApiAnchor(anchor, file);
-        await parseFeatureAnchor(anchor, file);
-        await parseMarkdownAnchor(anchor, file);
+        await parseBPMNAnchor(anchor, file, root);
+        await parseOpenapiAnchor(anchor, file, root);
+        await parseAsyncApiAnchor(anchor, file, root);
+        await parseFeatureAnchor(anchor, file, root);
+        await parseMarkdownAnchor(anchor, file, root);
     }
 }
 
@@ -266,13 +268,13 @@ async function parseBPMNAnchor(anchor, file) {
     console.log(`Parsed bpmn anchor in ${file}`);
 }
 
-async function parseOpenapiAnchor(anchor, file) {
+async function parseOpenapiAnchor(anchor, file, root) {
     if(!anchor.href.endsWith("openapi.yaml"))
         return;
 
     const src =  `${anchor.href.substring(0, anchor.href.length - 5)}.html`;
     const dst = relativeFileLocation(file, src);
-    const root = getRelativeRootFromFile(dst);
+    const relativeRoot = getRelativeRootFromFile(dst, root);
 
     const parent = anchor.parentNode;
     const container = parent.parentNode;
@@ -281,19 +283,19 @@ async function parseOpenapiAnchor(anchor, file) {
     parent.removeChild(anchor);
     
     const json = await SwaggerParser.validate(relativeFileLocation(file, anchor.href));
-    const html = Mustache.render(OPENAPI_TEMPLATE, { root, json_string: JSON.stringify(json) });
+    const html = Mustache.render(OPENAPI_TEMPLATE, { root: relativeRoot, json_string: JSON.stringify(json) });
     fs.writeFile(dst, html);
 
     console.log(`Parsed openapi anchor in ${file}`);    
 }
 
-async function parseAsyncApiAnchor(anchor, file) {
+async function parseAsyncApiAnchor(anchor, file, root) {
     if(!anchor.href.endsWith("asyncapi.yaml"))
         return;
     
     const src =  `${anchor.href.substring(0, anchor.href.length - 5)}.html`;
     const dst = relativeFileLocation(file, src);
-    const root = getRelativeRootFromFile(dst);
+    const relativeRoot = getRelativeRootFromFile(dst, root);
 
     const parent = anchor.parentNode;
     const container = parent.parentNode;
@@ -303,7 +305,7 @@ async function parseAsyncApiAnchor(anchor, file) {
     
     const yaml = await readFileAsString(relativeFileLocation(file, anchor.href));
     const json = await AsyncApiParser.parse(yaml);
-    const html = Mustache.render(ASYNCAPI_TEMPLATE, { title: `${json["_json"].info.title} ${json["_json"].info.version}`, root, json: JSON.stringify(json["_json"]) });
+    const html = Mustache.render(ASYNCAPI_TEMPLATE, { title: `${json["_json"].info.title} ${json["_json"].info.version}`, root: relativeRoot, json: JSON.stringify(json["_json"]) });
     fs.writeFile(dst, html);
 
     console.log(`Parsed asyncapi anchor in ${file}`);
@@ -404,13 +406,13 @@ function relativeFileLocation(src, ref) {
     return `${getPath(src)}/${ref}`;
 }
 
-function getRelativeRootFromFile(file) {
-    const root = path.relative(path.parse(file).dir, DIST_ROOT);
+function getRelativeRootFromFile(file, root) {
+    const relativeRoot = path.relative(path.parse(file).dir, root);
     
-    if(root.endsWith(".."))
-        return root + "/";
+    if(relativeRoot.endsWith(".."))
+        return relativeRoot + "/";
     else
-        return root;
+        return relativeRoot;
 }
 
 async function readFileAsString(file, encoding = "utf8") {
@@ -419,20 +421,34 @@ async function readFileAsString(file, encoding = "utf8") {
 }
 
 async function getGitInfo() {
+
     const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
     const remote = await __exec(`git remote`);
     const origin = await __exec(`git config --get remote.origin.url`);
     const repository = getGitRepository(origin);
-    const main_branch = await __exec(`git remote show ${remote} | sed -n '/HEAD branch/s/.*: //p'`);
+    const main_branch = (await __exec(`git remote show ${remote}`))
+        .split(`\n`)
+        .filter(l => l.includes("HEAD branch"))
+        .map(l => l.substr(l.indexOf(":") + 1).trim())
+        [0];
+
     const path = branch != main_branch ? "/" + featureBranchToPath(branch) : "";
-    const branches = (await new Octokit().request(`GET /repos/${repository}/branches`))
-        .data
-            .map(b => ({
-                name: b.name,
-                path: b.name == main_branch ? "" : featureBranchToPath(b.name),
-                is_feature_branch: b.name != main_branch 
-            }))
-            .sort((a, b) => `${a.is_feature_branch ? "z" : "a"}${a.name}`.localeCompare(`${b.is_feature_branch ? "z" : "a"}${b.name}`));
+
+    const remote_branches = (await new Octokit().request(`GET /repos/${repository}/branches`))
+        .data.map(b => b.name);
+
+    const local_branches = (await __exec(`git branch -a`))
+        .split(`\n`)
+        .map(b => b.replace("*", "").trim())
+        .filter(b => !b.startsWith("remotes"));
+
+    const branches = remote_branches.concat(local_branches.filter(b => !remote_branches.includes(b)))
+        .map(b => ({
+            name: b,
+            path: b == main_branch ? "" : featureBranchToPath(b),
+            is_feature_branch: b != main_branch 
+        }))
+        .sort((a, b) => `${a.is_feature_branch ? "z" : "a"}${a.name}`.localeCompare(`${b.is_feature_branch ? "z" : "a"}${b.name}`));
 
     return { 
         branch,
@@ -458,8 +474,7 @@ function getGitRepository(origin) {
 }
 
 function featureBranchToPath(branch) {
-    return "x-" + branch
-        .replace("/", "-")
+    return branch
         .replace(" ", "-")
         .toLowerCase();
 }
@@ -591,7 +606,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>{{title}}</title>
-    <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{{root}}}assets/style/style.css" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -600,8 +615,9 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
     
-    <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="{{{root}}}assets/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/svg+xml" href="{{{root}}}assets/images/favicon.svg" />
+    <link rel="icon" type="image/png" href="{{{root}}}assets/images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{{{root}}}assets/images/favicon-16x16.png" sizes="16x16" />
 </head>
 <body class="line-numbers {{#git.is_feature_branch}}feature{{/git.is_feature_branch}}">
     <header>
@@ -654,7 +670,7 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
-    <script src="{{{root}}}assets/script.js" charset="UTF-8"></script>
+    <script src="{{{root}}}assets/script/script.js" charset="UTF-8"></script>
     <script> 
         __init("{{{root}}}", {{{git_string}}});
     </script>
