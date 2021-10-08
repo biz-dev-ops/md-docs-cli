@@ -204,6 +204,10 @@ header a[aria-expanded="true"] {
     color: var(--header-background-color);
 }
 
+.menu-toggle-branches {
+    white-space: nowrap;
+}
+
 .menu-toggle-branches::after {
     content: "";
     display: inline-block;
