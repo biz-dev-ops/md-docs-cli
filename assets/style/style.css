@@ -378,9 +378,21 @@ main > aside a {
     text-decoration: none;
 }
 
+main > aside .active {
+    font-weight: 600;
+}
+
+main > aside .active li {
+    font-weight: 400;
+}
+
 main > aside a:hover,
 main > aside a:focus {
     text-decoration: underline;
+}
+
+main > aside .table-of-contents > * {
+    padding-left: 0;
 }
 
 
