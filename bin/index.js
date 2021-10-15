@@ -32,10 +32,12 @@ const exec = util.promisify(require('child_process').exec);
 const { Octokit } = require("octokit");
 const yargs = require("yargs");
 const YamlParser = require("js-yaml");
+const RefParser = require("@apidevtools/json-schema-ref-parser");
 const options = yargs
  .usage("Usage: -b")
  .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
  .argv;
+
 
 async function run() {
     const menu_data = await getMenu(DOCS_ROOT);
@@ -289,9 +291,19 @@ async function parseOpenapiAnchor(anchor, file, root) {
     container.insertBefore(fragment, parent);
     parent.removeChild(anchor);
     
-    const json = await SwaggerParser.validate(relativeFileLocation(file, anchor.href));
+    const json = await RefParser.dereference(relativeFileLocation(file, anchor.href));
     const html = Mustache.render(OPENAPI_TEMPLATE, { root: relativeRoot, json_string: JSON.stringify(json) });
     fs.writeFile(dst, html);
+
+
+    try
+    {
+        await SwaggerParser.validate(json);
+    }
+    catch(ex)
+    {
+        console.error(json.stringify(ex));
+    }
 
     console.log(`Parsed openapi anchor in ${file}`);    
 }
@@ -310,10 +322,19 @@ async function parseAsyncApiAnchor(anchor, file, root) {
     container.insertBefore(fragment, parent);
     parent.removeChild(anchor);
     
-    const yaml = await readFileAsString(relativeFileLocation(file, anchor.href));
-    const json = await AsyncApiParser.parse(yaml);
-    const html = Mustache.render(ASYNCAPI_TEMPLATE, { title: `${json["_json"].info.title} ${json["_json"].info.version}`, root: relativeRoot, json: JSON.stringify(json["_json"]) });
-    fs.writeFile(dst, html);
+    try
+    {
+        const json = (
+            await RefParser.dereference(relativeFileLocation(file, anchor.href))
+                .then(json => AsyncApiParser.parse(json))
+        )["_json"];
+        const html = Mustache.render(ASYNCAPI_TEMPLATE, { title: `${json.info.title} ${json.info.version}`, root: relativeRoot, json: JSON.stringify(json) });
+        fs.writeFile(dst, html);
+    }
+    catch(ex)
+    {
+        console.error(ex);
+    }
 
     console.log(`Parsed asyncapi anchor in ${file}`);
 }
@@ -332,8 +353,7 @@ async function parseJsonFormAnchor(anchor, file, root) {
     container.insertBefore(fragment, parent);
     parent.removeChild(anchor);
     
-    const yaml = await readFileAsString(relativeFileLocation(file, anchor.href));
-    const json = YamlParser.load(yaml);
+    const json = await RefParser.dereference(relativeFileLocation(file, anchor.href))
     const html = Mustache.render(JSON_FORM_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
     fs.writeFile(dst, html);
 
