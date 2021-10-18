@@ -20,7 +20,8 @@ const md = require('markdown-it')
     })
     .use(require("markdown-it-plantuml-ex"))
     .use(require("markdown-it-abbr"))
-    .use(require("markdown-it-codetabs"));
+    .use(require("markdown-it-codetabs"))
+    .use(require("markdown-it-attrs"));
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
@@ -142,6 +143,7 @@ async function renderMarkdown(file) {
 
 async function parseHtml(template, file, root) {
     await parseImages(template, file);
+    await parseUnsortedLists(template, file);
     await parseAnchors(template, file, root);
     await removeEmptyParagraphs(template, file);
     await addHeadingContainers(template)
@@ -183,6 +185,20 @@ async function setFigureAlignment(fig, img, file) {
     fig.classList.add(align);
 
     console.log(`Set figure alignment in ${file}`);
+}
+
+async function parseUnsortedLists(template, file) {
+    const uls = template.querySelectorAll("ul");
+    for (let ul of uls) {
+        await ParseFileTabsUl(ul, file);
+    }
+}
+
+async function ParseFileTabsUl(ul, file) {
+    if (!ul.classList.contains("file-tabs"))
+        return;
+    
+    console.log(`Parsed file-tabs ul in ${file}`);
 }
 
 async function parseAnchors(template, file, root) {
@@ -304,7 +320,7 @@ async function parseOpenapiAnchor(anchor, file, root) {
         console.error(JSON.stringify(ex));
     }
 
-    console.log(`Parsed openapi anchor in ${file}`);    
+    console.log(`Parsed openapi anchor in ${file}`);
 }
 
 async function parseAsyncApiAnchor(anchor, file, root) {
