@@ -21,7 +21,7 @@
 
   /* Theming */
   --background-color-base: var(--color-black-a10);
-  --text-color-base: var(--color-grey-900);
+  --text-color-base: var(--color-black-a90);
 
   --color-info: #385998;
   --color-info-100: #EFF2FB;
@@ -99,7 +99,7 @@
 
   /* Article */
   --article-background-color: var(--color-white);
-  --article-text-color: var(--color-grey-900);
+  --article-text-color: var(--text-color-base);
 }
 
 @media (min-width: 40rem) {
