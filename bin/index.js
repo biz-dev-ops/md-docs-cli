@@ -295,14 +295,13 @@ async function parseOpenapiAnchor(anchor, file, root) {
     const html = Mustache.render(OPENAPI_TEMPLATE, { root: relativeRoot, json_string: JSON.stringify(json) });
     fs.writeFile(dst, html);
 
-
     try
     {
         await SwaggerParser.validate(json);
     }
     catch(ex)
     {
-        console.error(json.stringify(ex));
+        console.error(JSON.stringify(ex));
     }
 
     console.log(`Parsed openapi anchor in ${file}`);    
@@ -322,18 +321,17 @@ async function parseAsyncApiAnchor(anchor, file, root) {
     container.insertBefore(fragment, parent);
     parent.removeChild(anchor);
     
+    const json = await RefParser.dereference(relativeFileLocation(file, anchor.href));
+    const html = Mustache.render(ASYNCAPI_TEMPLATE, { title: `${json.info.title} ${json.info.version}`, root: relativeRoot, json: JSON.stringify(json) });
+    fs.writeFile(dst, html);
+
     try
     {
-        const json = (
-            await RefParser.dereference(relativeFileLocation(file, anchor.href))
-                .then(json => AsyncApiParser.parse(json))
-        )["_json"];
-        const html = Mustache.render(ASYNCAPI_TEMPLATE, { title: `${json.info.title} ${json.info.version}`, root: relativeRoot, json: JSON.stringify(json) });
-        fs.writeFile(dst, html);
+        await AsyncApiParser.parse(json);
     }
     catch(ex)
     {
-        console.error(ex);
+        console.error(JSON.stringify(ex))
     }
 
     console.log(`Parsed asyncapi anchor in ${file}`);
