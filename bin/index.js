@@ -32,7 +32,6 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const { Octokit } = require("octokit");
 const yargs = require("yargs");
-const YamlParser = require("js-yaml");
 const RefParser = require("@apidevtools/json-schema-ref-parser");
 const options = yargs
  .usage("Usage: -b")
@@ -142,11 +141,11 @@ async function renderMarkdown(file) {
 }
 
 async function parseHtml(template, file, root) {
-    await parseImages(template, file);
+    await addHeadingContainers(template);
     await parseUnsortedLists(template, file);
+    await parseImages(template, file);
     await parseAnchors(template, file, root);
     await removeEmptyParagraphs(template, file);
-    await addHeadingContainers(template)
     
     return template;
 }
@@ -154,37 +153,11 @@ async function parseHtml(template, file, root) {
 async function parseImages(template, file) {
     const images = template.querySelectorAll("img");
     for (let img of images) {
-        const fsWrapper = JSDOM.fragment("<div data-fullscreen></div>").firstElementChild;
-        const fig = JSDOM.fragment("<figure></figure>").firstElementChild;
-        
-        let ref = img;
-        let container = img.parentNode;
-
-        if(container.nodeName === "P") {
-            ref = container;
-            container = container.parentNode;
-        }
-
-        container.insertBefore(fsWrapper, ref);
-        
-        await setFigureAlignment(fig, img, file);
-
-        fig.appendChild(img);
-        fsWrapper.appendChild(fig);
+        const fragment = JSDOM.fragment(Mustache.render(FIGURE_TEMPLATE, { img: img.outerHTML, align: getUrlParameter(img.src, "align") }));
+        replaceWithFragment(fragment, img);
 
         console.log(`Wrapped image with figure in ${file}`);
     }
-}
-
-async function setFigureAlignment(fig, img, file) {
-    const align = getUrlParameter(img.src, "align");
-    
-    if(align == undefined)
-        return;
-
-    fig.classList.add(align);
-
-    console.log(`Set figure alignment in ${file}`);
 }
 
 async function parseUnsortedLists(template, file) {
@@ -197,6 +170,18 @@ async function parseUnsortedLists(template, file) {
 async function ParseFileTabsUl(ul, file) {
     if (!ul.classList.contains("file-tabs"))
         return;
+    
+    const parent_id = createUniqueId(ul);
+    
+    const collection = Array.from(ul.querySelectorAll("a"))
+        .map(a => ({
+            id: `${parent_id}-${makeUrlFriendly(a.text)}`,
+            href: a.href,
+            text: a.text
+        }));
+    
+    const fragment = JSDOM.fragment(Mustache.render(TABS_TEMPLATE, { items: collection }));
+    replaceWithFragment(fragment, ul);
     
     console.log(`Parsed file-tabs ul in ${file}`);
 }
@@ -283,12 +268,9 @@ async function parseBPMNAnchor(anchor, file) {
     const xml = (await readFileAsString(relativeFileLocation(file, anchor.href)))
         .replace(/(\r\n|\n|\r)/gm, "")
         .replace("'", "\'");
-
-    const parent = anchor.parentNode;
-    const container = parent.parentNode;
+    
     const fragment = JSDOM.fragment(Mustache.render(BPMN_TEMPLATE, { id, xml, href: anchor.href }));
-    container.insertBefore(fragment, parent);
-    parent.removeChild(anchor);
+    replaceWithFragment(fragment, anchor);
     
     console.log(`Parsed bpmn anchor in ${file}`);
 }
@@ -301,11 +283,8 @@ async function parseOpenapiAnchor(anchor, file, root) {
     const dst = relativeFileLocation(file, src);
     const relativeRoot = getRelativeRootFromFile(dst, root);
 
-    const parent = anchor.parentNode;
-    const container = parent.parentNode;
     const fragment = JSDOM.fragment(Mustache.render(OPENAPI_IFRAME_TEMPLATE, { src }));
-    container.insertBefore(fragment, parent);
-    parent.removeChild(anchor);
+    replaceWithFragment(fragment, anchor);
     
     const json = await RefParser.dereference(relativeFileLocation(file, anchor.href));
     const html = Mustache.render(OPENAPI_TEMPLATE, { root: relativeRoot, json_string: JSON.stringify(json) });
@@ -331,24 +310,22 @@ async function parseAsyncApiAnchor(anchor, file, root) {
     const dst = relativeFileLocation(file, src);
     const relativeRoot = getRelativeRootFromFile(dst, root);
 
-    const parent = anchor.parentNode;
-    const container = parent.parentNode;
     const fragment = JSDOM.fragment(Mustache.render(ASYNCAPI_IFRAME_TEMPLATE, { src: src }));
-    container.insertBefore(fragment, parent);
-    parent.removeChild(anchor);
+    replaceWithFragment(fragment, anchor);
     
-    const json = await RefParser.dereference(relativeFileLocation(file, anchor.href));
-    const html = Mustache.render(ASYNCAPI_TEMPLATE, { title: `${json.info.title} ${json.info.version}`, root: relativeRoot, json: JSON.stringify(json) });
-    fs.writeFile(dst, html);
-
+    let json = await RefParser.dereference(relativeFileLocation(file, anchor.href));    
+    
     try
     {
-        await AsyncApiParser.parse(json);
+        json = (await AsyncApiParser.parse(json))["_json"];
     }
     catch(ex)
     {
         console.error(JSON.stringify(ex))
     }
+    
+    const html = Mustache.render(ASYNCAPI_TEMPLATE, { title: `${json.info.title} ${json.info.version}`, root: relativeRoot, json: JSON.stringify(json) });
+    fs.writeFile(dst, html);
 
     console.log(`Parsed asyncapi anchor in ${file}`);
 }
@@ -361,11 +338,8 @@ async function parseJsonFormAnchor(anchor, file, root) {
     const dst = relativeFileLocation(file, src);
     const relativeRoot = getRelativeRootFromFile(dst, root);
 
-    const parent = anchor.parentNode;
-    const container = parent.parentNode;
     const fragment = JSDOM.fragment(Mustache.render(JSON_FORM_IFRAME_TEMPLATE, { src: src }));
-    container.insertBefore(fragment, parent);
-    parent.removeChild(anchor);
+    replaceWithFragment(fragment, anchor);
     
     const json = await RefParser.dereference(relativeFileLocation(file, anchor.href))
     const html = Mustache.render(JSON_FORM_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
@@ -379,14 +353,24 @@ async function parseFeatureAnchor(anchor, file) {
         return;
 
     const feature = (await readFileAsString(relativeFileLocation(file, anchor.href)));
-
-    const parent = anchor.parentNode;
-    const container = parent.parentNode;
-    const fragment = JSDOM.fragment(Mustache.render(FEATURE_TEMPLATE, { feature } ));
-    container.insertBefore(fragment, parent);
-    parent.removeChild(anchor);
+    const fragment = JSDOM.fragment(Mustache.render(FEATURE_TEMPLATE, { feature }));
+    
+    replaceWithFragment(fragment, anchor);
     
     console.log(`Parsed feature anchor in ${file}`);
+}
+
+function replaceWithFragment(fragment, el) {
+    let ref = el;
+    let parent = ref.parentNode;
+
+    if (parent.nodeName === "P") {
+        ref = parent;
+        parent = ref.parentNode;
+    }
+
+    parent.insertBefore(fragment, ref);
+    el.parentNode.removeChild(el);    
 }
 
 async function parseMarkdownAnchor(anchor, file) {
@@ -459,6 +443,34 @@ function renderMenu(root, menu_data) {
     return Mustache.render(template, menu_data, {
         "sub_menu": template
     });
+}
+
+function createUniqueId(obj) {
+    return getLeadingHeadings(obj)
+        .reverse()
+        .map(e => e.id ?? makeUrlFriendly(e.text))
+        .join("-");
+}
+
+function getLeadingHeadings(o) {
+    const headings = [];
+    if (o == undefined)
+        return headings;   
+            
+    let container = o;
+    while (container = container.parentNode.closest(".header-container"))
+    {
+        headings.push(container.querySelector("h1,h2,h3"));
+    }
+    
+    return headings;        
+}
+
+function makeUrlFriendly(value) {
+    if (value == undefined)
+        return null;
+    
+    return encodeURIComponent(value.toLowerCase().replace(/[^a-z0-9_-]+/gi, '-'));
 }
 
 function getPath(file) {
@@ -663,6 +675,29 @@ const MENU_TEMPLATE = (root) => `
 {{/items}}
 </ul>
 {{/has_items}}`;
+
+const TABS_TEMPLATE = `<div class="tabs-container">
+    <div class="tabs-list-container">
+        <ul>
+            {{#items}}
+            <li><a href="#{{id}}">{{text}}</a></li>
+            {{/items}}
+        </ul>
+    </div>
+    <div class="tabs-panels-container">
+        {{#items}}
+        <div id="{{id}}">
+            <a href="{{href}}">{{text}}</a>
+        </div>
+        {{/items}}
+    </div>
+</div>`;
+
+const FIGURE_TEMPLATE = `<div data-fullscreen>
+    <figure class="{{align}}">
+        {{{img}}}
+    </figure>
+</div>`;
 
 const HTML_TEMPLATE = `<!DOCTYPE HTML>
 <html>
