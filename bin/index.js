@@ -145,7 +145,10 @@ async function parseHtml(template, file, root) {
     await parseUnsortedLists(template, file);
     await parseImages(template, file);
     await parseAnchors(template, file, root);
+    await parseUnsortedLists(template, file);
+    await cleanUp(template);
     await removeEmptyParagraphs(template, file);
+    
     
     return template;
 }
@@ -168,7 +171,7 @@ async function parseUnsortedLists(template, file) {
 }
 
 async function ParseFileTabsUl(ul, file) {
-    if (!ul.classList.contains("file-tabs"))
+    if (!ul.querySelector("a.replaced"))
         return;
     
     const parent_id = createUniqueId(ul);
@@ -177,7 +180,8 @@ async function ParseFileTabsUl(ul, file) {
         .map(a => ({
             id: `${parent_id}-${makeUrlFriendly(a.text)}`,
             href: a.href,
-            text: a.text
+            text: a.text,
+            el: a.previousSibling.outerHTML
         }));
     
     const fragment = JSDOM.fragment(Mustache.render(TABS_TEMPLATE, { items: collection }));
@@ -317,6 +321,7 @@ async function parseAsyncApiAnchor(anchor, file, root) {
     
     try
     {
+        // Does not work without parsed json.
         json = (await AsyncApiParser.parse(json))["_json"];
     }
     catch(ex)
@@ -370,7 +375,7 @@ function replaceWithFragment(fragment, el) {
     }
 
     parent.insertBefore(fragment, ref);
-    el.parentNode.removeChild(el);    
+    el.classList.add("replaced");
 }
 
 async function parseMarkdownAnchor(anchor, file) {
@@ -385,6 +390,14 @@ async function parseMarkdownAnchor(anchor, file) {
     }
 
     console.log(`Parsed markdown anchor in ${file}`);
+}
+
+async function cleanUp(template) {
+    const replaced = template.querySelectorAll(".replaced");
+    for (let el of replaced) {
+        el.parentNode.removeChild(el);
+    }
+    
 }
 
 async function getMenu(src, parent = null, path = "") {
@@ -687,7 +700,7 @@ const TABS_TEMPLATE = `<div class="tabs-container">
     <div class="tabs-panels-container">
         {{#items}}
         <div id="{{id}}">
-            <a href="{{href}}">{{text}}</a>
+            {{{el}}}
         </div>
         {{/items}}
     </div>
