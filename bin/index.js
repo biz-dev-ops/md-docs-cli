@@ -154,7 +154,7 @@ async function parseHtml(template, file, root) {
 }
 
 async function parseImages(template, file) {
-    const images = template.querySelectorAll("img");
+    const images = template.querySelectorAll("img,svg");
     for (let img of images) {
         const fragment = JSDOM.fragment(Mustache.render(FIGURE_TEMPLATE, { img: img.outerHTML, align: getUrlParameter(img.src, "align") }));
         replaceWithFragment(fragment, img);
