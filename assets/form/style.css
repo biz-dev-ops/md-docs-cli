@@ -1,0 +1,114 @@
+@import "../style/reset.css";
+@import "../style/theme.css";
+html {
+    font-family: sans-serif;
+    line-height: 1.5;
+}
+
+body {
+    padding: var(--space-md) var(--space-lg);
+}
+
+dl, form {
+    margin: 0;
+}
+
+:where(dl, form):not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    margin: 0;
+    line-height: var(--line-height-heading);
+}
+
+:where(h1, h2, h3, h4, h5, h6):not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * .5em);
+}
+
+h1, .heading-size-1 {
+    font-size: var(--heading-1-size);
+}
+
+h2, .heading-size-2 {
+    font-size: var(--heading-2-size);
+}
+
+h3, .heading-size-3 {
+    font-size: var(--heading-3-size);
+}
+
+h4, .heading-size-4 {
+    font-size: var(--heading-4-size);
+}
+
+h5, .heading-size-5 {
+    font-size: var(--heading-5-size);
+}
+
+h6, .heading-size-6 {
+    font-size: var(--heading-6-size);
+}
+
+input:not([type="checkbox"], [type="radio"]),
+textarea,
+select {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+dt {
+    font-weight: 600;
+}
+
+dd {
+    margin-left: 0;
+    border-bottom: var(--line-base) dashed var(--color-grey-100);
+}
+
+dd + dt {
+    margin-top: var(--space-sm);
+}
+
+button {
+    border: 0;
+    border-radius: 10em;
+    font-size: inherit;
+    padding: var(--space-xs) var(--space-md);
+}
+
+button[type="submit"] {
+    font-weight: 600;
+}
+
+
+.card {
+    border-radius: var(--radius-base);
+    border: var(--line-base) solid var(--background-color-base);
+    padding: calc(var(--space-md) - var(--line-base));
+    position: relative;
+    overflow: hidden;
+
+    box-shadow: var(--drop-shadow-level2);
+}
+
+.action {
+    border: var(--line-base) solid var(--background-color-base);
+    padding: var(--space-md);
+}
+
+.form-item {
+    margin-bottom: 1rem;
+}
+
+.form-submit {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-submit button + button {
+    margin-left: var(--space-sm);
+}

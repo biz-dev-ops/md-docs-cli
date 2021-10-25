@@ -33,6 +33,7 @@ const exec = util.promisify(require('child_process').exec);
 const { Octokit } = require("octokit");
 const yargs = require("yargs");
 const RefParser = require("@apidevtools/json-schema-ref-parser");
+const mergeAllOf = require("json-schema-merge-allof");
 const options = yargs
  .usage("Usage: -b")
  .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
@@ -57,8 +58,6 @@ async function run() {
     await copyFiles(`${MODULE_ROOT}/node_modules/swagger-ui-dist`, `${DIST_BRANCH_ROOT}/assets/swagger-ui-dist`);
     await copyFiles(`${MODULE_ROOT}/node_modules/bpmn-js/dist`, `${DIST_BRANCH_ROOT}/assets/bpmn-js-dist`);
     await copyFiles(`${MODULE_ROOT}/node_modules/@asyncapi/html-template/template`, `${DIST_BRANCH_ROOT}/assets/asyncapi/html-template`);
-    await copyFiles(`${MODULE_ROOT}/node_modules/jsonform/deps`, `${DIST_BRANCH_ROOT}/assets/jsonform/deps`);
-    await copyFiles(`${MODULE_ROOT}/node_modules/jsonform/lib`, `${DIST_BRANCH_ROOT}/assets/jsonform/lib`);
 }
 
 async function copyFiles(src, dst) {
@@ -196,7 +195,7 @@ async function parseAnchors(template, file, root) {
         await parseBPMNAnchor(anchor, file, root);
         await parseOpenapiAnchor(anchor, file, root);
         await parseAsyncApiAnchor(anchor, file, root);
-        await parseJsonFormAnchor(anchor, file, root);
+        await parseUserTaskAnchor(anchor, file, root);
         await parseFeatureAnchor(anchor, file, root);
         await parseMarkdownAnchor(anchor, file, root);
     }
@@ -290,7 +289,7 @@ async function parseOpenapiAnchor(anchor, file, root) {
     const fragment = JSDOM.fragment(Mustache.render(OPENAPI_IFRAME_TEMPLATE, { src }));
     replaceWithFragment(fragment, anchor);
     
-    const json = await RefParser.dereference(relativeFileLocation(file, anchor.href));
+    const json = mergeAllOfInSchema(await RefParser.dereference(relativeFileLocation(file, anchor.href)));
     const html = Mustache.render(OPENAPI_TEMPLATE, { root: relativeRoot, json_string: JSON.stringify(json) });
     fs.writeFile(dst, html);
 
@@ -317,7 +316,7 @@ async function parseAsyncApiAnchor(anchor, file, root) {
     const fragment = JSDOM.fragment(Mustache.render(ASYNCAPI_IFRAME_TEMPLATE, { src: src }));
     replaceWithFragment(fragment, anchor);
     
-    let json = await RefParser.dereference(relativeFileLocation(file, anchor.href));    
+    let json = mergeAllOfInSchema(await RefParser.dereference(relativeFileLocation(file, anchor.href)));
     
     try
     {
@@ -335,22 +334,22 @@ async function parseAsyncApiAnchor(anchor, file, root) {
     console.log(`Parsed asyncapi anchor in ${file}`);
 }
 
-async function parseJsonFormAnchor(anchor, file, root) {
-    if(!anchor.href.endsWith("form.yaml"))
+async function parseUserTaskAnchor(anchor, file, root) {
+    if(!anchor.href.endsWith("user-task.yaml"))
         return;
 
     const src =  `${anchor.href.substring(0, anchor.href.length - 5)}.html`;
     const dst = relativeFileLocation(file, src);
     const relativeRoot = getRelativeRootFromFile(dst, root);
 
-    const fragment = JSDOM.fragment(Mustache.render(JSON_FORM_IFRAME_TEMPLATE, { src: src }));
+    const fragment = JSDOM.fragment(Mustache.render(USER_TASK_IFRAME_TEMPLATE, { src: src }));
     replaceWithFragment(fragment, anchor);
     
-    const json = await RefParser.dereference(relativeFileLocation(file, anchor.href))
-    const html = Mustache.render(JSON_FORM_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
+    const json = mergeAllOfInSchema(await RefParser.dereference(relativeFileLocation(file, anchor.href)));
+    const html = Mustache.render(USER_TASK_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
     fs.writeFile(dst, html);
 
-    console.log(`Parsed jsonform anchor in ${file}`);
+    console.log(`Parsed user task anchor in ${file}`);
 }
 
 async function parseFeatureAnchor(anchor, file) {
@@ -635,8 +634,21 @@ function getUrlParameter(url, name) {
     }
 }
 
+mergeAllOfInSchema = (object) =>{
+    if(!!object["allOf"]){
+        object = mergeAllOf(object);
+    }
+
+    for (let key in object) {
+        if(typeof object[key] == "object"){
+            object[key] = mergeAllOfInSchema(object[key])
+        }
+    }
+    return object;
+}
+
 async function __exec(command) {
-    const { stdout, stderr } = await exec(command);
+    const { stdout, stderr } = await exec(command, { timeout: 5000 });
     
     if(stderr.trim() != "")
         throw stderr.trim();
@@ -826,7 +838,7 @@ const OPENAPI_IFRAME_TEMPLATE = `<div data-fullscreen><iframe class="openapi" sr
 
 const ASYNCAPI_IFRAME_TEMPLATE = `<div data-fullscreen><iframe class="asyncapi" src="{{src}}" /></div>`;
 
-const JSON_FORM_IFRAME_TEMPLATE = `<iframe class="json-form" src="{{src}}" />`;
+const USER_TASK_IFRAME_TEMPLATE = `<iframe class="json-form" src="{{src}}" />`;
 
 const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
@@ -865,6 +877,10 @@ const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
       
       .swagger-ui .wrapper {
         padding: 0 3em;
+      }
+
+      .information-container, .scheme-container {
+        display:none;
       }
     </style>
   </head>
@@ -910,7 +926,7 @@ const ASYNCAPI_TEMPLATE = `<!DOCTYPE html>
     <div id="root"></div>
     
     <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
-    <script src="{{{root}}}assets/asyncapi/html-template/js/asyncapi-ui.min.js" type="application/javascript"></script> 
+    <script src="{{{root}}}assets/asyncapi/html-template/js/asyncapi-ui.min.js"></script> 
     <script>
       const schema = {{{json}}};
       const config = {
@@ -926,29 +942,22 @@ const ASYNCAPI_TEMPLATE = `<!DOCTYPE html>
   </body>
 </html>`;
 
-const JSON_FORM_TEMPLATE = `<!DOCTYPE html>
-<html>
+const USER_TASK_TEMPLATE = `<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">  
     <title>{{title}}</title>
-    <link rel="stylesheet" href="{{{root}}}assets/jsonform/deps/opt/bootstrap.css" />
-  </head>
-  <body>
-    <form></form>
-    <div id="res" class="alert"></div>
+    <link href="{{{root}}}assets/form/style.css" rel="stylesheet">
+</head>
+<body>
+    <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
+    <script src="{{{root}}}assets/form/script.js"></script>
     <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
-    <script src="{{{root}}}assets/jsonform/deps/jquery.min.js"></script>
-    <script src="{{{root}}}assets/jsonform/deps/underscore.js"></script>
-    <script src="{{{root}}}assets/jsonform/deps/opt/jsv.js"></script>
-    <script src="{{{root}}}assets/jsonform/lib/jsonform.js"></script>
     <script>
-      let config = {{{json}}};
-      if(!config.schema)
-        config = { schema: config };
-        
-      $('form').jsonForm(config);
+        const schema = {{{json}}};
+        __init(schema);
     </script>
-  </body>
+</body>
 </html>`;
 
 run();

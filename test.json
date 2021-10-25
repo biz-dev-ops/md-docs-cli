@@ -1,0 +1,205 @@
+{
+    "user-task": {
+        "name": "Answer question",
+        "schema": {
+            "title": "answer_question_user_task",
+            "type": "object",
+            "required": [
+                "due_date",
+                "id",
+                "links",
+                "name",
+                "question",
+                "question_id",
+                "recieved_on",
+                "sender",
+                "subject"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "dcb47fd6-5695-4c98-8f13-11c516fd0b8d"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Answer question"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Question for Company X sent by John Doen regarding loan applications."
+                },
+                "icon": {
+                    "type": "string",
+                    "format": "material-icon",
+                    "description": "See https://fonts.google.com/icons",
+                    "example": "Task alt"
+                },
+                "badge": {
+                    "title": "badge",
+                    "type": "object",
+                    "required": [
+                        "type",
+                        "message"
+                    ],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "ERROR",
+                                "WARN",
+                                "INFO"
+                            ],
+                            "example": "WARN"
+                        },
+                        "message": {
+                            "type": "string",
+                            "example": "The task is almost overdue."
+                        }
+                    }
+                },
+                "due_date": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "delayed_until": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "claimed_on": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "links": {
+                    "type": "object",
+                    "required": [
+                        "show_task",
+                        "claim",
+                        "delay"
+                    ],
+                    "properties": {
+                        "show_task": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "Webpage where the user can handle the user task",
+                            "example": "https://task-client.com//my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d"
+                        },
+                        "claim": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "Rest uri to claim the user task on behalve of the user.",
+                            "example": "https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/claim"
+                        },
+                        "delay": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "Rest uri to delay the user task on behalve of the user.",
+                            "example": "https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delay"
+                        },
+                        "delegate": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "Rest uri to delegate the user task on behalve of the user.",
+                            "example": "https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delegate"
+                        },
+                        "delegators": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "Rest uri from where to retieve a list of users to who are authorized for delegation.",
+                            "example": "https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delegators"
+                        }
+                    }
+                },
+                "question_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "recieved_on": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time on which the questions was recieved."
+                },
+                "subject": {
+                    "type": "string",
+                    "description": "The subject of the question.",
+                    "example": "Question regarding a loan application."
+                },
+                "question": {
+                    "type": "string",
+                    "format": "markdown"
+                },
+                "sender": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The senders email address.",
+                    "example": "johh@doe.com"
+                }
+            }
+        }
+    },
+    "actions": [
+        {
+            "name": "Answer",
+            "schema": {
+                "title": "answer_question_command",
+                "type": "object",
+                "required": [
+                    "answer",
+                    "command_id",
+                    "origin",
+                    "question_id"
+                ],
+                "properties": {
+                    "command_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Unique of the command. May be used as an idemptotency key.",
+                        "example": "afa0f657-ba5b-4f6f-bc4e-6ac8dd63d76b"
+                    },
+                    "correlation_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Id of the first command which has started a chain of commands. May be empty if it's the beginning of a command chain.",
+                        "example": "48c274d1-0976-49ca-bb70-6e3ced85b629"
+                    },
+                    "causation_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Id of the (last) command which has caused this command to be triggered.",
+                        "example": "e62c8928-026e-493b-9ad1-1ffca6e19e61"
+                    },
+                    "origin": {
+                        "title": "origin",
+                        "type": "object",
+                        "description": "The description if the commands origin.",
+                        "required": [
+                            "origin_id",
+                            "name"
+                        ],
+                        "properties": {
+                            "origin_id": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The id of the origin sevice.",
+                                "example": "37702c9b-c15b-4558-8dde-aa8a3c206833"
+                            },
+                            "name": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The name of the origin sevice.",
+                                "example": "loan service"
+                            }
+                        }
+                    },
+                    "question_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "answer": {
+                        "type": "string",
+                        "format": "markdown"
+                    }
+                }
+            }
+        }
+    ]
+}
