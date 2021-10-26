@@ -6,7 +6,7 @@ function __init(root, git) {
     }
 
     const path = window.location.href.substr(base_url.length);
-    const root_url = git.is_feature_branch ? new URL(`../`, base_url).href : base_url;
+    const root_url = git.is_feature_branch ? base_url.substr(0, base_url.length - git.path.length) : base_url;
 
     const loadBranches = async (menu) => {
         menu.classList.add("loading");
