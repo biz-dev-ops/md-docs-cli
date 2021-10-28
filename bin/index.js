@@ -16,7 +16,7 @@ const md = require('markdown-it')
     .use(require("markdown-it-container"), "warning")
     .use(require("markdown-it-container"), "error")
     .use(require("markdown-it-toc-done-right"), {
-        level: [1,2,3]
+        level: [2,3,4]
     })
     .use(require("markdown-it-plantuml-ex"))
     .use(require("markdown-it-abbr"))
@@ -172,6 +172,7 @@ async function ParseFileTabsUl(ul, file) {
     if (!ul.querySelector("a.replaced"))
         return;
     
+    
     const parent_id = createUniqueId(ul);
     
     const collection = Array.from(ul.querySelectorAll("a"))
@@ -179,7 +180,7 @@ async function ParseFileTabsUl(ul, file) {
             id: `${parent_id}-${makeUrlFriendly(a.text)}`,
             href: a.href,
             text: a.text,
-            el: a.previousSibling.outerHTML
+            el: a.parentNode.innerHTML
         }));
     
     const fragment = JSDOM.fragment(Mustache.render(TABS_TEMPLATE, { items: collection }));
