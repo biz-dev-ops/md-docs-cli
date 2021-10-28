@@ -39,7 +39,7 @@ const options = yargs
  .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
  .argv;
 
-
+ 
 async function run() {
     const menu_data = await getMenu(DOCS_ROOT);
     const git = await getGitInfo();
@@ -509,46 +509,37 @@ async function readFileAsString(file, encoding = "utf8") {
 
 async function getGitInfo() {
 
-    const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
-    const remote = await __exec(`git remote`);
-    const origin = await __exec(`git config --get remote.origin.url`);
-    const repository = getGitRepository(origin);
-    const main_branch = (await __exec(`git remote show ${remote}`))
-        .split(`\n`)
-        .filter(l => l.includes("HEAD branch"))
-        .map(l => l.substr(l.indexOf(":") + 1).trim())
-        [0];
+    const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);    
+    const repository = await parseGitRepository();
+    const remote = await parseRemoteOrigin();
 
-    const path = branch != main_branch ? "/" + featureBranchToPath(branch) : "";
-
-    const remote_branches = (await new Octokit().request(`GET /repos/${repository}/branches`))
-        .data.map(b => b.name);
+    const path = branch != remote.main_branch ? "/" + featureBranchToPath(branch) : "";
 
     const local_branches = (await __exec(`git branch -a`))
         .split(`\n`)
         .map(b => b.replace("*", "").trim())
         .filter(b => !b.startsWith("remotes"));
 
-    const branches = remote_branches.concat(local_branches.filter(b => !remote_branches.includes(b)))
+    const branches = remote.branches.concat(local_branches.filter(b => !remote.branches.includes(b)))
         .map(b => ({
             name: b,
-            path: b == main_branch ? "" : featureBranchToPath(b),
-            is_feature_branch: b != main_branch
+            path: b == remote.main_branch ? "" : featureBranchToPath(b),
+            is_feature_branch: b != remote.main_branch
         }))
         .sort((a, b) => `${a.is_feature_branch ? "z" : "a"}${a.name}`.localeCompare(`${b.is_feature_branch ? "z" : "a"}${b.name}`));
 
     return { 
         branch,
-        main_branch, 
-        is_feature_branch: branch != main_branch, 
+        is_feature_branch: branch != remote.main_branch, 
         repository,
         path,
         branches
     };
 }
 
-function getGitRepository(origin) {
-    const parts = origin.trim().split("/");
+async function parseGitRepository() {
+    const originUrl = await __exec(`git config --get remote.origin.url`);
+    const parts = originUrl.trim().split("/");
     let repository = `${parts[parts.length - 2]}/${parts[parts.length - 1]}`;
     if(repository.endsWith(".git"))
         repository = repository.substring(0, repository.length - 4);
@@ -558,6 +549,53 @@ function getGitRepository(origin) {
         repository = repository.substr(index + 1);
 
     return repository;
+}
+
+async function parseRemoteOrigin() {
+    const name = await __exec(`git remote`);
+    const lines = parseGitReponse((await __exec(`git remote show ${name}`)));
+
+    const response = {
+        main_branch: lines
+            .filter(l => l.key == "HEAD branch")
+            .map(l => l.value)
+            [0],
+        branches: lines
+            .filter(l => l.key.startsWith("Remote branch"))
+            .map(l => l.value.map(l => l.substr(0, l.indexOf(" "))))
+            [0]
+    };
+    
+    return response;
+}
+
+function parseGitReponse(response) {
+    const lines = response.split(`\n`);
+    const parsed = [];
+
+    lines.forEach(line => {
+        const index = line.indexOf(":");        
+        if (index == -1) {
+            if (parsed.length === 0)
+                return;
+            
+            const last = parsed[parsed.length - 1];
+            if (last.value == "") {
+                last.value = [];
+            }
+            
+            last.value.push(line.trim());
+            return;
+        }
+
+        const key = line.substr(0, index).trim();
+        const value = line.substr(index + 1).trim();
+
+        parsed.push({ key, value });        
+    });
+
+    return parsed;
+
 }
 
 function featureBranchToPath(branch) {

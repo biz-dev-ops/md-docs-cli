@@ -44,7 +44,6 @@
     "markdown-it-plantuml-ex": "^1.0.0",
     "markdown-it-toc-done-right": "^4.2.0",
     "mustache": "^4.2.0",
-    "octokit": "^1.7.0",
     "swagger-parser": "^10.0.3",
     "swagger-ui-dist": "^3.52.5",
     "uuid": "^8.3.2",
