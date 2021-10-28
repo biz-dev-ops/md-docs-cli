@@ -30,7 +30,6 @@ const Mustache = require('mustache');
 const AsyncApiParser = require("@asyncapi/parser");
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-const { Octokit } = require("octokit");
 const yargs = require("yargs");
 const RefParser = require("@apidevtools/json-schema-ref-parser");
 const mergeAllOf = require("json-schema-merge-allof");
