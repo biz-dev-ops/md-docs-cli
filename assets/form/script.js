@@ -76,6 +76,9 @@ function transformToFields(schema) {
     const fields = [];
 
     for (var key in schema.properties) {
+        if (key == "user_task" || key == "command")
+            continue;
+        
         const property = schema.properties[key];
         let field = {
             id: key,
@@ -122,6 +125,7 @@ function transformToAction(key, action) {
 
 function transformToFormFields(schema) {
     return Object.entries(schema.properties)
+        .filter(kvp => kvp[0] != "user_task" && kvp[0] != "command")
         .map(kvp => {
             const key = kvp[0];
             const property = kvp[1];
