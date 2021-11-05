@@ -25,8 +25,10 @@ function transformToScenarios(children) {
 function transformToScenario(child, index) {
     return {
         name: child.name,
-        status: getScenarioStatus(index),
-        steps: transformToSteps(child.steps)
+        steps: transformToSteps(child.steps),
+        status: {
+            type: getStatus(index)
+        }
     };
 }
 
@@ -36,34 +38,37 @@ function transformToSteps(steps) {
         .map(transformToStep);
 }
 
-function transformToStep(step) {
+function transformToStep(step, index) {
     return {
         type: step.keyword.trim().toLowerCase(),
         keyword: step.keyword.trim(),
-        text: step.text
+        text: step.text,
+        status: {
+            type: getStatus(index)
+        }
     };
 }
 
-function getScenarioStatus(index) {
+function getStatus(index) {
     switch (index) {
         case 1:
-            return "not-implemented";
+            return "other";
         case 2:
-            return "failing";
+            return "failed";
         default:
-            return "success";
+            return "passed";
     }
 }
 
 const TEMPLATE = `{{#data}}
 <ul class="scenarios">
     {{#scenarios}}
-        <li class="scenario {{status}}">
+        <li class="scenario {{status.type}}">
             <span>{{name}}</span>
 
             <ul class="steps">
                 {{#steps}}
-                    <li class="step {{type}}">
+                    <li class="step {{type}} {{status.type}}">
                         <span class="keyword">{{keyword}}</span> <span>{{text}}</span>
                     </li>
                 {{/steps}}
