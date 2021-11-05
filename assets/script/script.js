@@ -6,7 +6,7 @@ function __init(root, git) {
     }
 
     const path = window.location.href.substr(base_url.length);
-    const root_url = git.is_feature_branch ? new URL(`../`, base_url).href : base_url;
+    const root_url = git.is_feature_branch ? base_url.substr(0, base_url.length - git.path.length) : base_url;
 
     const loadBranches = async (menu) => {
         menu.classList.add("loading");
@@ -149,6 +149,42 @@ function __init(root, git) {
     };
 
     scrollspy();
+
+    // Tabs
+    const tabsContainers = document.querySelectorAll(".tabs-container");
+
+    tabsContainers.forEach(container => {
+        const tabs = container.querySelectorAll(".tabs-list-container a");
+        const panels = container.querySelectorAll(".tabs-panels-container > *");
+
+        const hideAllPanels = () => {
+            panels.forEach(panel => panel.setAttribute('hidden', 'hidden'));    
+        }
+
+        const unSelectAllTabs = () => {
+            tabs.forEach(tab => tab.setAttribute('aria-expanded', 'false'));    
+        }
+        
+        hideAllPanels();
+        panels[0].removeAttribute('hidden');
+
+        tabs[0].setAttribute('aria-expanded', 'true');
+
+        tabs.forEach(tab => {
+            tab.onclick = event => {
+                hideAllPanels();
+                unSelectAllTabs();
+
+                event.target.setAttribute('aria-expanded', 'true');
+                document.querySelector(event.target.hash).removeAttribute('hidden');
+
+                // Trigger iframe resizing
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 1);
+
+                event.preventDefault();
+            }
+        });
+    })
 };
 
 const urlExists = url => new Promise((resolve, reject) => {
