@@ -1,7 +1,15 @@
 function __init(schema) {
-    const data = transformToMustacheData(schema);
+    let data = transformToMustacheData(schema);
+
     console.log(data);
-    const html = Mustache.render(TEMPLATE, data, PARTIALS);
+
+    const html = (() => {
+        if (data.model == undefined && data.actions.length === 1)
+            return Mustache.render(TEMPLATE, { data: data.actions[0] }, PARTIALS);
+        else
+            return Mustache.render(TEMPLATE, { data: data }, PARTIALS);
+    })();
+
     document.body.insertAdjacentHTML("beforeend", html);
 
     const actionList = document.querySelector('.action-list');
@@ -66,6 +74,9 @@ function transformToMustacheData(data) {
 
 function transformToUserTask(data) {
     const d = data["user-task"];
+    if (d == undefined)
+        return null;
+    
     return {
         name: d.name,
         items: transformToFields(d.schema)
@@ -241,20 +252,39 @@ const OPENAPI_HTML5_MAPPING = {
 const HTML5_TYPES = ["color", "date", "datetime-local", "email", "month", "range", "tel", "time", "url", "week"];
 
 const TEMPLATE = `<section class="app card">
-    <h2>{{model.name}}</h2>
-    {{#model}}{{> fieldItems }}{{/model}}
-
-    <section class="action-list">
-        <div class="form-submit">
-            {{#actions}}
-            <button aria-controls="action-{{id}}">{{label}}</button>
-            {{/actions}}
-        </div>
-    </section>
-
-    {{#actions}}
-    <section class="action card" id="action-{{id}}" hidden="hidden">
+{{#data}}
+    {{#model}}
         <h2>{{name}}</h2>
+        
+        {{> fieldItems }}        
+
+        <section class="action-list">
+            <div class="form-submit">
+                {{#data.actions}}
+                <button aria-controls="action-{{id}}">{{label}}</button>
+                {{/data.actions}}
+            </div>
+        </section>
+
+        {{#actions}}
+        <section class="action card" id="action-{{id}}" hidden="hidden">
+            <h2>{{label}}</h2>
+            
+            <p>{{description}}</p>
+
+            <form action="#" type="post">
+                {{> formItems }}
+                
+                <div class="form-submit">
+                    <button type="button" data-cancel aria-controls="action-{{id}}">Cancel</button>
+                    <button type="submit" data-confirm="Are you sure you want to complete this user task with {{name}}?">Submit</button>
+                </div>
+            </form>
+        </section>
+        {{/actions}}
+    {{/model}}
+    {{^model}}
+        <h2>{{label}}</h2>
         
         <p>{{description}}</p>
 
@@ -265,8 +295,8 @@ const TEMPLATE = `<section class="app card">
                 <button type="submit" data-confirm="Are you sure you want to complete this user task with {{name}}?">Submit</button>
             </div>
         </form>
-    </section>
-    {{/actions}}
+    {{/model}}
+{{/data}}
 </section>`;
 
 const PARTIALS = {

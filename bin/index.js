@@ -33,6 +33,7 @@ const exec = util.promisify(require('child_process').exec);
 const yargs = require("yargs");
 const RefParser = require("@apidevtools/json-schema-ref-parser");
 const mergeAllOf = require("json-schema-merge-allof");
+const gherkinParser = require("gherkin-parse");
 const options = yargs
  .usage("Usage: -b")
  .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
@@ -282,7 +283,7 @@ async function parseOpenapiAnchor(anchor, file, root) {
     if(!anchor.href.endsWith("openapi.yaml"))
         return;
 
-    const src =  `${anchor.href.substring(0, anchor.href.length - 5)}.html`;
+    const src =  `${anchor}.html`;
     const dst = relativeFileLocation(file, src);
     const relativeRoot = getRelativeRootFromFile(dst, root);
 
@@ -309,7 +310,7 @@ async function parseAsyncApiAnchor(anchor, file, root) {
     if(!anchor.href.endsWith("asyncapi.yaml"))
         return;
     
-    const src =  `${anchor.href.substring(0, anchor.href.length - 5)}.html`;
+    const src =  `${anchor}.html`;
     const dst = relativeFileLocation(file, src);
     const relativeRoot = getRelativeRootFromFile(dst, root);
 
@@ -338,7 +339,7 @@ async function parseUserTaskAnchor(anchor, file, root) {
     if(!anchor.href.endsWith("user-task.yaml"))
         return;
 
-    const src =  `${anchor.href.substring(0, anchor.href.length - 5)}.html`;
+    const src =  `${anchor.href}.html`;
     const dst = relativeFileLocation(file, src);
     const relativeRoot = getRelativeRootFromFile(dst, root);
 
@@ -352,15 +353,21 @@ async function parseUserTaskAnchor(anchor, file, root) {
     console.log(`Parsed user task anchor in ${file}`);
 }
 
-async function parseFeatureAnchor(anchor, file) {
+async function parseFeatureAnchor(anchor, file, root) {
     if(!anchor.href.endsWith(".feature"))
         return;
 
-    const feature = (await readFileAsString(relativeFileLocation(file, anchor.href)));
-    const fragment = JSDOM.fragment(Mustache.render(FEATURE_TEMPLATE, { feature }));
-    
+    const src =  `${anchor.href}.html`;
+    const dst = relativeFileLocation(file, src);
+    const relativeRoot = getRelativeRootFromFile(dst, root);
+
+    const fragment = JSDOM.fragment(Mustache.render(FEATURE_IFRAME_TEMPLATE, { src: src }));
     replaceWithFragment(fragment, anchor);
     
+    const json = gherkinParser.convertFeatureFileToJSON(relativeFileLocation(file, anchor.href));
+    const html = Mustache.render(FEATURE_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
+    fs.writeFile(dst, html);
+
     console.log(`Parsed feature anchor in ${file}`);
 }
 
@@ -870,13 +877,13 @@ const BPMN_TEMPLATE = `<script>
     });
 </script><div data-fullscreen><div id="{{id}}" class="bpmn"></div></div>`;
 
-const FEATURE_TEMPLATE = `<pre><code class="feature">{{feature}}</code></pre>`;
-
 const OPENAPI_IFRAME_TEMPLATE = `<div data-fullscreen><iframe class="openapi" src="{{src}}" /></div>`;
 
 const ASYNCAPI_IFRAME_TEMPLATE = `<div data-fullscreen><iframe class="asyncapi" src="{{src}}" /></div>`;
 
 const USER_TASK_IFRAME_TEMPLATE = `<iframe class="json-form" src="{{src}}" />`;
+
+const FEATURE_IFRAME_TEMPLATE = `<iframe class="feature" src="{{src}}" />`;
 
 const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
@@ -990,6 +997,24 @@ const USER_TASK_TEMPLATE = `<!DOCTYPE html>
 <body>
     <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
     <script src="{{{root}}}assets/form/script.js"></script>
+    <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
+    <script>
+        const schema = {{{json}}};
+        __init(schema);
+    </script>
+</body>
+</html>`;
+
+const FEATURE_TEMPLATE = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">  
+    <title>{{title}}</title>
+    <link href="{{{root}}}assets/form/style.css" rel="stylesheet">
+</head>
+<body>
+    <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
+    <script src="{{{root}}}assets/feature/script.js"></script>
     <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
     <script>
         const schema = {{{json}}};
