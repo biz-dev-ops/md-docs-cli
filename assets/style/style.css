@@ -67,7 +67,8 @@ a:focus {
     text-decoration: none;
 }
 
-img {
+img,
+svg {
     max-width: 100%;
     height: auto;
     vertical-align: middle;
@@ -642,6 +643,14 @@ article > .header-container {
     margin: var(--space-md);
     padding: 0;
     text-align: center;
+}
+
+[data-fullscreen] svg {
+    height: auto !important; /* TODO: Maak PlantUML specifiek */
+}
+
+[data-fullscreen="true"] svg {
+    max-width: none;
 }
 
 [data-fullscreen="true"]  iframe.openapi,
