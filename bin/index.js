@@ -741,11 +741,13 @@ const MENU_TEMPLATE = (root) => `
 
 const TABS_TEMPLATE = `<div class="tabs-container">
     <div class="tabs-list-container">
-        <ul>
-            {{#items}}
-            <li><a href="#{{id}}">{{text}}</a></li>
-            {{/items}}
-        </ul>
+        <div class="tabs-scroll-container">
+            <ul>
+                {{#items}}
+                <li><a href="#{{id}}">{{text}}</a></li>
+                {{/items}}
+            </ul>
+        </div>
     </div>
     <div class="tabs-panels-container">
         {{#items}}
@@ -839,35 +841,49 @@ const HTML_TEMPLATE = `<!DOCTYPE HTML>
 </html>`;
 
 const BPMN_TEMPLATE = `<script>
-    window.addEventListener("load", function() {
-        const xml = '{{{xml}}}';
-        const viewer = new BpmnJS({
-            container: "#{{id}}"
-        });
-        let canvas;
-
-        viewer.importXML(xml)
-            .then(response => {
-                if(response.warnings.length > 0) {
-                    console.log("Warnings while rendering bpmn file: {{href}}", response.warnings);
-                }
-                
-                canvas = viewer.get("canvas");
-                const viewbox = canvas.viewbox();
-
-                document.getElementById("{{id}}").style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + "%";
-                
-                canvas.zoom("fit-viewport");
-                setTimeout(() => canvas.zoom("fit-viewport"), 1);
-            })
-            .catch(error => {
-                console.log("Error rendering bpmn file: {{href}}", error);
+    (function f() {
+        window.addEventListener("load", function() {
+            const xml = '{{{xml}}}';
+            const viewer = new BpmnJS({
+                container: "#{{id}}"
             });
+            
+            const bpmnContainer = document.getElementById("{{id}}");
+            
+            const triggerResizeCanvas = () => {
+                setTimeout(() => resizeCanvas(), 5);
+                setTimeout(() => resizeCanvas(), 10);
+            };
+            
+            const resizeCanvas = () => {
+                const canvas = viewer.get("canvas");
+                const viewbox = canvas.viewbox();
+                
+                if (bpmnContainer.offsetHeight > 0) {
+                    bpmnContainer.style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + "%";
         
-        window.addEventListener("resize", function() {
-            canvas.zoom("fit-viewport");
+                    setTimeout(() => canvas.zoom("fit-viewport"), 1);
+                    setTimeout(() => canvas.zoom("fit-viewport"), 2);
+                }
+            }
+    
+            viewer.importXML(xml)
+                .then(response => {
+                    if(response.warnings.length > 0) {
+                        console.log("Warnings while rendering bpmn file: {{href}}", response.warnings);
+                    }
+                    
+                    triggerResizeCanvas();
+    
+                    window.addEventListener("resize", () => {
+                        triggerResizeCanvas();
+                    });
+                })
+                .catch(error => {
+                    console.log("Error rendering bpmn file: {{href}}", error);
+                });
         });
-    });
+    })()
 </script><div data-fullscreen><div id="{{id}}" class="bpmn"></div></div>`;
 
 const FEATURE_TEMPLATE = `<pre><code class="feature">{{feature}}</code></pre>`;

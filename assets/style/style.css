@@ -67,8 +67,8 @@ a:focus {
     text-decoration: none;
 }
 
-img,
-svg {
+figure img,
+figure svg {
     max-width: 100%;
     height: auto;
     vertical-align: middle;
@@ -645,7 +645,7 @@ article > .header-container {
     text-align: center;
 }
 
-[data-fullscreen] svg {
+[data-fullscreen] figure svg {
     height: auto !important; /* TODO: Maak PlantUML specifiek */
 }
 
@@ -668,43 +668,43 @@ article > .header-container {
 }
 
 .tabs-list-container {
-    border-bottom: var(--line-thin) solid var(--background-color-base);
+    border-bottom: var(--line-base) solid var(--background-color-base);
     margin-right: calc(var(--space-lg) * -1);
     margin-left: calc(var(--space-lg) * -1);
     padding-right: var(--space-lg);
     padding-left: var(--space-lg);
 }
 
+.tabs-scroll-container {
+}
+
 .tabs-list-container ul {
     background-color: var(--color-white);
-    border: var(--line-base) solid var(--background-color-base);
-    border-bottom-width: 0;
-    border-radius: var(--radius-base) var(--radius-base) 0 0;
-    display: inline-flex;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--space-xs) var(--space-sm);
     list-style: none;
-    margin-bottom: calc(var(--line-thin) * -1);
-    overflow: hidden;
     padding-left: 0;
 }
 
-.tabs-list-container ul li {
-    /*margin-right: calc(var(--line-base) * -1);*/
-    
-}
-
 .tabs-list-container ul li a {
-    background-color: var(--background-color-base);
+    border-bottom: var(--line-thin) solid var(--background-color-base);
     display: block;
-    padding: var(--space-sm) var(--space-md);
+    padding:  var(--space-xs) var(--space-sm);
     text-decoration: none;
+    height: 100%;
 }
 
 .tabs-list-container ul li a:hover,
 .tabs-list-container ul li a:focus {
-    background-color: var(--color-white);
+    background-color: var(--background-color-base);
+    border-bottom-color: transparent;
+    border-radius: var(--radius-base) var(--radius-base) 0 0 ;
 }
 
 .tabs-list-container ul li a[aria-expanded="true"] {
     background-color: var(--color-white);
+    border-bottom-color: var(--color-black-a90);
     font-weight: 600;
 }

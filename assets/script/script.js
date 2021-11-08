@@ -114,9 +114,7 @@ function __init(root, git) {
                 );
 
                 // Trigger resize for BPMN.io container
-                // Resizing twice results in a beter viewport calculation
-                setTimeout(() => window.dispatchEvent(new Event('resize')), 1);
-                setTimeout(() => window.dispatchEvent(new Event('resize')), 2);
+                window.dispatchEvent(new Event('resize'));
             }
         });
 
@@ -178,8 +176,8 @@ function __init(root, git) {
                 event.target.setAttribute('aria-expanded', 'true');
                 document.querySelector(event.target.hash).removeAttribute('hidden');
 
-                // Trigger iframe resizing
-                setTimeout(() => window.dispatchEvent(new Event('resize')), 1);
+                // Trigger resize for BPMN.io container
+                window.dispatchEvent(new Event('resize'));
 
                 event.preventDefault();
             }
