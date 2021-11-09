@@ -850,38 +850,32 @@ const BPMN_TEMPLATE = `<script>
             
             const bpmnContainer = document.getElementById("{{id}}");
             
-            const triggerResizeCanvas = () => {
-                setTimeout(() => resizeCanvas(), 5);
-                setTimeout(() => resizeCanvas(), 10);
-            };
-            
-            const resizeCanvas = () => {
-                const canvas = viewer.get("canvas");
-                const viewbox = canvas.viewbox();
-                
-                if (bpmnContainer.offsetHeight > 0) {
-                    bpmnContainer.style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + "%";
-        
-                    setTimeout(() => canvas.zoom("fit-viewport"), 1);
-                    setTimeout(() => canvas.zoom("fit-viewport"), 2);
-                }
-            }
-    
-            viewer.importXML(xml)
-                .then(response => {
-                    if(response.warnings.length > 0) {
-                        console.log("Warnings while rendering bpmn file: {{href}}", response.warnings);
-                    }
+            const drawCanvas = () => {
+              viewer.importXML(xml)
+                .then(() => {
+                    const canvas = viewer.get("canvas");
+                    canvas.zoom("fit-viewport");
                     
-                    triggerResizeCanvas();
-    
-                    window.addEventListener("resize", () => {
-                        triggerResizeCanvas();
-                    });
+                    setTimeout(() => {
+                        const viewbox = canvas.viewbox();
+                        
+                        bpmnContainer.style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + "%";
+            
+                        setTimeout(() => canvas.zoom("fit-viewport"), 1);
+                        setTimeout(() => canvas.zoom("fit-viewport"), 2);
+                    }, 1)
+                    
                 })
                 .catch(error => {
                     console.log("Error rendering bpmn file: {{href}}", error);
                 });
+            }
+    
+            drawCanvas();
+    
+            window.addEventListener("resize", () => {
+                drawCanvas();
+            });     
         });
     })()
 </script><div data-fullscreen><div id="{{id}}" class="bpmn"></div></div>`;
