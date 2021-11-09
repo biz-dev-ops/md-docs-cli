@@ -854,15 +854,20 @@ const BPMN_TEMPLATE = `<script>
               viewer.importXML(xml)
                 .then(() => {
                     const canvas = viewer.get("canvas");
-                    canvas.zoom("fit-viewport");
+                    let viewbox = canvas.viewbox();
+                    if (viewbox.inner.width !== 0 && viewbox.inner.height !== 0) {
+                        canvas.zoom("fit-viewport");
+                    }
                     
                     setTimeout(() => {
-                        const viewbox = canvas.viewbox();
+                        viewbox = canvas.viewbox();
                         
-                        bpmnContainer.style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + "%";
-            
-                        setTimeout(() => canvas.zoom("fit-viewport"), 1);
-                        setTimeout(() => canvas.zoom("fit-viewport"), 2);
+                        if (viewbox.inner.width !== 0 && viewbox.inner.height !== 0) {
+                            bpmnContainer.style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + "%";
+                
+                            setTimeout(() => canvas.zoom("fit-viewport"), 1);
+                            setTimeout(() => canvas.zoom("fit-viewport"), 2);
+                        }
                     }, 1)
                     
                 })
