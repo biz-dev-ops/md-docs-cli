@@ -1010,7 +1010,7 @@ const FEATURE_TEMPLATE = `<!DOCTYPE html>
   <head>
     <meta charset="UTF-8">  
     <title>{{title}}</title>
-    <link href="{{{root}}}assets/form/style.css" rel="stylesheet">
+    <link href="{{{root}}}assets/feature/style.css" rel="stylesheet">
 </head>
 <body>
     <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
