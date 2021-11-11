@@ -31,6 +31,7 @@
     "@asyncapi/html-template": "^0.23.11",
     "@asyncapi/parser": "^1.10.0",
     "bpmn-js": "^8.8.1",
+    "gherkin-parse": "^1.0.6",
     "jsdom": "^17.0.0",
     "json-schema-merge-allof": "^0.8.1",
     "json-schema-ref-parser": "^9.0.9",

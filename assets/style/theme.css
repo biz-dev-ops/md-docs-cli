@@ -14,6 +14,7 @@
   --color-black: rgb(var(--color-black-r), var(--color-black-g), var(--color-black-b));
   --color-black-a10: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .1);
   --color-black-a20: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .2);
+  --color-black-a40: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .4);
   --color-black-a90: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .9);
 
   --color-grey-100: rgb(229, 229, 229);
@@ -23,11 +24,11 @@
   --background-color-base: var(--color-black-a10);
   --text-color-base: var(--color-black-a90);
 
-  --color-info: #385998;
-  --color-info-100: #EFF2FB;
+  --color-info: #0043A8;
+  --color-info-100: #E5F0FF;
 
-  --color-success: #337545;
-  --color-success-100: #EDF8F0;
+  --color-success: #00A843;
+  --color-success-100: #E5FFF0;
 
   --color-warning: #D88950;
   --color-warning-100: #FFF4EB;

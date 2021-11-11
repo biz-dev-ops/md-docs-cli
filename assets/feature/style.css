@@ -1,0 +1,83 @@
+@import "../style/reset.css";
+@import "../style/theme.css";
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + var(--space-lg));
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-family-heading);
+    color: var(--text-color-base);
+    line-height: var(--line-height-base);
+    margin: 0;
+}
+
+.scenarios,
+.steps {
+    list-style: none;
+    margin: 0 0 var(--space-md);
+    padding-left: 0;
+}
+
+.scenarios {
+    margin-bottom: 0;
+}
+
+.steps {
+    margin-top: var(--space-xs);
+}
+
+.scenario,
+.step {
+    padding-top: var(--space-xss);
+    padding-bottom: var(--space-xss);
+    padding-left: calc(var(--space-xs) + var(--space-md));
+    position: relative;
+}
+
+.step {
+    border-radius: var(--radius-base);
+    margin-bottom: var(--line-thin);
+    padding-right: var(--space-sm);
+}
+
+.scenario::before,
+.step::before {
+    border-radius: var(--space-sm);
+    background-color: currentColor;
+    content: "";
+    display: block;
+    height: var(--space-sm);
+    width: var(--space-sm);
+    position: absolute;
+    left: var(--space-xs);
+    top: .625rem;
+}
+
+.step.passed {
+    background-color: var(--color-success-100);
+}
+
+.passed::before {
+    color: var(--color-success);
+}
+
+.step.failed {
+    background-color: var(--color-error-100);
+}
+
+.failed::before {
+    color: var(--color-error);
+}
+
+.other::before {
+    color: var(--color-black-a40);
+}
+
+.keyword {
+    font-family: monospace;
+    font-size: var(--heading-5-size);
+    color: var(--color-info);
+}
