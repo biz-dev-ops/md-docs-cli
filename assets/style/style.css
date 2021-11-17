@@ -177,7 +177,7 @@ header .nav {
 }
 
 header .nav a {
-    transition: all 250ms;
+    transition: all var(--duration-base);
     border-radius: var(--radius-base);
     display: block;
     height: var(--space-lg);
@@ -548,7 +548,7 @@ article > .header-container {
     padding: var(--space-sm);
     position: relative;
     text-decoration: none;
-    transition: background-color 250ms, color 250ms;
+    transition: background-color var(--duration-base), color var(--duration-base);
     transform: translateX(calc(var(--space-lg) * 3));
     width: var(--space-lg);
 }

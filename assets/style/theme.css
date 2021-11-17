@@ -71,6 +71,9 @@
           (var(--grid-column-gap) * (var(--grid-column-count) + 1))
   );
 
+  /* Transition */
+  --duration-base: 250ms;
+
   /* z-indexes */
   --z-header: 900;
   --z-nav: 901;
