@@ -1,8 +1,6 @@
 function __init(schema) {
     let data = transformToMustacheData(schema);
 
-    console.log(data);
-
     const html = (() => {
         if (data.model == undefined && data.actions.length === 1)
             return Mustache.render(TEMPLATE, { data: data.actions[0] }, PARTIALS);

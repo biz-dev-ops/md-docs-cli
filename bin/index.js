@@ -33,7 +33,7 @@ const exec = util.promisify(require('child_process').exec);
 const yargs = require("yargs");
 const RefParser = require("@apidevtools/json-schema-ref-parser");
 const mergeAllOf = require("json-schema-merge-allof");
-const gherkinParser = require("gherkin-parse");
+const { GherkinStreams } = require('@cucumber/gherkin-streams')
 const options = yargs
  .usage("Usage: -b")
  .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
@@ -363,8 +363,24 @@ async function parseFeatureAnchor(anchor, file, root) {
 
     const fragment = JSDOM.fragment(Mustache.render(FEATURE_IFRAME_TEMPLATE, { src: src }));
     replaceWithFragment(fragment, anchor);
+
+    const json = await new Promise((resolve, reject) => {
+        const stream = GherkinStreams.fromPaths([relativeFileLocation(file, anchor.href)])
+        const chunks = [];
+
+        stream.on("data", function (chunk) {
+            chunks.push(chunk);
+        });
     
-    const json = gherkinParser.convertFeatureFileToJSON(relativeFileLocation(file, anchor.href));
+        // Send the buffer or you can put it into a var
+        stream.on("end", function () {
+            resolve(chunks);
+        });
+        stream.on('error', function (err) {
+            reject(err);
+        });
+    });
+
     const html = Mustache.render(FEATURE_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
     fs.writeFile(dst, html);
 

@@ -1,8 +1,6 @@
 function __init(schema) {
     const data = transformToMustacheData(schema);
 
-    console.log(data);
-
     const html = Mustache.render(TEMPLATE, { data: data }, PARTIALS);
 
     document.body.insertAdjacentHTML("beforeend", html);
@@ -31,55 +29,50 @@ function __init(schema) {
 };
 
 function transformToMustacheData(schema) {
-    const feature = schema.feature;
+    const feature = schema.find(i => i.gherkinDocument).gherkinDocument.feature;   
 
     return {
         name: feature.name,
-        scenarios: transformToScenarios(feature.children)
+        scenarios: schema
+                .filter(i => i.pickle)
+                .map(i => ({
+                    pickle: i.pickle,
+                    scenario: feature.children.find(c => c.scenario && c.scenario.id === i.pickle.astNodeIds[0]).scenario
+                }))
+                .map(transformToScenario)
     };        
 }
-
-function transformToScenarios(children) {
-    return children
-        .filter(c => c.type == "Scenario")
-        .map(transformToScenario);
-}
-function transformToScenario(child, index) {
+function transformToScenario(data, index) {
     return {
-        name: child.name,
-        steps: transformToSteps(child.steps),
+        id: data.pickle.id,
+        name: data.pickle.name,
+        steps: data.pickle.steps
+            .map(s => (
+                Object.assign(s, { keyword: data.scenario.steps.find(ss => ss.id == s.astNodeIds[0]).keyword }))
+            )
+            .map(transformToStep),
         status: {
-            type: getStatus(index)
+            type: getStatus(data.pickle.id)
         }
     };
-}
-
-function transformToSteps(steps) {
-    return steps        
-        .filter(c => c.type == "Step")
-        .map(transformToStep);
 }
 
 function transformToStep(step, index) {
     return {
+        id: step.id,
         type: step.keyword.trim().toLowerCase(),
         keyword: step.keyword.trim(),
         text: step.text,
         status: {
-            type: getStatus(index)
+            type: getStatus(step.id)
         }
     };
 }
 
-function getStatus(index) {
-    switch (index) {
-        case 1:
-            return "other";
-        case 2:
-            return "failed";
-        default:
-            return "passed";
-    }
+function getStatus(id) {
+    return "passed";
+
+    //other, failed
 }
 
 const TEMPLATE = `{{#data}}
