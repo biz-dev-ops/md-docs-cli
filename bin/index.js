@@ -191,8 +191,11 @@ async function ParseFileTabsUl(ul, file) {
 }
 
 async function parseAnchors(template, file, root) {
-    const anchors = template.querySelectorAll("a");
+    const anchors = Array.from(template.querySelectorAll("a"))
+        .filter(a => !a.href.startsWith("http"));
+    
     for (let anchor of anchors) {
+        
         await parseBPMNAnchor(anchor, file, root);
         await parseOpenapiAnchor(anchor, file, root);
         await parseAsyncApiAnchor(anchor, file, root);
