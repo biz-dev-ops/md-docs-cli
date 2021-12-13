@@ -33,13 +33,12 @@ const exec = util.promisify(require('child_process').exec);
 const yargs = require("yargs");
 const RefParser = require("@apidevtools/json-schema-ref-parser");
 const mergeAllOf = require("json-schema-merge-allof");
-const { GherkinStreams } = require('@cucumber/gherkin-streams')
+const { GherkinStreams } = require('@cucumber/gherkin-streams');
 const options = yargs
- .usage("Usage: -b")
- .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
- .argv;
-
- 
+    .usage("Usage: -b")
+    .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
+    .argv;
+  
 async function run() {
     const menu_data = await getMenu(DOCS_ROOT);
     const git = await getGitInfo();
@@ -146,8 +145,7 @@ async function parseHtml(template, file, root) {
     await parseAnchors(template, file, root);
     await parseUnsortedLists(template, file);
     await cleanUp(template);
-    await removeEmptyParagraphs(template, file);
-    
+    await removeEmptyParagraphs(template, file);   
     
     return template;
 }
@@ -170,18 +168,17 @@ async function parseUnsortedLists(template, file) {
 }
 
 async function ParseFileTabsUl(ul, file) {
-    if (!ul.querySelector("a.replaced"))
-        return;
-    
+    if (!ul.querySelector(".replaced"))
+        return;    
     
     const parent_id = createUniqueId(ul);
     
-    const collection = Array.from(ul.querySelectorAll("a"))
-        .map(a => ({
-            id: `${parent_id}-${makeUrlFriendly(a.text)}`,
-            href: a.href,
-            text: a.text,
-            el: a.parentNode.innerHTML
+    const collection = Array.from(ul.querySelectorAll(".replaced"))
+        .map(el => ({
+            id: `${parent_id}-${makeUrlFriendly(el.text || el.alt)}`,
+            href: el.href || el.src,
+            text: el.text || el.alt,
+            el: el.parentNode.innerHTML
         }));
     
     const fragment = JSDOM.fragment(Mustache.render(TABS_TEMPLATE, { items: collection }));
@@ -195,7 +192,6 @@ async function parseAnchors(template, file, root) {
         .filter(a => !a.href.startsWith("http"));
     
     for (let anchor of anchors) {
-        
         await parseBPMNAnchor(anchor, file, root);
         await parseOpenapiAnchor(anchor, file, root);
         await parseAsyncApiAnchor(anchor, file, root);
