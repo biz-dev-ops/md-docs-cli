@@ -37,6 +37,7 @@ function transformToMustacheData(schema) {
                 .filter(i => i.pickle)
                 .map(i => ({
                     pickle: i.pickle,
+                    background: feature.children.find(c => c.background)?.background,
                     scenario: feature.children.find(c => c.scenario && c.scenario.id === i.pickle.astNodeIds[0]).scenario
                 }))
                 .map(transformToScenario)
@@ -48,7 +49,12 @@ function transformToScenario(data, index) {
         name: data.pickle.name,
         steps: data.pickle.steps
             .map(s => (
-                Object.assign(s, { keyword: data.scenario.steps.find(ss => ss.id == s.astNodeIds[0]).keyword }))
+                Object.assign(s, {
+                    keyword: (
+                        data.scenario.steps.find(ss => ss.id == s.astNodeIds[0]) || 
+                        data.background?.steps.find(ss => ss.id == s.astNodeIds[0])
+                    ).keyword
+                }))
             )
             .map(transformToStep),
         status: {
