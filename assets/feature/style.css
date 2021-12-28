@@ -33,6 +33,7 @@ body {
 
 .scenario > .item {
     padding-left: var(--space-lg);
+    text-align: left;
 }
 
 .scenario > .item:hover {
