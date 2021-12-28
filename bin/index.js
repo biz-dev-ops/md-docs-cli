@@ -140,7 +140,6 @@ async function renderMarkdown(file) {
 
 async function parseHtml(template, file, root) {
     await addHeadingContainers(template);
-    await parseUnsortedLists(template, file);
     await parseImages(template, file);
     await parseAnchors(template, file, root);
     await parseUnsortedLists(template, file);
@@ -197,6 +196,7 @@ async function parseAnchors(template, file, root) {
         await parseAsyncApiAnchor(anchor, file, root);
         await parseUserTaskAnchor(anchor, file, root);
         await parseFeatureAnchor(anchor, file, root);
+        await parseFeatureDashboardAnchor(anchor, file, root);
         await parseMarkdownAnchor(anchor, file, root);
     }
 }
@@ -363,8 +363,49 @@ async function parseFeatureAnchor(anchor, file, root) {
     const fragment = JSDOM.fragment(Mustache.render(FEATURE_IFRAME_TEMPLATE, { src: src }));
     replaceWithFragment(fragment, anchor);
 
-    const json = await new Promise((resolve, reject) => {
-        const stream = GherkinStreams.fromPaths([relativeFileLocation(file, anchor.href)])
+    const features = [relativeFileLocation(file, anchor.href)];
+
+    const json = {
+        features: await getFeatures([relativeFileLocation(file, anchor.href)]),
+        executions: await getExecutions(features)
+    }
+
+    const html = Mustache.render(FEATURE_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
+    fs.writeFile(dst, html);
+
+    console.log(`Parsed feature anchor in ${file}`);
+}
+
+async function parseFeatureDashboardAnchor(anchor, file, root) {
+    if(!anchor.href.endsWith(".features.yml"))
+        return;
+
+    const src =  `${anchor.href}.html`;
+    const dst = relativeFileLocation(file, src);
+    const relativeRoot = getRelativeRootFromFile(dst, root);
+    const dashboard = await RefParser.dereference(relativeFileLocation(file, anchor.href));
+
+    const features = dashboard
+        .features
+        .map(f => relativeFileLocation(file, f));
+    
+    const fragment = JSDOM.fragment(Mustache.render(FEATURE_DASHBOARD_IFRAME_TEMPLATE, { src: src }));
+    replaceWithFragment(fragment, anchor);
+
+    const json = {
+        features: await getFeatures(features),
+        executions: await getExecutions(features)
+    }
+
+    const html = Mustache.render(FEATURE_DASHBOARD_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
+    fs.writeFile(dst, html);
+
+    console.log(`Parsed feature dashboard anchor in ${file}`);
+}
+
+async function getFeatures(files) {
+    return new Promise((resolve, reject) => {
+        const stream = GherkinStreams.fromPaths(files)
         const chunks = [];
 
         stream.on("data", function (chunk) {
@@ -375,15 +416,17 @@ async function parseFeatureAnchor(anchor, file, root) {
         stream.on("end", function () {
             resolve(chunks);
         });
+
         stream.on('error', function (err) {
             reject(err);
         });
     });
+}
 
-    const html = Mustache.render(FEATURE_TEMPLATE, { title: `${anchor.text}`, root: relativeRoot, json: JSON.stringify(json) });
-    fs.writeFile(dst, html);
-
-    console.log(`Parsed feature anchor in ${file}`);
+async function getExecutions(files) {
+    return new Promise((resolve, reject) => {
+        resolve([]);
+    });
 }
 
 function replaceWithFragment(fragment, el) {
@@ -915,6 +958,8 @@ const USER_TASK_IFRAME_TEMPLATE = `<iframe class="json-form" src="{{src}}" />`;
 
 const FEATURE_IFRAME_TEMPLATE = `<iframe class="feature" src="{{src}}" />`;
 
+const FEATURE_DASHBOARD_IFRAME_TEMPLATE = `<iframe class="feature" src="{{src}}" />`;
+
 const OPENAPI_TEMPLATE = `<!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
@@ -1044,7 +1089,27 @@ const FEATURE_TEMPLATE = `<!DOCTYPE html>
 </head>
 <body>
     <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
-    <script src="{{{root}}}assets/feature/script.js"></script>
+    <script src="{{{root}}}assets/feature/parser.js"></script>
+    <script src="{{{root}}}assets/feature/feature.js"></script>
+    <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
+    <script>
+        const schema = {{{json}}};
+        __init(schema);
+    </script>
+</body>
+</html>`;
+
+const FEATURE_DASHBOARD_TEMPLATE = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">  
+    <title>{{title}}</title>
+    <link href="{{{root}}}assets/feature/style.css" rel="stylesheet">
+</head>
+<body>
+    <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
+    <script src="{{{root}}}assets/feature/parser.js"></script>
+    <script src="{{{root}}}assets/feature/dashboard.js"></script>
     <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
     <script>
         const schema = {{{json}}};
