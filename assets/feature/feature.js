@@ -4,28 +4,6 @@ function __init(schema) {
     const html = Mustache.render(TEMPLATE, { feature: data.features[0] }, PARTIALS);
 
     document.body.insertAdjacentHTML("beforeend", html);
-
-    // Scenarios accordion
-    const scenarios = document.querySelectorAll('.scenario');
-    scenarios.forEach(scenario => {
-        const toggle = scenario.querySelector('button.item');
-        const steps = scenario.querySelector('.steps');
-
-        steps.setAttribute('hidden',  'hidden');
-        toggle.setAttribute('aria-expanded', 'false');
-
-        toggle.onclick = e => {
-            const expanded = toggle.getAttribute('aria-expanded') !== "false";
-            if (expanded) {
-                steps.setAttribute('hidden',  'hidden');
-                toggle.setAttribute('aria-expanded', 'false');
-            } else {
-                steps.removeAttribute('hidden');
-                toggle.setAttribute('aria-expanded', 'true');
-            }
-
-        };
-    })
 };
 
 const TEMPLATE = `{{#feature}}
