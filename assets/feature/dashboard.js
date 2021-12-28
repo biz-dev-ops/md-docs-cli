@@ -11,13 +11,13 @@ function __init(schema) {
         const toggle = scenario.querySelector('button.item');
         const steps = scenario.querySelector('.steps');
 
-        steps.setAttribute('hidden',  'hidden');
+        steps.setAttribute('hidden', 'hidden');
         toggle.setAttribute('aria-expanded', 'false');
 
         toggle.onclick = e => {
             const expanded = toggle.getAttribute('aria-expanded') !== "false";
             if (expanded) {
-                steps.setAttribute('hidden',  'hidden');
+                steps.setAttribute('hidden', 'hidden');
                 toggle.setAttribute('aria-expanded', 'false');
             } else {
                 steps.removeAttribute('hidden');
@@ -25,7 +25,7 @@ function __init(schema) {
             }
 
         };
-    })
+    });
 };
 
 const TEMPLATE = `
