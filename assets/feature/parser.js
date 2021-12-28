@@ -66,7 +66,7 @@ const Parser = (function () {
             return accumulator + a;
         }
 
-        return {
+        const summary = {
             features: {
                 total: features.length,
                 passed: features.filter(f => f.status.type === "passed").length,
@@ -114,6 +114,25 @@ const Parser = (function () {
                     .reduce(add, 0)
             }
         };
+
+        const getSummaryStatus = function (summary) {
+            if (summary.failed > 0)
+                return "failed";
+            
+            if (summary.other > 0)
+                return "other";
+            
+            if (summary.passed > 0)
+                return "passed";
+            
+            return null;
+        }
+
+        summary.features.status = getSummaryStatus(summary.features);
+        summary.scenarios.status = getSummaryStatus(summary.scenarios);
+        summary.steps.status = getSummaryStatus(summary.steps);
+        
+        return summary;
     }
 
     return {

@@ -30,7 +30,7 @@ function __init(schema) {
 
 const TEMPLATE = `
 <ul class="scenarios">    
-    <li class="scenario {{status.type}}">
+    <li class="scenario {{features.status}}">
         <button class="item" aria-expanded="true">{{ features.total }} features</button>
 
         <ul class="steps">
@@ -51,8 +51,8 @@ const TEMPLATE = `
             </li>
         </ul>
     </li>
-    <li class="scenario {{status.type}}">
-        <button class="item" aria-expanded="true">{{ scenarios.total }} features</button>
+    <li class="scenario {{scenarios.status}}">
+        <button class="item" aria-expanded="true">{{ scenarios.total }} scenarios</button>
 
         <ul class="steps">
             <li class="passed">
@@ -72,8 +72,8 @@ const TEMPLATE = `
             </li>
         </ul>
     </li>
-    <li class="scenario {{status.type}}">
-        <button class="item" aria-expanded="true">{{ steps.total }} features</button>
+    <li class="scenario {{steps.status}}">
+        <button class="item" aria-expanded="true">{{ steps.total }} steps</button>
 
         <ul class="steps">
             <li class="passed">
