@@ -1,3 +1,16 @@
+const pug = require('pug');
+const TEMPLATE = require('dashboard-component.pug')
+
+module.exports = class FeatureComponent {
+    constructor() {
+        this.template = pug.compile(TEMPLATE);
+    }
+    
+    render(summary) {
+        return this.template({ data: summary });
+    }
+}
+
 const Mustache = require('mustache');
 
 exports.render = (summary) => {

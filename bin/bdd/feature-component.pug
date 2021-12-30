@@ -1,0 +1,32 @@
+ul(class='features')
+  each feature in features
+    +feature(feature)
+    
+mixin feature(feature)
+  li(class='feature #{feature.status.type}')
+    button(class='item' aria-expanded='true')= feature.name        
+      +scenarios(feature.scenarios)
+        
+mixin scenarios(scenarios)
+  ul(class='scenarios')
+    each scenario in scenarios
+      +scenario(scenario)
+
+mixin scenario(scenario)
+  li(class='scenario #{scenario.status.type}')
+    button(class='item' aria-expanded='true')= feature.name
+      if scenario.scenarios
+        +scenarios(scenario.scenarios)
+      else
+        +steps(scenario.steps)
+
+mixin steps(steps)
+  ul(class='steps')              
+    each step in steps              
+      +step(step)
+
+mixin step(step)
+  li(class='step #{step.type} #{step.status.type}')
+    span(class='item') 
+      span(class='keyword')= step.keyword
+      span= step.text

@@ -56,16 +56,16 @@ exports.summarize = (features) => {
 }
 
 const getStatus = function (summary) {
+    const status = {};
     if (summary.failed > 0)
-        return "failed";
+        status.type = "failed";
+    else if (summary.other > 0)
+        status.type = "failed";
 
-    if (summary.other > 0)
-        return "other";
+    else if (summary.passed > 0)
+        status.type = "failed";
 
-    if (summary.passed > 0)
-        return "passed";
-
-    return null;
+    return status;
 }
 
 function add(accumulator, a) {

@@ -70,7 +70,7 @@ function mapStep(pickle, step, index) {
         id: step.id,
         type: step.keyword.trim().toLowerCase(),
         keyword: step.keyword.trim(),
-        name: pickleStep.text,
+        text: pickleStep.text,
         template: step.text
     };
 }
