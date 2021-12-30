@@ -1,37 +1,10 @@
-function __init(schema) {
-    const data = Parser.parse(schema.features, schema.executions);
+const Mustache = require('mustache');
 
-    console.log(data.summary);
+exports.render = (summary) => {
+    return Mustache.render(TEMPLATE, summary, PARTIALS);    
+}
 
-    const html = Mustache.render(TEMPLATE, data.summary, PARTIALS);
-
-    document.body.insertAdjacentHTML("beforeend", html);
-
-    // Scenarios accordion
-    const scenarios = document.querySelectorAll('.scenario');
-    scenarios.forEach(scenario => {
-        const toggle = scenario.querySelector('button.item');
-        const steps = scenario.querySelector('.steps');
-
-        steps.setAttribute('hidden', 'hidden');
-        toggle.setAttribute('aria-expanded', 'false');
-
-        toggle.onclick = e => {
-            const expanded = toggle.getAttribute('aria-expanded') !== "false";
-            if (expanded) {
-                steps.setAttribute('hidden', 'hidden');
-                toggle.setAttribute('aria-expanded', 'false');
-            } else {
-                steps.removeAttribute('hidden');
-                toggle.setAttribute('aria-expanded', 'true');
-            }
-
-        };
-    });
-};
-
-const TEMPLATE = `
-<ul class="scenarios">    
+const TEMPLATE = `<ul class="scenarios">    
     <li class="scenario {{features.status}}">
         <button class="item" aria-expanded="true">{{ features.total }} features</button>
 
