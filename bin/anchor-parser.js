@@ -1,4 +1,5 @@
-const JSDOM = require("jsdom");
+const JSDOM = require('jsdom');
+const PATH = require('path');
 
 module.exports = class AnchorParser {
     constructor() { }
@@ -7,7 +8,7 @@ module.exports = class AnchorParser {
         if (_canRender(src.anchor))
             return;
         
-        const target = `${src.file.substring(0, src.file.lastIndexOf('/'))}/${src.anchor.href}`;
+        const target = `${PATH.dirname(src.file)}/${src.anchor.href}`;
         
         const html = await _render(target);
         #replace(src.anchor, html);

@@ -5,6 +5,7 @@ const GHERKIN = require('gherkin');
 const SPECFLOW = require('specflow');
 const SUMMARIZER = require('summarizer');
 const COMPONENT = require('dashboard-component');
+const PATH = require('path');
 
 module.exports = class DasboardAnchorParser extends AnchorParser {
   constructor(executions) {
@@ -14,8 +15,9 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
   _canRender(anchor) { return anchor.href.endsWith(".dashboard.yml"); }
 
   async _render(file) {
+    const directory = PATH.dirname(file);
     const config = await parseFile(file);
-    const features = await GHERKIN.parse(config.features);
+    const features = await GHERKIN.parse(config.features.map(feature => `${directory}/${feature}`));
     SPECFLOW.parse(features, this.executions);
     const summary = SUMMARIZER.summarize(features);
     return COMPONENT.render(summary, features);
