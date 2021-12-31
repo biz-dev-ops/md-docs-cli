@@ -1,9 +1,9 @@
-const PUG = require('pug');
-const TEMPLATE = require('dashboard-component.pug')
+const pug = require('pug');
+const template = require('./dashboard-component.pug')
 
 module.exports = class FeatureComponent {
     constructor() {
-        this.template = PUG.compile(TEMPLATE);
+        this.template = pug.compile(template);
     }
     
     render(summary) {

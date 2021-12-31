@@ -1,4 +1,4 @@
-const { GherkinStreams: GHERKIN_STREAMS } = require('@cucumber/gherkin-streams');
+const { GherkinStreams } = require('cucumber/gherkin-streams');
 
 exports.parse = async (files) => {
     if (files == undefined)
@@ -96,7 +96,7 @@ function getArguments(scenario, index) {
 
 async function getChunks(files) {
     return new Promise((resolve, reject) => {
-        const stream = GHERKIN_STREAMS.fromPaths(files)
+        const stream = GherkinStreams.fromPaths(files)
         const chunks = [];
 
         stream.on("data", function (chunk) {

@@ -1,8 +1,8 @@
 const AnchorParser = require('../anchor-parser');
 
-const GHERKIN = require('gherkin');
-const SPECFLOW = require('specflow');
-const COMPONENT = require('feature-component');
+const gherkin = require('./gherkin');
+const specflow = require('./specflow');
+const component = require('./feature-component');
 
 module.exports = class FeatureAnchorParser extends AnchorParser {
   constructor(executions) {
@@ -12,8 +12,8 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
   _canRender(anchor) { return anchor.href.endsWith(".feature"); }
 
   async _render(file) {
-    const feature = await GHERKIN.parse(file);
-    SPECFLOW.parse(feature, this.executions);
-    return COMPONENT.render(feature);
+    const feature = await gherkin.parse(file);
+    specflow.parse(feature, this.executions);
+    return component.render(feature);
   }
 };

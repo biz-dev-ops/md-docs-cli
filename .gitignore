@@ -105,3 +105,6 @@ dist
 
 # Project config files
 /.idea
+
+# Temporary files used for building
+.temp/
