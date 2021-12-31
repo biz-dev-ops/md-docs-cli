@@ -1,4 +1,4 @@
-const AnchorParser = require('../anchor-parser');
+const AnchorParser = require('../html/anchor-parser');
 
 const gherkin = require('./gherkin');
 const specflow = require('./specflow');

@@ -51,31 +51,43 @@ async function createFileParser(src, git) {
     const menu = await menuUtil.getMenu(src);
     const executions = await executionsUtil.getExecutions(path.resolve(`${src}/../temp/executions`));
 
+    let htmlParser;
+
+    const htmlParsers = [
+        new HeadingHtmlParser(),
+        new AnchorHtmlParser({
+            parsers: [
+                BPMNAnchorParser(),
+                OpenapiAnchorParser(),
+                AsyncapiAnchorParser(),
+                UserTaskAnchorParser(),
+                FeatureAnchorParser({
+                    executions: executions
+                }),
+                DashboardAnchorParser({
+                    executions: executions
+                }),
+                MarkdownAnchorParser({
+                    htmlParser: htmlParser
+                }),
+                UmlAnchorParser()
+            ]
+        }),
+        new UnsortedListHtmlParser(),
+        new ImageHtmlParser(),
+        new CleanUpHtmlParser()
+    ];
+
+    htmlParser = new HtmlParser({
+        parsers: htmlParsers
+    })
+
     return new FileParser({
         parsers: [
             new MarkdownFileParser({
                 git: git,
                 menu: menu,
-                parser: new HtmlParser({
-                    parsers: [
-                        new HeadingHtmlParser(),
-                        new AnchorHtmlParser({
-                            parsers: [
-                                BPMNAnchorParser(),
-                                OpenapiAnchorParser(),
-                                AsyncapiAnchorParser(),
-                                UserTaskAnchorParser(),
-                                FeatureAnchorParser(executions),
-                                DashboardAnchorParser(executions),
-                                MarkdownAnchorParser(),
-                                UmlAnchorParser()
-                            ]
-                        }),
-                        new UnsortedListHtmlParser(),
-                        new ImageHtmlParser(),
-                        new CleanUpHtmlParser()
-                    ]
-                })
+                htmlParser: htmlParser
             })
         ]
     });

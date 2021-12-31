@@ -3,7 +3,7 @@ exports.getInfo = function () {
     const repository = await parseGitRepository();
     const remote = await parseRemoteOrigin();
 
-    const path = branch != remote.mainBranch ? "/" + featureBranchToPath(branch) : "";
+    //const path = branch != remote.mainBranch ? "/" + featureBranchToPath(branch) : "";
 
     const localBranches = (await __exec(`git branch -a`))
         .split(`\n`)
@@ -13,16 +13,13 @@ exports.getInfo = function () {
     const branches = remote.branches.concat(localBranches.filter(b => !remote.branches.includes(b)))
         .map(b => ({
             name: b,
-            path: b == remote.mainBranch ? "" : featureBranchToPath(b),
-            isFeatureBranch: b != remote.mainBranch
+            url: `https://github.com/${repository}/tree/${b}`,
+            feature: !remote.mainBranch,
         }))
-        .sort((a, b) => `${a.isFeatureBranch ? "z" : "a"}${a.name}`.localeCompare(`${b.isFeatureBranch ? "z" : "a"}${b.name}`));
+        .sort((a, b) => `${a.feature ? "z" : "a"}${a.name}`.localeCompare(`${b.feature ? "z" : "a"}${b.name}`));
 
-    return { 
-        branch,
-        isFeatureBranch: branch != remote.mainBranch, 
-        repository,
-        path,
+    return {
+        branch: branches.find(b => b.name === branch),
         branches
     };
 }

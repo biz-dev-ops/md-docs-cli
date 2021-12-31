@@ -1,12 +1,12 @@
 const pug = require('pug');
-const template = require('./dashboard-component.pug')
+const files = require('../file/files');
 
 module.exports = class FeatureComponent {
-    constructor() {
-        this.template = pug.compile(template);
+    constructor(options) {
+        this.renderFn = pug.compile(options?.template ?? files.readFileAsStringSync(`${__dirname}/dashboard-component.pug`));
     }
     
     render(summary) {
-        return this.template({ data: summary });
+        return this.renderFn({ data: summary });
     }
 }

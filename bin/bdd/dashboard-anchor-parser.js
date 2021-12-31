@@ -1,7 +1,7 @@
 const yaml = require('js-yaml');
 const path = require('path');
 
-const AnchorParser = require('../anchor-parser');
+const AnchorParser = require('../html/anchor-parser');
 
 const gherkin = require('./gherkin');
 const specflow = require('./specflow');

@@ -1,7 +1,13 @@
 const fs = require("fs").promises;
+const fsSync = require("fs");
 
 exports.readFileAsString = async (file, encoding = "utf8") => {
     const content = await fs.readFile(file);
+    return content.toString(encoding);
+}
+
+exports.readFileAsStringSync = (file, encoding = "utf8") => {
+    const content = fsSync.readFile(file);
     return content.toString(encoding);
 }
 

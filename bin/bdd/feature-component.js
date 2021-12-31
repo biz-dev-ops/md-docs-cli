@@ -1,12 +1,12 @@
 const pug = require('pug');
-const template = require('./feature-component.pug')
+const files = require('../file/files');
 
 module.exports = class FeatureComponent {
-    constructor() {
-        this.template = pug.compile(template);
+    constructor(options) {
+        this.renderFn = pug.compile(options?.template ?? files.readFileAsStringSync(`${__dirname}/feature-component.pug`));
     }
     
     render(features) {
-        return this.template({ data: features });
+        return this.renderFn({ data: features });
     }
 }
