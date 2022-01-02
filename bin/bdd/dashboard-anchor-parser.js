@@ -10,6 +10,7 @@ const component = require('./dashboard-component');
 
 module.exports = class DasboardAnchorParser extends AnchorParser {
   constructor(executions) {
+    super();
     this.executions = executions;
   }
 

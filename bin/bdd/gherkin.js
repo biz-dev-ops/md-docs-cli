@@ -1,4 +1,4 @@
-const { GherkinStreams } = require('cucumber/gherkin-streams');
+const { GherkinStreams } = require('@cucumber/gherkin-streams');
 
 exports.parse = async (files) => {
     if (files == undefined)

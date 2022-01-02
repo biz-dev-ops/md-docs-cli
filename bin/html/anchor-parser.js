@@ -1,6 +1,6 @@
 const jsdom = require('jsdom');
 const path = require('path');
-const files = require('./file/files');
+const files = require('../file/files');
 
 module.exports = class AnchorParser {
     constructor() { }

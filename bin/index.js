@@ -40,6 +40,7 @@ const options = yargs
     .argv;
   
 async function run() {
+    return;
     const menu_data = await getMenu(DOCS_ROOT);
     const git = await getGitInfo();
     const DIST_BRANCH_ROOT = path.resolve(`./dist${git.path}`);

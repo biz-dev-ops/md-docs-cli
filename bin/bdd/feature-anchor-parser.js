@@ -6,6 +6,7 @@ const component = require('./feature-component');
 
 module.exports = class FeatureAnchorParser extends AnchorParser {
   constructor(executions) {
+    super();
     this.executions = executions;
   }
 

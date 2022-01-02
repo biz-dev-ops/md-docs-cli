@@ -1,10 +1,12 @@
+const jsdom = require('jsdom');
+
 module.exports = class HtmlParser {
     constructor(options) {
         this.parsers = options.parsers
     }
 
-    parse(html) {
-        const element = JSDOM.fragment("<div></div>").firstElementChild;
+    async parse(html) {
+        const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
         element.innerHTML = html;
         
         for (const parser of this.parsers) {

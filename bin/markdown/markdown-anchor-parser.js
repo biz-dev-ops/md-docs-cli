@@ -1,11 +1,11 @@
 const path = require('path');
 
-const md = require('./markdown-renderer');
 const AnchorParser = require('../html/anchor-parser');
 
 module.exports = class MarkdownAnchorParser extends AnchorParser {
   constructor(options) {
-    this.htmlParser = options.htmlParser;
+    super();
+    this.renderer = options.renderer;
   }
 
   _canParse(anchor) { return path.basename(anchor.href).endsWith('.md') || anchor.href.includes(".md#"); }
@@ -23,7 +23,6 @@ module.exports = class MarkdownAnchorParser extends AnchorParser {
 
   async _render(file) {
     const markdown = await this._readFileAsString(file);
-    const html = md.render(markdown);
-    return this.htmlParser.parse(html);
+    return await this.renderer.render(markdown);
   }
 };

@@ -9,10 +9,13 @@ const files = require('./file/files');
 const menuUtil = require('./util/menu');
 const executionsUtil = require('./util/executions');
 
+const HtmlParser = require('./html/html-parser');
+
 const FileParser = require('./file/file-parser');
+
+const MarkdownRenderer = require('./markdown/markdown-renderer');
 const MarkdownFileParser = require('./markdown/markdown-file-parser');
 
-const HtmlParser = require('./html/html-parser');
 const HeadingHtmlParser = require('./html/heading-html-parser');
 const UnsortedListHtmlParser = require('./html/unsorted-list-html-parser');
 const AnchorHtmlParser = require('./html/anchor-html-parser');
@@ -29,13 +32,9 @@ const MarkdownAnchorParser = require('./markdown/markdown-anchor-parser');
 const UmlAnchorParser = require('./uml/uml-anchor-parser');
 
 async function run(options) {
-    //TODO: nodejs dir helpers uitzoeken.
     const src = path.resolve(`./docs`);
-
-    const git = await gitUtil.getInfo();
-    const dst = path.resolve(`./dist${git.path}`);
-    
-    await init(src, dst, git);
+    const git = await gitUtil.getInfo();    
+    const dst = await init(src, `./dist`, git);
 
     if (options.branches) {
         console.log("Branche only mode, quitting.....")
@@ -43,34 +42,42 @@ async function run(options) {
     }
 
     await files.copy(src, dst);
-    const fileParser = await createFileParser(src, git);    
-    await files.each(dst, async (file) => await fileParser.parse(file));
+    
+    const fileParser = await createFileParser(src, dst, git);
+    
+    await files.each(dst, async (file) => {
+        console.info(`parsing ${file}`);
+        
+        await fileParser.parse(file);
+        
+        console.info(`${file} parsed`);
+    });
 }
 
-async function createFileParser(src, git) {
+async function createFileParser(src, dst, git) {
     const menu = await menuUtil.getMenu(src);
     const executions = await executionsUtil.getExecutions(path.resolve(`${src}/../temp/executions`));
 
-    let htmlParser;
+    let markdownRenderer;
 
     const htmlParsers = [
         new HeadingHtmlParser(),
         new AnchorHtmlParser({
             parsers: [
-                BPMNAnchorParser(),
-                OpenapiAnchorParser(),
-                AsyncapiAnchorParser(),
-                UserTaskAnchorParser(),
-                FeatureAnchorParser({
+                new BPMNAnchorParser(),
+                new OpenapiAnchorParser(),
+                new AsyncapiAnchorParser(),
+                new UserTaskAnchorParser(),
+                new FeatureAnchorParser({
                     executions: executions
                 }),
-                DashboardAnchorParser({
+                new DashboardAnchorParser({
                     executions: executions
                 }),
-                MarkdownAnchorParser({
-                    htmlParser: htmlParser
+                new MarkdownAnchorParser({
+                    renderer: markdownRenderer
                 }),
-                UmlAnchorParser()
+                new UmlAnchorParser()
             ]
         }),
         new UnsortedListHtmlParser(),
@@ -78,22 +85,27 @@ async function createFileParser(src, git) {
         new CleanUpHtmlParser()
     ];
 
-    htmlParser = new HtmlParser({
-        parsers: htmlParsers
-    })
+    markdownRenderer = new MarkdownRenderer({
+        parser: new HtmlParser({
+            parsers: htmlParsers
+        })
+    });
 
     return new FileParser({
+        root: dst,
         parsers: [
             new MarkdownFileParser({
                 git: git,
                 menu: menu,
-                htmlParser: htmlParser
+                renderer: markdownRenderer
             })
         ]
     });
 }
 
-async function init(src, dst, git) {
+init = async function(src, dst, git) {
+    dst = getBranchPath(dst, git.branch);
+
     await fs.rm(dst, { recursive: true, force: true });
     await fs.access(src);
     
@@ -101,8 +113,17 @@ async function init(src, dst, git) {
 
     await fs.writeFile(`${dst}/branches.json`, JSON.stringify(git.branches));
 
-    console.log(`Created ${dst}/branches.json`);
+    console.info(`Created ${dst}/branches.json`);
+
+    return dst;
 }
+
+getBranchPath = function (src, branch) {
+    if (!branch.feature)
+        return src;
+    
+    return path.resolve(src, `/${branch.name.replace(' ', '-').toLowerCase() }`);
+};
 
 const options = yargs
     .usage("Usage: -b")

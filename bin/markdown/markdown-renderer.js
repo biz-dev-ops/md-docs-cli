@@ -23,9 +23,13 @@ const md = require('markdown-it')
     .use(require("markdown-it-codetabs"))
     .use(require("markdown-it-attrs"));
 
-    //TODO class van maken en logic vanuit html parser hiernaartoe verplaatsen.
+module.exports = class MarkdownRenderer {
+    constructor(options) {
+        this.parser = options.parser
+    }
 
-exports.render = (markdown) => {
-    const html = md.render(markdown);
-    return html;
+    async render(markdown) {
+        const html = md.render(markdown);
+        return await this.parser.parse(html);
+    }
 }
