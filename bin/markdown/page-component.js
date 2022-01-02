@@ -7,6 +7,6 @@ module.exports = class PageComponent {
     }
     
     render(source, content, title, menu, git) {
-        return this.renderFn({ data: { source, content, title, menu, git } });
+        return this.renderFn({ source, content, title, menu, git });
     }
 }

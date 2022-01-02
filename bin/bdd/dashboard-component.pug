@@ -1,16 +1,10 @@
 ul
-  each item, key in summary   
-    +segment(key, item)
-
-mixin segment(name, segment)
-  li(class='#{name} #{segment.status.type}')
-    button(class='item' aria-expanded='true')= segment.total + ' ' + name
-    ul
-      each value, status in segment
-        +li(status, value)
-
-mixin li(status, value)
-  li(class='#{status}')
-    span(class='item')
-      span(class='keyword')= status 
-      span= value
+  each item, key in summary
+    li(class='#{name} #{segment.status.type}')
+      button(class='item' aria-expanded='true')= segment.total + ' ' + name
+      ul
+        each value, status in segment
+          li(class='#{status}')
+            span(class='item')
+              span(class='keyword')= status 
+              span= value
