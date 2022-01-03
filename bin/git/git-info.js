@@ -34,7 +34,7 @@ exports.getInfo = async function () {
         
         const branch = {
             name: 'main',
-            url: null,
+            url: `https://github.com/undefined/undefined/tree/main`,
             feature: false
         };
 

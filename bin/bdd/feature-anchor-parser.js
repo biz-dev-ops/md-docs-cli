@@ -1,3 +1,5 @@
+const chalk = require('chalk-next');
+
 const AnchorParser = require('../html/anchor-parser');
 
 const gherkin = require('./gherkin');
@@ -13,6 +15,8 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
   _canRender(anchor) { return anchor.href.endsWith(".feature"); }
 
   async _render(file) {
+    console.info(chalk.green(`\t\t* rendering feature anchor (${file})`));
+
     const feature = await gherkin.parse(file);
     specflow.parse(feature, this.executions);
     return component.render(feature);

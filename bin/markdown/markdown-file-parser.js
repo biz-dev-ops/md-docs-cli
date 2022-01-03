@@ -1,7 +1,9 @@
-const jsdom = require('jsdom');
+const fs = require('fs').promises;
 const path = require('path');
-
+const jsdom = require('jsdom');
+const chalk = require('chalk-next');
 const files = require('../file/files');
+
 const PageComponent = require('./page-component');
 
 module.exports = class MarkdownFileParser {
@@ -16,19 +18,24 @@ module.exports = class MarkdownFileParser {
         if (!file.endsWith('.md') && !path.basename(file).startsWith('_'))
             return;
         
+        const htmlFile = `${file.slice(0, -3)}.html`;        
+        console.info(chalk.green(`\t* creating ${htmlFile}`));
+        
         let html = await this.#render(file);
         const title = getTitle(html, file);            
-        html = this.component.render(html, root, title, this.menu, this.git);
+        html = this.component.render(root, path.relative(root, file), html, title, this.menu, this.git);
 
-        return [{
-            location: `${file.slice(0, -3)}.html`,
-            content: html
-        }];
+        await fs.writeFile(htmlFile, html);
+
+        console.info(chalk.green(`\t* created ${htmlFile}`));
+        
+        console.info(chalk.green(`\t* deleting ${file}`));        
+        await fs.unlink(file);
     }
-
+    
     async #render(file) {
         const markdown = await files.readFileAsString(file);
-        return await this.renderer.render(markdown);
+        return await this.renderer.render(file, markdown);
     }
 }
 

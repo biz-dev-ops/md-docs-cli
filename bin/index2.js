@@ -3,6 +3,7 @@
 const yargs = require('yargs');
 const fs = require('fs').promises;
 const path = require('path');
+const chalk = require('chalk-next');
 
 const gitUtil = require('./git/git-info');
 const files = require('./file/files');
@@ -37,7 +38,8 @@ async function run(options) {
     const dst = await init(src, `./dist`, git);
 
     if (options.branches) {
-        console.log("Branche only mode, quitting.....")
+        console.info(``);
+        console.log(chalk.yellow('branche only mode, quitting.....'));
         return;
     }
 
@@ -46,11 +48,10 @@ async function run(options) {
     const fileParser = await createFileParser(src, dst, git);
     
     await files.each(dst, async (file) => {
-        console.info(`parsing ${file}`);
+        console.info(``);
+        console.info(chalk.yellow(`parsing ${file}`));
         
         await fileParser.parse(file);
-        
-        console.info(`${file} parsed`);
     });
 }
 
@@ -113,7 +114,8 @@ init = async function(src, dst, git) {
 
     await fs.writeFile(`${dst}/branches.json`, JSON.stringify(git.branches));
 
-    console.info(`Created ${dst}/branches.json`);
+    console.info(``);
+    console.info(chalk.yellow(`created ${dst}/branches.json`));
 
     return dst;
 }

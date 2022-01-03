@@ -6,7 +6,7 @@ module.exports = class PageComponent {
         this.renderFn = pug.compile(options?.template ?? files.readFileAsStringSync(`${__dirname}/page-component.pug`));
     }
     
-    render(source, content, title, menu, git) {
-        return this.renderFn({ source, content, title, menu, git });
+    render(root, sourceFile, content, title, menu, git) {
+        return this.renderFn({ root, sourceFile, content, title, menu, git });
     }
 }

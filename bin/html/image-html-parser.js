@@ -1,7 +1,7 @@
 module.exports = class ImageHtmlParser {
     constructor() { }
 
-    async parse(element) {
+    async parse(file, element) {
 
     }
 }
