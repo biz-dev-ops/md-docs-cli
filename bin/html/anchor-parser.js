@@ -5,24 +5,24 @@ const files = require('../file/files');
 const { cwd } = require('process');
 
 module.exports = class AnchorParser {
-    constructor() { }
+    //TODO: extend html parser
+    constructor(options) { }
 
     async parse(anchor) {
         if (!this._canParse(anchor))
             return;
         
-        console.log(chalk.green(`\t\t\t* ${this.constructor.name} is parsing anchor (${anchor.href})`));
-
-        await this._parse(anchor);
+        console.log(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
         
         if (this._canRender(anchor)) {
             const file = path.resolve(cwd(), `${anchor.href}`);
-            console.log(chalk.green(`\t\t\t* ${this.constructor.name} is renderering anchor (${anchor.href})`));
         
             const html = await this._render(file);
-            replace(anchor, html);
-        }
 
+            if(html != undefined)
+                replace(anchor, html);
+        }
+        
         await this._parse(anchor);
     }
 
