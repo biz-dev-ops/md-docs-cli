@@ -9,10 +9,9 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
     super();
   }
 
-  _canRender(anchor) { return anchor.href.endsWith(".asyncapi.yml"); }
+  _canParse(anchor) { return anchor.href.endsWith(".asyncapi.yml"); }
 
   async _render(file) {
-
     return component.render();
   }
 };

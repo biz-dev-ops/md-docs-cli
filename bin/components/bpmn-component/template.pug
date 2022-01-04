@@ -1,1 +1,44 @@
-<h1>BPMN placeholder</h1>
+div(data-fullscreen)
+  div(id=id class='bpmn')
+
+script.
+  window.addEventListener('load', function() {
+    const xml = '#{xml}';
+    const viewer = new BpmnJS({
+      container: '#{id}'
+    });
+
+    const bpmnContainer = document.getElementById('#{id}');
+
+    const drawCanvas = () => {
+      viewer.importXML(xml)
+        .then(() => {
+          const canvas = viewer.get('canvas');
+          let viewbox = canvas.viewbox();
+          if (viewbox.inner.width !== 0 && viewbox.inner.height !== 0) {
+            canvas.zoom('fit-viewport');
+          }
+
+          setTimeout(() => {
+            viewbox = canvas.viewbox();
+
+            if (viewbox.inner.width !== 0 && viewbox.inner.height !== 0) {
+              bpmnContainer.style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + '%';
+
+              setTimeout(() => canvas.zoom('fit-viewport'), 1);
+              setTimeout(() => canvas.zoom('fit-viewport'), 2);
+            }
+          }, 1)
+
+        })
+        .catch(error => {
+          console.log('Error rendering bpmn file: #{file}', error);
+        });
+    }
+
+    drawCanvas();
+
+    window.addEventListener('resize', () => {
+      drawCanvas();
+    });     
+  });

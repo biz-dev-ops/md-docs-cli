@@ -13,13 +13,7 @@ module.exports = class UmlAnchorParser extends AnchorParser {
     this.root = options?.root;
   }
 
-  _canRender(anchor) { return anchor.href.endsWith(".puml"); }
-
-  async _parse(anchor) {
-    console.info(chalk.green(`\t\t\t\t* changing href`));   
-
-    anchor.href += '.svg';
-  }
+  _canParse(anchor) { return anchor.href.endsWith(".puml"); }
 
   async _render(file) {
     const svgFile = `${file}.svg`;    
@@ -34,5 +28,11 @@ module.exports = class UmlAnchorParser extends AnchorParser {
     await fs.promises.unlink(file);
 
     return `<img src="${path.relative(cwd(), svgFile)}" />`;
+  }
+
+  async _parse(anchor) {
+    console.info(chalk.green(`\t\t\t\t* changing href`));   
+
+    anchor.href += '.svg';
   }
 };

@@ -12,7 +12,7 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
     this.executions = executions;
   }
 
-  _canRender(anchor) { return anchor.href.endsWith(".feature"); }
+  _canParse(anchor) { return anchor.href.endsWith(".feature"); }
 
   async _render(file) {
 

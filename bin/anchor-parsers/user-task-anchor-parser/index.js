@@ -9,10 +9,9 @@ module.exports = class UserTaskAnchorParser extends AnchorParser {
     super();
   }
 
-  _canRender(anchor) { return anchor.href.endsWith(".user-task.yml"); }
+  _canParse(anchor) { return anchor.href.endsWith(".user-task.yml"); }
 
   async _render(file) {
-
     return component.render();
   }
 };

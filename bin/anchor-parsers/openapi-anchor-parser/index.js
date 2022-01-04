@@ -10,10 +10,9 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
     
   }
 
-  _canRender(anchor) { return anchor.href.endsWith(".openapi.yml"); }
+  _canParse(anchor) { return anchor.href.endsWith(".openapi.yml"); }
 
   async _render(file) {
-
     return component.render();
   }
 };

@@ -15,7 +15,7 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
     this.executions = executions;
   }
 
-  _canRender(anchor) { return anchor.href.endsWith('.dashboard.yml'); }
+  _canParse(anchor) { return anchor.href.endsWith('.dashboard.yml'); }
 
   async _render(file) {
     const directory = path.dirname(file);

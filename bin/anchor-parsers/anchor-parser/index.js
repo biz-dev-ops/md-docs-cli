@@ -13,29 +13,23 @@ module.exports = class AnchorParser {
         
         console.log(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
         
-        if (this._canRender(anchor)) {
-            const file = path.resolve(cwd(), `${anchor.href}`);
-        
-            const html = await this._render(file);
+        const file = path.resolve(cwd(), `${anchor.href}`);
+    
+        const html = await this._render(file);
 
-            if(html != undefined)
-                replace(anchor, html);
-        }
+        if(html != undefined)
+            replace(anchor, html);
         
         await this._parse(anchor);
     }
 
+    //Abstract methods
+    _canParse(anchor) { throw new Error('not implemented') };
+    async _parse(anchor) { };
+    async _render(file) { return null; };
+
     //Proteced methods
     async _readFileAsString(file, encoding = "utf8") { return await files.readFileAsString(file, encoding); };
-
-    //Abstract methods
-    _canParse(anchor) { return this._canRender(anchor) };
-    
-    async _parse(anchor) { };
-    
-    _canRender(anchor) { throw "abstract method not implemented." };
-    
-    async _render(file) { throw "abstract method not implemented." };
 }
 
 const replace = function (el, fragment) {

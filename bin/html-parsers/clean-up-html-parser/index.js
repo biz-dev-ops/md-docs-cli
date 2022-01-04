@@ -6,6 +6,7 @@ module.exports = class CleanUpHtmlParser {
     async parse(element) {
         const replaced = element.querySelectorAll(".replaced");
         console.log(chalk.green(`\t* removing ${replaced.length} replaced elements`));
+        
         for (const el of replaced) {
             el.parentNode.removeChild(el);
         }
