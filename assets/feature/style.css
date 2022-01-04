@@ -1,18 +1,13 @@
 @import "../style/reset.css";
+@import "../style/style.css";
 @import "../style/theme.css";
 
 html {
-    scroll-behavior: smooth;
-    scroll-padding-top: calc(var(--header-height) + var(--space-lg));
+    background-color: transparent;
 }
 
 body {
-    -webkit-font-smoothing: antialiased;
-    font-family: var(--font-family-heading);
-    color: var(--text-color-base);
-    line-height: var(--line-height-base);
-    margin: 0;
-    margin-top: 1.2rem;
+    margin-top: var(--space-sm);
 }
 
 .scenarios,
@@ -116,4 +111,118 @@ body {
     font-family: monospace;
     font-size: var(--heading-5-size);
     color: var(--color-info);
+}
+
+/* Dashboard */
+.dashboard {
+    display: flex;
+    grid-gap: var(--space-md);
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.dashboard:not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+.dashboard figure {
+    flex: 0 1 6.5rem;
+}
+
+.dashboard .legend {
+    flex: 0 1 auto;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    gap: var(--space-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.legend li {
+    flex: 1 0 auto;
+}
+
+.legend-passed {
+    color: var(--color-success);
+}
+
+.legend-failed {
+    color: var(--color-error);
+}
+
+.legend span {
+    display: block;
+    font-size: var(--font-size-sm);
+}
+
+.legend .count {
+    color: var(--text-color-base);
+    font-size: var(--heading-3-size);
+    font-weight: 600;
+    padding: var(--space-xss) 0 var(--space-xs) 0;
+}
+
+.legend .label {
+    border-top: var(--line-medium) solid currentColor;
+    padding-top: var(--space-xss);
+}
+
+.legend-other .label {
+    border-top-color: var(--background-color-base);
+}
+
+
+/* Charts */
+figure.chart-doughnut {
+    margin: 0;
+}
+
+figure.chart-doughnut svg {
+    vertical-align: middle;
+}
+
+figure.chart-doughnut figcaption {
+    align-items: center;
+    font-size: var(--heading-1-size);
+    font-weight: 600;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.chart-doughnut .text {
+    font-family: var(--font-family-heading);
+    font-size: .5em;
+    text-anchor: middle;
+}
+
+.chart-doughnut .circle {
+    stroke: var(--background-color-base);
+    fill: none;
+    /*stroke-linecap: round;*/
+}
+
+.chart-doughnut .circle-passed {
+    stroke: var(--color-success);
+    animation: stroke-progress 1s ease-out;
+}
+
+.chart-doughnut .circle-failed {
+    stroke: var(--color-error);
+    animation: stroke-progress 1s ease-out;
+}
+
+@keyframes stroke-progress {
+    0% {
+        stroke-dasharray: 0 100;
+        stroke-dashoffset: 0;
+    }
 }

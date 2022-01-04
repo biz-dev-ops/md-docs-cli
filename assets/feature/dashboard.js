@@ -1,9 +1,32 @@
 function __init(schema) {
     const data = Parser.parse(schema.features, schema.executions);
 
+    console.log(schema);
+    console.log(data);
+
+    const percentageOf = (value, total) => {
+        return Math.round(value / total * 1000) / 10;
+    }
+
     const html = Mustache.render(TEMPLATE, data.summary, PARTIALS);
 
     document.body.insertAdjacentHTML("beforeend", html);
+
+    // Charts
+    const doughnutCharts = document.querySelectorAll('svg.chart-doughnut');
+    doughnutCharts.forEach(chart => {
+        const passedEl = chart.querySelector('.circle-passed');
+        const failedEl = chart.querySelector('.circle-failed');
+        const passed = percentageOf(chart.dataset.passed, chart.dataset.total);
+        const failed = percentageOf(chart.dataset.failed, chart.dataset.total);
+
+        if (!passed) passedEl.setAttribute('hidden', 'hidden');
+        passedEl.setAttribute('stroke-dasharray',  passed + " 100");
+
+        if (!failed) failedEl.setAttribute('hidden', 'hidden');
+        failedEl.setAttribute('stroke-dasharray', failed + " 100");
+        failedEl.setAttribute('stroke-dashoffset', (passed * -1));
+    });
 
     // Scenarios accordion
     const scenarios = document.querySelectorAll('.scenario');
@@ -29,70 +52,139 @@ function __init(schema) {
 };
 
 const TEMPLATE = `
-<ul class="scenarios">    
-    <li class="scenario {{features.status}}">
-        <button class="item" aria-expanded="true">{{ features.total }} features</button>
+<h3>Features</h3>
+<div class="dashboard">
+    <figure class="chart chart-doughnut">
+        <svg viewBox="0 0 36 36" class="chart-doughnut"
+            data-total="{{ features.total }}"
+            data-passed="{{ features.passed }}"
+            data-failed="{{ features.failed }}"
+        >
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-base"
+              stroke-width="4.169"
+            />
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-failed"
+              stroke-width="4.169"
+              stroke-dasharray="0, 100"
+            />
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-passed"
+              stroke-width="4.169"
+              stroke-dasharray="0, 100"
+            />
+            <text x="18" y="21" class="text">{{ features.total }}</text>
+        </svg>
+    </figure>
+    
+    <ul class="legend">
+        <li class="legend-passed">
+            <span class="percentage">100.0%</span>
+            <span class="count">{{ features.passed }}</span>
+            <span class="label">Passed</span>
+        </li>
+        <li class="legend-failed">
+            <span class="percentage">0.0%</span>
+            <span class="count">{{ features.failed }}</span>
+            <span class="label">Failed</span>
+        </li>
+        <li class="legend-other">
+            <span class="percentage">0.0%</span>
+            <span class="count">{{ features.other }}</span>
+            <span class="label">Others</span>
+        </li>
+    </ul>
+</div>
 
-        <ul class="steps">
-            <li class="passed">
-                <span class="item">
-                    <span class="keyword">Passed</span> <span>{{features.passed}}</span>
-                </span>
-            </li>
-            <li class="failed">
-                <span class="item">
-                    <span class="keyword">Failed</span> <span>{{features.failed}}</span>
-                </span>
-            </li>
-            <li class="other">
-                <span class="item">
-                    <span class="keyword">Other</span> <span>{{features.other}}</span>
-                </span>
-            </li>
-        </ul>
-    </li>
-    <li class="scenario {{scenarios.status}}">
-        <button class="item" aria-expanded="true">{{ scenarios.total }} scenarios</button>
+<h3>Scenarios</h3>
+<div class="dashboard">
+    <figure class="chart chart-doughnut">
+        <svg viewBox="0 0 36 36" class="chart-doughnut"
+            data-total="{{ scenarios.total }}"
+            data-passed="{{ scenarios.passed }}"
+            data-failed="{{ scenarios.failed }}"
+        >
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-base"
+              stroke-width="4.169"
+            />
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-failed"
+              stroke-width="4.169"
+              stroke-dasharray="0, 100"
+            />
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-passed"
+              stroke-width="4.169"
+              stroke-dasharray="0, 100"
+            />
+            <text x="18" y="21" class="text">{{ scenarios.total }}</text>
+        </svg>
+    </figure>
+    
+    <ul class="legend">
+        <li class="legend-passed">
+            <span class="percentage">100.0%</span>
+            <span class="count">{{ scenarios.passed }}</span>
+            <span class="label">Passed</span>
+        </li>
+        <li class="legend-failed">
+            <span class="percentage">0.0%</span>
+            <span class="count">{{ scenarios.failed }}</span>
+            <span class="label">Failed</span>
+        </li>
+        <li class="legend-other">
+            <span class="percentage">0.0%</span>
+            <span class="count">{{ scenarios.other }}</span>
+            <span class="label">Others</span>
+        </li>
+    </ul>
+</div>
 
-        <ul class="steps">
-            <li class="passed">
-                <span class="item">
-                    <span class="keyword">Passed</span> <span>{{scenarios.passed}}</span>
-                </span>
-            </li>
-            <li class="failed">
-                <span class="item">
-                    <span class="keyword">Failed</span> <span>{{scenarios.failed}}</span>
-                </span>
-            </li>
-            <li class="other">
-                <span class="item">
-                    <span class="keyword">Other</span> <span>{{scenarios.other}}</span>
-                </span>
-            </li>
-        </ul>
-    </li>
-    <li class="scenario {{steps.status}}">
-        <button class="item" aria-expanded="true">{{ steps.total }} steps</button>
-
-        <ul class="steps">
-            <li class="passed">
-                <span class="item">
-                    <span class="keyword">Passed</span> <span>{{steps.passed}}</span>
-                </span>
-            </li>
-            <li class="failed">
-                <span class="item">
-                    <span class="keyword">Failed</span> <span>{{steps.failed}}</span>
-                </span>
-            </li>
-            <li class="other">
-                <span class="item">
-                    <span class="keyword">Other</span> <span>{{steps.other}}</span>
-                </span>
-            </li>
-        </ul>
-    </li>
-</ul>`;
+<h3>Steps</h3>
+<div class="dashboard">
+    <figure class="chart chart-doughnut">
+        <svg viewBox="0 0 36 36" class="chart-doughnut"
+            data-total="{{ steps.total }}"
+            data-passed="{{ steps.passed }}"
+            data-failed="{{ steps.failed }}"
+        >
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-base"
+              stroke-width="4.169"
+            />
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-failed"
+              stroke-width="4.169"
+              stroke-dasharray="0, 100"
+            />
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle circle-passed"
+              stroke-width="4.169"
+              stroke-dasharray="0, 100"
+            />
+            <text x="18" y="21" class="text">{{ steps.total }}</text>
+        </svg>
+    </figure>
+    
+    <ul class="legend">
+        <li class="legend-passed">
+            <span class="percentage">100.0%</span>
+            <span class="count">{{ steps.passed }}</span>
+            <span class="label">Passed</span>
+        </li>
+        <li class="legend-failed">
+            <span class="percentage">0.0%</span>
+            <span class="count">{{ steps.failed }}</span>
+            <span class="label">Failed</span>
+        </li>
+        <li class="legend-other">
+            <span class="percentage">0.0%</span>
+            <span class="count">{{ steps.other }}</span>
+            <span class="label">Others</span>
+        </li>
+    </ul>
+</div>`;
 
 const PARTIALS = { };

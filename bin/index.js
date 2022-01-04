@@ -1086,8 +1086,8 @@ const FEATURE_TEMPLATE = `<!DOCTYPE html>
     <meta charset="UTF-8">  
     <title>{{title}}</title>
     <link href="{{{root}}}assets/feature/style.css" rel="stylesheet">
-</head>
-<body>
+  </head>
+  <body>
     <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
     <script src="{{{root}}}assets/feature/parser.js"></script>
     <script src="{{{root}}}assets/feature/feature.js"></script>
@@ -1096,7 +1096,7 @@ const FEATURE_TEMPLATE = `<!DOCTYPE html>
         const schema = {{{json}}};
         __init(schema);
     </script>
-</body>
+  </body>
 </html>`;
 
 const FEATURE_DASHBOARD_TEMPLATE = `<!DOCTYPE html>
@@ -1105,8 +1105,8 @@ const FEATURE_DASHBOARD_TEMPLATE = `<!DOCTYPE html>
     <meta charset="UTF-8">  
     <title>{{title}}</title>
     <link href="{{{root}}}assets/feature/style.css" rel="stylesheet">
-</head>
-<body>
+  </head>
+  <body>
     <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
     <script src="{{{root}}}assets/feature/parser.js"></script>
     <script src="{{{root}}}assets/feature/dashboard.js"></script>
@@ -1115,7 +1115,7 @@ const FEATURE_DASHBOARD_TEMPLATE = `<!DOCTYPE html>
         const schema = {{{json}}};
         __init(schema);
     </script>
-</body>
+  </body>
 </html>`;
 
 run();
