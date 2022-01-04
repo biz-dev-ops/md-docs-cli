@@ -1089,6 +1089,7 @@ const FEATURE_TEMPLATE = `<!DOCTYPE html>
   </head>
   <body>
     <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
+    <script src="{{{root}}}assets/script/collapse.js"></script>
     <script src="{{{root}}}assets/feature/parser.js"></script>
     <script src="{{{root}}}assets/feature/feature.js"></script>
     <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>
@@ -1108,6 +1109,7 @@ const FEATURE_DASHBOARD_TEMPLATE = `<!DOCTYPE html>
   </head>
   <body>
     <script src="https://unpkg.com/mustache@4.2.0/mustache.js"></script>
+    <script src="{{{root}}}assets/script/collapse.js"></script>
     <script src="{{{root}}}assets/feature/parser.js"></script>
     <script src="{{{root}}}assets/feature/dashboard.js"></script>
     <script src="{{{root}}}assets/script/iframeResizer.contentWindow.min.js"></script>

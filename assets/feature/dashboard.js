@@ -1,16 +1,25 @@
 function __init(schema) {
     const data = Parser.parse(schema.features, schema.executions);
 
-    console.log(schema);
-    console.log(data);
+    // Add feature id
+    data.features.map((feature, index) => {
+        const name = feature.name.toLowerCase();
+        feature["id"] = encodeURIComponent(name).replace(/%20/g,'-');
+        return feature;
+    })
 
     const percentageOf = (value, total) => {
         return Math.round(value / total * 1000) / 10;
     }
 
-    const html = Mustache.render(TEMPLATE, data.summary, PARTIALS);
+    const summaryHtml = Mustache.render(SUMMARY_TEMPLATE, data.summary, PARTIALS);
+    const featuresHtml = Mustache.render(FEATURES_TEMPLATE, data, PARTIALS);
 
-    document.body.insertAdjacentHTML("beforeend", html);
+    document.body.insertAdjacentHTML("beforeend", summaryHtml);
+    document.body.insertAdjacentHTML("beforeend", featuresHtml);
+
+    // Init collapse
+    collapse();
 
     // Charts
     const doughnutCharts = document.querySelectorAll('svg.chart-doughnut');
@@ -27,31 +36,9 @@ function __init(schema) {
         failedEl.setAttribute('stroke-dasharray', failed + " 100");
         failedEl.setAttribute('stroke-dashoffset', (passed * -1));
     });
-
-    // Scenarios accordion
-    const scenarios = document.querySelectorAll('.scenario');
-    scenarios.forEach(scenario => {
-        const toggle = scenario.querySelector('button.item');
-        const steps = scenario.querySelector('.steps');
-
-        steps.setAttribute('hidden', 'hidden');
-        toggle.setAttribute('aria-expanded', 'false');
-
-        toggle.onclick = e => {
-            const expanded = toggle.getAttribute('aria-expanded') !== "false";
-            if (expanded) {
-                steps.setAttribute('hidden', 'hidden');
-                toggle.setAttribute('aria-expanded', 'false');
-            } else {
-                steps.removeAttribute('hidden');
-                toggle.setAttribute('aria-expanded', 'true');
-            }
-
-        };
-    });
 };
 
-const TEMPLATE = `
+const SUMMARY_TEMPLATE = `
 <h3>Features</h3>
 <div class="dashboard">
     <figure class="chart chart-doughnut">
@@ -185,6 +172,47 @@ const TEMPLATE = `
             <span class="label">Others</span>
         </li>
     </ul>
-</div>`;
+</div>
+`;
+
+const FEATURES_TEMPLATE = `
+{{#features.length}}
+    <ul class="collapse-list features">
+        {{#features}}
+            <li class="feature has-children">
+                <button role="button" class="status status-{{status.type}}" data-toggle="collapse" aria-controls="scenarios-{{id}}" aria-expanded="false">{{name}}</button>
+                    
+                <ul class="{{#scenarios.length}}collapse-list {{/scenarios.length}} scenarios" id="scenarios-{{id}}">
+                    {{#scenarios}}
+                        <li class="scenario has-children">
+                            <button role="button" class="status status-{{status.type}}" data-toggle="collapse" aria-controls="steps-{{id}}" aria-expanded="false">{{name}}</button>
+                
+                            <ul class="steps" id="steps-{{id}}">
+                                {{#steps}}
+                                    <li class="step {{type}}">
+                                        <span class="status status-bg status-{{status.type}}">
+                                            <span class="keyword">{{keyword}}</span> <span>{{text}}</span>
+                                        </span>
+                                    </li>
+                                {{/steps}}
+                                {{^steps.length}}
+                                    <li>
+                                        <mark>No steps defined</mark>
+                                    </li>
+                                {{/steps.length}}
+                            </ul>
+                        </li>
+                    {{/scenarios}}
+                
+                    {{^scenarios.length}}
+                        <li>
+                            <mark>No scenarios defined</mark>
+                        </li>
+                    {{/scenarios.length}}
+                </ul>
+            </li>
+        {{/features}}
+    </ul>
+{{/features.length}}`;
 
 const PARTIALS = { };
