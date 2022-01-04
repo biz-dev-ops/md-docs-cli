@@ -5,12 +5,12 @@ module.exports = class HtmlParser {
         this.parsers = options.parsers
     }
 
-    async parse(file, html) {
+    async parse(html) {
         const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
         element.innerHTML = html;
         
         for (const parser of this.parsers) {
-            await parser.parse(file, element);
+            await parser.parse(element);
         }
 
         return element.innerHTML;

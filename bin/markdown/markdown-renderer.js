@@ -28,8 +28,8 @@ module.exports = class MarkdownRenderer {
         this.parser = options.parser
     }
 
-    async render(file, markdown) {
+    async render(markdown) {
         const html = md.render(markdown);
-        return await this.parser.parse(file, html);
+        return await this.parser.parse(html);
     }
 }

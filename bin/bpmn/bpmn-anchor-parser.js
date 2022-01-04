@@ -13,7 +13,6 @@ module.exports = class BpmnAnchorParser extends AnchorParser {
   _canRender(anchor) { return anchor.href.endsWith(".bpmn"); }
 
   async _render(file) {
-    console.info(chalk.green(`\t\t* rendering BPMN anchor (${file})`));
 
     return component.render();
   }

@@ -18,8 +18,6 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
   _canRender(anchor) { return anchor.href.endsWith('.dashboard.yml'); }
 
   async _render(file) {
-    console.info(chalk.green(`\t\t* rendering dashboard anchor (${file})`));
-
     const directory = path.dirname(file);
     const config = await parseFile(file);
     const features = await gherkin.parse(config.features.map(feature => `${directory}/${feature}`));

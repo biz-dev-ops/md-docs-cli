@@ -1,3 +1,4 @@
+const chalk = require('chalk-next');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
@@ -30,7 +31,7 @@ exports.getInfo = async function () {
             throw ex;
         }
 
-        console.warn(`No git repository, falling back to default.`)
+        console.warn(chalk.yellowBright(`No git repository, falling back to default.`));
         
         const branch = {
             name: 'main',

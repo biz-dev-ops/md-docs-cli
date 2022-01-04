@@ -8,34 +8,39 @@ const PageComponent = require('./page-component');
 
 module.exports = class MarkdownFileParser {
     constructor(options) {
+        this.root = options.root;
         this.menu = options.menu;
         this.git = options.git;
         this.renderer = options.renderer;
         this.component = new PageComponent(options?.template);
     }
 
-    async parse(file, root) {
+    async parse(file) {
         if (!file.endsWith('.md') && !path.basename(file).startsWith('_'))
             return;
         
         const htmlFile = `${file.slice(0, -3)}.html`;        
-        console.info(chalk.green(`\t* creating ${htmlFile}`));
+        console.info(chalk.green(`\t* creating ${path.relative(this.root, htmlFile)}`));
         
-        let html = await this.#render(file);
-        const title = getTitle(html, file);            
-        html = this.component.render(root, path.relative(root, file), html, title, this.menu, this.git);
-
+        const html = await this.#render(file);
+        
         await fs.writeFile(htmlFile, html);
-
-        console.info(chalk.green(`\t* created ${htmlFile}`));
         
-        console.info(chalk.green(`\t* deleting ${file}`));        
+        console.info(chalk.green(`\t* deleting ${path.relative(this.root, file)}`));        
         await fs.unlink(file);
     }
     
     async #render(file) {
         const markdown = await files.readFileAsString(file);
-        return await this.renderer.render(file, markdown);
+        const html = await this.renderer.render(markdown);
+        return this.component.render({
+            root: this.root,
+            sourceFile: path.relative(this.root, file),
+            content: html,
+            title: getTitle(html, file),
+            menu: this.menu,
+            git: this.git,
+        });
     }
 }
 

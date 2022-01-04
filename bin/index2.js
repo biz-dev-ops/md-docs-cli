@@ -3,6 +3,7 @@
 const yargs = require('yargs');
 const fs = require('fs').promises;
 const path = require('path');
+const { chdir, cwd } = require('process');
 const chalk = require('chalk-next');
 
 const gitUtil = require('./git/git-info');
@@ -35,7 +36,7 @@ const UmlAnchorParser = require('./uml/uml-anchor-parser');
 async function run(options) {
     const src = path.resolve(`./docs`);
     const git = await gitUtil.getInfo();    
-    const dst = await init(src, `./dist`, git);
+    const dst = await init(src, path.resolve(`./dist`), git);
 
     if (options.branches) {
         console.info(``);
@@ -49,9 +50,14 @@ async function run(options) {
     
     await files.each(dst, async (file) => {
         console.info(``);
-        console.info(chalk.yellow(`parsing ${file}`));
+        console.info(chalk.yellow(`parsing ${path.relative(dst, file)}`));
+        
+        const dir = cwd();
+        chdir(path.dirname(file));
         
         await fileParser.parse(file);
+
+        chdir(dir);
     });
 }
 
@@ -62,32 +68,38 @@ async function createFileParser(src, dst, git) {
     let markdownRenderer;
 
     const htmlParsers = [
-        new HeadingHtmlParser(),
+        new HeadingHtmlParser({ root: dst }),
         new AnchorHtmlParser({
+            root: dst,
             parsers: [
-                new BPMNAnchorParser(),
-                new OpenapiAnchorParser(),
-                new AsyncapiAnchorParser(),
-                new UserTaskAnchorParser(),
+                new BPMNAnchorParser({ root: dst }),
+                new OpenapiAnchorParser({ root: dst }),
+                new AsyncapiAnchorParser({ root: dst }),
+                new UserTaskAnchorParser({ root: dst }),
                 new FeatureAnchorParser({
+                    root: dst,
                     executions: executions
                 }),
                 new DashboardAnchorParser({
+                    root: dst,
                     executions: executions
                 }),
                 new MarkdownAnchorParser({
+                    root: dst,
                     renderer: markdownRenderer
                 }),
-                new UmlAnchorParser()
+                new UmlAnchorParser({ root: dst })
             ]
         }),
-        new UnsortedListHtmlParser(),
-        new ImageHtmlParser(),
-        new CleanUpHtmlParser()
+        new UnsortedListHtmlParser({ root: dst }),
+        new ImageHtmlParser({ root: dst }),
+        new CleanUpHtmlParser({ root: dst })
     ];
 
     markdownRenderer = new MarkdownRenderer({
+        root: dst,
         parser: new HtmlParser({
+            root: dst,
             parsers: htmlParsers
         })
     });
@@ -96,6 +108,7 @@ async function createFileParser(src, dst, git) {
         root: dst,
         parsers: [
             new MarkdownFileParser({
+                root: dst,
                 git: git,
                 menu: menu,
                 renderer: markdownRenderer
@@ -115,7 +128,7 @@ init = async function(src, dst, git) {
     await fs.writeFile(`${dst}/branches.json`, JSON.stringify(git.branches));
 
     console.info(``);
-    console.info(chalk.yellow(`created ${dst}/branches.json`));
+    console.info(chalk.yellow(`created branches.json`));
 
     return dst;
 }

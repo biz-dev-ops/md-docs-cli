@@ -1,23 +1,29 @@
+const chalk = require('chalk-next');
 const jsdom = require('jsdom');
 const path = require('path');
 const files = require('../file/files');
+const { cwd } = require('process');
 
 module.exports = class AnchorParser {
     constructor() { }
 
-    async parse(src) {
-        if (!_canParse(src.anchor))
+    async parse(anchor) {
+        if (!this._canParse(anchor))
             return;
+        
+        console.log(chalk.green(`\t\t\t* ${this.constructor.name} is parsing anchor (${anchor.href})`));
 
-        if (this._canRender(src.anchor)) {
-            const target = `${path.dirname(src.file)}/${src.anchor.href}`;    
-            const html = await _render(target);
-            replace(src.anchor, html);
+        await this._parse(anchor);
+        
+        if (this._canRender(anchor)) {
+            const file = path.resolve(cwd(), `${anchor.href}`);
+            console.log(chalk.green(`\t\t\t* ${this.constructor.name} is renderering anchor (${anchor.href})`));
+        
+            const html = await this._render(file);
+            replace(anchor, html);
         }
 
-        await _parse(src.anchor);
-
-        console.log(`${this.constructor.name}: executed for ${src.file}`);
+        await this._parse(anchor);
     }
 
     //Proteced methods
@@ -35,7 +41,7 @@ module.exports = class AnchorParser {
 
 const replace = function (el, fragment) {
     if (typeof fragment === 'string')
-        fragment = jsdom.fragment(fragment);
+        fragment = jsdom.JSDOM.fragment(fragment);
 
     let ref = el;
     let parent = ref.parentNode;
