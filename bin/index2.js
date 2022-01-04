@@ -7,31 +7,30 @@ const { chdir, cwd } = require('process');
 const chalk = require('chalk-next');
 
 const gitUtil = require('./git/git-info');
-const files = require('./file/files');
-const menuUtil = require('./util/menu');
-const executionsUtil = require('./util/executions');
+const files = require('./utils/files');
+const menuUtil = require('./utils/menu');
+const executionsUtil = require('.//bdd/executions');
 
-const HtmlParser = require('./html/html-parser');
-
-const FileParser = require('./file/file-parser');
+const CompositeFileParser = require('./file-parsers/composite-file-parser');
+const MarkdownFileParser = require('./file-parsers/markdown-file-parser');
 
 const MarkdownRenderer = require('./markdown/markdown-renderer');
-const MarkdownFileParser = require('./markdown/markdown-file-parser');
 
-const HeadingHtmlParser = require('./html/heading-html-parser');
-const UnsortedListHtmlParser = require('./html/unsorted-list-html-parser');
-const AnchorHtmlParser = require('./html/anchor-html-parser');
-const ImageHtmlParser = require('./html/image-html-parser');
-const CleanUpHtmlParser = require('./html/clean-up-html-parser');
+const CompositeHtmlParser = require('./html-parsers/composite-html-parser');
+const HeadingHtmlParser = require('./html-parsers/heading-html-parser');
+const UnsortedListHtmlParser = require('./html-parsers/unsorted-list-html-parser');
+const AnchorHtmlParser = require('./html-parsers/anchor-html-parser');
+const ImageHtmlParser = require('./html-parsers/image-html-parser');
+const CleanUpHtmlParser = require('./html-parsers/clean-up-html-parser');
 
-const BPMNAnchorParser = require('./bpmn/bpmn-anchor-parser');
-const OpenapiAnchorParser = require('./openapi/openapi-anchor-parser');
-const AsyncapiAnchorParser = require('./asyncapi/asyncapi-anchor-parser');
-const UserTaskAnchorParser = require('./user-task/user-task-anchor-parser');
-const FeatureAnchorParser = require('./bdd/feature-anchor-parser');
-const DashboardAnchorParser = require('./bdd/dashboard-anchor-parser');
-const MarkdownAnchorParser = require('./markdown/markdown-anchor-parser');
-const UmlAnchorParser = require('./uml/uml-anchor-parser');
+const BPMNAnchorParser = require('./anchor-parsers/bpmn-anchor-parser');
+const OpenapiAnchorParser = require('./anchor-parsers/openapi-anchor-parser');
+const AsyncapiAnchorParser = require('./anchor-parsers/asyncapi-anchor-parser');
+const UserTaskAnchorParser = require('./anchor-parsers/user-task-anchor-parser');
+const FeatureAnchorParser = require('./anchor-parsers/feature-anchor-parser');
+const DashboardAnchorParser = require('./anchor-parsers/dashboard-anchor-parser');
+const MarkdownAnchorParser = require('./anchor-parsers/markdown-anchor-parser');
+const UmlAnchorParser = require('./anchor-parsers/uml-anchor-parser');
 
 async function run(options) {
     const src = path.resolve(`./docs`);
@@ -98,13 +97,13 @@ async function createFileParser(src, dst, git) {
 
     markdownRenderer = new MarkdownRenderer({
         root: dst,
-        parser: new HtmlParser({
+        parser: new CompositeHtmlParser({
             root: dst,
             parsers: htmlParsers
         })
     });
 
-    return new FileParser({
+    return new CompositeFileParser({
         root: dst,
         parsers: [
             new MarkdownFileParser({
