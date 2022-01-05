@@ -1,69 +1,51 @@
 exports.summarize = (features) => {
+    const scenarios = features
+        .flatMap(feature =>
+            feature.scenarios
+                .flatMap(scenario => scenario.scenarios ? scenario.scenarios : [scenario])
+    );
+    
+    const steps = scenarios
+        .flatMap(scenario => scenario.steps);
+    
     const summary = {
-        features: {
-            total: features.length,
-            passed: features.filter(f => f.status.type === "passed").length,
-            failed: features.filter(f => f.status.type === "failed").length,
-            other: features.filter(f => f.status.type === "other").length,
-        },
-        scenarios: {
-            total: features
-                .map(f => f.scenarios.length)
-                .reduce(add, 0),
-            passed: features
-                .map(f => f.scenarios.filter(s => s.status.type === "passed").length)
-                .reduce(add, 0),
-            failed: features
-                .map(f => f.scenarios.filter(s => s.status.type === "failed").length)
-                .reduce(add, 0),
-            other: features
-                .map(f => f.scenarios.filter(s => s.status.type === "other").length)
-                .reduce(add, 0)
-        },
-        steps: {
-            total: features
-                .map(f => f.scenarios
-                    .map(s => s.steps.length)
-                    .reduce(add, 0)
-                )
-                .reduce(add, 0),
-            passed: features
-                .map(f => f.scenarios
-                    .map(s => s.steps.filter(s => s.status?.type === "passed").length)
-                    .reduce(add, 0)
-                )
-                .reduce(add, 0),
-            failed: features
-                .map(f => f.scenarios
-                    .map(s => s.steps.filter(s => s.status?.type === "failed").length)
-                    .reduce(add, 0)
-                )
-                .reduce(add, 0),
-            other: features
-                .map(f => f.scenarios
-                    .map(s => s.steps.filter(s => s.status?.type != "passed" && s.status?.type != "failed").length)
-                    .reduce(add, 0)
-                )
-                .reduce(add, 0)
-        }
+        features: getStatusSummary(features),
+        scenarios: getStatusSummary(scenarios),
+        steps: getStatusSummary(steps)
+    }
+    
+    return summary;
+}
+
+const getStatusSummary = function(collection) {
+    const statuses = {
+        total: 0
     };
 
-    summary.features.status = getStatus(summary.features);
-    summary.scenarios.status = getStatus(summary.scenarios);
-    summary.steps.status = getStatus(summary.steps);
+    if (collection == undefined)
+        return statuses;
 
-    return summary;
+    for (const item of collection) {
+        if (statuses[item.status.type] == undefined) {
+            statuses[item.status.type] = 0;
+        }
+
+        statuses[item.status.type] += 1;
+        statuses.total += 1;
+    }
+
+    return statuses;
 }
 
 const getStatus = function (summary) {
     const status = {};
     if (summary.failed > 0)
-        status.type = "failed";
+        status.type = 'failed';
     else if (summary.other > 0)
-        status.type = "failed";
+        status.type = 'failed';
 
     else if (summary.passed > 0)
-        status.type = "failed";
+        status.type = 'failed';
 
     return status;
 }

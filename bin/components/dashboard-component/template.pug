@@ -1,10 +1,10 @@
 ul
   each item, key in summary
-    li(class='#{name} #{segment.status.type}')
-      button(class='item' aria-expanded='true')= segment.total + ' ' + name
+    li
+      button= key
       ul
-        each value, status in segment
-          li(class='#{status}')
+        each value, key in item
+          li
             span(class='item')
-              span(class='keyword')= status 
+              span(class='keyword')= key 
               span= value

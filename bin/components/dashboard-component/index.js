@@ -6,7 +6,7 @@ module.exports = class FeatureComponent {
         this.renderFn = pug.compile(options?.template ?? files.readFileAsStringSync(`${__dirname}/template.pug`));
     }
     
-    render(summary) {
-        return this.renderFn({ data: summary });
+    render(data) {
+        return this.renderFn(data);
     }
 }
