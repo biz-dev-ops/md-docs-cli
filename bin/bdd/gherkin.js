@@ -1,13 +1,20 @@
+const fs = require('fs').promises;
+const path = require('path');
+const { env, cwd } = require('process');
+
 const { GherkinStreams } = require('@cucumber/gherkin-streams');
 
 exports.parse = async (files) => {
     if (files == undefined)
-        throw `files is not defined`;
+        throw new Error(`files is not defined`);
 
     if (!Array.isArray(files))
         files = [files];
 
     const chunks = await getChunks(files);
+
+    if(env.NODE_ENV === 'development')
+        await fs.writeFile(path.resolve(cwd(), 'chunks.json'), JSON.stringify(chunks));
 
     return chunks
         .filter(chunk => chunk.source)
@@ -15,11 +22,11 @@ exports.parse = async (files) => {
         .map(uri => {
             const document = chunks.find(chunk => chunk.gherkinDocument?.uri === uri);
             if (document == undefined)
-                throw `gherkinDocument with uri ${uri} not found in chunks`;
+                throw new Error(`gherkinDocument with uri ${uri} not found in chunks`);
 
             const feature = document.gherkinDocument.feature;
             if (feature == undefined)
-                throw `feature not found in gherkinDocument with uri ${uri}`;
+                throw new Error(`feature not found in gherkinDocument with uri ${uri}`);
 
             const background = feature.children.find(child => child.background)?.background;
 
@@ -29,13 +36,16 @@ exports.parse = async (files) => {
                     .filter(child => child.scenario)
                     .map(child => child.scenario)
                     .map(scenario => {
-                        const pickles = chunks.filter(chunk => chunk.pickle?.astNodeIds.includes(scenario.id));
+                        const pickles = chunks
+                            .filter(chunk => chunk.pickle?.astNodeIds.includes(scenario.id))
+                            .map(chunk => chunk.pickle);
+                        
                         const steps = (background?.steps ?? []).concat(scenario.steps);
 
                         if (pickles.length === 0)
-                            throw `pickle not found for scenario with id ${scenario.id} in gherkinDocument with uri ${uri}`;
+                            throw new Error(`pickle not found for scenario with id ${scenario.id} in gherkinDocument with uri ${uri}`);
 
-                        if (pickles.length == 1) {
+                        if (pickles.length === 1) {
                             const pickle = pickles[0];
                             return {
                                 name: pickle.name,
@@ -64,7 +74,7 @@ exports.parse = async (files) => {
 function mapStep(pickle, step, index) {
     const pickleStep = pickle.steps[index];
     if (pickleStep == undefined)
-        throw `step ${index} not found in pickle with id ${pickle.id}`;
+        throw new Error(`step ${index} not found in pickle with id ${pickle.id}`);
 
     return {
         id: step.id,

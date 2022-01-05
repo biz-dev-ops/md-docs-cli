@@ -1,16 +1,17 @@
 exports.parse = (features, executions) => {
     if (features == undefined)
-        throw `files is not defined`;
+        throw new Error(`files is not defined`);
 
-    if (executions == undefined || executions.length === 0)
+    if (executions == undefined || executions.length === 0) {
+        setUndefined(features);
         return;
+    }
 
     for (const feature of features) {
         const scenarios = flatten(feature.scenarios);
-        
+
         for (const scenario of scenarios) {
-            const execution = executions
-                .find(execution => equals(execution, scenario));
+            const execution = executions.find(execution => equals(execution, scenario));
 
             scenario.steps.map((step, index) => {
                 step.result = parse(execution?.StepResults[index]);
@@ -40,6 +41,17 @@ exports.parse = (features, executions) => {
                 return 'passed';
             })()
         }
+    }
+}
+
+setUndefined = function (collection) {
+    if (collection == undefined)
+        return;
+    
+    for (const item of collection) {
+        item.status = { type: 'undefined' };
+        setUndefined(item.scenarios);
+        setUndefined(item.steps);
     }
 }
 

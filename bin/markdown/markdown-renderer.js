@@ -1,4 +1,4 @@
-
+const jsdom = require('jsdom');
 const markdown_it_anchor = require('markdown-it-anchor');
 const md = require('markdown-it')
     ({
@@ -25,11 +25,19 @@ const md = require('markdown-it')
 
 module.exports = class MarkdownRenderer {
     constructor(options) {
-        this.parser = options.parser
+        this.parsers = options.parsers
     }
 
     async render(markdown) {
         const html = md.render(markdown);
-        return await this.parser.parse(html);
+
+        const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
+        element.innerHTML = html;
+        
+        for (const parser of this.parsers) {
+            await parser.parse(element);
+        }
+
+        return element.innerHTML;
     }
 }

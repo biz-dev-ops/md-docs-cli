@@ -9,14 +9,13 @@ const chalk = require('chalk-next');
 const gitUtil = require('./git/git-info');
 const files = require('./utils/files');
 const menuUtil = require('./utils/menu');
-const executionsUtil = require('.//bdd/executions');
+const executionStore = require('./bdd/executions');
 
 const CompositeFileParser = require('./file-parsers/composite-file-parser');
 const MarkdownFileParser = require('./file-parsers/markdown-file-parser');
 
 const MarkdownRenderer = require('./markdown/markdown-renderer');
 
-const CompositeHtmlParser = require('./html-parsers/composite-html-parser');
 const HeadingHtmlParser = require('./html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('./html-parsers/unsorted-list-html-parser');
 const AnchorHtmlParser = require('./html-parsers/anchor-html-parser');
@@ -33,9 +32,9 @@ const MarkdownAnchorParser = require('./anchor-parsers/markdown-anchor-parser');
 const UmlAnchorParser = require('./anchor-parsers/uml-anchor-parser');
 
 async function run(options) {
-    const src = path.resolve(`./docs`);
+    const src = path.resolve(cwd(), `docs`);
     const git = await gitUtil.getInfo();    
-    const dst = await init(src, path.resolve(`./dist`), git);
+    const dst = await init(src, path.resolve(cwd(), `dist`), git);
 
     if (options.branches) {
         console.info(``);
@@ -52,17 +51,20 @@ async function run(options) {
         console.info(chalk.yellow(`parsing ${path.relative(dst, file)}`));
         
         const dir = cwd();
+
+        //Set current working directory to file path
         chdir(path.dirname(file));
         
         await fileParser.parse(file);
 
+        //Reset current working directory
         chdir(dir);
     });
 }
 
 async function createFileParser(src, dst, git) {
     const menu = await menuUtil.getMenu(src);
-    const executions = await executionsUtil.getExecutions(path.resolve(`${src}/../temp/executions`));
+    const executions = await executionStore.getExecutions(path.resolve(cwd(), `.temp/executions`));
 
     let markdownRenderer;
 
@@ -97,10 +99,7 @@ async function createFileParser(src, dst, git) {
 
     markdownRenderer = new MarkdownRenderer({
         root: dst,
-        parser: new CompositeHtmlParser({
-            root: dst,
-            parsers: htmlParsers
-        })
+        parsers: htmlParsers
     });
 
     return new CompositeFileParser({
@@ -117,7 +116,7 @@ async function createFileParser(src, dst, git) {
 }
 
 init = async function(src, dst, git) {
-    dst = getBranchPath(dst, git.branch);
+    dst = createDestinationPath(dst, git.branch);
 
     await fs.rm(dst, { recursive: true, force: true });
     await fs.access(src);
@@ -132,7 +131,7 @@ init = async function(src, dst, git) {
     return dst;
 }
 
-getBranchPath = function (src, branch) {
+createDestinationPath = function (src, branch) {
     if (!branch.feature)
         return src;
     

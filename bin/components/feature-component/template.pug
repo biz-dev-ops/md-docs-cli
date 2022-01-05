@@ -1,20 +1,20 @@
 mixin scenarios(scenarios)
   ul(class='scenarios')
     each scenario in scenarios    
-      li(class='scenario #{scenario.status.type}')
-        button(class='item' aria-expanded='true')= feature.name
+      li(class='scenario ' + scenario.status.type)
+        button(class='item' aria-expanded='true')= scenario.name
           if scenario.scenarios
             +scenarios(scenario.scenarios)
           else       
             ul(class='steps')              
-              each step in steps 
-                li(class='step #{step.type} #{step.status.type}')
+              each step in scenario.steps 
+                li(class='step ' + step.type + ' ' + scenario.status.type)
                   span(class='item') 
                     span(class='keyword')= step.keyword
                     span= step.text
 
 ul(class='features')
   each feature in features
-    li(class='feature #{feature.status.type}')
-      button(class='item' aria-expanded='true')= feature.name        
+    li(class='feature ' + feature.status.type)
+      button(class='item' aria-expanded='true')= feature.name
         +scenarios(feature.scenarios)

@@ -1,23 +1,36 @@
+const fs = require('fs').promises;
+const { env } = require('process');
+
 const chalk = require('chalk-next');
 
 const AnchorParser = require('../anchor-parser');
 
 const gherkin = require('../../bdd/gherkin');
 const specflow = require('../../bdd/specflow');
-const component = require('../../components/feature-component');
+const FeatureComponent = require('../../components/feature-component');
 
 module.exports = class FeatureAnchorParser extends AnchorParser {
-  constructor(executions) {
+  constructor(options) {
     super();
-    this.executions = executions;
+
+    this.executions = options?.executions;
+    this.component = new FeatureComponent(options?.template);
   }
 
   _canParse(anchor) { return anchor.href.endsWith(".feature"); }
 
   async _render(file) {
+    console.info(chalk.green(`\t\t\t\t* parsing feature file`));
+    const features = await gherkin.parse(file);
+    
+    console.info(chalk.green(`\t\t\t\t* parsing executions file`));    
+    specflow.parse(features, this.executions);
+    
+    if (env.NODE_ENV === 'development') {
+      await fs.writeFile(`${file}.json`, JSON.stringify(features));
+    }
 
-    const feature = await gherkin.parse(file);
-    specflow.parse(feature, this.executions);
-    return component.render(feature);
+    console.info(chalk.green(`\t\t\t\t* creating features`));
+    return this.component.render({ features });
   }
 };
