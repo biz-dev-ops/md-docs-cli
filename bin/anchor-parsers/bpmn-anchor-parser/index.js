@@ -15,7 +15,7 @@ module.exports = class BpmnAnchorParser extends AnchorParser {
   _canParse(anchor) { return anchor.href.endsWith(".bpmn"); }
 
   async _render(file) {
-    console.info(chalk.green(`\t\t\t\t* creating BPMN placeholder`));
+    console.info(chalk.green(`\t\t\t\t* rendering`));
 
     const id = `bpmn-container-${uuidv4()}`;
     const xml = (await this._readFileAsString(file))

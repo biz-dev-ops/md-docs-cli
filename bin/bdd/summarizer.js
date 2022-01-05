@@ -19,7 +19,9 @@ exports.summarize = (features) => {
 
 const getStatusSummary = function(collection) {
     const statuses = {
-        total: 0
+        total: 0,
+        passed: 0,
+        failed: 0
     };
 
     if (collection == undefined)
@@ -35,21 +37,4 @@ const getStatusSummary = function(collection) {
     }
 
     return statuses;
-}
-
-const getStatus = function (summary) {
-    const status = {};
-    if (summary.failed > 0)
-        status.type = 'failed';
-    else if (summary.other > 0)
-        status.type = 'failed';
-
-    else if (summary.passed > 0)
-        status.type = 'failed';
-
-    return status;
-}
-
-function add(accumulator, a) {
-    return accumulator + a;
 }

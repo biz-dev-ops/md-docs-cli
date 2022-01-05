@@ -6,17 +6,18 @@ module.exports = class CleanUpHtmlParser {
     async parse(element) {
         const replaced = element.querySelectorAll(".replaced");
         console.log(chalk.green(`\t* removing ${replaced.length} replaced elements`));
-        
+
         for (const el of replaced) {
             el.parentNode.removeChild(el);
         }
 
-        const paragraphs = element.querySelectorAll("p");
+        const paragraphs = Array.from(element.querySelectorAll("p"))
+            .filter(p => p.innerHTML === '');
+
+        console.log(chalk.green(`\t* removing ${paragraphs.length} empty paragraphs`));
+
         for (const p of paragraphs) {
-            if (p.innerHTML === '') {
-                console.log(chalk.green(`\t* removing empty paragraph`));
-                p.parentNode.removeChild(p);
-            }
+            p.parentNode.removeChild(p);
         }
     }
 }

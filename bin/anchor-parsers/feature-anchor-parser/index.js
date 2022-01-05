@@ -30,7 +30,7 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.json`, JSON.stringify(features));
     }
 
-    console.info(chalk.green(`\t\t\t\t* creating features`));
+    console.info(chalk.green(`\t\t\t\t* rendering`));
     return this.component.render({ features });
   }
 };

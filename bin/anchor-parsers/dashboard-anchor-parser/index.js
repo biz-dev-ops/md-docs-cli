@@ -40,7 +40,7 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.json`, JSON.stringify(summary));
 
-    console.info(chalk.green(`\t\t\t\t* creating dashboard`));
+    console.info(chalk.green(`\t\t\t\t* rendering`));
     return this.component.render({ summary, features });
   }
 
