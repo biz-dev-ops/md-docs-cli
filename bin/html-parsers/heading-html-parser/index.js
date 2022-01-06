@@ -19,14 +19,12 @@ module.exports = class HeadingHtmlParser {
 
 function addToHeadingContainer(element, container, level) {
     while (element) {
-        console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}:`));
-
         let next = element.nextSibling;
         if (element.localName && element.localName.match(/^h\d{1,}$/)) {
             const newLevel = Number.parseInt(element.localName.substring((1)));
 
             if (newLevel > level) {
-                console.info(chalk.green(`\t\t\t* creating header container level ${newLevel}`));
+                console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: creating header container level ${newLevel}`));
 
                 const headerContainer = jsdom.JSDOM.fragment(HEADER_CONTAINER_TEMPLATE(element.localName)).firstElementChild;
                 container.appendChild(headerContainer);
@@ -34,7 +32,7 @@ function addToHeadingContainer(element, container, level) {
                 next = addToHeadingContainer(next, headerContainer.getElementsByClassName("container")[0], newLevel);
             }
             else {
-                console.info(chalk.green(`\t\t\t* moving to level ${newLevel}`));
+                console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: moving to level ${level - 1}`));
 
                 return element;
             }
@@ -43,11 +41,11 @@ function addToHeadingContainer(element, container, level) {
             if (level === -1) {
                 if (element.localName && element.localName === "nav") {
                     if (element.querySelectorAll("a").length === 0) {
-                        console.info(chalk.green(`\t\t\t* removing element`));
+                        console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: removing element`));
                         element.parentNode.removeChild(element);
                     }
                     else {
-                        console.info(chalk.green(`\t\t\t* creating toc container`));
+                        console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: creating toc container`));
 
                         const parentNode = element.parentNode;
                         const tocContainer = jsdom.JSDOM.fragment(TOC_CONTAINER_TEMPLATE);
@@ -56,7 +54,7 @@ function addToHeadingContainer(element, container, level) {
                     }
                 }
                 else {
-                    console.info(chalk.green(`\t\t\t* creating headless container`));
+                    console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: creating headless container`));
 
                     const headlessContainer = jsdom.JSDOM.fragment(HEADLESS_CONTAINER_TEMPLATE).firstElementChild;
                     container.appendChild(headlessContainer);
@@ -64,7 +62,7 @@ function addToHeadingContainer(element, container, level) {
                 }
             }
             else {
-                console.info(chalk.green(`\t\t\t* add element to container`));
+                console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: add element to container`));
                 container.appendChild(element);
             }
         }
