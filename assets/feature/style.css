@@ -139,9 +139,22 @@ body {
     color: var(--color-error);
 }
 
+.status-skipped::before {
+    color: var(--color-black-a10);
+}
+
+.status-undefined::before{
+    color: var(--color-black-a20);
+}
+
+.status-pending::before {
+    color: var(--color-black-a30);
+}
+
 .status-other::before {
     color: var(--color-black-a40);
 }
+
 
 .keyword {
     font-family: monospace;
@@ -150,19 +163,31 @@ body {
 }
 
 /* Dashboard */
-.dashboard {
+.dashboard-list {
     display: flex;
-    grid-gap: var(--space-md);
-    align-items: center;
-    justify-content: flex-start;
+    flex-wrap: wrap;;
+    grid-gap: var(--space-lg);
 }
 
-.dashboard:not(:last-child) {
+.dashboard-list:not(:last-child) {
     margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+.dashboard {
+    display: flex;
+    flex: 1 0 calc((100% /3) - var(--space-lg));
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.dashboard h3 {
+    font-size: var(--heading-4-size)
 }
 
 .dashboard figure {
     flex: 0 1 6.5rem;
+    margin-bottom: var(--space-sm);
 }
 
 .dashboard .legend {
@@ -172,14 +197,18 @@ body {
 /* Legend */
 .legend {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-md);
+    justify-content: center;
     list-style: none;
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 .legend li {
-    flex: 1 0 auto;
+    flex: 1 0 calc((100% /3) - var(--space-md));
+    max-width: 5rem;
 }
 
 .legend-passed {
@@ -207,21 +236,32 @@ body {
     padding-top: var(--space-xss);
 }
 
-.legend-other .label {
-    border-top-color: var(--background-color-base);
+.legend-skipped .label {
+    border-top-color: var(--color-black-a10);
 }
 
+.legend-undefined .label {
+    border-top-color: var(--color-black-a20);
+}
+
+.legend-pending .label {
+    border-top-color: var(--color-black-a30);
+}
+
+.legend-other .label {
+    border-top-color: var(--color-black-a40);
+}
 
 /* Charts */
-figure.chart-doughnut {
+.chart-doughnut {
     margin: 0;
 }
 
-figure.chart-doughnut svg {
+.chart-doughnut svg {
     vertical-align: middle;
 }
 
-figure.chart-doughnut figcaption {
+.chart-doughnut figcaption {
     align-items: center;
     font-size: var(--heading-1-size);
     font-weight: 600;

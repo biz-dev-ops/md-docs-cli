@@ -39,139 +39,159 @@ function __init(schema) {
 };
 
 const SUMMARY_TEMPLATE = `
-<h3>Features</h3>
-<div class="dashboard">
-    <figure class="chart chart-doughnut">
-        <svg viewBox="0 0 36 36" class="chart-doughnut"
-            data-total="{{ features.total }}"
-            data-passed="{{ features.passed }}"
-            data-failed="{{ features.failed }}"
-        >
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-base"
-              stroke-width="4.169"
-            />
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-failed"
-              stroke-width="4.169"
-              stroke-dasharray="0, 100"
-            />
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-passed"
-              stroke-width="4.169"
-              stroke-dasharray="0, 100"
-            />
-            <text x="18" y="21" class="text">{{ features.total }}</text>
-        </svg>
-    </figure>
+<div class="dashboard-list">
+    <div class="dashboard">
+        <h3>Features</h3>
+        
+        <figure class="chart chart-doughnut">
+            <svg viewBox="0 0 36 36" class="chart-doughnut" width="100" height="100"
+                data-total="{{ features.total }}"
+                data-passed="{{ features.passed }}"
+                data-failed="{{ features.failed }}"
+            >
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-base"
+                  stroke-width="4.169"
+                />
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-failed"
+                  stroke-width="4.169"
+                  stroke-dasharray="0, 100"
+                />
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-passed"
+                  stroke-width="4.169"
+                  stroke-dasharray="0, 100"
+                />
+                <text x="18" y="21" class="text">{{ features.total }}</text>
+            </svg>
+        </figure>
+        
+        <ul class="legend">
+            <li class="legend-passed">
+                <span class="percentage">100.0%</span>
+                <span class="count">{{ features.passed }}</span>
+                <span class="label">Passed</span>
+            </li>
+            <li class="legend-failed">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ features.failed }}</span>
+                <span class="label">Failed</span>
+            </li>
+            <li class="legend-other">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ features.other }}</span>
+                <span class="label">Others</span>
+            </li>
+        </ul>
+    </div>
     
-    <ul class="legend">
-        <li class="legend-passed">
-            <span class="percentage">100.0%</span>
-            <span class="count">{{ features.passed }}</span>
-            <span class="label">Passed</span>
-        </li>
-        <li class="legend-failed">
-            <span class="percentage">0.0%</span>
-            <span class="count">{{ features.failed }}</span>
-            <span class="label">Failed</span>
-        </li>
-        <li class="legend-other">
-            <span class="percentage">0.0%</span>
-            <span class="count">{{ features.other }}</span>
-            <span class="label">Others</span>
-        </li>
-    </ul>
-</div>
-
-<h3>Scenarios</h3>
-<div class="dashboard">
-    <figure class="chart chart-doughnut">
-        <svg viewBox="0 0 36 36" class="chart-doughnut"
-            data-total="{{ scenarios.total }}"
-            data-passed="{{ scenarios.passed }}"
-            data-failed="{{ scenarios.failed }}"
-        >
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-base"
-              stroke-width="4.169"
-            />
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-failed"
-              stroke-width="4.169"
-              stroke-dasharray="0, 100"
-            />
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-passed"
-              stroke-width="4.169"
-              stroke-dasharray="0, 100"
-            />
-            <text x="18" y="21" class="text">{{ scenarios.total }}</text>
-        </svg>
-    </figure>
+    <div class="dashboard">
+        <h3>Scenarios</h3>
+        
+        <figure class="chart chart-doughnut">
+            <svg viewBox="0 0 36 36" class="chart-doughnut" width="100" height="100"
+                data-total="{{ scenarios.total }}"
+                data-passed="{{ scenarios.passed }}"
+                data-failed="{{ scenarios.failed }}"
+            >
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-base"
+                  stroke-width="4.169"
+                />
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-failed"
+                  stroke-width="4.169"
+                  stroke-dasharray="0, 100"
+                />
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-passed"
+                  stroke-width="4.169"
+                  stroke-dasharray="0, 100"
+                />
+                <text x="18" y="21" class="text">{{ scenarios.total }}</text>
+            </svg>
+        </figure>
+        
+        <ul class="legend">
+            <li class="legend-passed">
+                <span class="percentage">100.0%</span>
+                <span class="count">{{ scenarios.passed }}</span>
+                <span class="label">Passed</span>
+            </li>
+            <li class="legend-failed">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ scenarios.failed }}</span>
+                <span class="label">Failed</span>
+            </li>
+            <li class="legend-other">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ scenarios.other }}</span>
+                <span class="label">Others</span>
+            </li>
+        </ul>
+    </div>
     
-    <ul class="legend">
-        <li class="legend-passed">
-            <span class="percentage">100.0%</span>
-            <span class="count">{{ scenarios.passed }}</span>
-            <span class="label">Passed</span>
-        </li>
-        <li class="legend-failed">
-            <span class="percentage">0.0%</span>
-            <span class="count">{{ scenarios.failed }}</span>
-            <span class="label">Failed</span>
-        </li>
-        <li class="legend-other">
-            <span class="percentage">0.0%</span>
-            <span class="count">{{ scenarios.other }}</span>
-            <span class="label">Others</span>
-        </li>
-    </ul>
-</div>
-
-<h3>Steps</h3>
-<div class="dashboard">
-    <figure class="chart chart-doughnut">
-        <svg viewBox="0 0 36 36" class="chart-doughnut"
-            data-total="{{ steps.total }}"
-            data-passed="{{ steps.passed }}"
-            data-failed="{{ steps.failed }}"
-        >
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-base"
-              stroke-width="4.169"
-            />
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-failed"
-              stroke-width="4.169"
-              stroke-dasharray="0, 100"
-            />
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle circle-passed"
-              stroke-width="4.169"
-              stroke-dasharray="0, 100"
-            />
-            <text x="18" y="21" class="text">{{ steps.total }}</text>
-        </svg>
-    </figure>
-    
-    <ul class="legend">
-        <li class="legend-passed">
-            <span class="percentage">100.0%</span>
-            <span class="count">{{ steps.passed }}</span>
-            <span class="label">Passed</span>
-        </li>
-        <li class="legend-failed">
-            <span class="percentage">0.0%</span>
-            <span class="count">{{ steps.failed }}</span>
-            <span class="label">Failed</span>
-        </li>
-        <li class="legend-other">
-            <span class="percentage">0.0%</span>
-            <span class="count">{{ steps.other }}</span>
-            <span class="label">Others</span>
-        </li>
-    </ul>
+    <div class="dashboard">
+        <h3>Steps</h3>
+        
+        <figure class="chart chart-doughnut">
+            <svg viewBox="0 0 36 36" class="chart-doughnut" width="100" height="100"
+                data-total="{{ steps.total }}"
+                data-passed="{{ steps.passed }}"
+                data-failed="{{ steps.failed }}"
+            >
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-base"
+                  stroke-width="4.169"
+                />
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-failed"
+                  stroke-width="4.169"
+                  stroke-dasharray="0, 100"
+                />
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  class="circle circle-passed"
+                  stroke-width="4.169"
+                  stroke-dasharray="0, 100"
+                />
+                <text x="18" y="21" class="text">{{ steps.total }}</text>
+            </svg>
+        </figure>
+        
+        <ul class="legend">
+            <li class="legend-passed">
+                <span class="percentage">100.0%</span>
+                <span class="count">{{ steps.passed }}</span>
+                <span class="label">Passed</span>
+            </li>
+            <li class="legend-failed">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ steps.failed }}</span>
+                <span class="label">Failed</span>
+            </li>
+            <li class="legend-other">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ steps.other }}</span>
+                <span class="label">Others</span>
+            </li>
+            <li class="legend-skipped">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ steps.other }}</span>
+                <span class="label">Skipped</span>
+            </li>
+            <li class="legend-undefined">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ steps.other }}</span>
+                <span class="label">Undefined</span>
+            </li>
+            <li class="legend-pending">
+                <span class="percentage">0.0%</span>
+                <span class="count">{{ steps.other }}</span>
+                <span class="label">Pending</span>
+            </li>
+        </ul>
+    </div>
 </div>
 `;
 

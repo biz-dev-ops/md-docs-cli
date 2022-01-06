@@ -14,6 +14,7 @@
   --color-black: rgb(var(--color-black-r), var(--color-black-g), var(--color-black-b));
   --color-black-a10: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .1);
   --color-black-a20: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .2);
+  --color-black-a30: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .3);
   --color-black-a40: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .4);
   --color-black-a90: rgba(var(--color-black-r), var(--color-black-g), var(--color-black-b), .9);
 
