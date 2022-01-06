@@ -1,1 +1,14 @@
-<h1>user-task placeholder</h1>
+doctype html
+html 
+  head
+    meta(charset='UTF-8')
+    title= title
+    link(href=root + '/assets/form/style.css' rel='stylesheet')
+
+body
+  script(src='https://unpkg.com/mustache@4.2.0/mustache.js')
+  script(src=root + '/assets/form/script.js')
+  script(src=root + '/assets/script/iframeResizer.contentWindow.min.js')
+  script.
+    const schema = #{json};
+    __init(schema);

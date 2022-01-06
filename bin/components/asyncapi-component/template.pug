@@ -1,1 +1,25 @@
-<h1>asyncapi placeholder</h1>
+doctype html
+html 
+  head
+    meta(charset='UTF-8')
+    title='AsyncAPI'
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(href=root + '/assets/asyncapi/html-template/css/styles.min.css' rel='stylesheet')
+  
+  body
+    div(id='root')
+    
+    script(src=root + '/assets/script/iframeResizer.contentWindow.min.js')
+    script(src=root + '/assets/asyncapi/html-template/js/asyncapi-ui.min.js') 
+    script.
+      const schema = !{schema};
+      const config = {
+          'show': {
+              'sidebar':true
+          },
+          'sidebar': { 
+            'showOperations': 'byDefault'
+          }
+      };
+      
+      AsyncApiStandalone.hydrate({ schema, config }, document.getElementById('root'));

@@ -9,12 +9,3 @@ module.exports = class CompositeFileParser {
         }
     }
 }
-
-// relativeRoot = function (file, root) {
-//     const relativeRoot = path.relative(path.parse(file).dir, root);
-    
-//     if(relativeRoot.endsWith('..'))
-//         return `${relativeRoot}/`;
-//     else
-//         return relativeRoot;
-// }

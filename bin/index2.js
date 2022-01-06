@@ -33,7 +33,7 @@ const UmlAnchorParser = require('./anchor-parsers/uml-anchor-parser');
 
 async function run(options) {
     const src = path.resolve(cwd(), `docs`);
-    const git = await gitUtil.getInfo();    
+    const git = await gitUtil.getInfo();
     const dst = await init(src, path.resolve(cwd(), `dist`), git);
 
     if (options.branches) {
@@ -43,18 +43,18 @@ async function run(options) {
     }
 
     await files.copy(src, dst);
-    
+
     const fileParser = await createFileParser(src, dst, git);
-    
+
     await files.each(dst, async (file) => {
         console.info(``);
         console.info(chalk.yellow(`parsing ${path.relative(dst, file)}`));
-        
+
         const dir = cwd();
 
         //Set current working directory to file path
         chdir(path.dirname(file));
-        
+
         await fileParser.parse(file);
 
         //Reset current working directory
@@ -66,42 +66,6 @@ async function createFileParser(src, dst, git) {
     const menu = await menuUtil.getMenu(src);
     const executions = await executionStore.getExecutions(path.resolve(cwd(), `.temp/executions`));
 
-    let markdownRenderer;
-
-    const htmlParsers = [
-        new HeadingHtmlParser({ root: dst }),
-        new AnchorHtmlParser({
-            root: dst,
-            parsers: [
-                new BPMNAnchorParser({ root: dst }),
-                new OpenapiAnchorParser({ root: dst }),
-                new AsyncapiAnchorParser({ root: dst }),
-                new UserTaskAnchorParser({ root: dst }),
-                new FeatureAnchorParser({
-                    root: dst,
-                    executions: executions
-                }),
-                new DashboardAnchorParser({
-                    root: dst,
-                    executions: executions
-                }),
-                new MarkdownAnchorParser({
-                    root: dst,
-                    renderer: markdownRenderer
-                }),
-                new UmlAnchorParser({ root: dst })
-            ]
-        }),
-        new UnsortedListHtmlParser({ root: dst }),
-        new ImageHtmlParser({ root: dst }),
-        new CleanUpHtmlParser({ root: dst })
-    ];
-
-    markdownRenderer = new MarkdownRenderer({
-        root: dst,
-        parsers: htmlParsers
-    });
-
     return new CompositeFileParser({
         root: dst,
         parsers: [
@@ -109,18 +73,79 @@ async function createFileParser(src, dst, git) {
                 root: dst,
                 git: git,
                 menu: menu,
-                renderer: markdownRenderer
+                renderer: new MarkdownRenderer({
+                    root: dst,
+                    parsers: [
+                        new HeadingHtmlParser({ root: dst }),
+                        new AnchorHtmlParser({
+                            root: dst,
+                            parsers: [
+                                new BPMNAnchorParser({ root: dst }),
+                                new OpenapiAnchorParser({ root: dst }),
+                                new AsyncapiAnchorParser({ root: dst }),
+                                new UserTaskAnchorParser({ root: dst }),
+                                new FeatureAnchorParser({
+                                    root: dst,
+                                    executions: executions
+                                }),
+                                new DashboardAnchorParser({
+                                    root: dst,
+                                    executions: executions
+                                }),
+                                new MarkdownAnchorParser({
+                                    root: dst,
+                                    renderer: new MarkdownRenderer({
+                                        root: dst,
+                                        parsers: [
+                                            new HeadingHtmlParser({ root: dst }),
+                                            new AnchorHtmlParser({
+                                                root: dst,
+                                                parsers: [
+                                                    new BPMNAnchorParser({ root: dst }),
+                                                    new OpenapiAnchorParser({ root: dst }),
+                                                    new AsyncapiAnchorParser({ root: dst }),
+                                                    new UserTaskAnchorParser({ root: dst }),
+                                                    new FeatureAnchorParser({
+                                                        root: dst,
+                                                        executions: executions
+                                                    }),
+                                                    new DashboardAnchorParser({
+                                                        root: dst,
+                                                        executions: executions
+                                                    }),
+                                                    // TODO: uitzoeken hoe dit moet (DI)?
+                                                    // new MarkdownAnchorParser({
+                                                    //     root: dst,
+                                                    //     renderer: markdownRenderer
+                                                    // }),
+                                                    new UmlAnchorParser({ root: dst })
+                                                ]
+                                            }),
+                                            new UnsortedListHtmlParser({ root: dst }),
+                                            new ImageHtmlParser({ root: dst }),
+                                            new CleanUpHtmlParser({ root: dst })
+                                        ]
+                                    })
+                                }),
+                                new UmlAnchorParser({ root: dst })
+                            ]
+                        }),
+                        new UnsortedListHtmlParser({ root: dst }),
+                        new ImageHtmlParser({ root: dst }),
+                        new CleanUpHtmlParser({ root: dst })
+                    ]
+                })
             })
         ]
     });
 }
 
-init = async function(src, dst, git) {
+init = async function (src, dst, git) {
     dst = createDestinationPath(dst, git.branch);
 
     await fs.rm(dst, { recursive: true, force: true });
     await fs.access(src);
-    
+
     await fs.mkdir(dst, { recursive: true });
 
     await fs.writeFile(`${dst}/branches.json`, JSON.stringify(git.branches));
@@ -134,8 +159,8 @@ init = async function(src, dst, git) {
 createDestinationPath = function (src, branch) {
     if (!branch.feature)
         return src;
-    
-    return path.resolve(src, `/${branch.name.replace(' ', '-').toLowerCase() }`);
+
+    return path.resolve(src, `/${branch.name.replace(' ', '-').toLowerCase()}`);
 };
 
 const options = yargs

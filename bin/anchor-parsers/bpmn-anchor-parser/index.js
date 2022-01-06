@@ -1,4 +1,6 @@
 const chalk = require('chalk-next');
+const path = require('path');
+const { cwd } = require('process');
 const { v4: uuidv4 } = require('uuid');
 
 const AnchorParser = require('../anchor-parser');
@@ -9,6 +11,7 @@ module.exports = class BpmnAnchorParser extends AnchorParser {
   constructor(options) {
     super(options);
 
+    this.root = options.root;
     this.component = new BpmnComponent(options?.template);
   }
 
@@ -19,9 +22,9 @@ module.exports = class BpmnAnchorParser extends AnchorParser {
 
     const id = `bpmn-container-${uuidv4()}`;
     const xml = (await this._readFileAsString(file))
-        .replace(/(\r\n|\n|\r)/gm, "")
-        .replace("'", "\'");
+      .replace(/(\r\n|\n|\r)/gm, "")
+      .replace("'", "\'");
 
-    return this.component.render({ id, xml, file });
+    return this.component.render({ id, xml, file: path.relative(this.root, file) });
   }
 };

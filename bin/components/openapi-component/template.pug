@@ -1,1 +1,66 @@
-<h1>openapi placeholder</h1>
+doctype html
+html 
+  head
+    meta(charset='UTF-8')
+    title='Swagger UI'
+    link(rel='stylesheet' type='text/css' href=root + '/assets/swagger-ui-dist/swagger-ui.css')
+    link(rel='icon' type='image/png' href=root + '/assets/swagger-ui-dist/favicon-32x32.png' sizes='32x32')
+    link(rel='icon' type='image/png' href=root + '/assets/swagger-ui-dist/favicon-16x16.png' sizes='16x16')
+    style.
+      html
+      {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
+      }
+
+      *,
+      *:before,
+      *:after
+      {
+        box-sizing: inherit;
+      }
+
+      body
+      {
+        margin:0;
+        background: #fafafa;
+      }
+
+      .swagger-ui .info {
+        margin-top: 0;
+        padding-top: 50px;
+      }
+
+      .swagger-ui .wrapper {
+        padding: 0 3em;
+      }
+
+      .information-container, .scheme-container {
+        display:none;
+      }
+
+body
+  div(id='root')
+
+  script(src=root + '/assets/script/iframeResizer.contentWindow.min.js')
+  script(src=root + '/assets/swagger-ui-dist/swagger-ui-bundle.js' charset='UTF-8')
+  script(src=root + '/assets/swagger-ui-dist/swagger-ui-standalone-preset.js' charset='UTF-8')
+  script.
+    window.addEventListener('load', function() {
+      // Begin Swagger UI call region
+      const ui = SwaggerUIBundle({
+        spec: !{spec},
+        dom_id: '#root',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ]
+      });
+      // End Swagger UI call region
+
+      window.ui = ui;
+    });

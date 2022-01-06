@@ -1,5 +1,4 @@
 const chalk = require('chalk-next');
-
 const path = require('path');
 
 const AnchorParser = require('../anchor-parser');
