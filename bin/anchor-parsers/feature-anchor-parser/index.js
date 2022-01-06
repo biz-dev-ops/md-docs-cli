@@ -26,9 +26,8 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
     console.info(chalk.green(`\t\t\t\t* parsing executions file`));    
     specflow.parse(features, this.executions);
     
-    if (env.NODE_ENV === 'development') {
+    if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.json`, JSON.stringify(features));
-    }
 
     console.info(chalk.green(`\t\t\t\t* rendering`));
     return this.component.render({ features });

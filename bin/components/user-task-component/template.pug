@@ -1,0 +1,42 @@
+mixin fieldItems
+  dl 
+    each item in items
+      dt= name
+      dd
+        if value
+          value        
+        else if items 
+          +fieldItems
+
+mixin form()
+  h2= name
+  p= description
+
+  form(action='#' type='post')
+    +formItems
+
+    div(class='form-submit')
+      button(type='button' data-cancel aria-controls='action-' + id)='Cancel'
+      button(type='submit' data-confirm='Are you sure you want to complete this user task with ' + name + '?')='Submit'
+
+mixin formItems
+    each item in items
+      +formItem
+
+section(class='app card')
+  if actions.length > 1
+    h2= name
+    p= description 
+
+    +fieldItems
+
+    section(class='action-list')
+      div(class='form-submit')
+        each ation in actions
+          button(aria-controls='action-' + action.id)= action.name
+     
+    each ation in actions
+      section(class='action card' id='action-' + id hidden='hidden')
+        +form
+  else
+    +form

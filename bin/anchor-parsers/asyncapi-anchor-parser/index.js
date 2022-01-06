@@ -1,10 +1,10 @@
 const fs = require('fs').promises;
-const { env, cwd } = require('process');
+const { cwd } = require('process');
 const path = require('path');
 const chalk = require('chalk-next');
 const AsyncApiParser = require("@asyncapi/parser");
-const mergeAllOf = require("json-schema-merge-allof");
-const refParser = require("@apidevtools/json-schema-ref-parser");
+
+const jsonSchemaParser = require('../../utils/json-schema-parser');
 
 const AnchorParser = require('../anchor-parser');
 const AsyncapiComponent = require('../../components/asyncapi-component');
@@ -25,7 +25,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
   async _render(file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
-    let json = mergeAllOfInSchema(await refParser.dereference(file));
+    let json = await jsonSchemaParser.parse(file);
 
     try {
       // Does not work without parsed json.
@@ -54,16 +54,3 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
     });
   }
 };
-
-mergeAllOfInSchema = (object) =>{
-  if(!!object["allOf"]){
-      object = mergeAllOf(object);
-  }
-
-  for (let key in object) {
-      if(typeof object[key] == "object"){
-          object[key] = mergeAllOfInSchema(object[key])
-      }
-  }
-  return object;
-}
