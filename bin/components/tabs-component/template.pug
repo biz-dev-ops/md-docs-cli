@@ -1,0 +1,12 @@
+div(class='tabs-container')
+  div(class='tabs-list-container')
+    div(class='tabs-scroll-container')
+      ul
+        each tab in tabs
+          li
+            a(href=tab.id)= tab.text 
+
+  div(class='tabs-panels-container')
+    each tab in tabs
+      div(id=tab.id)
+        | !{tab.html}

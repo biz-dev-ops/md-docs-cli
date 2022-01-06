@@ -1,10 +1,7 @@
-const chalk = require('chalk-next');
 const jsdom = require('jsdom');
 
 module.exports = class HtmlParser {
-    constructor(options) {
-        
-    }
+    constructor(options) { }
 
     _replace(element, fragment) {
         if (typeof fragment === 'string')

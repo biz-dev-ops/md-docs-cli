@@ -24,9 +24,6 @@ module.exports = class UmlAnchorParser extends AnchorParser {
     const generator = plantuml.generate(uml, { format: 'svg' });
     generator.out.pipe(fs.createWriteStream(svgFile));
 
-    console.info(chalk.green(`\t\t\t\t* deleting ${path.relative(this.root, file)}`));   
-    await fs.promises.unlink(file);
-
     return `<img src="${path.relative(cwd(), svgFile)}" />`;
   }
 

@@ -31,8 +31,11 @@ module.exports = class MarkdownFileParser {
     }
     
     async #render(file) {
-        const markdown = await files.readFileAsString(file);
+        let markdown = await files.readFileAsString(file);
+        markdown = `[[toc]]\n${markdown}`;
+
         const html = await this.renderer.render(markdown);
+        
         return this.component.render({
             root: this.root,
             sourceFile: path.relative(this.root, file),

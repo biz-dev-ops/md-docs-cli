@@ -80,18 +80,6 @@ async function createFileParser(src, dst, git) {
                         new AnchorHtmlParser({
                             root: dst,
                             parsers: [
-                                new BPMNAnchorParser({ root: dst }),
-                                new OpenapiAnchorParser({ root: dst }),
-                                new AsyncapiAnchorParser({ root: dst }),
-                                new UserTaskAnchorParser({ root: dst }),
-                                new FeatureAnchorParser({
-                                    root: dst,
-                                    executions: executions
-                                }),
-                                new DashboardAnchorParser({
-                                    root: dst,
-                                    executions: executions
-                                }),
                                 new MarkdownAnchorParser({
                                     root: dst,
                                     renderer: new MarkdownRenderer({
@@ -121,17 +109,29 @@ async function createFileParser(src, dst, git) {
                                                     new UmlAnchorParser({ root: dst })
                                                 ]
                                             }),
-                                            new UnsortedListHtmlParser({ root: dst }),
                                             new ImageHtmlParser({ root: dst }),
+                                            new UnsortedListHtmlParser({ root: dst }),
                                             new CleanUpHtmlParser({ root: dst })
                                         ]
                                     })
                                 }),
+                                new BPMNAnchorParser({ root: dst }),
+                                new OpenapiAnchorParser({ root: dst }),
+                                new AsyncapiAnchorParser({ root: dst }),
+                                new UserTaskAnchorParser({ root: dst }),
+                                new FeatureAnchorParser({
+                                    root: dst,
+                                    executions: executions
+                                }),
+                                new DashboardAnchorParser({
+                                    root: dst,
+                                    executions: executions
+                                }),
                                 new UmlAnchorParser({ root: dst })
                             ]
                         }),
-                        new UnsortedListHtmlParser({ root: dst }),
                         new ImageHtmlParser({ root: dst }),
+                        new UnsortedListHtmlParser({ root: dst }),
                         new CleanUpHtmlParser({ root: dst })
                     ]
                 })
