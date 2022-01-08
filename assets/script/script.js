@@ -1,4 +1,6 @@
 function __init(root, git) {
+    return;
+    
     // Branches
     let base_url = new URL(`${root}`, window.location.href).href;
     if(base_url.endsWith("index.html")) {

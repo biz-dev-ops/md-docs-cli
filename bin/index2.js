@@ -42,9 +42,6 @@ async function run(options) {
         console.log(chalk.yellow('branche only mode, quitting.....'));
         return;
     }
-    
-    await files.copy(src, dst);
-    await files.copy(path.resolve(__dirname, '../assets'), path.resolve(dst, 'assets'));
         
     const testExecutionStore = new TestExecutionStore({ target: path.resolve(cwd(), `.temp/executions`) });
     const menu = new Menu({ target: dst });
@@ -160,6 +157,12 @@ init = async function (src, dst, gitInfo) {
     await fs.writeFile(`${dst}/branches.json`, JSON.stringify(gitInfo.branches));
 
     console.info(chalk.yellow(`created branches.json`));
+
+    await files.copy(src, dst);
+    await files.copy(path.resolve(__dirname, '../assets'), path.resolve(dst, 'assets'));
+    await files.copy(path.resolve(__dirname, '../node_modules/swagger-ui-dist'), path.resolve(dst, 'assets/swagger-ui-dist'));
+    await files.copy(path.resolve(__dirname, '../node_modules/bpmn-js/dist'), path.resolve(dst, 'assets/bpmn-js-dist'));
+    await files.copy(path.resolve(__dirname, '../node_modules/@asyncapi/html-template/template'), path.resolve(dst, 'assets/asyncapi/html-template'));
 
     return dst;
 }
