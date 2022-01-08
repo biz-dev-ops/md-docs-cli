@@ -2,7 +2,7 @@ const chalk = require('chalk-next');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-exports.getInfo = async function () {
+exports.info = async function () {
     try {
         const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
         const repository = await parseGitRepository();
@@ -31,7 +31,8 @@ exports.getInfo = async function () {
             throw ex;
         }
 
-        console.warn(chalk.yellowBright(`No git repository, falling back to default.`));
+        console.info('');
+        console.warn(chalk.yellowBright(`directorty is not a git repository, falling back to default.`));
         
         const branch = {
             name: 'main',

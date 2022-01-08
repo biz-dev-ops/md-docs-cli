@@ -38,7 +38,7 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
     console.info(chalk.green(`\t\t\t\t* rendering iframe`));
     return this.iframeComponent.render({
       name: 'openapi',
-      src: path.relative(cwd(), htmlFile),
+      src: `./${path.relative(cwd(), htmlFile)}`,
     });
   }
 };

@@ -5,8 +5,8 @@ const chalk = require('chalk-next');
 
 const AnchorParser = require('../anchor-parser');
 
-const gherkin = require('../../bdd/gherkin');
-const specflow = require('../../bdd/specflow');
+const gherkin = require('../../utils/bdd/gherkin-parser');
+const specflow = require('../../utils/bdd/specflow-test-executions-parser');
 const FeatureComponent = require('../../components/feature-component');
 
 module.exports = class FeatureAnchorParser extends AnchorParser {

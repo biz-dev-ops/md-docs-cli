@@ -20,13 +20,13 @@ exports.copy = async (src, dst) => {
 
     for (let entry of entries) {
         if (entry.isDirectory()) {
-            await copy(path.resolve(src, entry.name), path.resolve(dst, entry.name));
-        } 
+            await this.copy(path.resolve(src, entry.name), path.resolve(dst, entry.name));
+        }
         else {
             await fs.copyFile(path.resolve(src, entry.name), path.resolve(dst, entry.name));
         }
     }
-} 
+}
 
 exports.each = async (src, callback) => {
     await fs.access(src);
@@ -34,10 +34,20 @@ exports.each = async (src, callback) => {
 
     for (let entry of entries) {
         if (entry.isDirectory()) {
-            await each(path.resolve(src, entry.name), callback)
-        } 
+            await this.each(path.resolve(src, entry.name), callback)
+        }
         else {
             await callback(path.resolve(src, entry.name));
         }
     }
-} 
+}
+
+exports.exists = async (src) => {
+    try {
+        await fs.access(src);
+        return true;
+    }
+    catch {
+        return false;
+    }
+}

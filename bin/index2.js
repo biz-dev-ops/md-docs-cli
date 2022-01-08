@@ -6,15 +6,14 @@ const path = require('path');
 const { chdir, cwd } = require('process');
 const chalk = require('chalk-next');
 
-const gitUtil = require('./git/git-info');
+const git = require('./utils/git');
 const files = require('./utils/files');
-const menuUtil = require('./utils/menu');
-const executionStore = require('./bdd/executions');
+const MarkdownRenderer = require('./utils/markdown');
+const Menu = require('./utils/menu');
+const TestExecutionStore = new require('./utils/bdd/test-execution-store');
 
 const CompositeFileParser = require('./file-parsers/composite-file-parser');
 const MarkdownFileParser = require('./file-parsers/markdown-file-parser');
-
-const MarkdownRenderer = require('./markdown/markdown-renderer');
 
 const HeadingHtmlParser = require('./html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('./html-parsers/unsorted-list-html-parser');
@@ -33,18 +32,27 @@ const UmlAnchorParser = require('./anchor-parsers/uml-anchor-parser');
 
 async function run(options) {
     const src = path.resolve(cwd(), `docs`);
-    const git = await gitUtil.getInfo();
-    const dst = await init(src, path.resolve(cwd(), `dist`), git);
+
+    const gitInfo = await git.info();
+
+    const dst = await init(src, path.resolve(cwd(), `dist`), gitInfo);
 
     if (options.branches) {
         console.info(``);
         console.log(chalk.yellow('branche only mode, quitting.....'));
         return;
     }
-
+    
     await files.copy(src, dst);
+    await files.copy(path.resolve(__dirname, '../assets'), path.resolve(dst, 'assets'));
+        
+    const testExecutionStore = new TestExecutionStore({ target: path.resolve(cwd(), `.temp/executions`) });
+    const menu = new Menu({ target: dst });
 
-    const fileParser = await createFileParser(src, dst, git);
+    const testExecutions = await testExecutionStore.get();
+    const menuItems = await menu.items();
+
+    const fileParser = await createFileParser(dst, gitInfo, testExecutions, menuItems);    
 
     await files.each(dst, async (file) => {
         console.info(``);
@@ -58,21 +66,22 @@ async function run(options) {
         await fileParser.parse(file);
 
         //Reset current working directory
-        chdir(dir);
+        chdir(dir);       
     });
+
+
+    console.log('');
+    console.log(chalk.greenBright('ready, shutting down.....'));
 }
 
-async function createFileParser(src, dst, git) {
-    const menu = await menuUtil.getMenu(src);
-    const executions = await executionStore.getExecutions(path.resolve(cwd(), `.temp/executions`));
-
+async function createFileParser(dst, gitInfo, testExecutions, menuItems) {
     return new CompositeFileParser({
         root: dst,
         parsers: [
             new MarkdownFileParser({
                 root: dst,
-                git: git,
-                menu: menu,
+                git: gitInfo,
+                menu: menuItems,
                 renderer: new MarkdownRenderer({
                     root: dst,
                     parsers: [
@@ -95,11 +104,11 @@ async function createFileParser(src, dst, git) {
                                                     new UserTaskAnchorParser({ root: dst }),
                                                     new FeatureAnchorParser({
                                                         root: dst,
-                                                        executions: executions
+                                                        executions: testExecutions
                                                     }),
                                                     new DashboardAnchorParser({
                                                         root: dst,
-                                                        executions: executions
+                                                        executions: testExecutions
                                                     }),
                                                     // TODO: uitzoeken hoe dit moet (DI)?
                                                     // new MarkdownAnchorParser({
@@ -121,11 +130,11 @@ async function createFileParser(src, dst, git) {
                                 new UserTaskAnchorParser({ root: dst }),
                                 new FeatureAnchorParser({
                                     root: dst,
-                                    executions: executions
+                                    executions: testExecutions
                                 }),
                                 new DashboardAnchorParser({
                                     root: dst,
-                                    executions: executions
+                                    executions: testExecutions
                                 }),
                                 new UmlAnchorParser({ root: dst })
                             ]
@@ -140,17 +149,16 @@ async function createFileParser(src, dst, git) {
     });
 }
 
-init = async function (src, dst, git) {
-    dst = createDestinationPath(dst, git.branch);
+init = async function (src, dst, gitInfo) {
+    dst = createDestinationPath(dst, gitInfo.branch);
 
     await fs.rm(dst, { recursive: true, force: true });
     await fs.access(src);
 
     await fs.mkdir(dst, { recursive: true });
 
-    await fs.writeFile(`${dst}/branches.json`, JSON.stringify(git.branches));
+    await fs.writeFile(`${dst}/branches.json`, JSON.stringify(gitInfo.branches));
 
-    console.info(``);
     console.info(chalk.yellow(`created branches.json`));
 
     return dst;

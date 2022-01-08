@@ -6,9 +6,9 @@ const path = require('path');
 
 const AnchorParser = require('../anchor-parser');
 
-const gherkin = require('../../bdd/gherkin');
-const specflow = require('../../bdd/specflow');
-const summarizer = require('../../bdd/summarizer');
+const gherkin = require('../../utils/bdd/gherkin-parser');
+const specflow = require('../../utils/bdd/specflow-test-executions-parser');
+const summarizer = require('../../utils/bdd/features-summarizer');
 const DashboardComponent = require('../../components/dashboard-component');
 
 module.exports = class DasboardAnchorParser extends AnchorParser {

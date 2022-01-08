@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
+const { cwd } = require('process');
 const path = require('path');
-const jsdom = require('jsdom');
 const chalk = require('chalk-next');
 const files = require('../../utils/files');
 
@@ -38,8 +38,14 @@ module.exports = class MarkdownFileParser {
 
         const html = await this.renderer.render(response.markdown);
         
+
+        
+        let relativeRoot = path.relative(cwd(), this.root);
+        if (relativeRoot !== '')
+            relativeRoot += '/';
+
         return this.component.render({
-            root: this.root,
+            root: relativeRoot,
             sourceFile: path.relative(this.root, file),
             content: html,
             title: response.title,

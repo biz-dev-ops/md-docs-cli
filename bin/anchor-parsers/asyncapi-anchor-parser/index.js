@@ -46,11 +46,12 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
     console.info(chalk.green(`\t\t\t\t* creating ${path.relative(cwd(), htmlFile)}`));
     await fs.writeFile(htmlFile, html);
+    
 
     console.info(chalk.green(`\t\t\t\t* rendering iframe`));
     return this.iframeComponent.render({
       name: 'asyncapi',
-      src: path.relative(cwd(), htmlFile),
+      src: `./${path.relative(cwd(), htmlFile)}`,
     });
   }
 };
