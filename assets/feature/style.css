@@ -1,46 +1,38 @@
 @import "../style/reset.css";
+@import "../style/style.css";
 @import "../style/theme.css";
 
 html {
-    scroll-behavior: smooth;
-    scroll-padding-top: calc(var(--header-height) + var(--space-lg));
+    background-color: transparent;
 }
 
 body {
-    -webkit-font-smoothing: antialiased;
-    font-family: var(--font-family-heading);
-    color: var(--text-color-base);
-    line-height: var(--line-height-base);
-    margin: 0;
-    margin-top: 1.2rem;
+    margin-top: var(--space-sm);
 }
 
-.scenarios,
-.steps {
+/* Collapse */
+.collapse-list {
     list-style: none;
     margin: 0 0 var(--space-md);
     padding-left: 0;
 }
 
-.scenarios {
-    margin-bottom: 0;
+.collapse-list ul,
+.collapse-list ol {
+    padding-left: 0;
+    margin: 0 0 var(--space-xs);
 }
 
-.steps {
-    margin-top: var(--space-xs);
-    margin-left: var(--space-md);
+.collapse-list li {
+    position: relative;
+    padding-left: var(--space-md);
+    list-style: none;
 }
 
-.scenario > .item {
-    padding-left: var(--space-lg);
-    text-align: left;
+.collapse-list > li.has-children {
 }
 
-.scenario > .item:hover {
-    text-decoration: underline;
-}
-
-.scenario > .item::after {
+.collapse-list > li.has-children::before {
     border-color: var(--text-color-base);
     border-width: var(--line-base) var(--line-base) 0 0;
     transform: rotate(135deg);
@@ -56,8 +48,43 @@ body {
     transition: transform var(--duration-base);
 }
 
-.scenario > .item[aria-expanded="false"]::after {
+.collapse-list > li.has-hidden-children::before {
     transform: rotate(45deg);
+}
+
+.collapse-list mark {
+    background: transparent;
+    color: var(--color-info);
+    font-style: italic;
+}
+
+[data-toggle="collapse"] {
+    background-color: transparent;
+    border: none;
+    display: inline-block;
+    padding: var(--space-xss) 0;
+    position: relative;
+    text-align: left;
+}
+
+[data-toggle="collapse"]:hover {
+    text-decoration: underline;
+}
+
+.item {
+
+}
+
+/* Features, Scenarios & Steps */
+.features > li,
+.scenarios > li,
+.steps > li {
+    position: relative;
+}
+
+.steps {
+    /*margin-top: var(--space-xs);*/
+    /*margin-left: var(--space-md);*/
 }
 
 .step {
@@ -66,17 +93,14 @@ body {
     padding-right: var(--space-sm);
 }
 
-.item {
-    padding-top: var(--space-xss);
-    padding-bottom: var(--space-xss);
-    padding-left: calc(var(--space-xs) + var(--space-md));
+/* Status */
+.status {
+    padding: var(--space-xss);
     position: relative;
-    display: block;
-    border: none;
-    background-color: transparent;
+    padding-left: var(--space-md);
 }
 
-.item::before {
+.status::before {
     border-radius: var(--space-sm);
     background-color: currentColor;
     content: "";
@@ -84,36 +108,197 @@ body {
     height: var(--space-sm);
     width: var(--space-sm);
     position: absolute;
-    left: var(--space-xs);
+    left: 0;
     top: .625rem;
 }
 
-.scenario > .item::before {
-    left: var(--space-md);
+.status-bg {
+    display: block;
+    padding-left: calc(var(--space-xs) + var(--space-md));
 }
 
-.step.passed > .item {
+.status-bg::before {
+    display: block;
+    left: var(--space-xs);
+}
+
+
+.status-bg.status-passed  {
     background-color: var(--color-success-100);
 }
 
-.passed > .item::before {
+.status-passed::before {
     color: var(--color-success);
 }
 
-.step.failed > .item {
+.status-bg.status-failed  {
     background-color: var(--color-error-100);
 }
 
-.failed > .item::before {
+.status-failed::before {
     color: var(--color-error);
 }
 
-.other > .item::before {
+.status-skipped::before {
+    color: var(--color-black-a10);
+}
+
+.status-undefined::before{
+    color: var(--color-black-a20);
+}
+
+.status-pending::before {
+    color: var(--color-black-a30);
+}
+
+.status-other::before {
     color: var(--color-black-a40);
 }
+
 
 .keyword {
     font-family: monospace;
     font-size: var(--heading-5-size);
     color: var(--color-info);
+}
+
+/* Dashboard */
+.dashboard-list {
+    display: flex;
+    flex-wrap: wrap;;
+    grid-gap: var(--space-lg);
+}
+
+.dashboard-list:not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+.dashboard {
+    display: flex;
+    flex: 1 0 calc((100% /3) - var(--space-lg));
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.dashboard h3 {
+    font-size: var(--heading-4-size)
+}
+
+.dashboard figure {
+    flex: 0 1 6.5rem;
+    margin-bottom: var(--space-sm);
+}
+
+.dashboard .legend {
+    flex: 0 1 auto;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.legend li {
+    flex: 1 0 calc((100% /3) - var(--space-md));
+    max-width: 5rem;
+}
+
+.legend-passed {
+    color: var(--color-success);
+}
+
+.legend-failed {
+    color: var(--color-error);
+}
+
+.legend span {
+    display: block;
+    font-size: var(--font-size-sm);
+}
+
+.legend .count {
+    color: var(--text-color-base);
+    font-size: var(--heading-3-size);
+    font-weight: 600;
+    padding: var(--space-xss) 0 var(--space-xs) 0;
+}
+
+.legend .label {
+    border-top: var(--line-medium) solid currentColor;
+    padding-top: var(--space-xss);
+}
+
+.legend-skipped .label {
+    border-top-color: var(--color-black-a10);
+}
+
+.legend-undefined .label {
+    border-top-color: var(--color-black-a20);
+}
+
+.legend-pending .label {
+    border-top-color: var(--color-black-a30);
+}
+
+.legend-other .label {
+    border-top-color: var(--color-black-a40);
+}
+
+/* Charts */
+.chart-doughnut {
+    margin: 0;
+}
+
+.chart-doughnut svg {
+    vertical-align: middle;
+}
+
+.chart-doughnut figcaption {
+    align-items: center;
+    font-size: var(--heading-1-size);
+    font-weight: 600;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.chart-doughnut .text {
+    font-family: var(--font-family-heading);
+    font-size: .5em;
+    text-anchor: middle;
+}
+
+.chart-doughnut .circle {
+    stroke: var(--background-color-base);
+    fill: none;
+    /*stroke-linecap: round;*/
+}
+
+.chart-doughnut .circle-passed {
+    stroke: var(--color-success);
+    animation: stroke-progress 1s ease-out;
+}
+
+.chart-doughnut .circle-failed {
+    stroke: var(--color-error);
+    animation: stroke-progress 1s ease-out;
+}
+
+@keyframes stroke-progress {
+    0% {
+        stroke-dasharray: 0 100;
+        stroke-dashoffset: 0;
+    }
 }
