@@ -2,14 +2,14 @@ mixin button(item)
   button(role='button' class='status status-'+ item.status.type data-toggle='collapse' aria-expanded='false')=item.name
       
 mixin scenarios(scenarios)
-  ul(class='scenarios collapse-list')
+  ul(class='scenarios collapse-list' hidden='hidden')
     each scenario in scenarios    
-      li(class='scenario has-children')
+      li(class='scenario has-children has-hidden-children')
         +button(scenario)      
         if scenario.scenarios
           +scenarios(scenario.scenarios)
         else       
-          ul(class='steps collapse-list')              
+          ul(class='steps collapse-list' hidden='hidden')              
             each step in scenario.steps 
               li(class='step ' + step.type)
                 span(class='status status-bg status-' + step.status.type) 
@@ -19,7 +19,7 @@ mixin scenarios(scenarios)
 
 ul(class='features collapse-list')
   each feature in features
-    li(class='feature has-children')
+    li(class='feature has-children has-hidden-children')
       +button(feature)
       +scenarios(feature.scenarios)
 

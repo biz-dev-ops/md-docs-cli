@@ -2,11 +2,11 @@ div(class='tabs-container')
   div(class='tabs-list-container')
     div(class='tabs-scroll-container')
       ul
-        each tab in tabs
+        each tab, index in tabs
           li
-            a(href=tab.id)= tab.text 
+            a(href='#' + tab.id aria-expanded=index == 0)= tab.text 
 
   div(class='tabs-panels-container')
-    each tab in tabs
-      div(id=tab.id)
+    each tab, index in tabs
+      div(id=tab.id hidden=index > 0)
         | !{tab.html}

@@ -40,11 +40,11 @@ getTabs = function (ul, id) {
     return Array.from(ul.childNodes)
         .filter(child => child.nodeName === 'LI')
         .map((li, index) => {
-            const target = li.querySelector('a,img');
+            const target = li.querySelector('a');
             
             return {
-                id: `${id}-${makeUrlFriendly(target.text || (target.alt || index.toString()))}`,
-                text: target.text ?? target.alt,
+                id: `${id}-${makeUrlFriendly(target.text || index.toString())}`,
+                text: target.text,
                 html: li.innerHTML
             };
         });

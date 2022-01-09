@@ -1,3 +1,11 @@
+mixin button()
+  button(type='button' title='Maximize')
+    span(class='label')='Zoom'
+
 div(data-fullscreen)
+  header
+    +button()
   figure(class= align)
     | !{img}
+  footer    
+    +button() 

@@ -15,7 +15,7 @@ module.exports = class UmlAnchorParser extends AnchorParser {
 
   _canParse(anchor) { return anchor.href.endsWith(".puml"); }
 
-  async _render(file) {
+  async _render(file, anchor) {
     const svgFile = `${file}.svg`;    
     console.info(chalk.green(`\t\t\t\t* creating ${path.relative(this.root, svgFile)}`));
 
