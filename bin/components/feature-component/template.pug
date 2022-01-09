@@ -13,8 +13,9 @@ mixin scenarios(scenarios)
                     span(class='keyword')= step.keyword
                     span= step.text
 
-ul(class='features')
+ul(class='collapse-list features')
   each feature in features
-    li(class='feature ' + feature.status.type)
-      button(class='item' aria-expanded='true')= feature.name
+    li(class='feature has-children')
+      button(role='button' class='status status-'+ feature.status.type data-toggle='collapse' aria-controls='scenarios-' + feature.id aria-expanded='false')
         +scenarios(feature.scenarios)
+
