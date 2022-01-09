@@ -11,7 +11,7 @@ module.exports = class ImageHtmlParser extends HtmlParser {
     }
 
     async parse(element) {
-        const images = element.querySelectorAll('img,svg');
+        const images = element.querySelectorAll('img');
 
         if (images.length === 0) {
             console.info(chalk.green(`\t* html contains no images`));

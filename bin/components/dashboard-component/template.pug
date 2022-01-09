@@ -5,13 +5,15 @@ mixin svg(item)
   - }
 
   svg(viewBox='0 0 36 36' class='chart-doughnut' width='100' height='100')&attributes(attributes)
+    path(d='M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831' class='circle circle-base' stroke-width='4.169')
     each value, key in item
-      path(d='M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831' class='circle circle-base' stroke-width='4.169' stroke-dasharray='0, 100')
+      if key != 'total'
+        path(d='M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831' class='circle circle-' + key stroke-width='4.169' stroke-dasharray='0, 100')
     text(x='18' y='21' class='text')= item.total
 
 div(class='dashboard-list')
-  div(class='dashboard')
-    each item, key in summary
+  each item, key in summary
+    div(class='dashboard')
       h3= key
 
       figure(class='chart chart-doughnut')
@@ -19,7 +21,10 @@ div(class='dashboard-list')
 
       ul(class='legend')
         each value, key in item
-          li(class='legend-' + key)
-            span(class='percentage')='100.0%'
-            span(class='count')= value
-            span(class='label')= key
+          if key != 'total'
+            li(class='legend-' + key)
+              span(class='percentage')= (value / item.total * 100).toFixed(0) + '%'
+              span(class='count')= value
+              span(class='label')= key
+.
+  !{features}
