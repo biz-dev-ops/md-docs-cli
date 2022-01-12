@@ -13,7 +13,7 @@ module.exports = class UmlAnchorParser extends AnchorParser {
     this.root = options?.root;
   }
 
-  _canParse(anchor) { return anchor.href.endsWith(".puml"); }
+  _canParse(anchor) { return anchor.href.endsWith('.puml'); }
 
   async _render(file, anchor) {
     const svgFile = `${file}.svg`;    
@@ -24,7 +24,7 @@ module.exports = class UmlAnchorParser extends AnchorParser {
     const generator = plantuml.generate(uml, { format: 'svg' });
     generator.out.pipe(fs.createWriteStream(svgFile));
 
-    return `<img src="${path.relative(cwd(), svgFile)}" alt="${anchor.text}" />`;
+    return `<img src='${path.relative(cwd(), svgFile)}' alt='${anchor.text}' />`;
   }
 
   async _parse(anchor) {

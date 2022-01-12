@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const { cwd } = require('process');
 const path = require('path');
 const chalk = require('chalk-next');
-const AsyncApiParser = require("@asyncapi/parser");
+const AsyncApiParser = require('@asyncapi/parser');
 
 const jsonSchemaParser = require('../../utils/json-schema-parser');
 
@@ -21,7 +21,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
   }
 
-  _canParse(anchor) { return anchor.href.endsWith(".asyncapi.yml"); }
+  _canParse(anchor) { return anchor.href.endsWith('.asyncapi.yml') || anchor.href.endsWith('.asyncapi.yaml'); }
 
   async _render(file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
@@ -29,7 +29,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
     try {
       // Does not work without parsed json.
-      json = (await AsyncApiParser.parse(json))["_json"];
+      json = (await AsyncApiParser.parse(json))['_json'];
     }
     catch (ex) {
       console.info(chalk.redBright(`\t\t\t\t* error parsing json`));

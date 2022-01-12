@@ -19,7 +19,7 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
     this.component = new DashboardComponent(options?.template);
   }
 
-  _canParse(anchor) { return anchor.href.endsWith('.dashboard.yml'); }
+  _canParse(anchor) { return anchor.href.endsWith('.dashboard.yml') || anchor.href.endsWith('.dashboard.yaml'); }
 
   async _render(file) {
     const directory = path.dirname(file);

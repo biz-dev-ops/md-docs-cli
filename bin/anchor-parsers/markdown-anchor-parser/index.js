@@ -10,16 +10,16 @@ module.exports = class MarkdownAnchorParser extends AnchorParser {
     this.renderer = options?.renderer;
   }
 
-  _canParse(anchor) { return path.basename(anchor.href).endsWith('.md') || anchor.href.includes(".md#"); }
+  _canParse(anchor) { return path.basename(anchor.href).endsWith('.md') || anchor.href.includes('.md#'); }
 
   async _parse(anchor) {
     console.info(chalk.green(`\t\t\t\t* changing href`));
 
-    if (anchor.href.endsWith(".md")) {
+    if (anchor.href.endsWith('.md')) {
       anchor.href = `${anchor.href.substring(0, anchor.href.length - 3)}.html`;
     }
     else {
-      anchor.href = anchor.href.replace(".md#", ".html#");
+      anchor.href = anchor.href.replace('.md#', '.html#');
     }
   }
 

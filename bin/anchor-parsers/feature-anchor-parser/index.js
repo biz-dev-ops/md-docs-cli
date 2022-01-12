@@ -17,7 +17,7 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
     this.component = new FeatureComponent(options?.template);
   }
 
-  _canParse(anchor) { return anchor.href.endsWith(".feature"); }
+  _canParse(anchor) { return anchor.href.endsWith('.feature'); }
 
   async _render(file) {
     console.info(chalk.green(`\t\t\t\t* parsing feature file`));

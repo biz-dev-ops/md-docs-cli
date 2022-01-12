@@ -28,7 +28,7 @@ module.exports = class AnchorParser {
     async _render(file) { return null; };
 
     //Proteced methods
-    async _readFileAsString(file, encoding = "utf8") { return await files.readFileAsString(file, encoding); };
+    async _readFileAsString(file, encoding = 'utf8') { return await files.readFileAsString(file, encoding); };
 }
 
 const replace = function (el, fragment) {
@@ -38,11 +38,11 @@ const replace = function (el, fragment) {
     let ref = el;
     let parent = ref.parentNode;
 
-    if (parent.nodeName === "P") {
+    if (parent.nodeName === 'P') {
         ref = parent;
         parent = ref.parentNode;
     }
 
     parent.insertBefore(fragment, ref);
-    el.classList.add("replaced");
+    el.classList.add('replaced');
 }

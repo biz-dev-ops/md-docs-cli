@@ -15,11 +15,14 @@ module.exports = class UserTaskAnchorParser extends AnchorParser {
     this.component = new UserTaskComponent(options?.template);
   }
 
-  _canParse(anchor) { return anchor.href.endsWith(".user-task.yml"); }
+  _canParse(anchor) { return anchor.href.endsWith('.user-task.yml') || anchor.href.endsWith('.user-task.yaml'); }
 
   async _render(file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
     const json = await jsonSchemaParser.parse(file);
+
+    if (env.NODE_ENV === 'development')
+      await fs.writeFile(`${file}.json`, JSON.stringify(json));
 
     console.info(chalk.green(`\t\t\t\t* parsing user-task`));
     const userTask = userTaskParser.parse(json);

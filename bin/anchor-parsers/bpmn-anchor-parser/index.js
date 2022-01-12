@@ -15,7 +15,7 @@ module.exports = class BpmnAnchorParser extends AnchorParser {
     this.component = new BpmnComponent(options?.template);
   }
 
-  _canParse(anchor) { return anchor.href.endsWith(".bpmn"); }
+  _canParse(anchor) { return anchor.href.endsWith('.bpmn'); }
 
   async _render(file) {
     console.info(chalk.green(`\t\t\t\t* rendering`));
