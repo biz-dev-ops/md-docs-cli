@@ -30,9 +30,13 @@ module.exports = class MarkdownRenderer {
 
     async render(markdown) {
         const html = md.render(markdown);
-
+        
         const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
         element.innerHTML = html;
+
+        Array.from(element.querySelectorAll('svg')).forEach(svg => {
+            svg.setAttribute('data-generator', 'markdown');
+        });
         
         for (const parser of this.parsers) {
             await parser.parse(element);

@@ -10,14 +10,14 @@ module.exports = class ImageHtmlParser extends HtmlParser {
     }
 
     async parse(element) {
-        const elements = element.querySelectorAll('img');
+        const elements = element.querySelectorAll('img,svg[data-generator=markdown]');
 
         if (elements.length === 0) {
             console.info(chalk.green(`\t* html contains no image elements`));
             return;
         }
 
-        console.info(chalk.green(`\t* parsing ${elements.length} elements:`));
+        console.info(chalk.green(`\t* parsing ${elements.length} image elements:`));
 
         for (const element of elements) {
             console.info(chalk.green(`\t\t* parsing ${element.nodeName}`));            

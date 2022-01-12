@@ -17,7 +17,7 @@ module.exports = class FullscreenHtmlParser extends HtmlParser {
             return;
         }
 
-        console.info(chalk.green(`\t* parsing ${elements.length} elements:`));
+        console.info(chalk.green(`\t* parsing ${elements.length} fullscreen elements:`));
 
         for (const element of elements) {
             element.removeAttribute('fullscreen');
