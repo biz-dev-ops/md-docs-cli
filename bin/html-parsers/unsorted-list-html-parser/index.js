@@ -40,11 +40,11 @@ getTabs = function (ul, id) {
     return Array.from(ul.childNodes)
         .filter(child => child.nodeName === 'LI')
         .map((li, index) => {
-            const target = li.querySelector('a');
+            const text = getText(li, index);
             
             return {
-                id: `${id}-${makeUrlFriendly(target.text || index.toString())}`,
-                text: target.text,
+                id: `${id}-${makeUrlFriendly(text)}`,
+                text: text,
                 html: li.innerHTML
             };
         });
@@ -75,4 +75,16 @@ function makeUrlFriendly(value) {
         return null;
 
     return encodeURIComponent(value.toLowerCase().replace(/[^a-z0-9_-]+/gi, '-'));
+}
+
+function getText(li, index) {
+    const anchor = li.querySelector('a.replaced');
+    if (anchor != undefined)
+        return anchor.text;
+    
+    const child = li.firstChild;
+    if (child.nodeName === 'IMG')
+        return child.getAttribute('alt');
+    
+    return `tab-${index}`;
 }

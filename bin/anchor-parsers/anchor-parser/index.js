@@ -15,7 +15,7 @@ module.exports = class AnchorParser {
         
         const file = path.resolve(cwd(), `${anchor.href}`);
     
-        const html = await this._render(file);
+        const html = await this._render(file, anchor);
         if(html != undefined)
             replace(anchor, html);
         

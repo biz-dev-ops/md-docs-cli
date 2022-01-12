@@ -35,7 +35,7 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
     const summary = summarizer.summarize(features);
 
     if (env.NODE_ENV === 'development')
-      await fs.writeFile(`${file}.features.json`, JSON.stringify(summary));
+      await fs.writeFile(`${file}.features.json`, JSON.stringify(features));
 
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.json`, JSON.stringify(summary));

@@ -15,7 +15,7 @@
     "generator"
   ],
   "bin": {
-    "md-docs": "bin/index2.js"
+    "md-docs": "bin/index.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "@cucumber/gherkin-streams": "^4.0.0",
     "bpmn-js": "^8.8.1",
     "chalk-next": "^6.1.5",
+    "iframe-resizer": "^4.3.2",
     "inversify": "^5.0.5",
     "jsdom": "^17.0.0",
     "json-schema-merge-allof": "^0.8.1",

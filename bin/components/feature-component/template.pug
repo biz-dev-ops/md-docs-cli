@@ -1,25 +1,22 @@
-mixin button(item)
-  button(role='button' class='status status-'+ item.status.type data-toggle='collapse' aria-expanded='false')=item.name
+mixin summary(item)
+  summary(class='status status-'+ item.status.type)=item.name
       
-mixin scenarios(scenarios)
-  ul(class='scenarios collapse-list' hidden='hidden')
+mixin scenarios(scenarios)  
     each scenario in scenarios    
-      li(class='scenario has-children has-hidden-children')
-        +button(scenario)      
-        if scenario.scenarios
-          +scenarios(scenario.scenarios)
-        else       
-          ul(class='steps collapse-list' hidden='hidden')              
-            each step in scenario.steps 
-              li(class='step ' + step.type)
-                span(class='status status-bg status-' + step.status.type) 
-                  span(class='keyword')= step.keyword
-                  span=' '
-                  span= step.text
-
-ul(class='features collapse-list')
+        details(class='scenario')
+          +summary(scenario)      
+          if scenario.scenarios
+            +scenarios(scenario.scenarios)
+          else       
+            ul(class='steps')              
+              each step in scenario.steps 
+                li(class='step ' + step.type)
+                  span(class='status status-bg status-' + step.status.type) 
+                    span(class='keyword')= step.keyword
+                    span=' '
+                    span= step.text
+div(fullscreen)
   each feature in features
-    li(class='feature has-children has-hidden-children')
-      +button(feature)
+    details(class='feature')
+      +summary (feature)
       +scenarios(feature.scenarios)
-

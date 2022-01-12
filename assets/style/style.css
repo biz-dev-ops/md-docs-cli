@@ -273,13 +273,6 @@ header nav {
     top: 100%;
     margin-top: calc(var(--space-md) * -3/2);
     right: var(--space-md);
-}
-
-header nav[aria-hidden] {
-    display: none;
-}
-
-header nav[aria-hidden="false"] {
     display: block;
 }
 

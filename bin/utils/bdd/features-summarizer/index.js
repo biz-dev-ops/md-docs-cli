@@ -19,9 +19,9 @@ exports.summarize = (features) => {
 
 const getStatusSummary = function(collection) {
     const statuses = {
-        total: 0,
-        passed: 0,
-        failed: 0
+        total: { value: 0 },
+        passed: { value: 0 },
+        failed: { value: 0 }
     };
 
     if (collection == undefined)
@@ -29,11 +29,20 @@ const getStatusSummary = function(collection) {
 
     for (const item of collection) {
         if (statuses[item.status.type] == undefined) {
-            statuses[item.status.type] = 0;
+            statuses[item.status.type] = { value: 0 };
         }
 
-        statuses[item.status.type] += 1;
-        statuses.total += 1;
+        statuses[item.status.type].value += 1;
+        statuses.total.value += 1;
+    }
+
+    let offset = 0;
+    for (const [key, status] of Object.entries(statuses)) {
+        if (key !== 'total') {
+            status.percentage = Math.round((status.value / statuses.total.value) * 100);
+            status.offset = offset;
+            offset += status.percentage;
+        }
     }
 
     return statuses;

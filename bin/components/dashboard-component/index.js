@@ -1,4 +1,5 @@
 const pug = require('pug');
+const jsdom = require('jsdom');
 const files = require('../../utils/files');
 const FeatureComponent = require('../feature-component')
 
@@ -9,7 +10,10 @@ module.exports = class DashboardComponent {
     }
     
     render(data) {
-        const features = this.featureComponent.render(data);
-        return this.renderFn({ summary: data.summary, features: features });
+        const features = jsdom.JSDOM.fragment(this.featureComponent.render(data)).firstElementChild;
+        features.removeAttribute('fullscreen');
+
+        return this.renderFn({ summary: data.summary, features: features.outerHTML });
     }
 }
+

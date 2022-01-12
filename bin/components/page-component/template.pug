@@ -49,25 +49,28 @@ html
             a(href='#menu' class='menu-toggle menu-toggle-pages' aria-controls='menu' aria-expanded='false')
               span(class='label') Menu
 
-        nav(id='git-branch-menu' aria-hidden='true')
+        nav(id='git-branch-menu' hidden='true')
           ul 
             each branch in git.branches 
               li 
-                a(href=branch.url + '/' + sourceFile)= branch.name
+                a(href=branch.url + '/' + sourceFile data-branch-url=branch.url)= branch.name
 
-        nav(id='menu' aria-hidden='true')
+        nav(id='menu' hidden='true')
           +menuItems(menu, root)
 
     main
       | !{content}
 
-    script(src=root + 'assets/script/iframeResizer.min.js')
-    script(src=root + 'assets/bpmn-js-dist/bpmn-viewer.production.min.js')
+    script(src=root + 'assets/iframe-resizer-dist/iframeResizer.min.js' charset='UTF-8')
+    script(src=root + 'assets/bpmn-js-dist/bpmn-viewer.production.min.js' charset='UTF-8')
 
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-core.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-core.min.js' charset='UTF-8')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js' charset='UTF-8')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js' charset='UTF-8')
 
-    script(src=root + 'assets/script/script.js' charset='UTF-8')
-    script.
-      __init('#{root}');
+    script(src=root + 'assets/scripts/iframe.js' charset='UTF-8')
+    script(src=root + 'assets/scripts/fullscreen.js' charset='UTF-8')
+    script(src=root + 'assets/scripts/git.js' charset='UTF-8')
+    script(src=root + 'assets/scripts/menu.js' charset='UTF-8')
+    script(src=root + 'assets/scripts/scroll-spy.js' charset='UTF-8')
+    script(src=root + 'assets/scripts/tabs.js' charset='UTF-8')

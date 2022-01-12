@@ -24,7 +24,7 @@ module.exports = class UmlAnchorParser extends AnchorParser {
     const generator = plantuml.generate(uml, { format: 'svg' });
     generator.out.pipe(fs.createWriteStream(svgFile));
 
-    return `<img src="${path.relative(cwd(), svgFile)}" />`;
+    return `<img src="${path.relative(cwd(), svgFile)}" alt="${anchor.text}" />`;
   }
 
   async _parse(anchor) {

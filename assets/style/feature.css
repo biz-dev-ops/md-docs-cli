@@ -296,6 +296,21 @@ body {
     animation: stroke-progress 1s ease-out;
 }
 
+.chart-doughnut .circle-skipped {
+    stroke: var(--color-black-a10);
+    animation: stroke-progress 1s ease-out;
+}
+
+.chart-doughnut .circle-undefined {
+    stroke: var(--color-black-a20);
+    animation: stroke-progress 1s ease-out;
+}
+
+.chart-doughnut .circle-pending {
+    stroke: var(--color-black-a30);
+    animation: stroke-progress 1s ease-out;
+}
+
 @keyframes stroke-progress {
     0% {
         stroke-dasharray: 0 100;
