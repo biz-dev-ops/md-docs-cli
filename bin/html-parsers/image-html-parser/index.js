@@ -22,11 +22,21 @@ module.exports = class ImageHtmlParser extends HtmlParser {
         for (const element of elements) {
             console.info(chalk.green(`\t\t* parsing ${element.nodeName}`));
 
+            
+
             const html = this.component.render({
-                html: element.outerHTML
+                html: element.outerHTML,
+                align: getAlign(element)
             });
             
             this._replace(element, html);
         }
     }
+}
+
+getAlign = function (element) {
+    const url = new URL(`https://example.org/${element.getAttribute('src')}`);
+
+    const align = url.searchParams.get('align');
+    return align;
 }
