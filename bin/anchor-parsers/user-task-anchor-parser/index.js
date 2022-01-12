@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const { env } = require('process');
 const chalk = require('chalk-next');
 
-const userTaskParser = require('../../user-tasks/user-task-parser');
+const userTaskParser = require('../../utils/user-task-parser');
 const jsonSchemaParser = require('../../utils/json-schema-parser');
 
 const AnchorParser = require('../anchor-parser');
@@ -31,6 +31,11 @@ module.exports = class UserTaskAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.user-task.json`, JSON.stringify(userTask));
 
     console.info(chalk.green(`\t\t\t\t* rendering`));
-    return this.component.render(userTask);
+    const html = this.component.render(userTask);
+
+    if (env.NODE_ENV === 'development')
+      await fs.writeFile(`${file}.html`, html);
+
+    return html;
   }
 };

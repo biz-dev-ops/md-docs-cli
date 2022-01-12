@@ -1,14 +1,8 @@
-const formParser = require('../user-task-parser');
-
 exports.parse = function (schema) {
-    return {};
-}
+    const userTask = transformToUserTask(schema);
+    const actions = transformToActions(schema);
 
-function transformToMustacheData(data) {
-    return {
-        model: transformToUserTask(data),
-        actions: transformToActions(data)
-    };
+    return { userTask, actions };
 }
 
 function transformToUserTask(data) {
@@ -30,23 +24,17 @@ function transformToFields(schema) {
             continue;
         
         const property = schema.properties[key];
-        let field = {
+        const field = {
             id: key,
             name: key,
             label: property.title ?? key,
-            description: property.description,
-            has_items: false,
-            items: null,
-            has_value: false,
-            value: null
+            description: property.description
         }
 
         if (property.type == "object") {
-            field.has_items = true;
             field.items = transformToFields(property);
         }
         else {
-            field.has_value = true;
             field.value = transformToField(property);
         }
 
@@ -68,7 +56,7 @@ function transformToActions(data) {
 function transformToAction(key, action) {
     return {
         id: key,
-        label: action.name ?? key,
+        name: action.name ?? key,
         items: transformToFormFields(action.schema)
     }    
 }
@@ -80,25 +68,19 @@ function transformToFormFields(schema) {
             const key = kvp[0];
             const property = kvp[1];
 
-            let field = {
+            const field = {
                 id: key,
                 name: key,
                 label: property.title ?? key,
                 description: property.description,
                 required: schema.required != undefined ? schema.required.includes(key) : false,            
-                value: property.example,
-                has_items: false,
-                items: null,
-                has_editor: false,
-                editor: null
+                value: property.example
             }
 
             if (property.type == "object") {
-                field.has_items = true;
                 field.items = transformToFormFields(property);
             }
             else {
-                field.has_editor = true;
                 field.editor = parseFormField(property);
             }
 
@@ -109,15 +91,15 @@ function transformToFormFields(schema) {
 function parseFormField(property) {
     if (property.type === "boolean") {
         return {
-            inputEditor: true,
-            type: checkbox
+            type: "input",
+            inputType: checkbox
         };
     }
 
     if (property.type === "number" || property.type === "integer") {
         return {
-            inputEditor: true,
-            type: number,
+            type: "input",
+            inputType: number,
             format: property.format ?? false,
             minimum: property.format ?? false,
             maximum: property.format ?? false,
@@ -136,8 +118,8 @@ function parseFormField(property) {
         var type = mapHtml5InpputType(property);
         if (type != undefined) {
             return {
-                inputEditor: true,
-                type: type,
+                type: "input",
+                inputType: type,
                 pattern: property.pattern ?? false
             }
         }
@@ -146,18 +128,18 @@ function parseFormField(property) {
         {
             case "text":
                 return {
-                    textAreaEditor: true,
+                    type: "textarea",
                     rows: 5
                 }
             case "markdown":
                 return {
-                    markdownEditor: true,
+                    type: "markdown",
                     rows: 5
                 }
             default:
                 return {
-                    inputEditor: true,
-                    type: "text",
+                    type: "input",
+                    inputType: "text",
                     format: property.format ?? false,
                     pattern: property.pattern ?? false,
                 };
@@ -183,3 +165,9 @@ function mapFormat(format) {
     
     return OPENAPI_HTML5_MAPPING[format];
 }
+
+const OPENAPI_HTML5_MAPPING = {
+    "date-time": "datetime-local"
+};
+
+const HTML5_TYPES = ["color", "date", "datetime-local", "email", "month", "range", "tel", "time", "url", "week"];

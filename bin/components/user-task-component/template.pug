@@ -1,42 +1,92 @@
-mixin fieldItems
+mixin userTask(userTask)
+  h2=userTask.name
+  p=userTask.description 
+
+  +fieldItems(userTask.items)
+
+mixin fieldItems(items)
   dl 
     each item in items
-      dt= name
-      dd
-        if value
-          value        
-        else if items 
-          +fieldItems
+      dt= item.label
+      if item.value
+        dd=item.value        
+      else if item.items 
+        dd
+          +fieldItems(item.items)
 
-mixin form()
-  h2= name
-  p= description
+mixin form(action)
+  h2=action.name
+  p=action.description
 
   form(action='#' type='post')
-    +formItems
+    +formItems(action.items)
 
     div(class='form-submit')
-      button(type='button' data-cancel aria-controls='action-' + id)='Cancel'
-      button(type='submit' data-confirm='Are you sure you want to complete this user task with ' + name + '?')='Submit'
+      button(type='button' data-cancel aria-controls='action-' + action.id)='Cancel'
+      button(type='submit' data-confirm='Are you sure you want to complete this user task with ' + action.name + '?')='Submit'
 
-mixin formItems
-    each item in items
-      +formItem
+mixin formItems(items)
+  each item in items
+    +formItem(item)
+
+mixin formItem(item)
+  div(class='form-item')
+    label(for=item.id class={required: item.required})=item.label
+      div(class='input-group')
+        if(item.items)
+          +formItems(item.items)
+        else if(item.editor)
+          +editor(item)
+        else
+          p(class=error)='No editor defined!'
+
+      div(class='input-feedback')
+
+mixin editor(item)
+  if(item.editor.type === 'input')
+    input(type=item.editor.inputType name=item.name id=item.id value=item.value required=item.required)
+
+  else if(item.editor.type === 'textarea')
+    textarea(name=item.name id=item.id rows=item.editor.rows required=item.required)=item.value
+  
+  else if(item.editor.type === 'markdown')
+    textarea(name=item.name id=item.id rows=item.editor.rows required=item.required)=item.value
+
+  else if(item.editor.type === 'select')
+    select( name=item.name id=item.id)
+      option(disabled=!item.required selected)
+        each option in item.options
+          option(value=options.value)=option.name
+  
+  else if(item.editor.type === 'radio group')
+    if(item.required)
+      div(class='form-check')
+        input(type='radio' name=item.name id=item.id value='')
+        label(for=item.id)='None'
+
+    each option in item.options
+      div(class='form-check')
+        input(type='radio' name=option.name.name id=option.id value=option.value)
+        label(for=option.id)=option.name
+
+  else if(item.editor.type === 'checkbox group')
+    each option in item.options
+      div(class='form-check')
+        input(type='checkbox' name=option.name id=option.id value=option.value)
+        label(for=option.id)=option.name
 
 section(class='app card' fullscreen)
+  if(userTask)
+    +userTask(userTask)
+    
   if actions.length > 1
-    h2= name
-    p= description 
-
-    +fieldItems
-
     section(class='action-list')
       div(class='form-submit')
-        each ation in actions
+        each action in actions
           button(aria-controls='action-' + action.id)= action.name
-     
-    each ation in actions
-      section(class='action card' id='action-' + id hidden='hidden')
-        +form
+
+    each action in actions
+      section(class='action card' id='action-' + action.id hidden='hidden')
+        +form(action)
   else
-    +form
+    +form(actions[0])
