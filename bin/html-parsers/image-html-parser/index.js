@@ -20,9 +20,7 @@ module.exports = class ImageHtmlParser extends HtmlParser {
         console.info(chalk.green(`\t* parsing ${elements.length} elements:`));
 
         for (const element of elements) {
-            console.info(chalk.green(`\t\t* parsing ${element.nodeName}`));
-
-            
+            console.info(chalk.green(`\t\t* parsing ${element.nodeName}`));            
 
             const html = this.component.render({
                 html: element.outerHTML,

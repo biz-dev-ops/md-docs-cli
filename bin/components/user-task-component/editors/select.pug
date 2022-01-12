@@ -1,0 +1,4 @@
+select( name=item.name id=item.id)
+  option(disabled=!item.required selected)
+    each option in item.options
+      option(value=options.value)=option.name
