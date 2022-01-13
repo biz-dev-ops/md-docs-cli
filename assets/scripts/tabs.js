@@ -8,7 +8,7 @@
                 event.preventDefault();
 
                 anchors.forEach(sibling => sibling.removeAttribute('aria-expanded'));
-                anchor.setAttribute('aria-expanded', 'aria-expanded');
+                anchor.setAttribute('aria-expanded', 'true');
             
                 panels.forEach(sibling => sibling.setAttribute('hidden', 'true'));
                 panels[index].removeAttribute('hidden');

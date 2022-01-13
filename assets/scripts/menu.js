@@ -4,14 +4,14 @@
             event.preventDefault();
             
             const target = document.getElementById(anchor.hash.substring(1));
-            const visible = anchor.getAttribute('aria-expanded') === 'aria-expanded';
+            const visible = anchor.getAttribute('aria-expanded') === 'true';
 
             if (visible) {
                 anchor.removeAttribute('aria-expanded');
                 target.setAttribute('hidden', 'true');
             }
             else {
-                anchor.setAttribute('aria-expanded', 'aria-expanded');
+                anchor.setAttribute('aria-expanded', 'true');
                 target.removeAttribute('hidden');
             }
             

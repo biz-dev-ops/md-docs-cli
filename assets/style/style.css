@@ -206,7 +206,7 @@ header a:active {
     background-color: transparent;
 }
 
-header a[aria-expanded="aria-expanded"] {
+header a[aria-expanded="true"] {
     background-color: var(--color-white);
     color: var(--header-background-color);
 }
@@ -697,7 +697,7 @@ article > .header-container {
     border-radius: var(--radius-base) var(--radius-base) 0 0 ;
 }
 
-.tabs-list-container ul li a[aria-expanded="aria-expanded"] {
+.tabs-list-container ul li a[aria-expanded="true"] {
     background-color: var(--color-white);
     border-bottom-color: var(--color-black-a90);
     font-weight: 600;

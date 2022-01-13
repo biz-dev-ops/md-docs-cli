@@ -4,7 +4,7 @@ div(class='tabs-container')
       ul
         each tab, index in tabs
           li
-            a(href='#' + tab.id aria-expanded=index == 0)= tab.text 
+            a(href='#' + tab.id aria-expanded=index == 0 ? 'true' : 'false')= tab.text
 
   div(class='tabs-panels-container')
     each tab, index in tabs
