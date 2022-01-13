@@ -1,23 +1,22 @@
-div(fullscreen)
-  div(class='dashboard-list')
-    each segment, key in summary
-      div(class='dashboard')
-        h3= key
+div(class='dashboard-list')
+  each segment, key in summary
+    div(class='dashboard')
+      h3= key
 
-        figure(class='chart chart-doughnut')
-          svg(viewBox='0 0 36 36' class='chart-doughnut' width='100' height='100')
-            path(d='M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831' class='circle circle-base' stroke-width='4.169')
-            each status, key in segment
-              if key != 'total'
-                path(d='M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831' class='circle circle-' + key stroke-width='4.169' stroke-dasharray=status.percentage + ' 100' stroke-dashoffset=status.offset * -1)
-            text(x='18' y='21' class='text')= segment.total.value
-
-        ul(class='legend')
+      figure(class='chart chart-doughnut')
+        svg(viewBox='0 0 36 36' class='chart-doughnut' width='100' height='100')
+          path(d='M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831' class='circle circle-base' stroke-width='4.169')
           each status, key in segment
             if key != 'total'
-              li(class='legend-' + key)
-                span(class='percentage')= status.percentage + '%'
-                span(class='count')= status.value
-                span(class='label')= key
-  .
-    !{features}
+              path(d='M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831' class='circle circle-' + key stroke-width='4.169' stroke-dasharray=status.percentage + ' 100' stroke-dashoffset=status.offset * -1)
+          text(x='18' y='21' class='text')= segment.total.value
+
+      ul(class='legend')
+        each status, key in segment
+          if key != 'total'
+            li(class='legend-' + key)
+              span(class='percentage')= status.percentage + '%'
+              span(class='count')= status.value
+              span(class='label')= key
+.
+  !{features}

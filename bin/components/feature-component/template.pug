@@ -1,5 +1,6 @@
 mixin summary(item)
-  summary(class='status status-'+ item.status.type)=item.name
+  summary
+    span(class='status status-'+ item.status.type)=item.name
       
 mixin scenarios(scenarios)  
     each scenario in scenarios    
@@ -15,7 +16,8 @@ mixin scenarios(scenarios)
                     span(class='keyword')= step.keyword
                     span=' '
                     span= step.text
-div(fullscreen)
+
+div(class='feature-list')
   each feature in features
     details(class='feature')
       +summary (feature)
