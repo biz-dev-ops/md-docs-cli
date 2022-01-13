@@ -110,39 +110,45 @@
     left: var(--space-xs);
 }
 
-
-.status-bg.status-passed  {
-    background-color: var(--color-success-100);
+.status-passed.status-bg  {
+    background-color: var(--status-passed-100);
 }
 
 .status-passed::before {
-    color: var(--color-success);
+    color: var(--status-passed);
 }
 
-.status-bg.status-failed  {
+.status-failed.status-bg  {
     background-color: var(--color-error-100);
 }
 
 .status-failed::before {
-    color: var(--color-error);
+    color: var(--status-failed);
+}
+
+.status-skipped.status-bg  {
+    background-color: var(--status-skipped-100);
 }
 
 .status-skipped::before {
-    color: var(--color-black-a10);
+    color: var(--status-skipped);
+}
+
+.status-undefined.status-bg  {
+    background-color: var(--status-undefined-100);
 }
 
 .status-undefined::before{
-    color: var(--color-black-a20);
+    color: var(--status-undefined);
+}
+
+.status-pending.status-bg  {
+    background-color: var(--status-pending-100);
 }
 
 .status-pending::before {
-    color: var(--color-black-a30);
+    color: var(--status-pending);
 }
-
-.status-other::before {
-    color: var(--color-black-a40);
-}
-
 
 .keyword {
     font-family: monospace;
@@ -200,11 +206,23 @@
 }
 
 .legend-passed {
-    color: var(--color-success);
+    color: var(--status-passed);
 }
 
 .legend-failed {
-    color: var(--color-error);
+    color: var(--status-failed);
+}
+
+.legend-skipped {
+    color: var(--status-skipped);
+}
+
+.legend-undefined {
+    color: var(--status-undefined);
+}
+
+.legend-pending {
+    color: var(--status-pending);
 }
 
 .legend span {
@@ -224,21 +242,7 @@
     padding-top: var(--space-xss);
 }
 
-.legend-skipped .label {
-    border-top-color: var(--color-black-a10);
-}
 
-.legend-undefined .label {
-    border-top-color: var(--color-black-a20);
-}
-
-.legend-pending .label {
-    border-top-color: var(--color-black-a30);
-}
-
-.legend-other .label {
-    border-top-color: var(--color-black-a40);
-}
 
 /* Charts */
 .chart-doughnut {
@@ -285,12 +289,12 @@
 }
 
 .chart-doughnut .circle-skipped {
-    stroke: var(--color-black-a10);
+    stroke: var(--color-info);
     animation: stroke-progress 1s ease-out;
 }
 
 .chart-doughnut .circle-undefined {
-    stroke: var(--color-black-a20);
+    stroke: var(--color-warning);
     animation: stroke-progress 1s ease-out;
 }
 

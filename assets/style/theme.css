@@ -31,11 +31,30 @@
   --color-success: #00A843;
   --color-success-100: #E5FFF0;
 
-  --color-warning: #D88950;
+  --color-warning: #EA7E31;
   --color-warning-100: #FFF4EB;
+
+  --color-warning-secondary: #CDB015;
+  --color-warning-secondary-100: #FDF8DD;
 
   --color-error: #B12626;
   --color-error-100: #FEEEEF;
+
+  /* Status */
+  --status-passed: var(--color-success);
+  --status-passed-100: var(--color-success-100);
+
+  --status-failed: var(--color-error);
+  --status-failed-100: var(--color-error-100);
+
+  --status-skipped: var(--color-info);
+  --status-skipped-100: var(--color-info-100);
+
+  --status-undefined: var(--color-warning);
+  --status-undefined-100: var(--color-warning-100);
+
+  --status-pending: var(--color-warning-secondary);
+  --status-pending-100: var(--color-warning-secondary-100);
 
   /* Typography */
   --font-family-base: 'Mulish', sans-serif;
