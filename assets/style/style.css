@@ -702,3 +702,7 @@ article > .header-container {
     border-bottom-color: var(--color-black-a90);
     font-weight: 600;
 }
+
+.tabs-panels-container > div {
+    padding-top: var(--space-sm);
+}
