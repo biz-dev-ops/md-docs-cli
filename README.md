@@ -6,12 +6,12 @@ This script copies every file and directory from the **docs** directory into the
 1. Every index.md is added to the menu;
 1. Every heading is automaticly converted into a container;
 1. Every `*.bpmn` anchor is automaticly [converted](https://bpmn.io/toolkit/bpmn-js/) into a bpmn.io viewer;
-1. Every `*openapi.yaml` anchor is automaticly [converted](https://github.com/OpenAPITools/openapi-generator) into a html documentation site;
-1. Every `*asyncapi.yaml` anchor is automaticly [converted](https://github.com/asyncapi/generator) into a html documentation site;
-1. Every `*.feature` anchor is automaticly converted into a code block;
-1. Every `*.dashboard.yaml` anchor is automaticly converted into dashboard;
-1. Every `*.user-task.yaml` is automaticly converted into an user-interface;
-1. Every `*.puml` is automaticly [converted](https://plantuml.com/) into an svg;
+1. Every `*openapi.yaml` anchor is automaticly [converted](https://github.com/OpenAPITools/openapi-generator) into a html documentation page;
+1. Every `*asyncapi.yaml` anchor is automaticly [converted](https://github.com/asyncapi/generator) into a html documentation page;
+1. Every `*.feature` anchor is automaticly converted into a feature details list;
+1. Every `*.dashboard.yaml` anchor is automaticly converted into a BDD dashboard;
+1. Every `*.user-task.yaml` anchor is automaticly converted into a user-interface;
+1. Every `*.puml` anchor is automaticly [converted](https://plantuml.com/) into an svg image file;
 1. Every markdown anchor is automaticly converted into an html link;
 1. Every markdown anchor which starts with an `_` is automaticly added to the markdown file; 
 1. Every git branch is added to the git menu;
@@ -30,6 +30,8 @@ This script copies every file and directory from the **docs** directory into the
 
 All links are relative so you do not need a webserver.
 
+See [product documentation](https://docs.synion.nl/products/md-docs-cli/index.html) for more information.
+
 ## To get started
 
 ```
@@ -41,5 +43,14 @@ echo "# It works!" > docs/index.md
 md-docs
 google-chrome dist/index.html
 ```
+
+## To debug
+
+Set the environment to development. All intermediate steps are saved as files in the dist directory.
+
+```
+export NODE_ENV=development
+```
+
 
 

@@ -25,7 +25,7 @@ function createEditorTemplate() {
         if (entry.isDirectory())
             continue;
 
-        lines.push(`if(item.editor.type === '${entry.name.substring(-4)}')`)
+        lines.push(`if(item.editor.type === '${entry.name.slice(0, -4)}')`)
         lines.push(`\tinclude ../editors/${entry.name}`);
     }
 
