@@ -4,12 +4,12 @@ const pug = require('pug');
 const files = require('../../utils/files');
 
 module.exports = class UserTaskComponent {
-    constructor(template) {
+    constructor({ userTaskComponentRenderFn }) {
         createEditorTemplate();
         
         const pugFile = path.resolve(__dirname, `template.pug`);
 
-        this.renderFn = pug.compile(template ?? files.readFileAsStringSync(pugFile), { filename: pugFile });
+        this.renderFn = userTaskComponentRenderFn ?? pug.compile(files.readFileAsStringSync(pugFile), { filename: pugFile });
     }
 
     render(data) {

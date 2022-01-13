@@ -1,9 +1,9 @@
 const chalk = require('chalk-next');
 
 module.exports = class AnchorHtmlParser {
-    constructor(options) { 
-        this.root = options.root;
-        this.parsers = options?.parsers ?? [];
+    constructor({ options, anchorParsers }) { 
+        this.root = options.dst;
+        this.parsers = anchorParsers;
     }
 
     async parse(element) {

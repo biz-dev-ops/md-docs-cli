@@ -24,8 +24,8 @@ const md = require('markdown-it')
     .use(require("markdown-it-attrs"));
 
 module.exports = class MarkdownRenderer {
-    constructor(options) {
-        this.parsers = options.parsers
+    constructor({ htmlParsers }) {
+        this.parsers = htmlParsers
     }
 
     async render(markdown) {

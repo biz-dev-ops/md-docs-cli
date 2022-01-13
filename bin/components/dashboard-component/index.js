@@ -1,12 +1,11 @@
 const pug = require('pug');
 const jsdom = require('jsdom');
 const files = require('../../utils/files');
-const FeatureComponent = require('../feature-component')
 
 module.exports = class DashboardComponent {
-    constructor(template) {
-        this.renderFn = pug.compile(template ?? files.readFileAsStringSync(`${__dirname}/template.pug`));
-        this.featureComponent = new FeatureComponent();
+    constructor({ featureComponent, dashboardComponentRenderFn }) {
+        this.renderFn = dashboardComponentRenderFn ?? pug.compile(files.readFileAsStringSync(`${__dirname}/template.pug`));
+        this.featureComponent = featureComponent;
     }
     
     render(data) {

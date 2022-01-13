@@ -5,7 +5,7 @@ This script copies every file and directory from the **docs** directory into the
 1. Every index.md is transformed in a static web page;
 1. Every index.md is added to the menu;
 1. Every heading is automaticly converted into a container;
-1. Every `*.bpmn` anchor is automaticly [converted](https://bpmn.io/toolkit/bpmn-js/) into a bpmn.io viewer;
+1. Every `*.bpmn` anchor is automaticly [converted](https://bpmn.io/toolkit/bpmn-js/) into a bpmn.io viewer;fir
 1. Every `*openapi.yaml` anchor is automaticly [converted](https://github.com/OpenAPITools/openapi-generator) into a html documentation page;
 1. Every `*asyncapi.yaml` anchor is automaticly [converted](https://github.com/asyncapi/generator) into a html documentation page;
 1. Every `*.feature` anchor is automaticly converted into a feature details list;

@@ -4,15 +4,13 @@ const path = require('path');
 const chalk = require('chalk-next');
 const files = require('../../utils/files');
 
-const PageComponent = require('../../components/page-component');
-
 module.exports = class MarkdownFileParser {
-    constructor(options) {
-        this.root = options.root;
-        this.menu = options.menu;
-        this.git = options.git;
-        this.renderer = options.renderer;
-        this.component = new PageComponent(options?.template);
+    constructor({ options, menu, gitInfo, markdownRenderer, pageComponent }) {
+        this.root = options.dst;
+        this.menu = menu;
+        this.gitInfo = gitInfo;
+        this.renderer = markdownRenderer;
+        this.component = pageComponent;
     }
 
     async parse(file) {
@@ -37,8 +35,7 @@ module.exports = class MarkdownFileParser {
         const response = getTitle(markdown, file);
 
         const html = await this.renderer.render(response.markdown);
-        
-
+        const menuItems = await this.menu.items();
         
         let relativeRoot = path.relative(cwd(), this.root);
         if (relativeRoot !== '')
@@ -49,8 +46,8 @@ module.exports = class MarkdownFileParser {
             sourceFile: path.relative(this.root, file),
             content: html,
             title: response.title,
-            menu: this.menu,
-            git: this.git,
+            menu: menuItems,
+            git: this.gitInfo,
         });
     }
 }

@@ -6,32 +6,37 @@ const files = require('../files');
 
 
 module.exports = class Menu {
-    constructor(options) {
-        this.target = options.target;
+    #data = null;
+
+    constructor({ options }) {
+        this.root = options.dst;
     }
 
     async items() {
-        if (!await files.exists(this.target)) {
-            throw new Error(`menu source ${path.relative(cwd(), this.target)}  not found.`);
+        if (this.#data != null)
+            return this.#data;
+        
+        if (!await files.exists(this.root)) {
+            throw new Error(`menu source ${path.relative(cwd(), this.root)}  not found.`);
         }
 
         console.info('');
-        console.info(chalk.yellow(`scanning ${path.relative(cwd(), this.target)} for menu items:`));
+        console.info(chalk.yellow(`scanning ${path.relative(cwd(), this.root)} for menu items:`));
 
         const items = [];
 
-        const item = await this.#getMenuItems(this.target);
+        const item = await this.#getMenuItems(this.root);
         if (items != undefined)
             items.push(item);
 
         if (env.NODE_ENV === 'development')
-            await fs.writeFile(path.resolve(this.target, `menu.json`), JSON.stringify(items));
+            await fs.writeFile(path.resolve(this.root, `menu.json`), JSON.stringify(items));
 
-        return items;
+        this.#data = items;
+        return this.#data;
     }
 
-
-    #getMenuItems = async function (src) {
+    async #getMenuItems(src) {
         await fs.access(src);
         const entries = await fs.readdir(src, { withFileTypes: true });
 
@@ -47,7 +52,7 @@ module.exports = class Menu {
                     item.items.push(sub);
             }
             else if (entry.name === 'index.md') {
-                const file = path.relative(this.target, path.resolve(src, entry.name));
+                const file = path.relative(this.root, path.resolve(src, entry.name));
                 console.info(chalk.green(`\t * adding menu item ${file}`));
                 item.url = `${file.slice(0, -3)}.html`;
             }
@@ -57,8 +62,8 @@ module.exports = class Menu {
             return item;
     }
 
-    #format = function (name) {
-        if (name === path.basename(this.target))
+    #format(name) {
+        if (name === path.basename(this.root))
             return 'home';
 
         return name.charAt(0).toUpperCase() + name.slice(1)

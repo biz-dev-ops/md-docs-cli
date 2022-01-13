@@ -1,12 +1,12 @@
 const chalk = require('chalk-next');
-const ImageComponent = require('../../components/image-component');
+
 const HtmlParser = require('../html-parser');
 
 module.exports = class ImageHtmlParser extends HtmlParser {
-    constructor(options) { 
+    constructor({ imageComponent }) { 
         super();
 
-        this.component = new ImageComponent(options?.template);
+        this.component = imageComponent;
     }
 
     async parse(element) {
@@ -22,12 +22,26 @@ module.exports = class ImageHtmlParser extends HtmlParser {
         for (const element of elements) {
             console.info(chalk.green(`\t\t* parsing ${element.nodeName}`));            
 
-            const html = this.component.render({
-                html: element.outerHTML,
-                align: getAlign(element)
-            });
             
-            this._replace(element, html);
+
+            if (element.parentNode.nodeName === 'A') {
+                const parent = element.parentNode;
+
+                const html = this.component.render({
+                    html: parent.outerHTML,
+                    align: getAlign(element)
+                });
+
+                this._replace(parent, html);
+            }
+            else {
+                const html = this.component.render({
+                    html: element.outerHTML,
+                    align: getAlign(element)
+                });
+
+                this._replace(element, html);
+            }
         }
     }
 }

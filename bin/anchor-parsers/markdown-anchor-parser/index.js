@@ -1,13 +1,20 @@
+const fs = require('fs').promises;
 const chalk = require('chalk-next');
 const path = require('path');
+const { env } = require('process');
 
 const AnchorParser = require('../anchor-parser');
 
+//TODO: find solution for renderer problem.
 module.exports = class MarkdownAnchorParser extends AnchorParser {
-  constructor(options) {
-    super();
+  // constructor({ markdownRenderer}) {
+  //   super();
 
-    this.renderer = options?.renderer;
+  //   this.renderer = markdownRenderer;
+  // }
+
+  constructor() {
+    super();
   }
 
   _canParse(anchor) { return path.basename(anchor.href).endsWith('.md') || anchor.href.includes('.md#'); }
@@ -23,13 +30,18 @@ module.exports = class MarkdownAnchorParser extends AnchorParser {
     }
   }
 
-  async _render(file) {
-    if (!path.basename(file).startsWith('_'))
-      return;
+  // async _render(file) {
+  //   if (!path.basename(file).startsWith('_'))
+  //     return;
 
-    console.info(chalk.green(`\t\t\t\t* rendering`));
+  //   console.info(chalk.green(`\t\t\t\t* rendering`));
 
-    const markdown = await this._readFileAsString(file);
-    return await this.renderer.render(markdown);
-  }
+  //   const markdown = await this._readFileAsString(file);
+  //   const html = await this.renderer.render(markdown);
+
+  //   if (env.NODE_ENV === 'development')
+  //     await fs.writeFile(`${file}.html`, html);
+    
+  //   return html;
+  // }
 };

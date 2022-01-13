@@ -5,7 +5,7 @@ const files = require('../../utils/files');
 const { cwd } = require('process');
 
 module.exports = class AnchorParser {
-    constructor(options) { }
+    constructor() { }
 
     async parse(anchor) {
         if (!this._canParse(anchor))

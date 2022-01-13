@@ -1,12 +1,12 @@
 const chalk = require('chalk-next');
-const FullscreenComponent = require('../../components/fullscreen-component');
+
 const HtmlParser = require('../html-parser');
 
 module.exports = class FullscreenHtmlParser extends HtmlParser {
-    constructor(options) { 
+    constructor({ fullscreenComponent }) { 
         super();
 
-        this.component = new FullscreenComponent(options?.template);
+        this.component = fullscreenComponent
     }
 
     async parse(element) {
