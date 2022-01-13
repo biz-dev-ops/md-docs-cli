@@ -562,7 +562,7 @@ article > .header-container {
     padding: 0 var(--space-lg);
 }
 
-[data-fullscreen] button {
+[data-fullscreen] [data-toggle="fullscreen"] {
     --icon-padding: calc(var(--space-sm) + var(--space-xss));
 
     background-color: var(--color-black-a10);
@@ -581,27 +581,27 @@ article > .header-container {
     width: var(--space-lg);
 }
 
-[data-fullscreen] button:active,
-[data-fullscreen] button:focus,
-[data-fullscreen]:hover button {
+[data-fullscreen] [data-toggle="fullscreen"]:active,
+[data-fullscreen] [data-toggle="fullscreen"]:focus,
+[data-fullscreen]:hover [data-toggle="fullscreen"] {
     transform: none;
 }
 
-[data-fullscreen] button:hover,
-[data-fullscreen] button:focus {
+[data-fullscreen] [data-toggle="fullscreen"]:hover,
+[data-fullscreen] [data-toggle="fullscreen"]:focus {
     background-color: var(--color-black-a20);
 }
 
-[data-fullscreen] button:active {
+[data-fullscreen] [data-toggle="fullscreen"]:active {
     background-color: transparent;
 }
 
-[data-fullscreen] button .label {
+[data-fullscreen] [data-toggle="fullscreen"] .label {
     display: none;
 }
 
-[data-fullscreen] button::before,
-[data-fullscreen] button::after {
+[data-fullscreen] [data-toggle="fullscreen"]::before,
+[data-fullscreen] [data-toggle="fullscreen"]::after {
     border-style: solid;
     border-color: currentColor;
     content: "";
@@ -611,13 +611,13 @@ article > .header-container {
     position: absolute;
 }
 
-[data-fullscreen] button::before {
+[data-fullscreen] [data-toggle="fullscreen"]::before {
     border-width: 0 0 var(--line-thin) var(--line-thin);
     bottom: var(--icon-padding);
     left: var(--icon-padding);
 }
 
-[data-fullscreen] button::after {
+[data-fullscreen] [data-toggle="fullscreen"]::after {
     border-width: var(--line-thin) var(--line-thin) 0 0;
     right: var(--icon-padding);
     top: var(--icon-padding);
