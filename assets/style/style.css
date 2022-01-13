@@ -1,6 +1,9 @@
 @import "reset.css";
 @import "theme.css";
 @import "feature.css";
+/* 
+TODO: @Sander kijk jij nog even naar dit stylesheet: @import "user-task.css"; 
+*/
 
 /* Basic elements */
 html {
