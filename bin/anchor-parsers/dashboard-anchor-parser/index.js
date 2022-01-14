@@ -31,11 +31,11 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
     console.info(chalk.green(`\t\t\t\t* parsing executions file`));
     specflow.parse(features, executions);
 
-    console.info(chalk.green(`\t\t\t\t* summarizing features`));
-    const summary = summarizer.summarize(features);
-
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.features.json`, JSON.stringify(features));
+
+    console.info(chalk.green(`\t\t\t\t* summarizing features`));
+    const summary = summarizer.summarize(features);
 
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.json`, JSON.stringify(summary));

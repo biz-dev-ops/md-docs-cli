@@ -28,11 +28,11 @@ const getStatusSummary = function(collection) {
         return statuses;
 
     for (const item of collection) {
-        if (statuses[item.status.type] == undefined) {
-            statuses[item.status.type] = { value: 0 };
+        if (statuses[item.result.status] == undefined) {
+            statuses[item.result.status] = { value: 0 };
         }
 
-        statuses[item.status.type].value += 1;
+        statuses[item.result.status].value += 1;
         statuses.total.value += 1;
     }
 
