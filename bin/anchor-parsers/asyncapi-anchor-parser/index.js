@@ -36,7 +36,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
     console.info(chalk.green(`\t\t\t\t* rendering page`));
     const html = this.asyncapiComponent.render({
       schema: JSON.stringify(json),
-      root: this.root
+      root: path.relative(path.dirname(file), this.root)
     });
 
     const htmlFile = `${file}.html`;
