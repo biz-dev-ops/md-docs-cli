@@ -85,7 +85,7 @@ module.exports = class App {
         options.dst = destinationPath(options.dst, gitInfo.branch);
 
         await createDestination(options);
-        await createBranches(options, gitInfo);
+        await createBranches(opts, gitInfo);
         await copyFiles(this._getFileTransfers(options));
         registerServices(this.container, this._getServices(options));
 
