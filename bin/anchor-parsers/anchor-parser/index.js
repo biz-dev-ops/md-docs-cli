@@ -5,13 +5,13 @@ const files = require('../../utils/files');
 const { cwd } = require('process');
 
 module.exports = class AnchorParser {
-    constructor(options) { }
+    constructor() { }
 
     async parse(anchor) {
         if (!this._canParse(anchor))
             return;
         
-        console.log(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
+        console.info(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
         
         const file = path.resolve(cwd(), `${anchor.href}`);
     

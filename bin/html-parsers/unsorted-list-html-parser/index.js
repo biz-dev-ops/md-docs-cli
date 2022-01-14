@@ -1,13 +1,12 @@
 const chalk = require('chalk-next');
 
 const HtmlParser = require('../html-parser');
-const TabsComponent = require('../../components/tabs-component');
 
 module.exports = class UnsortedListHtmlParser extends HtmlParser {
-    constructor(options) {
-        super(options);
+    constructor({ tabsComponent }) {
+        super();
 
-        this.component = new TabsComponent(options?.template);
+        this.component = tabsComponent;
     }
 
     async parse(element) {

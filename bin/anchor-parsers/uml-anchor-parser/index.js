@@ -7,10 +7,10 @@ const { cwd } = require('process');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class UmlAnchorParser extends AnchorParser {
-  constructor(options) {
-    super(options);
+  constructor({ options }) {
+    super();
   
-    this.root = options?.root;
+    this.root = options.dst;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.puml'); }

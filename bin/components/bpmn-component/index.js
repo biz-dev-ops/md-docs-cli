@@ -2,8 +2,8 @@ const pug = require('pug');
 const files = require('../../utils/files');
 
 module.exports = class BpmnComponent {
-    constructor(template) {
-        this.renderFn = pug.compile(template ?? files.readFileAsStringSync(`${__dirname}/template.pug`));
+    constructor({ bpmnComponentRenderFn }) {
+        this.renderFn = bpmnComponentRenderFn ?? pug.compile(files.readFileAsStringSync(`${__dirname}/template.pug`));
     }
     
     render(data) {

@@ -6,13 +6,12 @@ const userTaskParser = require('../../utils/user-task-parser');
 const jsonSchemaParser = require('../../utils/json-schema-parser');
 
 const AnchorParser = require('../anchor-parser');
-const UserTaskComponent = require('../../components/user-task-component');
 
 module.exports = class UserTaskAnchorParser extends AnchorParser {
-  constructor(options) {
-    super(options);
+  constructor({ userTaskComponent }) {
+    super();
 
-    this.component = new UserTaskComponent(options?.template);
+    this.component = userTaskComponent;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.user-task.yml') || anchor.href.endsWith('.user-task.yaml'); }

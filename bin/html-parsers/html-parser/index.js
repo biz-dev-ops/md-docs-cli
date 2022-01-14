@@ -1,7 +1,7 @@
 const jsdom = require('jsdom');
 
 module.exports = class HtmlParser {
-    constructor(options) { }
+    constructor() { }
 
     _replace(element, fragment) {
         if (typeof fragment === 'string')

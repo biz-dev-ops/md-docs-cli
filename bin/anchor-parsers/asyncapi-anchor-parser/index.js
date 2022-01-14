@@ -4,21 +4,17 @@ const path = require('path');
 const chalk = require('chalk-next');
 const AsyncApiParser = require('@asyncapi/parser');
 
+const AnchorParser = require('../anchor-parser');
+
 const jsonSchemaParser = require('../../utils/json-schema-parser');
 
-const AnchorParser = require('../anchor-parser');
-const AsyncapiComponent = require('../../components/asyncapi-component');
-const IFrameComponent = require('../../components/iframe-component');
-
-
 module.exports = class AsyncapiAnchorParser extends AnchorParser {
-  constructor(options) {
-    super(options);
+  constructor({ options, asyncapiComponent, iFrameComponent  }) {
+    super();
 
-    this.root = options.root;
-    this.asyncapiComponent = new AsyncapiComponent(options?.template);
-    this.iframeComponent = new IFrameComponent(options?.template);
-
+    this.root = options.dst;
+    this.asyncapiComponent = asyncapiComponent;
+    this.iFrameComponent = iFrameComponent;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.asyncapi.yml') || anchor.href.endsWith('.asyncapi.yaml'); }
@@ -49,7 +45,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
     
 
     console.info(chalk.green(`\t\t\t\t* rendering iframe`));
-    return this.iframeComponent.render({
+    return this.iFrameComponent.render({
       name: 'asyncapi',
       src: `./${path.relative(cwd(), htmlFile)}`,
     });

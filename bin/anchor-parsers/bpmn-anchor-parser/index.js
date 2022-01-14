@@ -1,18 +1,15 @@
 const chalk = require('chalk-next');
 const path = require('path');
-const { cwd } = require('process');
 const { v4: uuidv4 } = require('uuid');
 
 const AnchorParser = require('../anchor-parser');
 
-const BpmnComponent = require('../../components/bpmn-component');
-
 module.exports = class BpmnAnchorParser extends AnchorParser {
-  constructor(options) {
-    super(options);
+  constructor({ options, bpmnComponent }) {
+    super();
 
-    this.root = options.root;
-    this.component = new BpmnComponent(options?.template);
+    this.root = options.dst;
+    this.component = bpmnComponent;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.bpmn'); }

@@ -3,6 +3,10 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 exports.info = async function () {
+    console.info();
+    console.info(chalk.yellow(`downloading git information:`));
+    const info = {};
+
     try {
         const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
         const repository = await parseGitRepository();
@@ -16,35 +20,37 @@ exports.info = async function () {
         const branches = remote.branches.concat(localBranches.filter(b => !remote.branches.includes(b)))
             .map(b => ({
                 name: b,
+                repository: repository,
                 url: `https://github.com/${repository}/tree/${b}`,
                 feature: !remote.mainBranch,
             }))
             .sort((a, b) => `${a.feature ? "z" : "a"}${a.name}`.localeCompare(`${b.feature ? "z" : "a"}${b.name}`));
 
-        return {
-            branch: branches.find(b => b.name === branch),
-            branches
-        };
+        info.branch = branches.find(b => b.name === branch);
+        info.branches = branches;
     }
     catch (ex) {
-        if (!ex?.message?.includes('fatal: not a git repository')) {            
+        if (!ex?.message?.includes('fatal: not a git repository')) {     
             throw ex;
         }
 
-        console.info('');
-        console.warn(chalk.yellowBright(`directorty is not a git repository, falling back to default.`));
+        console.warn(chalk.yellowBright(`\t* directory is not a git repository, falling back to default.`));
         
         const branch = {
             name: 'main',
+            repository: 'undefined',
             url: `https://github.com/undefined/undefined/tree/main`,
             feature: false
         };
 
-        return {
-            branch,
-            branches: [branch]
-        };
+        info.branch = branch;
+        info.branches = [branch];
     }
+
+    console.info(chalk.green(`\t* repository: ${info.branch.repository}`));
+    console.info(chalk.green(`\t* ${info.branch.feature ? 'feature ' : ''}branch: ${info.branch.name}`));
+
+    return info;
 }
 
 async function __exec(command) {
@@ -115,10 +121,4 @@ function parseGitReponse(response) {
 
     return parsed;
 
-}
-
-function featureBranchToPath(branch) {
-    return branch
-        .replace(" ", "-")
-        .toLowerCase();
 }
