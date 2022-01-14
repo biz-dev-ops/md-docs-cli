@@ -119,14 +119,20 @@ module.exports = class App {
 
     //Protected
     _getFileTransfers(options) {
-        return [
+        const fileTransfers = [
             { src: options.src, dst: options.dst },
             { src: path.resolve(__dirname, '../../assets'), dst: path.resolve(options.dst, 'assets') },
             { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
             { src: path.resolve(__dirname, '../../node_modules/bpmn-js/dist'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
             { src: path.resolve(__dirname, '../../node_modules/@asyncapi/html-template/template'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
             { src: path.resolve(__dirname, '../../node_modules/iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') }
-        ]
+        ];
+
+        if (options.theme) {
+            fileTransfers.push({ src: options.theme, dst: path.resolve(options.dst, 'assets/style/custom-theme.css') });
+        }
+
+        return fileTransfers;
     }
 
     //Protected

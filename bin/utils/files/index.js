@@ -12,19 +12,26 @@ exports.readFileAsStringSync = (file, encoding = 'utf8') => {
     return content.toString(encoding);
 }
 
-exports.copy = async (src, dst) => {
-    await fs.mkdir(dst, { recursive: true });
+exports.copy = async (src, dst) => {    
     await fs.access(src);
 
-    const entries = await fs.readdir(src, { withFileTypes: true });
+    if ((await fs.stat(src)).isDirectory()) {
+        await fs.mkdir(dst, { recursive: true });
 
-    for (let entry of entries) {
-        if (entry.isDirectory()) {
-            await this.copy(path.resolve(src, entry.name), path.resolve(dst, entry.name));
+        const entries = await fs.readdir(src, { withFileTypes: true });
+
+        for (let entry of entries) {
+            if (entry.isDirectory()) {
+                await this.copy(path.resolve(src, entry.name), path.resolve(dst, entry.name));
+            }
+            else {
+                await fs.copyFile(path.resolve(src, entry.name), path.resolve(dst, entry.name));
+            }
         }
-        else {
-            await fs.copyFile(path.resolve(src, entry.name), path.resolve(dst, entry.name));
-        }
+    }
+    else {
+        await fs.mkdir(path.dirname(dst), { recursive: true });
+        await fs.copyFile(src, dst);
     }
 }
 

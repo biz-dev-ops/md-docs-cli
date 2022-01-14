@@ -25,6 +25,7 @@ async function run(options) {
 const options = yargs
     .usage("Usage: -b")
     .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
+    .option("t", { alias: "theme", describe: "Path to a stylesheet to include in the source", type: "string", demandOption: false })
     .argv;
 
 run(options);
