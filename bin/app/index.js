@@ -226,7 +226,7 @@ function destinationPath(src, branch) {
     if (!branch.feature)
         return src;
 
-    return path.resolve(src, `/${branch.name.replace(' ', '-').toLowerCase()}`);
+    return path.resolve(src, `${branch.name.replace(' ', '-').toLowerCase()}`);
 };
 
 async function createDestination(options) {
