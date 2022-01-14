@@ -33,10 +33,14 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
       throw new Error(ex);
     }
 
+    let relativeRoot = path.relative(path.dirname(file), this.root);
+    if (relativeRoot !== '')
+      relativeRoot += '/';
+
     console.info(chalk.green(`\t\t\t\t* rendering page`));
     const html = this.asyncapiComponent.render({
       schema: JSON.stringify(json),
-      root: path.relative(path.dirname(file), this.root)
+      root: relativeRoot
     });
 
     const htmlFile = `${file}.html`;

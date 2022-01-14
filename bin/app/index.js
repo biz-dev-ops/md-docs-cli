@@ -150,12 +150,12 @@ module.exports = class App {
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
 
             //HTML parser
-            'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
-            'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
-            'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
-            'fullscreenHtmlParser': asClass(FullscreenHtmlParser).singleton(),
             'cleanUpHtmlParser': asClass(CleanUpHtmlParser).singleton(),
+            'fullscreenHtmlParser': asClass(FullscreenHtmlParser).singleton(),
+            'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
+            'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
+            'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
             'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
@@ -181,22 +181,22 @@ module.exports = class App {
             'userTaskComponent': asClass(UserTaskComponent).singleton().inject(container => allowUnregistered(container, 'userTaskComponentRenderFn')),
 
             //File parsers: order can be important!
-            'fileParsers': asArray([
+            'fileParsers': [
                 'markdownFileParser'
-            ]),
+            ],
 
             //Html parsers, order is important!
-            'htmlParsers': asArray([
+            'htmlParsers': [
                 'headingHtmlParser',
                 'anchorHtmlParser',
                 'unsortedListHtmlParser',
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
                 'cleanUpHtmlParser'
-            ]),
+            ],
 
             //Anchor parsers, order can be important!
-            'anchorParsers': asArray([
+            'anchorParsers': [
                 'asyncapiAnchorParser',
                 'bpmnAnchorParser',
                 'dashboardAnchorParser',
@@ -205,13 +205,14 @@ module.exports = class App {
                 'openapiAnchorParser',
                 'umlAnchorParser',
                 'userTaskAnchorParser'
-            ])
+            ]
         };
     }
 }
 
 function asArray(names) {
     return {
+        names: names,
         resolve: (container, opts) => names.map(name => container.resolve(name, opts))
     }
 }
@@ -256,9 +257,19 @@ async function copyFiles(fileTransfers) {
 function registerServices(container, services) {
     console.info();
     console.info(chalk.yellow(`registering services:`));
-    for (const service of Object.keys(services)) {
-        console.info(chalk.yellow(`\t* registering service ${service}`));
+    const parsed = {};
+
+    for (const [key, value] of Object.entries(services)) {
+        console.info(chalk.yellow(`\t* registering service ${key}`));
+        parsed[key] = parseResolver(value);
     }
 
-    container.register(services);
+    container.register(parsed);
+}
+
+function parseResolver(resolver) {
+    if (Array.isArray(resolver))
+        return asArray(resolver);    
+    
+    return resolver;
 }

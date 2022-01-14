@@ -23,10 +23,14 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
     const json = await jsonSchemaParser.parse(file);
 
+    let relativeRoot = path.relative(path.dirname(file), this.root);
+    if (relativeRoot !== '')
+      relativeRoot += '/';
+
     console.info(chalk.green(`\t\t\t\t* rendering page`));
-    const html = this.openapiComponent.render({ 
+    const html = this.openapiComponent.render({
       spec: JSON.stringify(json),
-      root: path.relative(path.dirname(file), this.root)
+      root: relativeRoot
     });
 
     const htmlFile = `${file}.html`;
