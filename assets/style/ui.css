@@ -1,0 +1,45 @@
+.ui {
+    border-radius: var(--radius-base);
+    border: var(--line-base) solid var(--background-color-base);
+    padding: calc(var(--space-md) - var(--line-base));
+    position: relative;
+    overflow: hidden;
+
+    box-shadow: var(--drop-shadow-level2);
+}
+
+.ui .action {
+    border: var(--line-base) solid var(--background-color-base);
+    padding: var(--space-md);
+}
+
+.ui .form-item {
+    margin-bottom: 1rem;
+}
+
+.ui .form-submit {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ui .form-submit button + button {
+    margin-left: var(--space-sm);
+}
+
+.ui button {
+    background-color: var(--color-black-a10);
+    border: 0;
+    border-radius: 10em;
+    font-size: inherit;
+    padding: var(--space-xs) var(--space-md);
+    transition: background-color var(--duration-base);
+}
+
+.ui button:hover,
+.ui button:focus-visible {
+    background-color: var(--color-black-a20);
+}
+
+.ui button[type="submit"] {
+    font-weight: 600;
+}

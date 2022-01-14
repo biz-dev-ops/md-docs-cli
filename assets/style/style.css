@@ -1,6 +1,7 @@
 @import "reset.css";
 @import "theme.css";
 @import "feature.css";
+@import "ui.css";
 
 /* Basic elements */
 html {
@@ -148,6 +149,28 @@ table tr *:last-child {
     padding-right: 0;
 }
 
+
+input:not([type="checkbox"], [type="radio"]),
+textarea,
+select {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+dt {
+    font-weight: 600;
+}
+
+dd {
+    margin-left: 0;
+    border-bottom: var(--line-base) dashed var(--color-grey-100);
+}
+
+dd + dt {
+    margin-top: var(--space-sm);
+}
 
 details {
     padding-left: var(--space-md);
