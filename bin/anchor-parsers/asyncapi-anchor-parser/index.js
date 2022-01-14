@@ -4,9 +4,10 @@ const path = require('path');
 const chalk = require('chalk-next');
 const AsyncApiParser = require('@asyncapi/parser');
 
-const AnchorParser = require('../anchor-parser');
-
 const jsonSchemaParser = require('../../utils/json-schema-parser');
+const files = require('../../utils/files');
+
+const AnchorParser = require('../anchor-parser');
 
 module.exports = class AsyncapiAnchorParser extends AnchorParser {
   constructor({ options, asyncapiComponent, iFrameComponent  }) {
@@ -43,10 +44,12 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
     console.info(chalk.green(`\t\t\t\t* creating ${path.relative(cwd(), htmlFile)}`));
     await fs.writeFile(htmlFile, html);    
 
+    const hash = await files.hash(htmlFile);
+
     console.info(chalk.green(`\t\t\t\t* rendering iframe`));
     return this.iFrameComponent.render({
       name: 'asyncapi',
-      src: `./${path.relative(cwd(), htmlFile)}`,
+      src: `./${path.relative(cwd(), htmlFile)}?_v=${hash}`,
     });
   }
 };

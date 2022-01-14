@@ -7,8 +7,6 @@ const { cwd } = require('process');
 const files = require('../../utils/files');
 
 const AnchorParser = require('../anchor-parser');
-const { Socket } = require('dgram');
-const { start } = require('repl');
 
 module.exports = class UmlAnchorParser extends AnchorParser {
   constructor({ options }) {
