@@ -192,7 +192,7 @@ module.exports = class App {
                 'unsortedListHtmlParser',
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
-                'cleanUpHtmlParser',
+                'cleanUpHtmlParser'
             ]),
 
             //Anchor parsers, order can be important!
@@ -204,6 +204,7 @@ module.exports = class App {
                 'markdownAnchorParser',
                 'openapiAnchorParser',
                 'umlAnchorParser',
+                'userTaskAnchorParser'
             ])
         };
     }

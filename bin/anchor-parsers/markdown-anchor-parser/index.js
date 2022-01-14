@@ -19,7 +19,7 @@ module.exports = class MarkdownAnchorParser extends AnchorParser {
 
   _canParse(anchor) { return path.basename(anchor.href).endsWith('.md') || anchor.href.includes('.md#'); }
 
-  async _parse(anchor) {
+  async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* changing href`));
 
     if (anchor.href.endsWith('.md')) {
@@ -28,20 +28,18 @@ module.exports = class MarkdownAnchorParser extends AnchorParser {
     else {
       anchor.href = anchor.href.replace('.md#', '.html#');
     }
+
+    //   if (!path.basename(file).startsWith('_'))
+    //     return;
+
+    //   console.info(chalk.green(`\t\t\t\t* rendering`));
+
+    //   const markdown = await this._readFileAsString(file);
+    //   const html = await this.renderer.render(markdown);
+
+    //   if (env.NODE_ENV === 'development')
+    //     await fs.writeFile(`${file}.html`, html);
+      
+    //   return html;
   }
-
-  // async _render(file) {
-  //   if (!path.basename(file).startsWith('_'))
-  //     return;
-
-  //   console.info(chalk.green(`\t\t\t\t* rendering`));
-
-  //   const markdown = await this._readFileAsString(file);
-  //   const html = await this.renderer.render(markdown);
-
-  //   if (env.NODE_ENV === 'development')
-  //     await fs.writeFile(`${file}.html`, html);
-    
-  //   return html;
-  // }
 };

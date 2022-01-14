@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs').promises;
 const fsSync = require('fs');
+const crypto = require('crypto');
 
 exports.readFileAsString = async (file, encoding = 'utf8') => {
     const content = await fs.readFile(file);
@@ -12,7 +13,7 @@ exports.readFileAsStringSync = (file, encoding = 'utf8') => {
     return content.toString(encoding);
 }
 
-exports.copy = async (src, dst) => {    
+exports.copy = async (src, dst) => {
     await fs.access(src);
 
     if ((await fs.stat(src)).isDirectory()) {
@@ -57,4 +58,11 @@ exports.exists = async (src) => {
     catch {
         return false;
     }
+}
+
+exports.hash = async (file) => {
+    const fileBuffer = await fs.readFile(file);
+    const hashSum = crypto.createHash('sha256');
+    hashSum.update(fileBuffer);
+    return hashSum.digest('hex');
 }

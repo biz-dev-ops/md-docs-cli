@@ -4,7 +4,11 @@ const chalk = require('chalk-next');
 const plantuml = require('node-plantuml');
 const { cwd } = require('process');
 
+const files = require('../../utils/files');
+
 const AnchorParser = require('../anchor-parser');
+const { Socket } = require('dgram');
+const { start } = require('repl');
 
 module.exports = class UmlAnchorParser extends AnchorParser {
   constructor({ options }) {
@@ -15,21 +19,26 @@ module.exports = class UmlAnchorParser extends AnchorParser {
 
   _canParse(anchor) { return anchor.href.endsWith('.puml'); }
 
-  async _render(file, anchor) {
+  async _parse(anchor, file) {
     const svgFile = `${file}.svg`;    
     console.info(chalk.green(`\t\t\t\t* creating ${path.relative(this.root, svgFile)}`));
 
     const uml = await this._readFileAsString(file);
 
-    const generator = plantuml.generate(uml, { format: 'svg' });
-    generator.out.pipe(fs.createWriteStream(svgFile));
+    await on(plantuml.generate(uml, { format: 'svg' }).out.pipe(fs.createWriteStream(svgFile)));
 
-    return `<img src='${path.relative(cwd(), svgFile)}' alt='${anchor.text}' />`;
-  }
+    const hash = await files.hash(svgFile);
 
-  async _parse(anchor) {
-    console.info(chalk.green(`\t\t\t\t* changing href`));   
+    console.info(chalk.green(`\t\t\t\t* changing href`));
+    anchor.href += `.svg?_v=${hash}`;
 
-    anchor.href += '.svg';
-  }
+    return `<img src='${path.relative(cwd(), svgFile)}?_v=${hash}' alt='${anchor.text}' />`;
+  } 
 };
+
+async function on(stream) {
+  return new Promise((resolve, reject) => {
+    stream.on('finish', () => resolve());
+    stream.on('error', () => reject());
+  });
+}

@@ -18,7 +18,7 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
 
   _canParse(anchor) { return anchor.href.endsWith('.feature'); }
 
-  async _render(file) {
+  async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing feature file`));
     const features = await gherkin.parse(file);
     const executions = await this.testExecutionStore.get();

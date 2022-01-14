@@ -16,7 +16,7 @@ module.exports = class UserTaskAnchorParser extends AnchorParser {
 
   _canParse(anchor) { return anchor.href.endsWith('.user-task.yml') || anchor.href.endsWith('.user-task.yaml'); }
 
-  async _render(file) {
+  async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
     const json = await jsonSchemaParser.parse(file);
 

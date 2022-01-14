@@ -12,22 +12,15 @@ module.exports = class AnchorParser {
             return;
         
         console.info(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
-        
+
         const file = path.resolve(cwd(), `${anchor.href}`);
-    
-        const html = await this._render(file, anchor);
-        if(html != undefined)
+        const html = await this._parse(anchor, file);
+        if (html != undefined)
             replace(anchor, html);
-        
-        await this._parse(anchor);
     }
 
-    //Abstract methods
-    _canParse(anchor) { throw new Error('not implemented') };
-    async _parse(anchor) { };
-    async _render(file) { return null; };
-
-    //Proteced methods
+    _canParse(anchor) { throw new Error('abstract method not implemented') };
+    async _parse(anchor, file) { throw new Error('abstract method not implemented') };
     async _readFileAsString(file, encoding = 'utf8') { return await files.readFileAsString(file, encoding); };
 }
 

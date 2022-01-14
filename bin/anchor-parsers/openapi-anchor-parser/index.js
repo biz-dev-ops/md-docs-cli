@@ -18,7 +18,7 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
 
   _canParse(anchor) { return anchor.href.endsWith('.openapi.yml') || anchor.href.endsWith('.openapi.yaml'); }
 
-  async _render(file) {
+  async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
     const json = await jsonSchemaParser.parse(file);
 

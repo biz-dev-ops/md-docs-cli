@@ -19,7 +19,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
   _canParse(anchor) { return anchor.href.endsWith('.asyncapi.yml') || anchor.href.endsWith('.asyncapi.yaml'); }
 
-  async _render(file) {
+  async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
     let json = await jsonSchemaParser.parse(file);
 
@@ -41,8 +41,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
     const htmlFile = `${file}.html`;
 
     console.info(chalk.green(`\t\t\t\t* creating ${path.relative(cwd(), htmlFile)}`));
-    await fs.writeFile(htmlFile, html);
-    
+    await fs.writeFile(htmlFile, html);    
 
     console.info(chalk.green(`\t\t\t\t* rendering iframe`));
     return this.iFrameComponent.render({
