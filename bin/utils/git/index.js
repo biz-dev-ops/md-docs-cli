@@ -14,17 +14,17 @@ exports.info = async function () {
 
         const localBranches = (await __exec(`git branch -a`))
             .split(`\n`)
-            .map(b => b.replace("*", "").trim())
-            .filter(b => !b.startsWith("remotes"));
-
-        const branches = remote.branches.concat(localBranches.filter(b => !remote.branches.includes(b)))
+            .map(b => b.replace('*', '').trim());
+        
+        const branches = remote.branches.concat(localBranches.filter(b => !remote.branches.includes(b)))            
+            .filter(b => !b.includes('remotes/'))
             .map(b => ({
                 name: b,
                 repository: repository,
                 url: `https://github.com/${repository}/tree/${b}`,
-                feature: !remote.mainBranch,
+                feature: b != remote.mainBranch,
             }))
-            .sort((a, b) => `${a.feature ? "z" : "a"}${a.name}`.localeCompare(`${b.feature ? "z" : "a"}${b.name}`));
+            .sort((a, b) => `${a.feature ? 'z' : 'a'}${a.name}`.localeCompare(`${b.feature ? 'z' : 'a'}${b.name}`));
 
         info.branch = branches.find(b => b.name === branch);
         info.branches = branches;
@@ -56,7 +56,7 @@ exports.info = async function () {
 async function __exec(command) {
     const { stdout, stderr } = await exec(command, { timeout: 5000 });
 
-    if (stderr.trim() != "")
+    if (stderr.trim() != '')
         throw stderr.trim();
 
     return stdout.trim();
@@ -64,12 +64,12 @@ async function __exec(command) {
 
 async function parseGitRepository() {
     const originUrl = await __exec(`git config --get remote.origin.url`);
-    const parts = originUrl.trim().split("/");
+    const parts = originUrl.trim().split('/');
     let repository = `${parts[parts.length - 2]}/${parts[parts.length - 1]}`;
-    if (repository.endsWith(".git"))
+    if (repository.endsWith('.git'))
         repository = repository.substring(0, repository.length - 4);
 
-    const index = repository.indexOf(":");
+    const index = repository.indexOf(':');
     if (index > -1)
         repository = repository.substring(index + 1);
 
@@ -82,12 +82,12 @@ async function parseRemoteOrigin() {
 
     const response = {
         mainBranch: lines
-            .filter(l => l.key == "HEAD branch")
+            .filter(l => l.key == 'HEAD branch')
             .map(l => l.value)
         [0],
         branches: lines
-            .filter(l => l.key.startsWith("Remote branch"))
-            .map(l => l.value.map(l => l.substr(0, l.indexOf(" "))))
+            .filter(l => l.key.startsWith('Remote branch'))
+            .map(l => l.value.map(l => l.substr(0, l.indexOf(' '))))
         [0]
     };
 
@@ -99,13 +99,13 @@ function parseGitReponse(response) {
     const parsed = [];
 
     lines.forEach(line => {
-        const index = line.indexOf(":");
+        const index = line.indexOf(':');
         if (index == -1) {
             if (parsed.length === 0)
                 return;
 
             const last = parsed[parsed.length - 1];
-            if (last.value == "") {
+            if (last.value == '') {
                 last.value = [];
             }
 

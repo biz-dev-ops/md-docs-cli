@@ -27,13 +27,10 @@
       hide(card);
     }
 
-
     actionCards.forEach(card => {
       const form = card.querySelector('form');
       const submit = card.querySelector('[type="submit"]');
       const cancel = card.querySelector('[data-cancel]');
-
-      console.log(submit, cancel);
 
       submit.onclick = (event) => {
         const confirmText = submit.getAttribute("data-confirm");
