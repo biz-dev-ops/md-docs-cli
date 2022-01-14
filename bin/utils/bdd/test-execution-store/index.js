@@ -16,16 +16,16 @@ module.exports = class TestExecutionsStore {
             return this.#data;
         
         if (!await files.exists(this.testExecutionLocation)) {
-            console.info('');
-            console.log(chalk.yellowBright(`test execution source ${path.relative(cwd(), this.testExecutionLocation)} does not exsits, returning empty collection.`));
+            console.info();
+            console.info(chalk.yellowBright(`test execution source ${this.testExecutionLocation} does not exsits, returning empty collection.`));
             this.#data = [];
             return this.#data;
         }
 
         const executions = [];
 
-        console.info('');
-        console.info(chalk.yellow(`scanning ${path.relative(cwd(), this.testExecutionLocation)} for test executions:`));
+        console.info();
+        console.info(chalk.yellow(`scanning ${this.testExecutionLocation} for test executions:`));
 
         await files.each(this.testExecutionLocation, async (file) => {
             if (!path.extname(file) !== '.json')

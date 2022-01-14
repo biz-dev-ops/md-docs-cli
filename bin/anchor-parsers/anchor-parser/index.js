@@ -11,7 +11,7 @@ module.exports = class AnchorParser {
         if (!this._canParse(anchor))
             return;
         
-        console.log(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
+        console.info(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
         
         const file = path.resolve(cwd(), `${anchor.href}`);
     

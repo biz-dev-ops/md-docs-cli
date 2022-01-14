@@ -20,8 +20,8 @@ module.exports = class Menu {
             throw new Error(`menu source ${path.relative(cwd(), this.root)}  not found.`);
         }
 
-        console.info('');
-        console.info(chalk.yellow(`scanning ${path.relative(cwd(), this.root)} for menu items:`));
+        console.info();
+        console.info(chalk.yellow(`scanning ${this.root} for menu items:`));
 
         const items = [];
 
@@ -53,7 +53,7 @@ module.exports = class Menu {
             }
             else if (entry.name === 'index.md') {
                 const file = path.relative(this.root, path.resolve(src, entry.name));
-                console.info(chalk.green(`\t * adding menu item ${file}`));
+                console.info(chalk.green(`\t* adding menu item ${file}`));
                 item.url = `${file.slice(0, -3)}.html`;
             }
         }

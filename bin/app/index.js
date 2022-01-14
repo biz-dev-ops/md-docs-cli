@@ -49,31 +49,57 @@ module.exports = class App {
     constructor(options) {
         this.#options = options;
         this.container = awilix.createContainer({
-            injectionMode: awilix.InjectionMode.PROXY,
-            allowUnregistered: true
+            injectionMode: awilix.InjectionMode.PROXY
         });
     }
 
     async run() {
         await this.#init(this.#options);
-        const options = this.container.resolve('options');
-        await this.#exec(options);
-    }
 
-    async #exec(options) {
+        const options = this.container.resolve('options');
+
         if (options.branches) {
-            console.info(``);
-            console.log(chalk.yellow('branche only mode, quitting.....'));
+            console.info();
+            console.info(chalk.greenBright('ready, shutting down.....'));
             return;
         }
 
+        await this.#parse(options);
+    }
+
+    dispose() {
+        this.container.dispose();
+        this.container = null;
+        this.#options = null;
+    }
+
+    async #init(opts) {
+        await fs.access(opts.src);
+
+        const options = Object.assign({}, opts);
+
+        const gitInfo = await git.info();
+
+        this.container.register('gitInfo', asValue(gitInfo));
+
+        options.dst = destinationPath(options.dst, gitInfo.branch);
+
+        await createDestination(options);
+        await createBranches(options, gitInfo);
+        await copyFiles(this._getFileTransfers(options));
+        registerServices(this.container, this._getServices(options));
+
+        this.#options = null
+    }
+
+    async #parse(options) {
         const fileParser = this.container.resolve('fileParser');
 
         await files.each(options.src, async (file) => {
             //Change from src to dst location.
             file = path.resolve(options.dst, path.relative(options.src, file));
 
-            console.info(``);
+            console.info();
             console.info(chalk.yellow(`parsing ${path.relative(options.dst, file)}`));
 
             const dir = cwd();
@@ -87,50 +113,8 @@ module.exports = class App {
             chdir(dir);
         });
 
-        console.log('');
-        console.log(chalk.greenBright('ready, shutting down.....'));
-    }
-
-    async #init(opts) {
-        await fs.access(opts.src);
-
-        console.log(chalk.yellow(`reading from ${opts.src}`));
-
-        const options = Object.assign({}, opts);
-
-        const gitInfo = await git.info();
-
-        this.container.register('gitInfo', asValue(gitInfo));
-
-        options.dst = destinationPath(options.dst, gitInfo.branch);
-
-        console.log(chalk.yellow(`writing to ${options.src}`));
-
-        await fs.rm(options.dst, { recursive: true, force: true });
-        await fs.mkdir(options.dst, { recursive: true });
-
-        console.info(chalk.yellow(`creating branches.json`));
-        await fs.writeFile(`${options.dst}/branches.json`, JSON.stringify(gitInfo.branches));
-
-        if (options.branches)
-            return;
-
-        console.log(chalk.yellow(`copying files:`));
-        for (const fileTransfer of this._getFileTransfers(options)) {
-            console.log(chalk.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(cwd(), fileTransfer.dst)}`));
-            await files.copy(fileTransfer.src, fileTransfer.dst);
-        }
-
-        console.log(chalk.yellow(`registering services:`));
-        const services = this._getServices(options);
-
-        for (const service of Object.keys(services)) {
-            console.log(chalk.yellow(`\t* registering service ${service}`));
-        }
-
-        this.container.register(services);
-
-        this.#options = null
+        console.info();
+        console.info(chalk.greenBright('ready, shutting down.....'));
     }
 
     //Protected
@@ -151,60 +135,84 @@ module.exports = class App {
             'options': asValue(options),
 
             //Utils
-            'testExecutionStore': asClass(TestExecutionStore),
-            'menu': asClass(Menu),
-            'markdownRenderer': asClass(MarkdownRenderer),
+            'testExecutionStore': asClass(TestExecutionStore).singleton(),
+            'menu': asClass(Menu).singleton(),
+            'markdownRenderer': asClass(MarkdownRenderer).singleton(),
 
             //File parser
-            'fileParser': asClass(CompositeFileParser),
+            'fileParser': asClass(CompositeFileParser).singleton(),
+            'markdownFileParser': asClass(MarkdownFileParser).singleton(),
+
+            //HTML parser
+            'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
+            'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
+            'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
+            'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
+            'fullscreenHtmlParser': asClass(FullscreenHtmlParser).singleton(),
+            'cleanUpHtmlParser': asClass(CleanUpHtmlParser).singleton(),
+
+            //Anchor parser
+            'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
+            'bpmnAnchorParser': asClass(BPMNAnchorParser).singleton(),
+            'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
+            'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
+            'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
+            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
+            'umlAnchorParser': asClass(UmlAnchorParser).singleton(),
+            'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
+
+            //Component
+            'asyncapiComponent': asClass(AsyncapiComponent).singleton().inject(container => allowUnregistered(container, 'asyncapiComponentRenderFn')),
+            'bpmnComponent': asClass(BpmnComponent).singleton().inject(container => allowUnregistered(container, 'bpmnComponentRenderFn')),
+            'dashboardComponent': asClass(DashboardComponent).singleton().inject(container => allowUnregistered(container, 'dashboardComponentRenderFn')),
+            'featureComponent': asClass(FeatureComponent).singleton().inject(container => allowUnregistered(container, 'featureComponentRenderFn')),
+            'fullscreenComponent': asClass(FullscreenComponent).singleton().inject(container => allowUnregistered(container, 'fullscreenComponentRenderFn')),
+            'iFrameComponent': asClass(IFrameComponent).singleton().inject(container => allowUnregistered(container, 'iFrameComponentRenderFn')),
+            'imageComponent': asClass(ImageComponent).singleton().inject(container => allowUnregistered(container, 'imageComponentRenderFn')),
+            'openapiComponent': asClass(OpenapiComponent).singleton().inject(container => allowUnregistered(container, 'openapiComponentRenderFn')),
+            'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
+            'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
+            'userTaskComponent': asClass(UserTaskComponent).singleton().inject(container => allowUnregistered(container, 'userTaskComponentRenderFn')),
 
             //File parsers: order can be important!
             'fileParsers': asArray([
-                asClass(MarkdownFileParser)
+                'markdownFileParser'
             ]),
 
             //Html parsers, order is important!
             'htmlParsers': asArray([
-                asClass(HeadingHtmlParser),
-                asClass(AnchorHtmlParser),
-                asClass(UnsortedListHtmlParser),
-                asClass(ImageHtmlParser),
-                asClass(FullscreenHtmlParser),
-                asClass(CleanUpHtmlParser)
+                'headingHtmlParser',
+                'anchorHtmlParser',
+                'unsortedListHtmlParser',
+                'imageHtmlParser',
+                'fullscreenHtmlParser',
+                'cleanUpHtmlParser',
             ]),
 
             //Anchor parsers, order can be important!
             'anchorParsers': asArray([
-                asClass(AsyncapiAnchorParser),
-                asClass(BPMNAnchorParser),
-                asClass(DashboardAnchorParser),
-                asClass(FeatureAnchorParser),
-                asClass(MarkdownAnchorParser),
-                asClass(OpenapiAnchorParser),
-                asClass(UmlAnchorParser),
-                asClass(UserTaskAnchorParser)
-            ]),
-
-            //Components
-            'asyncapiComponent': asClass(AsyncapiComponent).inject(c => ({ asyncapiComponentRenderFn: c.resolve('asyncapiComponentRenderFn', { allowUnregistered: true }) })),
-            'bpmnComponent': asClass(BpmnComponent).inject(c => ({ bpmnComponentRenderFn: c.resolve('bpmnComponentRenderFn', { allowUnregistered: true }) })),
-            'dashboardComponent': asClass(DashboardComponent).inject(c => ({ dashboardComponentRenderFn: c.resolve('dashboardComponentRenderFn', { allowUnregistered: true }) })),
-            'featureComponent': asClass(FeatureComponent).inject(c => ({ featureComponentRenderFn: c.resolve('featureComponentRenderFn', { allowUnregistered: true }) })),
-            'fullscreenComponent': asClass(FullscreenComponent).inject(c => ({ fullscreenComponentRenderFn: c.resolve('fullscreenComponentRenderFn', { allowUnregistered: true }) })),
-            'iFrameComponent': asClass(IFrameComponent).inject(c => ({ iFrameComponentRenderFn: c.resolve('iFrameComponentRenderFn', { allowUnregistered: true }) })),
-            'imageComponent': asClass(ImageComponent).inject(c => ({ imageComponentRenderFn: c.resolve('imageComponentRenderFn', { allowUnregistered: true }) })),
-            'openapiComponent': asClass(OpenapiComponent).inject(c => ({ openapiComponentRenderFn: c.resolve('openapiComponentRenderFn', { allowUnregistered: true }) })),
-            'pageComponent': asClass(PageComponent).inject(c => ({ pageComponentRenderFn: c.resolve('pageComponentRenderFn', { allowUnregistered: true }) })),
-            'tabsComponent': asClass(TabsComponent).inject(c => ({ tabsComponentRenderFn: c.resolve('tabsComponentRenderFn', { allowUnregistered: true }) })),
-            'userTaskComponent': asClass(UserTaskComponent).inject(c => ({ userTaskComponentRenderFn: c.resolve('userTaskComponentRenderFn', { allowUnregistered: true }) }))
+                'asyncapiAnchorParser',
+                'bpmnAnchorParser',
+                'dashboardAnchorParser',
+                'featureAnchorParser',
+                'markdownAnchorParser',
+                'openapiAnchorParser',
+                'umlAnchorParser',
+            ])
         };
     }
 }
 
-function asArray(resolvers) {
+function asArray(names) {
     return {
-        resolve: (container, opts) => resolvers.map(r => container.build(r, opts))
+        resolve: (container, opts) => names.map(name => container.resolve(name, opts))
     }
+}
+
+function allowUnregistered(container, ...names) {
+    const obj = {};
+    names.forEach(name => obj[name] = container.resolve(name, { allowUnregistered: true }));
+    return obj;
 }
 
 function destinationPath(src, branch) {
@@ -213,3 +221,37 @@ function destinationPath(src, branch) {
 
     return path.resolve(src, `/${branch.name.replace(' ', '-').toLowerCase()}`);
 };
+
+async function createDestination(options) {
+    console.info();
+    console.info(chalk.yellow(`reading from source ${options.src}`));
+    console.info(chalk.yellow(`writing to destination: ${options.dst}`));
+
+    await fs.rm(options.dst, { recursive: true, force: true });
+    await fs.mkdir(options.dst, { recursive: true });
+}
+
+async function createBranches(options, gitInfo) {
+    console.info();
+    console.info(chalk.yellow(`creating branches.json`));
+    await fs.writeFile(`${options.dst}/branches.json`, JSON.stringify(gitInfo.branches));
+}
+
+async function copyFiles(fileTransfers) {
+    console.info();
+    console.info(chalk.yellow(`copying files:`));
+    for (const fileTransfer of fileTransfers) {
+        console.info(chalk.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(cwd(), fileTransfer.dst)}`));
+        await files.copy(fileTransfer.src, fileTransfer.dst);
+    }
+}
+
+function registerServices(container, services) {
+    console.info();
+    console.info(chalk.yellow(`registering services:`));
+    for (const service of Object.keys(services)) {
+        console.info(chalk.yellow(`\t* registering service ${service}`));
+    }
+
+    container.register(services);
+}

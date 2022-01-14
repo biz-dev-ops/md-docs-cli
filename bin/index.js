@@ -11,7 +11,7 @@ const App = require('./app');
 
 async function run(options) {
     const logo = await figlet('md-docs-cli');
-    console.log(chalk.blueBright(logo));
+    console.info(chalk.blueBright(logo));
 
     options.src = path.resolve(cwd(), `docs`)
     options.dst = path.resolve(cwd(), `dist`);
@@ -19,6 +19,7 @@ async function run(options) {
 
     const app = new App(options);    
     await app.run();
+    app.dispose();
 }
 
 const options = yargs
