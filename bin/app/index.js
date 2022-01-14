@@ -34,14 +34,15 @@ const ImageHtmlParser = require('../html-parsers/image-html-parser');
 const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const CleanUpHtmlParser = require('../html-parsers/clean-up-html-parser');
 
-const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
-const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
-const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
-const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
+const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
+const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
+const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
+const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const UmlAnchorParser = require('../anchor-parsers/uml-anchor-parser');
+const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
 
 module.exports = class App {
     #options = null;
@@ -160,6 +161,7 @@ module.exports = class App {
             //Anchor parser
             'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
             'bpmnAnchorParser': asClass(BPMNAnchorParser).singleton(),
+            'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
@@ -199,6 +201,7 @@ module.exports = class App {
             'anchorParsers': [
                 'asyncapiAnchorParser',
                 'bpmnAnchorParser',
+                'codeAnchorParser',
                 'dashboardAnchorParser',
                 'featureAnchorParser',
                 'markdownAnchorParser',
