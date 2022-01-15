@@ -10,6 +10,8 @@ module.exports = class FullscreenHtmlParser extends HtmlParser {
     }
 
     async parse(element) {
+        Array.from(element.querySelectorAll('code')).forEach(e => e.parentNode.setAttribute('fullscreen', 'fullscreen'));
+        
         const elements = element.querySelectorAll('[fullscreen]');
 
         if (elements.length === 0) {
