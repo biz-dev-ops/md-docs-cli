@@ -124,8 +124,13 @@ module.exports = class App {
             { src: options.src, dst: options.dst },
             { src: path.resolve(__dirname, '../../assets'), dst: path.resolve(options.dst, 'assets') },
             { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(__dirname, '../../node_modules/bpmn-js/dist'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
+            { src: path.resolve(__dirname, '../../node_modules/bpmn-js/dist/bpmn-viewer.production.min.js'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
             { src: path.resolve(__dirname, '../../node_modules/@asyncapi/html-template/template'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
+            { src: path.resolve(__dirname, '../../node_modules/prismjs/components'), dst: path.resolve(options.dst, 'assets/prismjs/components') },
+            { src: path.resolve(__dirname, '../../node_modules/prismjs/plugins/autoloader/prism-autoloader.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(__dirname, '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(__dirname, '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(__dirname, '../../node_modules/prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
             { src: path.resolve(__dirname, '../../node_modules/iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') }
         ];
 

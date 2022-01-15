@@ -31,8 +31,14 @@ exports.copy = async (src, dst) => {
         }
     }
     else {
-        await fs.mkdir(path.dirname(dst), { recursive: true });
-        await fs.copyFile(src, dst);
+        if (path.extname(dst) === '') {
+            await fs.mkdir(dst, { recursive: true });
+            await fs.copyFile(src, path.resolve(dst, path.basename(src)));
+        }
+        else {
+            await fs.mkdir(path.dirname(dst), { recursive: true });
+            await fs.copyFile(src, dst);
+        }
     }
 }
 
