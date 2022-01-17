@@ -79,7 +79,7 @@ module.exports = class App {
 
         const options = Object.assign({}, opts);
 
-        const gitInfo = await git.info();
+        const gitInfo = await git.info(options);
 
         this.container.register('gitInfo', asValue(gitInfo));
 

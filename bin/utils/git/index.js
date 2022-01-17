@@ -2,7 +2,7 @@ const chalk = require('chalk-next');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-exports.info = async function () {
+exports.info = async function (options) {
     console.info();
     console.info(chalk.yellow(`downloading git information:`));
     const info = {};
@@ -16,8 +16,14 @@ exports.info = async function () {
             .split(`\n`)
             .map(b => b.replace('*', '').trim());
         
-        const branches = remote.branches.concat(localBranches.filter(b => !remote.branches.includes(b)))            
-            .filter(b => !b.includes('remotes/'))
+        const branches = remote.branches
+            .concat(localBranches
+                .filter(b => !remote.branches.includes(b))
+            )            
+            .filter(b =>
+                !b.includes('remotes/') && 
+                (options.skip == undefined || !options.skip.includes(b))
+            )
             .map(b => ({
                 name: b,
                 repository: repository,
@@ -25,6 +31,7 @@ exports.info = async function () {
                 feature: b != remote.mainBranch,
             }))
             .sort((a, b) => `${a.feature ? 'z' : 'a'}${a.name}`.localeCompare(`${b.feature ? 'z' : 'a'}${b.name}`));
+            
 
         info.branch = branches.find(b => b.name === branch);
         info.branches = branches;
