@@ -12,6 +12,7 @@ jobs:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm publish
+      - run: npm publish --acccess=public
         env:
+          VERSION:  ${{ github.event.release.tag_name }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}
