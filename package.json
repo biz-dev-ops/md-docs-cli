@@ -1,7 +1,7 @@
 {
   "name": "@synion/md-docs",
-  "version": "0.0.4",
-  "description": "",
+  "version": "0.0.5",
+  "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
     "markdown",
@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/arjangeertsema/living-documentation.git"
+    "url": "git+https://github.com/synionnl/md-docs-cli.git"
   },
   "author": "Arjan Geertsema",
   "license": "Apache 2.0",
   "bugs": {
     "url": "https://github.com/arjangeertsema/living-documentation/issues"
   },
-  "homepage": "https://github.com/arjangeertsema/living-documentation#readme",
+  "homepage": "https://github.com/synionnl/md-docs-cli/blob/main/README.md",
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.9",
     "@asyncapi/html-template": "^0.24.5",
