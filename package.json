@@ -29,7 +29,7 @@
   "homepage": "https://github.com/arjangeertsema/living-documentation#readme",
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.9",
-    "@asyncapi/html-template": "^0.24.4",
+    "@asyncapi/html-template": "^0.24.5",
     "@cucumber/gherkin-streams": "^4.0.0",
     "awilix": "^6.0.0",
     "bpmn-js": "^8.9.0",
