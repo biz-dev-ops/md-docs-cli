@@ -33,10 +33,12 @@
 
     document.getElementById('git-branch-menu').querySelectorAll('a').forEach(anchor => {
         anchor.onclick = async (event) => {
-            event.preventDefault();
-            if ((await urlExists(anchor.href)) === false) {
-                window.location.href = anchor.getAttribute('data-branch-url');
+            if ((await urlExists(anchor.href))) {
+                return;
             }
+
+            event.preventDefault();
+            window.location.href = anchor.getAttribute('data-branch-url');
         }
     });
 })();
