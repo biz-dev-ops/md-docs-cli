@@ -6,7 +6,7 @@ const files = require('../../utils/files');
 
 module.exports = class MarkdownFileParser {
     constructor({ options, menu, gitInfo, markdownRenderer, pageComponent }) {
-        this.root = options.dst;
+        this.options = options;
         this.menu = menu;
         this.gitInfo = gitInfo;
         this.renderer = markdownRenderer;
@@ -18,13 +18,13 @@ module.exports = class MarkdownFileParser {
             return;
 
         const htmlFile = `${file.slice(0, -3)}.html`;
-        console.info(chalk.green(`\t* creating ${path.relative(this.root, htmlFile)}`));
+        console.info(chalk.green(`\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
         const html = await this.#render(file);
 
         await fs.writeFile(htmlFile, html);
 
-        console.info(chalk.green(`\t* deleting ${path.relative(this.root, file)}`));
+        console.info(chalk.green(`\t* deleting ${path.relative(this.options.dst, file)}`));
         await fs.unlink(file);
     }
 
@@ -37,19 +37,34 @@ module.exports = class MarkdownFileParser {
         const html = await this.renderer.render(response.markdown);
         const menuItems = await this.menu.items();
         
-        let relativeRoot = path.relative(cwd(), this.root);
-        if (relativeRoot !== '')
-            relativeRoot += '/';
-
         return this.component.render({
-            root: relativeRoot,
-            sourceFile: path.relative(this.root, file),
+            root: getRelativeRoot(this.options),
+            sourceFile: getSourceFile(this.options, file),
+            url: getRelativeUrl(this.options, file),
             content: html,
             title: response.title,
             menu: menuItems,
             git: this.gitInfo,
         });
     }
+}
+
+function getRelativeRoot(options) {
+    const root = path.relative(cwd(), options.dst);
+    if (root === '')
+        return root;
+    
+    return `${root}/`;
+}
+
+function getRelativeUrl(options, file) {
+    return `${path.relative(options.dst, file).slice(0, -3)}.html`;
+}
+
+function getSourceFile(options, file) {
+    const dstFile = path.relative(options.dst, file);
+    const srcFile = path.resolve(options.src, dstFile);
+    return path.relative(options.root, srcFile);
 }
 
 getTitle = function (markdown, file) {

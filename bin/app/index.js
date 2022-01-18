@@ -78,12 +78,13 @@ module.exports = class App {
         await fs.access(opts.src);
 
         const options = Object.assign({}, opts);
+        options.root = path.resolve('.');
 
         const gitInfo = await git.info(options);
 
         this.container.register('gitInfo', asValue(gitInfo));
 
-        options.dst = destinationPath(options.dst, gitInfo.branch);
+        options.dst = path.resolve(options.dst, gitInfo.branch.path);
 
         await createDestination(options);
         await createBranches(opts, gitInfo);
@@ -230,13 +231,6 @@ function allowUnregistered(container, ...names) {
     names.forEach(name => obj[name] = container.resolve(name, { allowUnregistered: true }));
     return obj;
 }
-
-function destinationPath(src, branch) {
-    if (!branch.feature)
-        return src;
-
-    return path.resolve(src, `${branch.name.replace(' ', '-').toLowerCase()}`);
-};
 
 async function createDestination(options) {
     console.info();

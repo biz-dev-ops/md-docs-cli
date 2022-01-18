@@ -19,9 +19,9 @@ exports.info = async function (options) {
         const branches = remote.branches
             .concat(localBranches
                 .filter(b => !remote.branches.includes(b))
-            )            
+            )
             .filter(b =>
-                !b.includes('remotes/') && 
+                !b.includes('remotes/') &&
                 (options.skip == undefined || !options.skip.includes(b))
             )
             .map(b => ({
@@ -29,6 +29,9 @@ exports.info = async function (options) {
                 repository: repository,
                 url: `https://github.com/${repository}/tree/${b}`,
                 feature: b != remote.mainBranch,
+            }))
+            .map(b => Object.assign(b, {
+                path: createPath(b)
             }))
             .sort((a, b) => `${a.feature ? 'z' : 'a'}${a.name}`.localeCompare(`${b.feature ? 'z' : 'a'}${b.name}`));
             
@@ -47,6 +50,7 @@ exports.info = async function (options) {
             name: 'main',
             repository: 'undefined',
             url: `https://github.com/undefined/undefined/tree/main`,
+            path: '',
             feature: false
         };
 
@@ -55,7 +59,8 @@ exports.info = async function (options) {
     }
 
     console.info(chalk.green(`\t* repository: ${info.branch.repository}`));
-    console.info(chalk.green(`\t* ${info.branch.feature ? 'feature ' : ''}branch: ${info.branch.name}`));
+    console.info(chalk.green(`\t* branches: ${info.branches.map(b => b.name).join(', ')}`));
+    console.info(chalk.green(`\t* branch: ${info.branch.name}`));
 
     return info;
 }
@@ -127,5 +132,11 @@ function parseGitReponse(response) {
     });
 
     return parsed;
+}
 
+function createPath(branch) {
+    if (!branch.feature)
+        return '';
+
+    return `${branch.name.replace(' ', '-').toLowerCase()}/`;
 }

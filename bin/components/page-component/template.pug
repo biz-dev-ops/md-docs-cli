@@ -51,7 +51,7 @@ html
           ul 
             each branch in git.branches 
               li 
-                a(href=branch.url + '/' + sourceFile data-branch-url=branch.url)= branch.name
+                a(href=root + branch.path + url data-branch-url=root + branch.path)= branch.name
 
         nav(id='menu' hidden='true')
           +menuItems(menu, root)
