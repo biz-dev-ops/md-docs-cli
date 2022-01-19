@@ -8,9 +8,9 @@ const files = require('../../files');
 module.exports = class TestExecutionsStore {
     #data = null;
 
-    constructor({ options }) {
+    constructor({ options, gitInfo }) {
         this.root = options.dst;
-        this.testExecutionLocation = options.testExecutionLocation;
+        this.testExecutionLocation = path.resolve(options.testExecutionLocation, gitInfo.branch.name);
     }
 
     async get() {
