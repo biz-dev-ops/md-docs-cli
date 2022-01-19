@@ -9,10 +9,10 @@ const gherkin = require('../../utils/bdd/gherkin-parser');
 const specflow = require('../../utils/bdd/specflow-test-executions-parser');
 
 module.exports = class FeatureAnchorParser extends AnchorParser {
-  constructor({ options, testExecutionStore, featureComponent }) {
+  constructor({ options, testExecutionParser, featureComponent }) {
     super();
 
-    this.testExecutionStore = testExecutionStore;
+    this.testExecutionParser = testExecutionParser;
     this.component = featureComponent;
   }
 
@@ -21,7 +21,7 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
   async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing feature file`));
     const features = await gherkin.parse(file);
-    const executions = await this.testExecutionStore.get();
+    const executions = await this.testExecutionParser.get();
     
     console.info(chalk.green(`\t\t\t\t* parsing executions file`));    
     specflow.parse(features, executions);

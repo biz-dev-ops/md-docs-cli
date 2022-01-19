@@ -10,6 +10,7 @@ const files = require('../utils/files');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
+const TestExecutionParser = new require('../utils/bdd/test-execution-parser');
 const TestExecutionStore = new require('../utils/bdd/test-execution-store');
 
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
@@ -148,6 +149,7 @@ module.exports = class App {
             'options': asValue(options),
 
             //Utils
+            'testExecutionParser': asClass(TestExecutionParser).singleton(),
             'testExecutionStore': asClass(TestExecutionStore).singleton(),
             'menu': asClass(Menu).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),

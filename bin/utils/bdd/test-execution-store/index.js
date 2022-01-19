@@ -1,7 +1,7 @@
 const chalk = require('chalk-next');
 const fs = require('fs').promises;
 const path = require('path');
-const { cwd, env } = require('process');
+const { env } = require('process');
 const files = require('../../files');
 
 
@@ -20,25 +20,36 @@ module.exports = class TestExecutionsStore {
         if (!await files.exists(this.testExecutionLocation)) {
             console.info();
             console.info(chalk.yellowBright(`test execution source ${this.testExecutionLocation} does not exsits, returning empty collection.`));
-            this.#data = [];
+            this.#data = {};
             return this.#data;
         }
 
-        const executions = [];
+        const executions = {};
 
         console.info();
         console.info(chalk.yellow(`scanning ${this.testExecutionLocation} for test executions:`));
 
-        await files.each(this.testExecutionLocation, async (file) => {
-            if (!file.endsWith('.json'))
-                return;
-        
-            console.info(chalk.green(`\t* adding test execution ${path.relative(this.testExecutionLocation, file)}`));
+        const directories = await getDirectories(this.testExecutionLocation);
 
-            const execution = JSON.parse(await files.readFileAsString(file));
+        for (const directory of directories) {
+            const type = path.basename(directory);
+            executions[type] = {
+                items: []
+            };
 
-            executions.push(execution);
-        });
+            console.debug(chalk.yellow(`\t* execution type ${type} found:`));
+
+            await files.each(directory, async (file) => {
+                if (!file.endsWith('.json'))
+                    return;
+            
+                console.info(chalk.green(`\t\t* adding test execution ${path.relative(directory, file)}`));
+    
+                const execution = JSON.parse(await files.readFileAsString(file));
+    
+                executions[type].items.push(execution);
+            });
+        }        
 
         this.#data = executions; 
 
@@ -47,4 +58,11 @@ module.exports = class TestExecutionsStore {
 
         return this.#data;
     }
+}
+
+async function getDirectories(src) {
+    const entries = await fs.readdir(src, { withFileTypes: true });
+    return entries
+        .filter(entry => entry.isDirectory())
+        .map(entry => path.resolve(src, entry.name));
 }

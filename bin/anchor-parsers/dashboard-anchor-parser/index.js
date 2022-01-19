@@ -11,10 +11,10 @@ const specflow = require('../../utils/bdd/specflow-test-executions-parser');
 const summarizer = require('../../utils/bdd/features-summarizer');
 
 module.exports = class DasboardAnchorParser extends AnchorParser {
-  constructor({ testExecutionStore, dashboardComponent }) {
+  constructor({ testExecutionParser, dashboardComponent }) {
     super();
 
-    this.testExecutionStore = testExecutionStore;
+    this.testExecutionParser = testExecutionParser;
     this.component = dashboardComponent;
   }
 
@@ -26,7 +26,7 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
 
     console.info(chalk.green(`\t\t\t\t* parsing feature files`));
     const features = await gherkin.parse(config.features.map(feature => path.resolve(directory, feature)));
-    const executions = await this.testExecutionStore.get();
+    const executions = await this.testExecutionParser.get();
 
     console.info(chalk.green(`\t\t\t\t* parsing executions file`));
     specflow.parse(features, executions);
