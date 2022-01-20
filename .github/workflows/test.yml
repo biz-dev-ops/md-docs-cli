@@ -1,0 +1,57 @@
+name: test
+
+on:
+  
+  pull_request:  
+    types: [opened,synchronize]
+
+jobs:
+  
+  build:
+    
+    runs-on: ubuntu-latest
+  
+    steps:
+      
+      - uses: actions/checkout@v2
+        
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Install
+        run: npm ci     
+
+      - uses: oke-py/npm-audit-action@v1.8.2
+        with:
+          audit_level: high
+          github_token: ${{ github.token }}
+          issue_assignees: arjangeertsema
+          issue_labels: vulnerability,test
+          dedupe_issues: true
+
+      - name: Build branches
+        working-directory: tests
+        id: branches
+        run: |
+          node ../bin/index.js -b
+          BRANCHES=$(cat ./dist/branches.json)
+          echo "::set-output name=value::${BRANCHES//'%'/'%25'}"
+
+      - name: Build websites
+        working-directory: tests
+        shell: bash
+        run: |
+          git fetch
+          for B in $(echo $BRANCHES | jq -r 'sort_by(.path) | .[].name')
+          do
+              git checkout "$B"
+              node ../bin/index.js -t theme.css
+          done
+        env:
+          THEME: ${{ inputs.theme }}
+          BRANCHES: ${{ steps.branches.outputs.value }}
