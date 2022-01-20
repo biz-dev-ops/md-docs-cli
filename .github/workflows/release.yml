@@ -18,20 +18,24 @@ jobs:
     steps:
   
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
         
       - name: get package version
         id: package-version
         uses: Saionaro/extract-package-version@v1.0.6
 
+      - name: Print package version
+        run: |
+          echo 'package version: ${{ steps.package-version.outputs.version }}'
+
       - name: get tag version
         id: tag-version
         uses: WyriHaximus/github-action-get-previous-tag@v1
 
-      - name: Print version
+      - name: Print tag version
         run: |
-          echo 'package version: ${{ steps.package-version.outputs.version }}'
-          echo 'tag version: ${{ steps.package-version.outputs.version }}'
-          
+          echo 'tag version: ${{ steps.tag-version.outputs.version }}'          
   
       - uses: actions/setup-node@v2
         if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
