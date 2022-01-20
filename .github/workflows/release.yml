@@ -24,7 +24,7 @@ jobs:
         
       - name: get package version
         id: package_version
-        uses: Saionaro/extract-package_version@v1.0.6
+        uses: Saionaro/extract-package-version@v1.0.6
 
       - name: add v
         id: version
