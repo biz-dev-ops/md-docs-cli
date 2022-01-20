@@ -35,7 +35,7 @@ jobs:
 
       - name: Print tag version
         run: |
-          echo 'tag version: ${{ steps.tag-version.outputs.version }}'          
+          echo 'tag version: ${{ steps.tag-version.outputs.tag }}'          
   
       - uses: actions/setup-node@v2
         if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
@@ -46,7 +46,7 @@ jobs:
       - run: npm ci
         if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
         
-      - run: rm-rf tests
+      - run: rm -rf tests
         if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
   
       - run: npm publish --access public
