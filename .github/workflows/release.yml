@@ -9,10 +9,10 @@ on:
 
 jobs:
   
-  build:
+  release:
   
     runs-on: ubuntu-latest
-    environment: production    
+    environment: production
     if: github.event.pull_request.merged
   
     steps:
