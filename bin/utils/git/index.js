@@ -9,6 +9,9 @@ exports.info = async function (options) {
 
     try {
         const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
+    
+        console.info(chalk.green(`\t* current branch: ${branch}`));
+
         const repository = await parseGitRepository();
         const remote = await parseRemoteOrigin();
 
