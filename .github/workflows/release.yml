@@ -26,9 +26,13 @@ jobs:
         id: package-version
         uses: Saionaro/extract-package-version@v1.0.6
 
+      - name: add v
+        id: version
+        run: echo "::set-output name=value::${{ format('v{0}', steps.package-version.outputs.version }}"
+
       - name: print package version
         run: |
-          echo 'package version: ${{ steps.package-version.outputs.version }}'
+          echo "package version: ${{ steps.version.outputs.value }}"
 
       - name: get tag version
         id: tag-version
@@ -39,25 +43,25 @@ jobs:
           echo 'tag version: ${{ steps.tag-version.outputs.tag }}'          
   
       - uses: actions/setup-node@v2
-        if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
+        if: steps.version.outputs.value != steps.tag-version.outputs.tag
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
   
       - run: npm ci
-        if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
+        if: steps.version.outputs.value != steps.tag-version.outputs.tag
         
       - run: rm -rf tests
-        if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
+        if: steps.version.outputs.value != steps.tag-version.outputs.tag
   
       - run: npm publish --access public
-        if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
+        if: steps.version.outputs.value != steps.tag-version.outputs.tag
         env:
-          VERSION: ${{ steps.package-version.outputs.version}}
+          VERSION: ${{ steps.version.outputs.value}}
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}
 
       - uses: actions-ecosystem/action-push-tag@v1
-        if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
+        if: steps.version.outputs.value != steps.tag-version.outputs.tag
         with:
-          tag: ${{ steps.package-version.outputs.version}}
-          message: 'Version ${{ steps.package-version.outputs.version}}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
+          tag: ${{ steps.version.outputs.value}}
+          message: 'Version ${{ steps.version.outputs.value}}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'

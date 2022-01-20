@@ -1,5 +1,6 @@
 [![test](https://github.com/synionnl/md-docs-cli/actions/workflows/test.yml/badge.svg)](https://github.com/synionnl/md-docs-cli/actions/workflows/test.yml)
 [![audit](https://github.com/synionnl/md-docs-cli/actions/workflows/audit.yml/badge.svg)](https://github.com/synionnl/md-docs-cli/actions/workflows/audit.yml)
+[![release](https://github.com/synionnl/md-docs-cli/actions/workflows/release.yml/badge.svg)](https://github.com/synionnl/md-docs-cli/actions/workflows/release.yml)
 [![npm](https://img.shields.io/npm/v/@synion/md-docs.svg)](https://npmjs.org/package/@synion/md-docs)
 [![npm](https://img.shields.io/npm/dm/@synion/md-docs.svg)](https://npmjs.org/package/@synion/md-docs)
 
@@ -36,7 +37,7 @@ md-docs -t theme.css
 ### Skip branches
 
 ```
-md-docs -s branch
+md-docs -s branch1 branch2
 ```
 
 ## To debug
