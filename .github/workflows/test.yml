@@ -38,7 +38,7 @@ jobs:
         working-directory: tests
         id: branches
         run: |
-          node bin/index.js -b
+          node ../bin/index.js -b
           BRANCHES=$(cat ./dist/branches.json)
           echo "::set-output name=value::${BRANCHES//'%'/'%25'}"
 
@@ -50,7 +50,7 @@ jobs:
           for B in $(echo $BRANCHES | jq -r 'sort_by(.path) | .[].name')
           do
               git checkout "$B"
-              node bin/index.js -t theme.css
+              node ../bin/index.js -t theme.css
           done
         env:
           THEME: ${{ inputs.theme }}
