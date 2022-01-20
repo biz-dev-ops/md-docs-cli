@@ -1,0 +1,297 @@
+openapi: 3.0.3
+info:
+  version: 0.0.1
+  title: User task server
+  description: ""
+servers:
+  - url: http://localhost:9000/
+paths:
+  /api/my-user-tasks:
+    get:
+      tags:
+        - user-tasks
+      summary: Gets a list of claimed or claimable user tasks.
+      operationId: GetMyUserTasks
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            example: 10
+            minimum: 1
+            maximum: 100
+            description: Limit the number of responses.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - type: object
+                      properties:
+                        messages:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                description: The type of message.
+                                enum:
+                                  - ERROR
+                                  - WARN
+                                  - INFO
+                                example: ERROR
+                              message:
+                                type: string
+                                description: The message.
+                                example: Service x could not be reached.
+                            required:
+                              - type
+                              - message
+                    - type: object
+                      properties:
+                        user_task_id:
+                          type: string
+                          example: dcb47fd6-5695-4c98-8f13-11c516fd0b8d
+                        name:
+                          type: string
+                          example: Answer question
+                        description:
+                          type: string
+                          example: Question for Company X sent by John Doen regarding loan applications.
+                        icon:
+                          type: string
+                          format: material-icon
+                          description: See https://fonts.google.com/icons
+                          example: Task alt
+                        badge:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                                - ERROR
+                                - WARN
+                                - INFO
+                              example: WARN
+                            message:
+                              type: string
+                              example: The task is almost overdue.
+                          required:
+                            - type
+                            - message
+                        due_date:
+                          type: string
+                          format: date-time
+                        delayed_until:
+                          type: string
+                          format: date-time
+                        claimed_on:
+                          type: string
+                          format: date-time
+                        links:
+                          type: object
+                          properties:
+                            href:
+                              type: string
+                              format: uri
+                              description: Webpage where the user can handle the user task
+                              example: https://task-client.com//my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d
+                            claim:
+                              type: string
+                              format: uri
+                              description: Rest uri to claim the user task on behalve of the user.
+                              example: https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/claim
+                            delay:
+                              type: string
+                              format: uri
+                              description: Rest uri to delay the user task on behalve of the user.
+                              example: https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delay
+                            delegate:
+                              type: string
+                              format: uri
+                              description: Rest uri to delegate the user task on behalve of the user.
+                              example: https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delegate
+                            delegators:
+                              type: string
+                              format: uri
+                              description: Rest uri from where to retieve a list of users to who are authorized for delegation.
+                              example: https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delegators
+                          required:
+                            - href
+                            - claim
+                            - delay
+                        ext:
+                          type: object
+                          description: Object for additional non-standard attributes
+                      required:
+                        - user_task_id
+                        - name
+                        - due_date
+                        - links
+                    - properties:
+                        user_task_provider_id:
+                          type: string
+                          example: 17ce885f-3b83-4ed2-8bec-e0e78b682c26
+                      required:
+                        - user_task_provider_id
+        "401":
+          description: User is not authenticated
+        "403":
+          description: User is not authorized
+  /api/my-user-tasks/{user_task_id}:
+    parameters:
+      - in: path
+        name: user_task_id
+        required: true
+        schema:
+          type: string
+          example: dcb47fd6-5695-4c98-8f13-11c516fd0b8d
+    get:
+      tags:
+        - user-task
+      summary: Gets a claimed user task.
+      operationId: GetMyUserTask
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              description: The type of message.
+                              enum:
+                                - ERROR
+                                - WARN
+                                - INFO
+                              example: ERROR
+                            message:
+                              type: string
+                              description: The message.
+                              example: Service x could not be reached.
+                          required:
+                            - type
+                            - message
+                  - type: object
+                    properties:
+                      user_task_id:
+                        type: string
+                        example: dcb47fd6-5695-4c98-8f13-11c516fd0b8d
+                      user_task_reference_id:
+                        type: string
+                        example: e15dc06f-a54b-4396-aec5-788417142b1c
+                      correlation_id:
+                        type: string
+                        format: uuid
+                        description: Id of the first command which has started a chain of commands. May be empty if it's the beginning of a command chain.
+                        example: 48c274d1-0976-49ca-bb70-6e3ced85b629
+                      causation_id:
+                        type: string
+                        format: uuid
+                        description: Id of the (last) command which has caused this command to be triggered.
+                        example: e62c8928-026e-493b-9ad1-1ffca6e19e61
+                      name:
+                        type: string
+                        example: Answer question
+                      context:
+                        type: string
+                        example: Question for Company X sent by John Doen regarding loan applications.
+                      icon:
+                        type: string
+                        format: material-icon
+                        description: See https://fonts.google.com/icons
+                        example: Task alt
+                      badge:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                              - ERROR
+                              - WARN
+                              - INFO
+                            example: WARN
+                          message:
+                            type: string
+                            example: The task is almost overdue.
+                        required:
+                          - type
+                          - message
+                      due_date:
+                        type: string
+                        format: date-time
+                      delayed_until:
+                        type: string
+                        format: date-time
+                      claimed_on:
+                        type: string
+                        format: date-time
+                      claimed_by:
+                        type: string
+                        example: john.doe
+                      links:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                            format: uri
+                            description: Webpage where the user can handle the user task
+                            example: https://task-client.com//my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d
+                          claim:
+                            type: string
+                            format: uri
+                            description: Rest uri to claim the user task on behalve of the user.
+                            example: https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/claim
+                          delay:
+                            type: string
+                            format: uri
+                            description: Rest uri to delay the user task on behalve of the user.
+                            example: https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delay
+                          delegate:
+                            type: string
+                            format: uri
+                            description: Rest uri to delegate the user task on behalve of the user.
+                            example: https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delegate
+                          delegators:
+                            type: string
+                            format: uri
+                            description: Rest uri from where to retieve a list of users to who are authorized for delegation.
+                            example: https://task-client.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d/delegators
+                        required:
+                          - href
+                          - claim
+                          - delay
+                      ext:
+                        type: object
+                        description: Object for additional non-standard attributes
+                    required:
+                      - user_task_id
+                      - correlation_id
+                      - name
+                      - due_date
+                  - properties:
+                      user_task_provider_id:
+                        type: string
+                        example: 17ce885f-3b83-4ed2-8bec-e0e78b682c26
+                    required:
+                      - user_task_provider_id
+        "401":
+          description: User is not authenticated
+        "403":
+          description: User is not authorized fot this user task
+        "404":
+          description: User task not found
