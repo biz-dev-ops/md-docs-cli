@@ -4,14 +4,14 @@ html
     meta(charset='UTF-8')
     title='AsyncAPI'
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
-    link(href=root + 'assets/asyncapi/html-template/css/global.min.css' rel='stylesheet')
-    link(href=root + 'assets/asyncapi/html-template/css/asyncapi.min.css' rel='stylesheet')
+    link(href=root + 'assets/asyncapi/html-template/global.min.css' rel='stylesheet')
+    link(href=root + 'assets/asyncapi/html-template/asyncapi.min.css' rel='stylesheet')
   
   body
     div(id='root')
     
     script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
-    script(src=root + 'assets/asyncapi/html-template/js/asyncapi-ui.min.js' charset='UTF-8') 
+    script(src=root + 'assets/asyncapi/html-template/asyncapi-ui.min.js' charset='UTF-8') 
     script.
       const schema = !{schema};
       const config = {
