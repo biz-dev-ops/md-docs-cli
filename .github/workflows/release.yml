@@ -67,5 +67,5 @@ jobs:
       - run: npm publish --access public
         if: steps.version.outputs.value != steps.tag_version.outputs.tag
         env:
-          VERSION: ${{ steps.version.outputs.value}}
+          VERSION: ${{ steps.package_version.outputs.version }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}
