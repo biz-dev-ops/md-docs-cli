@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     if: github.event.pull_request.merged
+    timeout-minutes: 5
   
     steps:
   
@@ -25,7 +26,7 @@ jobs:
         id: package-version
         uses: Saionaro/extract-package-version@v1.0.6
 
-      - name: Print package version
+      - name: print package version
         run: |
           echo 'package version: ${{ steps.package-version.outputs.version }}'
 
@@ -33,7 +34,7 @@ jobs:
         id: tag-version
         uses: WyriHaximus/github-action-get-previous-tag@v1
 
-      - name: Print tag version
+      - name: print tag version
         run: |
           echo 'tag version: ${{ steps.tag-version.outputs.tag }}'          
   

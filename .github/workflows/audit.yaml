@@ -5,10 +5,13 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  scan:
+  
+  audit:
+    
     name: npm audit
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    
     steps:
       - uses: actions/checkout@v2
       

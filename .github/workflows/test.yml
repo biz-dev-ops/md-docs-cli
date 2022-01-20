@@ -11,6 +11,7 @@ jobs:
     
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged === false
+    timeout-minutes: 5
   
     steps:
       
