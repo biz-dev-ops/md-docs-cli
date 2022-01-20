@@ -43,7 +43,7 @@ jobs:
           echo "::set-output name=value::${BRANCHES//'%'/'%25'}"
 
       - name: Build websites
-        working-directory: test
+        working-directory: tests
         shell: bash
         run: |
           git fetch
