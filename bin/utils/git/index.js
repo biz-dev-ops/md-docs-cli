@@ -25,6 +25,7 @@ exports.info = async function (options) {
             )
             .filter(b =>
                 !b.includes('remotes/') &&
+                !b.includes('HEAD detached') &&
                 (options.skip == undefined || !options.skip.includes(b))
             )
             .map(b => ({
@@ -40,11 +41,18 @@ exports.info = async function (options) {
             
 
         info.branch = branches.find(b => b.name === branch);
+        if (!info.branch) {
+            console.warn(chalk.yellowBright(`\t* branch not found falling back to default branch.`));
+            info.branch = branches.find(b => b.feature === false);
+        }
         info.branches = branches;
     }
     catch (ex) {
         if (!ex?.message?.includes('fatal: not a git repository')) {     
             throw ex;
+        }
+        else {
+            console.error(chalk.redBright(ex));
         }
 
         console.warn(chalk.yellowBright(`\t* directory is not a git repository, falling back to default.`));
@@ -61,6 +69,9 @@ exports.info = async function (options) {
         info.branches = [branch];
     }
 
+    if (!info.branch)
+        return;
+    
     console.info(chalk.green(`\t* repository: ${info.branch.repository}`));
     console.info(chalk.green(`\t* branches: ${info.branches.map(b => b.name).join(', ')}`));
     console.info(chalk.green(`\t* branch: ${info.branch.name}`));
