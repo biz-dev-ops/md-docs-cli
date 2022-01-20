@@ -73,8 +73,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
   
-      - if: steps.version.outputs.value != steps.tag_version.outputs.tag
+      - name: npm publish
+        if: steps.version.outputs.value != steps.tag_version.outputs.tag
         run: |
           npm ci
           npm publish --access public
