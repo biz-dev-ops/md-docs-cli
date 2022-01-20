@@ -55,4 +55,4 @@ jobs:
         if: steps.package-version.outputs.version != steps.tag-version.outputs.tag
         with:
           tag: ${{ steps.package-version.outputs.version}}
-          message: '${{ ${{ steps.package-version.outputs.version}} }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
+          message: 'Version ${{ steps.package-version.outputs.version}} }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
