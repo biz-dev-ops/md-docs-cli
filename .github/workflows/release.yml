@@ -28,7 +28,7 @@ jobs:
 
       - name: add v
         id: version
-        run: echo "::set-output name=value::${{ format('v{0}', steps.package-version.outputs.version }}"
+        run: echo "::set-output name=value::${{ format('v{0}', steps.package-version.outputs.version) }}"
 
       - name: print package version
         run: |
