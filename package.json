@@ -27,6 +27,10 @@
     "url": "https://github.com/arjangeertsema/living-documentation/issues"
   },
   "homepage": "https://github.com/synionnl/md-docs-cli/blob/main/README.md",
+  "files": [
+    "assets/",
+    "bin/"
+  ],
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.9",
     "@asyncapi/html-template": "^0.24.5",

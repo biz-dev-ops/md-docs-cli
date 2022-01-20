@@ -65,9 +65,6 @@ jobs:
           release_name: '${{ steps.version.outputs.value}}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
           body: ${{steps.release_notes.outputs.changelog}}
       
-      - run: rm -rf tests
-        if: steps.version.outputs.value != steps.tag_version.outputs.tag
-
       - name: setup node.js
         if: steps.version.outputs.value != steps.tag_version.outputs.tag
         uses: actions/setup-node@v2

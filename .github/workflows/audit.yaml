@@ -18,7 +18,8 @@ jobs:
       - name: install dependencies
         run: npm ci
 
-      - uses: oke-py/npm-audit-action@v1.8.2
+      - name: audit
+        uses: oke-py/npm-audit-action@v1.8.2
         with:
           audit_level: high
           github_token: ${{ github.token }}
