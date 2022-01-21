@@ -1,6 +1,9 @@
 name: npm audit
 
 on:
+  pull_request:
+    types: [opened,synchronize]
+    
   schedule:
     - cron: '0 0 * * *'
 

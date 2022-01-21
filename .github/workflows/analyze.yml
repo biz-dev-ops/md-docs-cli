@@ -12,11 +12,14 @@
 name: analyze
 
 on:
+  
   push:
-    branches: [ main ]
+    branches: [main]
+  
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ main ]
+    types: [opened,synchronize]
+    branches: [main]
+    
   schedule:
     - cron: '24 9 * * 5'
 
@@ -24,6 +27,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       actions: read
       contents: read

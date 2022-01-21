@@ -4,6 +4,7 @@
 [![release](https://github.com/synionnl/md-docs-cli/actions/workflows/release.yml/badge.svg)](https://github.com/synionnl/md-docs-cli/actions/workflows/release.yml)
 [![npm](https://img.shields.io/npm/v/@synion/md-docs.svg)](https://npmjs.org/package/@synion/md-docs)
 [![npm](https://img.shields.io/npm/dm/@synion/md-docs.svg)](https://npmjs.org/package/@synion/md-docs)
+[![alerts](https://img.shields.io/lgtm/alerts/g/synionnl/md-docs-cli.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/synionnl/md-docs-cli/alerts/)
 
 # Living documentation
 

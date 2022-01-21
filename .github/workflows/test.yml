@@ -26,16 +26,7 @@ jobs:
           node-version: '16.x'
 
       - name: Install
-        run: npm ci     
-
-      - name: Audit
-        uses: oke-py/npm-audit-action@v1.8.2
-        with:
-          audit_level: high
-          github_token: ${{ github.token }}
-          issue_assignees: arjangeertsema
-          issue_labels: vulnerability,test
-          dedupe_issues: true
+        run: npm ci
 
       - name: Build branches
         working-directory: tests
