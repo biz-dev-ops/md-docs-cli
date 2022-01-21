@@ -20,7 +20,7 @@ module.exports = class BpmnAnchorParser extends AnchorParser {
     const id = `bpmn-container-${uuidv4()}`;
     const xml = (await this._readFileAsString(file))
       .replace(/(\r\n|\n|\r)/gm, "")
-      .replace("'", "\'");
+      .replace(/'/g, "''");
 
     return this.component.render({ id, xml, file: path.relative(this.root, file) });
   }
