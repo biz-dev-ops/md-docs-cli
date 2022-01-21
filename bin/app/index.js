@@ -92,7 +92,7 @@ module.exports = class App {
         await copyFiles(this._getFileTransfers(options));
         registerServices(this.container, this._getServices(options));
 
-        this.#options = null
+        this.#options = null;
     }
 
     async #parse(options) {
@@ -234,7 +234,7 @@ module.exports = class App {
             ]
         };
     }
-}
+};
 
 function asArray(names) {
     return {

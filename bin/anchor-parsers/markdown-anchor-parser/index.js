@@ -1,7 +1,7 @@
-const fs = require('fs').promises;
+// const fs = require('fs').promises;
 const chalk = require('chalk-next');
 const path = require('path');
-const { env } = require('process');
+// const { env } = require('process');
 
 const AnchorParser = require('../anchor-parser');
 

@@ -97,7 +97,7 @@ equals = function (result, feature, scenario) {
 const parseStepResult = function (stepResult) {
     const result = {
         status: 'undefined'
-    }
+    };
 
     switch (stepResult?.Status) {
         case 'OK':

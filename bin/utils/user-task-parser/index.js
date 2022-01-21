@@ -104,7 +104,6 @@ function parseFormField(property) {
             minimum: property.format ?? false,
             maximum: property.format ?? false,
             multipleOf: property.format ?? false,
-            maximum: property.format ?? false,
             exclusiveMinimum: property.format ?? false,
             exclusiveMaximum: property.format ?? false,
         };

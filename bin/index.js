@@ -14,7 +14,7 @@ async function run(options) {
     const logo = await figlet('md-docs-cli');
     console.info(chalk.blueBright(logo));
 
-    options.src = path.resolve(cwd(), `docs`)
+    options.src = path.resolve(cwd(), `docs`);
     options.dst = path.resolve(cwd(), `dist`);
     options.testExecutionLocation = path.resolve(cwd(), `.temp/executions`);
     options.assets = await find(__dirname, 'assets');

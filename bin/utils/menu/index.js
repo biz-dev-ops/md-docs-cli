@@ -25,8 +25,8 @@ module.exports = class Menu {
 
         const items = [];
 
-        const item = await this.#getMenuItems(this.root);
-        if (items != undefined)
+        const item = await this.#getMenuItem(this.root);
+        if (item != undefined)
             items.push(item);
 
         if (env.NODE_ENV === 'development')
@@ -36,7 +36,7 @@ module.exports = class Menu {
         return this.#data;
     }
 
-    async #getMenuItems(src) {
+    async #getMenuItem(src) {
         await fs.access(src);
         const entries = await fs.readdir(src, { withFileTypes: true });
 
@@ -47,7 +47,7 @@ module.exports = class Menu {
 
         for (const entry of entries) {
             if (entry.isDirectory()) {
-                var sub = await this.#getMenuItems(path.resolve(src, entry.name));
+                var sub = await this.#getMenuItem(path.resolve(src, entry.name));
                 if (sub != undefined)
                     item.items.push(sub);
             }
