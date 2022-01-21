@@ -17,7 +17,7 @@ exports.info = async function (options) {
 
         const localBranches = (await __exec(`git branch -a`))
             .split(`\n`)
-            .map(b => b.replace('*', '').trim());
+            .map(b => b.replace('\*', '').trim());
         
         const branches = remote.branches
             .concat(localBranches
