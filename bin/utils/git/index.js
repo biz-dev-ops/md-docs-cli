@@ -17,12 +17,10 @@ exports.info = async function (options) {
 
         const localBranches = (await __exec(`git branch -a`))
             .split(`\n`)
-            .map(b => b.replace(/\*/g, "''").trim());
-        
+            .map(b => b.replace(/\*/g, "").trim());
+                
         const branches = remote.branches
-            .concat(localBranches
-                .filter(b => !remote.branches.includes(b))
-            )
+            .concat(localBranches.filter(b => !remote.branches.includes(b)))
             .filter(b =>
                 !b.includes('remotes/') &&
                 !b.includes('HEAD detached') &&
