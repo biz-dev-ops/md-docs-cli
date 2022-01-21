@@ -124,30 +124,31 @@ module.exports = class App {
     _getFileTransfers(options) {
         const fileTransfers = [
             { src: options.src, dst: options.dst },
-            { src: path.resolve(__dirname, '../../assets'), dst: path.resolve(options.dst, 'assets') },
-            
-            { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist/favicon-16x16.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist/favicon-32x32.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist/swagger-ui.css'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist/swagger-ui.css.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist/swagger-ui-bundle.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist/swagger-ui-bundle.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(__dirname, '../../node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
 
-            { src: path.resolve(__dirname, '../../node_modules/bpmn-js/dist/bpmn-viewer.production.min.js'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
+            { src: options.assets, dst: path.resolve(options.dst, 'assets') },
+            
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-16x16.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-32x32.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
 
-            { src: path.resolve(__dirname, '../../node_modules/@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
-            { src: path.resolve(__dirname, '../../node_modules/@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
-            { src: path.resolve(__dirname, '../../node_modules/@asyncapi/html-template/template/js/asyncapi-ui.min.js'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, 'bpmn-js/dist/bpmn-viewer.production.min.js'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
+
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/js/asyncapi-ui.min.js'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
             
-            { src: path.resolve(__dirname, '../../node_modules/prismjs/components'), dst: path.resolve(options.dst, 'assets/prismjs/components') },
-            { src: path.resolve(__dirname, '../../node_modules/prismjs/plugins/autoloader/prism-autoloader.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(__dirname, '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(__dirname, '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(__dirname, '../../node_modules/prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/components'), dst: path.resolve(options.dst, 'assets/prismjs/components') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/autoloader/prism-autoloader.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
             
-            { src: path.resolve(__dirname, '../../node_modules/iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') }
+            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') }
         ];
 
         if (options.theme) {
