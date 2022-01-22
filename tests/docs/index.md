@@ -14,6 +14,10 @@ Test page to render al elements.
 
 [feature](test.feature)
 
+## Features
+
+[features](test.features.yml)
+
 ## Dashboard
 
 [dashboard](test.dashboard.yml)
@@ -31,6 +35,7 @@ Test page to render al elements.
 * [uml](test.puml)
 * [process](process.bpmn)
 * [feature](test.feature)
+* [features](test.features.yml)
 * [dashboard](test.dashboard.yml)
 * [openapi](test.openapi.yml)
 * [asyncapi](test.asyncapi.yml)
