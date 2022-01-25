@@ -40,6 +40,7 @@ const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
+const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const UmlAnchorParser = require('../anchor-parsers/uml-anchor-parser');
@@ -187,6 +188,7 @@ module.exports = class App {
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
+            'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
             'umlAnchorParser': asClass(UmlAnchorParser).singleton(),
@@ -227,6 +229,7 @@ module.exports = class App {
                 'codeAnchorParser',
                 'dashboardAnchorParser',
                 'featureAnchorParser',
+                'featuresAnchorParser',
                 'markdownAnchorParser',
                 'openapiAnchorParser',
                 'umlAnchorParser',

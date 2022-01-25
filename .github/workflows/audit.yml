@@ -1,6 +1,9 @@
 name: npm audit
 
 on:
+  
+  workflow_dispatch:    
+
   pull_request:
     types: [opened,synchronize]
     
