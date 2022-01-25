@@ -1,3 +1,4 @@
 features:
     - test.feature
     - outline.feature
+    - test.features.yml
