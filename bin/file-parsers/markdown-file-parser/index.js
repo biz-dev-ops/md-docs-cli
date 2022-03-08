@@ -6,11 +6,12 @@ const files = require('../../utils/files');
 const { sign } = require('crypto');
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, menu, gitInfo, markdownRenderer, pageComponent }) {
+    constructor({ options, menu, gitInfo, markdownRenderer, defintionParser, pageComponent }) {
         this.options = options;
         this.menu = menu;
         this.gitInfo = gitInfo;
         this.renderer = markdownRenderer;
+        this.defintionParser = defintionParser;
         this.component = pageComponent;
     }
 
@@ -30,12 +31,15 @@ module.exports = class MarkdownFileParser {
     }
 
     async #render(file) {
+        const root = getRelativeRoot(this.options);
         let markdown = await files.readFileAsString(file);
         markdown = `[[toc]]\n${markdown}`;
 
         const response = getTitle(markdown, file);
 
-        const html = await this.renderer.render(response.markdown);
+        let html = await this.renderer.render(response.markdown);
+        html = await this.defintionParser.parse(html, root);
+        
         const menuItems = await this.menu.items();
 
         const signOut = getSignOutInfo(this.options, file);
@@ -44,7 +48,7 @@ module.exports = class MarkdownFileParser {
         return this.component.render({
             showNav: showNav,
             signOut: signOut,
-            root: getRelativeRoot(this.options),
+            root: root,
             sourceFile: getSourceFile(this.options, file),
             url: getRelativeUrl(this.options, file),
             content: html,
@@ -54,6 +58,8 @@ module.exports = class MarkdownFileParser {
         });
     }
 }
+
+
 
 function getShowNavInfo(options, file) {
     if (file.endsWith('401.md') || file.endsWith('403.md'))
