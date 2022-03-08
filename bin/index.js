@@ -5,21 +5,25 @@ const chalk = require('chalk-next');
 const yargs = require('yargs');
 const figlet = util.promisify(require('figlet'));
 const path = require('path');
+const yaml = require('js-yaml');
 const { cwd } = require('process');
 
 const files = require('./utils/files');
 const App = require('./app');
 
-async function run(options) {
+async function run(o) {
     const logo = await figlet('md-docs-cli');
     console.info(chalk.blueBright(logo));
+
+    const options = await createOptions(o);
 
     options.src = path.resolve(cwd(), `docs`);
     options.dst = path.resolve(cwd(), `dist`);
     options.testExecutionLocation = path.resolve(cwd(), `.temp/executions`);
     options.assets = await find(__dirname, 'assets');
     options.nodeModules = await find(__dirname, 'node_modules');
-    const app = new App(options);    
+
+    const app = new App(options);
     await app.run();
     app.dispose();
 }
@@ -44,5 +48,20 @@ const options = yargs
     .option("t", { alias: "theme", describe: "Path to a stylesheet to include in the source", type: "string", demandOption: false })
     .option("s", { alias: "skip", describe: "Branches to skip", array: true, type: "string", demandOption: false })
     .argv;
+
+async function createOptions(options) {
+    var file = path.resolve(cwd(), `options.yml`);
+    if (!await files.exists(file))
+        return options;
+    
+    const content = await files.readFileAsString(file);
+    const json = yaml.load(content);
+    
+    return {
+        ...options,
+        ...json
+    };
+}
+
 
 run(options);

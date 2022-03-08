@@ -10,8 +10,11 @@ const files = require('../utils/files');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
-const TestExecutionParser = new require('../utils/bdd/test-execution-parser');
-const TestExecutionStore = new require('../utils/bdd/test-execution-store');
+const TestExecutionParser = require('../utils/bdd/test-execution-parser');
+const TestExecutionStore = require('../utils/bdd/test-execution-store');
+
+const CompositeHostingService = require('../hosting/composite-hosting-service')
+const AzureStaticWebApp = require('../hosting/azure-static-web-app');
 
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
@@ -66,6 +69,9 @@ module.exports = class App {
             console.info(chalk.greenBright('ready, shutting down.....'));
             return;
         }
+
+        const hosting = this.container.resolve('hosting');
+        await hosting.apply();
 
         await this.#parse(options);
     }
@@ -170,6 +176,10 @@ module.exports = class App {
             'menu': asClass(Menu).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
 
+            //Security services
+            'hosting': asClass(CompositeHostingService).singleton(),
+            'azureStaticWebApp': asClass(AzureStaticWebApp).singleton(),
+
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
@@ -206,6 +216,10 @@ module.exports = class App {
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
             'userTaskComponent': asClass(UserTaskComponent).singleton().inject(container => allowUnregistered(container, 'userTaskComponentRenderFn')),
+
+            'hostingServices': [
+                'azureStaticWebApp'
+            ],
 
             //File parsers: order can be important!
             'fileParsers': [

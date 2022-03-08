@@ -3,6 +3,7 @@ const { cwd } = require('process');
 const path = require('path');
 const chalk = require('chalk-next');
 const files = require('../../utils/files');
+const { sign } = require('crypto');
 
 module.exports = class MarkdownFileParser {
     constructor({ options, menu, gitInfo, markdownRenderer, pageComponent }) {
@@ -36,8 +37,11 @@ module.exports = class MarkdownFileParser {
 
         const html = await this.renderer.render(response.markdown);
         const menuItems = await this.menu.items();
-        
+
+        let signOut = getSignOutInfo(this.options, file);
+
         return this.component.render({
+            signOut: signOut,
             root: getRelativeRoot(this.options),
             sourceFile: getSourceFile(this.options, file),
             url: getRelativeUrl(this.options, file),
@@ -49,11 +53,24 @@ module.exports = class MarkdownFileParser {
     }
 }
 
+function getSignOutInfo(options, file) {
+    if (file.endsWith('401.md') || file.endsWith('403.md') || file.endsWith('404.md'))
+        return null;
+
+    if (!'hosting' in options ||
+        !'routes' in options.hosting ||
+        !'signOut' in options.hosting.routes) {
+        return;
+    }
+
+    return options.hosting.routes.signOut;
+}
+
 function getRelativeRoot(options) {
     const root = path.relative(cwd(), options.dst);
     if (root === '')
         return root;
-    
+
     return `${root}/`;
 }
 
@@ -71,7 +88,7 @@ getTitle = function (markdown, file) {
     const response = getTitleFromMarkdown(markdown);
     if (response != undefined)
         return response;
-    
+
     const title = getTitleFromFile(file);
     return {
         title: formatTitle(title),
@@ -85,7 +102,7 @@ getTitleFromMarkdown = function (markdown) {
         lines.push(markdown);
     }
 
-    for (const [ index, line ] of lines.entries()) {
+    for (const [index, line] of lines.entries()) {
         if (!line.trim().startsWith('# '))
             continue;
 
@@ -107,11 +124,11 @@ getTitleFromFile = function (file) {
     }
 }
 
-formatTitle = function(title) {
-    if(title === "dist")
+formatTitle = function (title) {
+    if (title === "dist")
         title = "home";
 
-    if(title.indexOf(".") > -1)
+    if (title.indexOf(".") > -1)
         title = title.substring(0, title.indexOf("."))
 
     return title.charAt(0).toUpperCase() + title.slice(1)

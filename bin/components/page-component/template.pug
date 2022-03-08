@@ -33,6 +33,10 @@ html
           h1(class='title')= title
 
           div(class='nav')
+            if(signOut)
+              a(href=signOut.route)
+                span=signOut.text
+
             a(href='#git-branch-menu' class='menu-toggle menu-toggle-branches' aria-controls='git-branch-menu' aria-expanded='false')
               span(class='icon')
                 svg(aria-hidden='true' height='16' viewBox='0 0 16 16' version='1.1' width='16' data-view-component='true' class='octicon octicon-git-branch')
