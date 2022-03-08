@@ -38,9 +38,11 @@ module.exports = class MarkdownFileParser {
         const html = await this.renderer.render(response.markdown);
         const menuItems = await this.menu.items();
 
-        let signOut = getSignOutInfo(this.options, file);
+        const signOut = getSignOutInfo(this.options, file);
+        const showNav = getShowNavInfo(this.options, file);
 
         return this.component.render({
+            showNav: showNav,
             signOut: signOut,
             root: getRelativeRoot(this.options),
             sourceFile: getSourceFile(this.options, file),
@@ -51,6 +53,13 @@ module.exports = class MarkdownFileParser {
             git: this.gitInfo,
         });
     }
+}
+
+function getShowNavInfo(options, file) {
+    if (file.endsWith('401.md') || file.endsWith('403.md'))
+        return false;
+    
+    return true;
 }
 
 function getSignOutInfo(options, file) {
