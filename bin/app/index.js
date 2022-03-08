@@ -16,6 +16,9 @@ const TestExecutionStore = require('../utils/bdd/test-execution-store');
 const CompositeHostingService = require('../hosting/composite-hosting-service')
 const AzureStaticWebApp = require('../hosting/azure-static-web-app');
 
+const DefinitionParser = require('../utils/definitions/definition-parser');
+const DefinitionStore = require('../utils/definitions/definition-store');
+
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 
@@ -176,9 +179,13 @@ module.exports = class App {
             'menu': asClass(Menu).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
 
-            //Security services
+            //Hosting services
             'hosting': asClass(CompositeHostingService).singleton(),
             'azureStaticWebApp': asClass(AzureStaticWebApp).singleton(),
+
+            //Defintions
+            'defintionParser': asClass(DefinitionParser).singleton(),
+            'defintionStore': asClass(DefinitionStore).singleton(),
 
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
