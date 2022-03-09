@@ -74,9 +74,9 @@ function getlogoutInfo(options, file) {
     if (file.endsWith('401.md') || file.endsWith('403.md') || file.endsWith('404.md'))
         return null;
 
-    if (!'hosting' in options ||
-        !'routes' in options.hosting ||
-        !'logout' in options.hosting.routes) {
+    if (!('hosting' in options) ||
+        !('routes' in options.hosting) ||
+        !('logout' in options.hosting.routes)) {
         return null;
     }
 
