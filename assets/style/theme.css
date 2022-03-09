@@ -141,6 +141,13 @@
 @media (min-width: 40rem) {
   :root {
     /* Header */
+    --header-title-size: var(--heading-2-size);
+  }
+}
+
+@media (min-width: 60rem) {
+  :root {
+    /* Header */
     --header-title-size: var(--heading-1-size);
   }
 }

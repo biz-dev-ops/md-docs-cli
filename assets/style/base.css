@@ -223,9 +223,13 @@ header .bar {
     min-height: var(--header-height);
 }
 
+header .bar .logo {
+}
+
 header .bar h1 {
     color: currentColor;
     font-size: var(--header-title-size);
+    flex: 1;
     margin-bottom: 0;
 }
 
@@ -579,7 +583,7 @@ article > .header-container {
     outline: none;
 }
 
-header a:active {
+.button a:active {
     background-color: transparent;
 }
 
