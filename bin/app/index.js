@@ -8,6 +8,8 @@ const chalk = require('chalk-next');
 const git = require('../utils/git');
 const files = require('../utils/files');
 
+const Locale = require('../locale');
+
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
 const TestExecutionParser = require('../utils/bdd/test-execution-parser');
@@ -180,6 +182,7 @@ module.exports = class App {
             'testExecutionStore': asClass(TestExecutionStore).singleton(),
             'menu': asClass(Menu).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
+            'locale': asClass(Locale).singleton(),
 
             //Hosting services
             'hosting': asClass(CompositeHostingService).singleton(),

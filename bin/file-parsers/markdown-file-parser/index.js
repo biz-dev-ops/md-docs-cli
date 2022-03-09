@@ -6,10 +6,11 @@ const files = require('../../utils/files');
 const { sign } = require('crypto');
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, menu, gitInfo, markdownRenderer, defintionParser, pageComponent }) {
+    constructor({ options, menu, gitInfo, locale, markdownRenderer, defintionParser, pageComponent }) {
         this.options = options;
         this.menu = menu;
         this.gitInfo = gitInfo;
+        this.locale = locale;
         this.renderer = markdownRenderer;
         this.defintionParser = defintionParser;
         this.component = pageComponent;
@@ -48,6 +49,7 @@ module.exports = class MarkdownFileParser {
         return this.component.render({
             showNav: showNav,
             logout: logout,
+            locale: await this.locale.get(),
             root: root,
             sourceFile: getSourceFile(this.options, file),
             url: getRelativeUrl(this.options, file),

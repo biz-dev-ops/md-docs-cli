@@ -2,22 +2,26 @@ const jsdom = require('jsdom');
 const chalk = require('chalk-next');
 
 module.exports = class HeadingHtmlParser {
-    constructor() { }
+    constructor({ locale })
+    { 
+        this.locale = locale;
+    }
 
     async parse(element) {
+        const locale = await this.locale.get();
         console.info(chalk.green(`\t* parsing headings:`));
 
         const container = jsdom.JSDOM.fragment("<article></article>").firstElementChild;
         
         const main = element;
-        addToHeadingContainer(main.firstChild, container, -1);
+        addToHeadingContainer(locale, main.firstChild, container, -1);
         if (container.childNodes.length > 0) {
             main.appendChild(container);
         }
     }
 }
 
-function addToHeadingContainer(element, container, level) {
+function addToHeadingContainer(locale, element, container, level) {
     while (element) {
         let next = element.nextSibling;
         if (element.localName && element.localName.match(/^h\d{1,}$/)) {
@@ -29,7 +33,7 @@ function addToHeadingContainer(element, container, level) {
                 const headerContainer = jsdom.JSDOM.fragment(HEADER_CONTAINER_TEMPLATE(element.localName)).firstElementChild;
                 container.appendChild(headerContainer);
                 headerContainer.getElementsByClassName("header")[0].appendChild(element);
-                next = addToHeadingContainer(next, headerContainer.getElementsByClassName("container")[0], newLevel);
+                next = addToHeadingContainer(locale, next, headerContainer.getElementsByClassName("container")[0], newLevel);
             }
             else {
                 console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: moving to level ${level - 1}`));
@@ -48,7 +52,7 @@ function addToHeadingContainer(element, container, level) {
                         console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: creating toc container`));
 
                         const parentNode = element.parentNode;
-                        const tocContainer = jsdom.JSDOM.fragment(TOC_CONTAINER_TEMPLATE);
+                        const tocContainer = jsdom.JSDOM.fragment(TOC_CONTAINER_TEMPLATE(locale));
                         parentNode.insertBefore(tocContainer, element);
                         parentNode.querySelector("#toc-container").appendChild(element);
                     }
@@ -58,7 +62,7 @@ function addToHeadingContainer(element, container, level) {
 
                     const headlessContainer = jsdom.JSDOM.fragment(HEADLESS_CONTAINER_TEMPLATE).firstElementChild;
                     container.appendChild(headlessContainer);
-                    next = addToHeadingContainer(element, headlessContainer, 999999);
+                    next = addToHeadingContainer(locale, element, headlessContainer, 999999);
                 }
             }
             else {
@@ -70,9 +74,9 @@ function addToHeadingContainer(element, container, level) {
     }
 }
 
-const TOC_CONTAINER_TEMPLATE = `<aside>
+const TOC_CONTAINER_TEMPLATE = (locale) => `<aside>
     <div>
-        <h2>on this page</h2>
+        <h2>${locale["on_this_page"]}</h2>
     </div>
     <div id="toc-container"></div>
 </aside>`;
