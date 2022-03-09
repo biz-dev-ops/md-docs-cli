@@ -24,6 +24,7 @@
   /* Theming */
   --background-color-base: var(--color-black-a10);
   --text-color-base: var(--color-black-a90);
+  --text-color-heading: var(--text-color-base);
 
   --color-info: #0043A8;
   --color-info-100: #E5F0FF;
