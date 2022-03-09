@@ -404,7 +404,7 @@ main > aside {
     margin-bottom: var(--space-md);
 }
 
-main > aside > h2 {
+main > aside h2 {
     color: currentColor;
 }
 

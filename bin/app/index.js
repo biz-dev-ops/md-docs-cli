@@ -162,8 +162,6 @@ module.exports = class App {
         ];
 
         if (options.theme) {
-            console.info();
-            console.info(chalk.red(`THEME: ${options.theme}`));
             fileTransfers.push({ src: options.theme, dst: path.resolve(options.dst, 'assets/style/custom-theme.css') });
         }
 
