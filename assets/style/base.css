@@ -224,6 +224,7 @@ header .bar {
 }
 
 header .bar h1 {
+    color: currentColor;
     font-size: var(--header-title-size);
     margin-bottom: 0;
 }
@@ -404,7 +405,7 @@ main > aside {
     margin-bottom: var(--space-md);
 }
 
-main > aside > h2 {
+main > aside h2 {
     color: currentColor;
 }
 
@@ -552,6 +553,34 @@ article > .header-container {
 
 .header-container.h2 > .header * {
     margin-bottom: 0;
+}
+
+/* Element: Button */
+.button {
+    background-color: var(--button-background-base);
+    border-radius: var(--radius-base);
+    color: var(--button-text-color);
+    display: inline-block;
+    height: var(--space-lg);
+    padding: var(--space-sm) var(--space-md);
+    text-decoration: none;
+    transition: all var(--duration-base);
+}
+
+.button + .button {
+    margin-left: var(--space-xss);
+}
+
+.button:active,
+.button:focus,
+.button:hover {
+    background-color: var(--button-background-active);
+    color: var(--button-text-color-active);
+    outline: none;
+}
+
+header a:active {
+    background-color: transparent;
 }
 
 /* Module: Main menu */
