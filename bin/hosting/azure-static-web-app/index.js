@@ -38,7 +38,10 @@ module.exports = class AzureStaticWebApp {
                 allowedRoles: ['anonymous', 'authenticated']
             }, {
                 route: '/*',
-                allowedRoles: hosting.privateAccess.roles
+                allowedRoles: hosting.privateAccess.roles,
+                headers: {
+                    "Cache-Control": "no-store"
+                }
             });
 
             if ('providers' in hosting.privateAccess) {                
