@@ -31,7 +31,11 @@
         }
     });
 
-    document.getElementById('git-branch-menu').querySelectorAll('a').forEach(anchor => {
+    const menu = document.getElementById('git-branch-menu');
+    if (!menu)
+        return;
+        
+    menu.querySelectorAll('a').forEach(anchor => {
         anchor.onclick = async (event) => {
             if ((await urlExists(anchor.href))) {
                 return;
