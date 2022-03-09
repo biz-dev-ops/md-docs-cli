@@ -44,8 +44,7 @@ jobs:
           for B in $(echo $BRANCHES | jq -r 'sort_by(.path) | .[].name')
           do
               git checkout "$B"
-              node ../bin/index.js -t theme.css
+              node ../bin/index.js
           done
         env:
-          THEME: ${{ inputs.theme }}
           BRANCHES: ${{ steps.branches.outputs.value }}

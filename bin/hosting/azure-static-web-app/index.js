@@ -22,7 +22,10 @@ module.exports = class AzureStaticWebApp {
             routes: [],
             responseOverrides: {
                 404: {
-                    rewrite: '/404.html'
+                    rewrite: '/404.html',
+                    headers: {
+                        "Cache-Control": "no-store"
+                    }
                 }
             },
             auth: {
@@ -76,13 +79,12 @@ module.exports = class AzureStaticWebApp {
         }
 
         if ('routes' in hosting) {
-            if ('signOut' in hosting.routes) {
-                console.info(chalk.green(`\t* adding signout route.`));
+            if ('logout' in hosting.routes) {
+                console.info(chalk.green(`\t* adding logout route.`));
 
                 config.routes.unshift({
-                    route: hosting.routes.signOut.route,
-                    redirect: '/.auth/logout',
-                    statusCode: 302
+                    route: hosting.routes.logout.route,
+                    redirect: '/.auth/logout'
                 });
             }
         }
@@ -94,7 +96,10 @@ module.exports = class AzureStaticWebApp {
                 config.routes.unshift({
                     route: hosting.responseOverrides[401],
                     rewrite: '/401.html',
-                    allowedRoles: ['anonymous']
+                    allowedRoles: ['anonymous'],
+                    headers: {
+                        "Cache-Control": "no-store"
+                    }
                 });
             }
 
@@ -104,7 +109,10 @@ module.exports = class AzureStaticWebApp {
                 config.routes.unshift({
                     route: hosting.responseOverrides[403],
                     rewrite: '/403.html',
-                    allowedRoles: ['authenticated']
+                    allowedRoles: ['authenticated'],
+                    headers: {
+                        "Cache-Control": "no-store"
+                    }
                 });
             }
 

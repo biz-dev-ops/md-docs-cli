@@ -6,10 +6,11 @@ const files = require('../../utils/files');
 const { sign } = require('crypto');
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, menu, gitInfo, markdownRenderer, defintionParser, pageComponent }) {
+    constructor({ options, menu, gitInfo, locale, markdownRenderer, defintionParser, pageComponent }) {
         this.options = options;
         this.menu = menu;
         this.gitInfo = gitInfo;
+        this.locale = locale;
         this.renderer = markdownRenderer;
         this.defintionParser = defintionParser;
         this.component = pageComponent;
@@ -42,12 +43,13 @@ module.exports = class MarkdownFileParser {
         
         const menuItems = await this.menu.items();
 
-        const signOut = getSignOutInfo(this.options, file);
+        const logout = getlogoutInfo(this.options, file);
         const showNav = getShowNavInfo(this.options, file);
 
         return this.component.render({
             showNav: showNav,
-            signOut: signOut,
+            logout: logout,
+            locale: await this.locale.get(),
             root: root,
             sourceFile: getSourceFile(this.options, file),
             url: getRelativeUrl(this.options, file),
@@ -68,17 +70,17 @@ function getShowNavInfo(options, file) {
     return true;
 }
 
-function getSignOutInfo(options, file) {
+function getlogoutInfo(options, file) {
     if (file.endsWith('401.md') || file.endsWith('403.md') || file.endsWith('404.md'))
         return null;
 
     if (!'hosting' in options ||
         !'routes' in options.hosting ||
-        !'signOut' in options.hosting.routes) {
-        return;
+        !'logout' in options.hosting.routes) {
+        return null;
     }
 
-    return options.hosting.routes.signOut;
+    return options.hosting.routes.logout;
 }
 
 function getRelativeRoot(options) {
