@@ -32,9 +32,7 @@ md-docs -b
 
 ### Custom theme
 
-```
-md-docs -t theme.css
-```
+You can override all assets files by adding the same files to docs folder:  docs/assets/style/custom-theme.css can then be overwritten by a custom theme implementation.
 
 ### Skip branches
 

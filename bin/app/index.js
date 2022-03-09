@@ -133,8 +133,6 @@ module.exports = class App {
     //Protected
     _getFileTransfers(options) {
         const fileTransfers = [
-            { src: options.src, dst: options.dst },
-
             { src: options.assets, dst: path.resolve(options.dst, 'assets') },
             
             { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-16x16.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
@@ -158,7 +156,9 @@ module.exports = class App {
             { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
             { src: path.resolve(options.nodeModules, 'prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
             
-            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') }
+            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') },
+
+            { src: options.src, dst: options.dst }
         ];
 
         if (options.theme) {
