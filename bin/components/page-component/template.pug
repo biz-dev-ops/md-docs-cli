@@ -30,6 +30,10 @@ html
     header
       div(class='container')
         div(class='bar')
+          if(logo)
+            div(class='logo')
+              img(src=logo)
+
           h1(class='title')= title
 
           if(showNav)
