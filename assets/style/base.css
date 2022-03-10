@@ -224,6 +224,7 @@ header .bar {
 }
 
 header .bar .logo {
+    display: none;
 }
 
 header .bar h1 {

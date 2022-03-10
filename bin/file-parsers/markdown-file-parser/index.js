@@ -47,6 +47,7 @@ module.exports = class MarkdownFileParser {
         const showNav = getShowNavInfo(this.options, file);
 
         return this.component.render({
+            basePath: getRelativeBasePath(this.options),
             showNav: showNav,
             logout: logout,
             locale: await this.locale.get(),
@@ -60,8 +61,6 @@ module.exports = class MarkdownFileParser {
         });
     }
 }
-
-
 
 function getShowNavInfo(options, file) {
     if (file.endsWith('401.md') || file.endsWith('403.md'))
@@ -83,6 +82,14 @@ function getlogoutInfo(options, file) {
     return options.hosting.routes.logout;
 }
 
+function getRelativeBasePath(options) {
+    const root = path.relative(cwd(), options.basePath);
+    if (root === '')
+        return root;
+
+    return `${root}/`;
+}
+
 function getRelativeRoot(options) {
     const root = path.relative(cwd(), options.dst);
     if (root === '')
@@ -98,7 +105,7 @@ function getRelativeUrl(options, file) {
 function getSourceFile(options, file) {
     const dstFile = path.relative(options.dst, file);
     const srcFile = path.resolve(options.src, dstFile);
-    return path.relative(options.root, srcFile);
+    return path.relative(options.src, srcFile);
 }
 
 getTitle = function (markdown, file) {
