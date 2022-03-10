@@ -6,22 +6,26 @@ module.exports = class DefinitionParser {
     async parse(html, root) {
         const defintions = await this.defintionStore.get();
 
-        for (const defintion of defintions) {
+        for (const definition of defintions) {
             let replacement = '$1';
             
-            if (defintion.text)
-                replacement = `<abbr title="${defintion.text}">${replacement}</abbr>`;
+            if (definition.text)
+                replacement = `<abbr title="${definition.text}">${replacement}</abbr>`;
             
-            if(defintion.link)
+            if(definition.link)
             {
-                let url = defintion.link;
+                let url = definition.link;
                 if (!url.startsWith('http'))
                     url = root + url;
                 
                 replacement = `<a href="${url}">${replacement}</a>`
             }
 
-            const regex = new RegExp(`(?![^<]*>)(${defintion.alias.join('|')})`, 'img');
+            const alias = [ definition.name ];
+            if (definition.alias)
+                alias.push(definition.alias);
+
+            const regex = new RegExp(`(?![^<]*>)(${alias.join('|')})`, 'img');
             html = html.replace(regex, replacement);
         }
 
