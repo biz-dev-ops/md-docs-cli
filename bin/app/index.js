@@ -15,7 +15,7 @@ const Menu = require('../utils/menu');
 const TestExecutionParser = require('../utils/bdd/test-execution-parser');
 const TestExecutionStore = require('../utils/bdd/test-execution-store');
 
-const CompositeHostingService = require('../hosting/composite-hosting-service')
+const CompositeHostingService = require('../hosting/composite-hosting-service');
 const AzureStaticWebApp = require('../hosting/azure-static-web-app');
 
 const DefinitionParser = require('../utils/definitions/definition-parser');

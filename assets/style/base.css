@@ -227,6 +227,12 @@ header .bar .logo {
     display: none;
 }
 
+header .bar .logo a {
+    text-decoration: none !important;
+    background-color: unset !important;
+    color: unset !important;
+}
+
 header .bar h1 {
     color: currentColor;
     font-size: var(--header-title-size);

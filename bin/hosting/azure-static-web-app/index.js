@@ -59,8 +59,8 @@ module.exports = class AzureStaticWebApp {
                             registration: {
                                 clientIdSettingName: '{GOOGLE_CLIENT_ID}',
                                 clientSecretSettingName: '{GOOGLE_CLIENT_SECRET}'
-                            }   
-                        }
+                            }
+                        };
                     }
                 }
 
@@ -121,7 +121,7 @@ module.exports = class AzureStaticWebApp {
 
                 config.responseOverrides[key] = {
                     redirect: value
-                }
+                };
             }
         }
 

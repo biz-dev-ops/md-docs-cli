@@ -3,7 +3,6 @@ const { cwd } = require('process');
 const path = require('path');
 const chalk = require('chalk-next');
 const files = require('../../utils/files');
-const { sign } = require('crypto');
 
 module.exports = class MarkdownFileParser {
     constructor({ options, menu, gitInfo, locale, markdownRenderer, defintionParser, pageComponent }) {
