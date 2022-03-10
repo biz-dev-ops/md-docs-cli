@@ -41,7 +41,7 @@ module.exports = class Menu {
         const entries = await fs.readdir(src, { withFileTypes: true });
 
         const item = {
-            name: this.#format(path.basename(src)),
+            name: this.#format(src),
             items: []
         };
 
@@ -62,10 +62,11 @@ module.exports = class Menu {
             return item;
     }
 
-    #format(name) {
-        if (name === path.basename(this.root))
+    #format(src) {
+        if (this.root === src)
             return 'home';
-
+        
+        const name = path.basename(src);
         return name.charAt(0).toUpperCase() + name.slice(1)
             .replace("-", " ");
     }

@@ -90,13 +90,12 @@ module.exports = class App {
     async #init(opts) {
         await fs.access(opts.src);
 
-        const options = Object.assign({}, opts);
-        options.root = path.resolve('.');
+        const options = Object.assign({}, opts);        
+        options.basePath = options.dst;
 
         const gitInfo = await git.info(options);
 
-        this.container.register('gitInfo', asValue(gitInfo));
-
+        this.container.register('gitInfo', asValue(gitInfo));        
         options.dst = path.resolve(options.dst, gitInfo.branch.path);
 
         await createDestination(options);

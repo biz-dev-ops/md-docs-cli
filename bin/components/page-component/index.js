@@ -9,6 +9,6 @@ module.exports = class PageComponent {
     }
 
     render(data) {
-        return this.renderFn({...data, logo: this.options.logo});
+        return this.renderFn({...data });
     }
 }
