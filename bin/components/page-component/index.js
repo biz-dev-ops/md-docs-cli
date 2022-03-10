@@ -1,6 +1,5 @@
 const pug = require('pug');
 const files = require('../../utils/files');
-const chalk = require("chalk-next");
 
 module.exports = class PageComponent {
     constructor({ options, pageComponentRenderFn }) {
