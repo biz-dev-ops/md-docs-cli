@@ -23,6 +23,7 @@ const DefinitionStore = require('../utils/definitions/definition-store');
 
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
+const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BpmnComponent = require('../components/bpmn-component');
@@ -31,6 +32,7 @@ const FeatureComponent = require('../components/feature-component');
 const FullscreenComponent = require('../components/fullscreen-component');
 const IFrameComponent = require('../components/iframe-component');
 const ImageComponent = require('../components/image-component');
+const MessageComponent = require('../components/message-component');
 const OpenapiComponent = require('../components/openapi-component');
 const PageComponent = require('../components/page-component');
 const TabsComponent = require('../components/tabs-component');
@@ -49,7 +51,7 @@ const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
-const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
+const MarkdownMessageAnchorParser = require('../anchor-parsers/markdown-message-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const UmlAnchorParser = require('../anchor-parsers/uml-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
@@ -192,6 +194,7 @@ module.exports = class App {
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
+            'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
 
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
@@ -208,7 +211,7 @@ module.exports = class App {
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
-            'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
+            'markdownMessageAnchorParser': asClass(MarkdownMessageAnchorParser).singleton(),
             'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
             'umlAnchorParser': asClass(UmlAnchorParser).singleton(),
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
@@ -221,6 +224,7 @@ module.exports = class App {
             'fullscreenComponent': asClass(FullscreenComponent).singleton().inject(container => allowUnregistered(container, 'fullscreenComponentRenderFn')),
             'iFrameComponent': asClass(IFrameComponent).singleton().inject(container => allowUnregistered(container, 'iFrameComponentRenderFn')),
             'imageComponent': asClass(ImageComponent).singleton().inject(container => allowUnregistered(container, 'imageComponentRenderFn')),
+            'messageComponent': asClass(MessageComponent).singleton().inject(container => allowUnregistered(container, 'messageComponentRenderFn')),
             'openapiComponent': asClass(OpenapiComponent).singleton().inject(container => allowUnregistered(container, 'openapiComponentRenderFn')),
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
@@ -232,7 +236,8 @@ module.exports = class App {
 
             //File parsers: order can be important!
             'fileParsers': [
-                'markdownFileParser'
+                'markdownFileParser',
+                'markdownMessageFileParser'
             ],
 
             //Html parsers, order is important!
@@ -253,7 +258,7 @@ module.exports = class App {
                 'dashboardAnchorParser',
                 'featureAnchorParser',
                 'featuresAnchorParser',
-                'markdownAnchorParser',
+                'markdownMessageAnchorParser',
                 'openapiAnchorParser',
                 'umlAnchorParser',
                 'userTaskAnchorParser'

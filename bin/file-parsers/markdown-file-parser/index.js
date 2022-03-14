@@ -16,7 +16,7 @@ module.exports = class MarkdownFileParser {
     }
 
     async parse(file) {
-        if (!file.endsWith('.md') && !path.basename(file).startsWith('_'))
+        if (!(file.endsWith('.md') && !file.endsWith('.message.md')))
             return;
 
         const htmlFile = `${file.slice(0, -3)}.html`;
@@ -56,7 +56,7 @@ module.exports = class MarkdownFileParser {
             content: html,
             title: response.title,
             menu: menuItems,
-            git: this.gitInfo,
+            git: this.gitInfo
         });
     }
 }
