@@ -1,5 +1,7 @@
 {
     "attachments": "Bijlagen",
+    "cancel": "Annuleren",
     "context": "Context",
-    "on_this_page": "Op deze pagina:"
+    "on_this_page": "Op deze pagina:",
+    "submit": "Opslaan"
 }

@@ -1,5 +1,7 @@
 {
     "attachments": "Attachments",
+    "cancel": "Cancel",
     "context": "Context",
-    "on_this_page": "On this page:"
+    "on_this_page": "On this page:",
+    "submit": "Submit"
 }

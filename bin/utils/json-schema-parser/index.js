@@ -12,9 +12,13 @@ exports.parse = async function (file) {
     return json;
 }
 
-mergeAllOfInSchema = (object) =>{
+mergeAllOfInSchema = (object) => {
     if(!!object["allOf"]){
-        object = mergeAllOf(object);
+        object = mergeAllOf(object, {
+            resolvers: {
+              defaultResolver: mergeAllOf.options.resolvers.title
+            }
+          });
     }
   
     for (let key in object) {

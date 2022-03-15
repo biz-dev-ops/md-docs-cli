@@ -12,15 +12,15 @@ function transformToUserTask(data) {
     
     return {
         name: d.name,
-        items: transformToFields(d.schema)
+        items: transformToFields(d.schema, d.ui, [])
     };
 }
 
-function transformToFields(schema) {
+function transformToFields(schema, ui, parents) {
     const fields = [];
 
     for (var key in schema.properties) {
-        if (key == "user_task" || key == "command")
+        if(hide(parents, key, ui?.hidden))
             continue;
         
         const property = schema.properties[key];
@@ -32,16 +32,24 @@ function transformToFields(schema) {
         }
 
         if (property.type == "object") {
-            field.items = transformToFields(property);
+            field.items = transformToFields(property, ui, [...parents, key]);
         }
         else {
-            field.value = transformToField(property);
+            field.value = transformToField(property, ui, [...parents, key]);
         }
 
         fields.push(field);
     }
 
     return fields;
+}
+
+function hide(parents, key, hidden) {
+    if (hidden == undefined)
+        return false;
+    
+    const id = `${[...parents, key].join(".")}`;    
+    return hidden.includes(id);
 }
 
 function transformToField(property) {
@@ -57,13 +65,13 @@ function transformToAction(key, action) {
     return {
         id: key,
         name: action.name ?? key,
-        items: transformToFormFields(action.schema)
+        items: transformToFormFields(action.schema, action.ui, [])
     }    
 }
 
-function transformToFormFields(schema) {
+function transformToFormFields(schema, ui, parents) {
     return Object.entries(schema.properties)
-        .filter(kvp => kvp[0] != "user_task" && kvp[0] != "command")
+        .filter(kvp => !hide(parents, kvp[0], ui?.hidden))
         .map(kvp => {
             const key = kvp[0];
             const property = kvp[1];
@@ -78,7 +86,7 @@ function transformToFormFields(schema) {
             }
 
             if (property.type == "object") {
-                field.items = transformToFormFields(property);
+                field.items = transformToFormFields(property, ui, [...parents, key]);
             }
             else {
                 field.editor = parseFormField(property);
@@ -92,14 +100,14 @@ function parseFormField(property) {
     if (property.type === "boolean") {
         return {
             type: "input",
-            inputType: checkbox
+            inputType: 'checkbox'
         };
     }
 
     if (property.type === "number" || property.type === "integer") {
         return {
             type: "input",
-            inputType: number,
+            inputType: "number",
             format: property.format ?? false,
             minimum: property.format ?? false,
             maximum: property.format ?? false,
@@ -114,34 +122,44 @@ function parseFormField(property) {
     }
 
     if (property.type === "string") {
-        var type = mapHtml5InpputType(property);
-        if (type != undefined) {
+        if (property.enum) {
             return {
-                type: "input",
-                inputType: type,
-                pattern: property.pattern ?? false
+                type: "select",
+                options: property.enum.map(o => ({
+                    name: o,
+                    value: o
+                }))
             }
         }
-        
-        switch (property.format)
-        {
-            case "text":
-                return {
-                    type: "textarea",
-                    rows: 5
-                }
-            case "markdown":
-                return {
-                    type: "markdown",
-                    rows: 5
-                }
-            default:
+        else {
+            var type = mapHtml5InpputType(property);
+            if (type != undefined) {
                 return {
                     type: "input",
-                    inputType: "text",
-                    format: property.format ?? false,
-                    pattern: property.pattern ?? false,
-                };
+                    inputType: type,
+                    pattern: property.pattern ?? false
+                }
+            }
+        
+            switch (property.format) {
+                case "text":
+                    return {
+                        type: "textarea",
+                        rows: 5
+                    }
+                case "markdown":
+                    return {
+                        type: "markdown",
+                        rows: 5
+                    }
+                default:
+                    return {
+                        type: "input",
+                        inputType: "text",
+                        format: property.format ?? false,
+                        pattern: property.pattern ?? false,
+                    };
+            }
         }
     }
 }
