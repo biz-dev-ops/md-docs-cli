@@ -7,6 +7,10 @@ module.exports = class Locale {
         this.locale = options.locale ?? 'en';
     }
 
+    async init() {
+        await this.get();
+    }
+
     async get() {
         if (this.#locale != null)
             return this.#locale;

@@ -104,7 +104,17 @@ module.exports = class App {
         await createDestination(options);
         await createBranches(opts, gitInfo);
         await copyFiles(this._getFileTransfers(options));
+
         registerServices(this.container, this._getServices(options));
+
+        // Init stores
+        console.info();
+        console.info(chalk.greenBright('Initializing stores....'));
+
+        await this.container.resolve('defintionStore').init();
+        await this.container.resolve('locale').init();
+        await this.container.resolve('menu').init();        
+        await this.container.resolve('testExecutionStore').init();
 
         this.#options = null;
     }
@@ -112,9 +122,9 @@ module.exports = class App {
     async #parse(options) {
         const fileParser = this.container.resolve('fileParser');
 
-        await files.each(options.src, async (file) => {
-            //Change from src to dst location.
-            file = path.resolve(options.dst, path.relative(options.src, file));
+        await files.each(options.dst, async (file) => {
+            // //Change from src to dst location.
+            // file = path.resolve(options.dst, path.relative(options.src, file));
 
             console.info();
             console.info(chalk.yellow(`parsing ${path.relative(options.dst, file)}`));

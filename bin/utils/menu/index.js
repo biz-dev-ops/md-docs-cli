@@ -7,9 +7,14 @@ const files = require('../files');
 
 module.exports = class Menu {
     #data = null;
+    #regex = /\d+[_](.*)/;
 
     constructor({ options }) {
-        this.root = options.dst;
+        this.root = options.dst;        
+    }
+
+    async init() {
+        await this.items();
     }
 
     async items() {
@@ -45,9 +50,10 @@ module.exports = class Menu {
             items: []
         };
 
-        for (const entry of entries) {
+        for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
             if (entry.isDirectory()) {
-                var sub = await this.#getMenuItem(path.resolve(src, entry.name));
+                const name = await this.#resolveDirectory(entry, src);
+                const sub = await this.#getMenuItem(path.resolve(src, name));
                 if (sub != undefined)
                     item.items.push(sub);
             }
@@ -69,6 +75,16 @@ module.exports = class Menu {
         const name = path.basename(src);
         return name.charAt(0).toUpperCase() + name.slice(1)
             .replace("-", " ");
+    }
+
+    async #resolveDirectory(entry, src) {
+
+        const matches = entry.name.match(this.#regex);
+        if (!matches)
+            return entry.name;
+        
+        await fs.rename(path.resolve(src, matches[0]), path.resolve(src, matches[1]));
+        return matches[1];
     }
 }
 
