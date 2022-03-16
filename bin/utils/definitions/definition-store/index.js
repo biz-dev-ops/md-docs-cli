@@ -10,6 +10,10 @@ module.exports = class DefinitionStore {
         this.options = options;
     }
 
+    async init() {
+        await this.get();
+    }
+
     async get() {
         if (this.#data != null)
             return this.#data;

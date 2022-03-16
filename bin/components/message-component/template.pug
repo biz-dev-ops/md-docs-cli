@@ -1,0 +1,60 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    title=title
+
+    script.
+      window.PagedConfig = {
+        after: (flow) => { 
+          document.body.classList.add('pagedjs_previewed');
+        }
+      };
+
+    script(src='https://unpkg.com/pagedjs/dist/paged.polyfill.js')
+
+    style
+      | !{css}
+
+    if(googleFont)
+      link(rel='preconnect' href='https://fonts.googleapis.com')
+      link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
+      link(href=googleFont rel='stylesheet')
+    
+  body
+    article
+      header
+        div(class='logo')
+          figure
+            img(src=root + 'assets/images/message/logo.png')
+        
+      footer
+        div(class='contact')
+          | !{footer}
+          
+        if(sender)
+          p 
+            | !{sender}
+
+      main
+        if(address)
+          div(class='address')
+            address          
+              | !{address}
+
+        if(time)
+          p(class='time')
+            time(datetime=time.value)=time.text
+        
+        | !{content}
+        
+        if attachments
+          attachements
+            h3=locale.attachments
+            ul
+              each val in attachments
+                li=val
+
+    script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
+
+    

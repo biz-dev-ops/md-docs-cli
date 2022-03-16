@@ -7,7 +7,7 @@ mixin userTask(userTask)
 mixin fieldItems(items)
   dl 
     each item in items
-      dt= item.label
+      dt=item.label
       if item.value
         dd=item.value        
       else if item.items 
@@ -22,8 +22,8 @@ mixin form(action)
     +formItems(action.items)
 
     div(class='form-submit')
-      button(type='button' data-cancel aria-controls='action-' + action.id)='Cancel'
-      button(type='submit' data-confirm='Are you sure you want to complete this user task with ' + action.name + '?')='Submit'
+      button(type='button' data-cancel aria-controls='action-' + action.id)=locale.cancel
+      button(type='submit' data-confirm='Are you sure you want to complete this user task with ' + action.name + '?')=locale.submit
 
 mixin formItems(items)
   each item in items
@@ -31,14 +31,18 @@ mixin formItems(items)
 
 mixin formItem(item)
   div(class='form-item')
-    label(for=item.id class={required: item.required})=item.label
-      div(class='input-group')
-        if(item.items)
-          +formItems(item.items)
-        else if(item.editor)
+    if(item.items)
+      fieldset
+        legend=item.label
+
+        +formItems(item.items)        
+    else if(item.editor)
+      label(for=item.id class={required: item.required})=item.label
+
+        div(class='input-group')
           include .generated/editor.pug
-        else
-          p(class=error)='No editor defined!'
+    else
+      p(class=error)='No editor defined!'
 
       div(class='input-feedback')
 

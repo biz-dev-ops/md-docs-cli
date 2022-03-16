@@ -566,6 +566,36 @@ article > .header-container {
     margin-bottom: 0;
 }
 
+/* Module: Header container - level 3 */
+.header-container.h3 h3 {
+    position: relative;
+}
+
+.header-container.h3 h3:hover {
+    cursor: pointer;
+}
+
+.header-container.h3 h3:after {
+    content: "▼";
+    font-size: calc(100% / var(--line-height-base));
+    color: var(--text-color-heading);
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.header-container.h3.active h3:after {
+    content: "▲";
+}
+
+.header-container.h3.active > .container {
+    display: block !important;
+}
+
+.header-container.h3 > .container {
+    display: none;
+}
+
 /* Element: Button */
 .button {
     background-color: var(--button-background-base);

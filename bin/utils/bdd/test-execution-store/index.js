@@ -13,6 +13,10 @@ module.exports = class TestExecutionsStore {
         this.testExecutionLocation = options.testExecutionLocation;
     }
 
+    async init() {
+        await this.get();
+    }
+
     async get() {
         if (this.#data != null)
             return this.#data;
