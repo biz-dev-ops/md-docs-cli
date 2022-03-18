@@ -73,6 +73,7 @@ module.exports = class Menu {
             return 'home';
         
         const name = path.basename(src);
+
         return name.charAt(0).toUpperCase() + name.slice(1)
             .replace("-", " ");
     }

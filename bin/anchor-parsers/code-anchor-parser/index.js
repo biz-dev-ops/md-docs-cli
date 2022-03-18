@@ -16,7 +16,9 @@ module.exports = class CodeAnchorParser extends AnchorParser {
     console.info(chalk.green(`\t\t\t\t* rendering`));
     
     const language = CODE_LANGUAGES.find(item => anchor.href.endsWith(item.extension)).name;
-    const content = await files.readFileAsString(file);
+    const content = (await files.readFileAsString(file))
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
 
     return `<pre fullscreen><code class="language-${language}">${content}</code></pre>`;
   }

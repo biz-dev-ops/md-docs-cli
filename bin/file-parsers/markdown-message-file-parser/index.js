@@ -49,8 +49,8 @@ module.exports = class MarkdownMessageFileParser {
         console.info(chalk.green(`\t* render html`));
         const attachments = await this.#renderHtml(file);
 
-        console.info(chalk.green(`\t* render pdf`));
-        await this.#renderPDF(file, attachments)
+        //console.info(chalk.green(`\t* render pdf`));
+        //await this.#renderPDF(file, attachments)
 
         console.info(chalk.green(`\t* deleting ${path.relative(this.options.dst, file)}`));        
         await fs.unlink(file);
