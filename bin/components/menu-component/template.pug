@@ -1,0 +1,21 @@
+mixin menuItems(items, toc, root)
+  if items && items.length > 0
+    ul
+      each item in items 
+        li(class={active: item.url === currentUrl})
+          if item.url
+            a(href=root + '' + item.url)= item.name
+          else
+            span= item.name
+
+          +menuItems(item.items, toc, root)            
+
+aside
+  div(class="header")
+    h2=locale["on_this_page"]
+  div(id="toc-container")
+    | !{toc}
+  div(class="header")
+    h2=locale.menu
+  div
+    +menuItems(menu, toc, root)

@@ -30,10 +30,11 @@ const cssImportResolveAsync = util.promisify(cssImportResolve);
 
 
 module.exports = class MarkdownMessageFileParser {
-    constructor({ options, messageComponent, locale }) {
+    constructor({ options, messageComponent, locale, relative }) {
         this.options = options;
         this.component = messageComponent;
         this.locale = locale;
+        this.relative = relative;
 
         moment.locale(this.options.locale);
     }
@@ -60,7 +61,7 @@ module.exports = class MarkdownMessageFileParser {
         const htmlFile = `${file}.html`;
         console.info(chalk.green(`\t\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
-        const root = getRelativeRoot(this.options);
+        const root = this.relative.get().root;
         const cssFile = path.resolve(root, 'assets/style/message/style.css');
         const css = await cssImportResolveAsync({
             ext: 'css',
@@ -167,14 +168,6 @@ module.exports = class MarkdownMessageFileParser {
         element.innerHTML = html;
         return element;
     }
-}
-
-getRelativeRoot = function(options) {
-    const root = path.relative(cwd(), options.dst);
-    if (root === '')
-        return root;
-
-    return `${root}/`;
 }
 
 formatTitle = function (title) {

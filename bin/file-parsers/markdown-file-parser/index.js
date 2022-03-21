@@ -1,18 +1,17 @@
 const fs = require('fs').promises;
-const { cwd } = require('process');
 const path = require('path');
 const chalk = require('chalk-next');
 const files = require('../../utils/files');
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, menu, gitInfo, locale, markdownRenderer, defintionParser, pageComponent }) {
+    constructor({ options, gitInfo, markdownRenderer, htmlParsers, defintionParser, pageComponent, relative }) {
         this.options = options;
-        this.menu = menu;
         this.gitInfo = gitInfo;
-        this.locale = locale;
         this.renderer = markdownRenderer;
+        this.parsers = htmlParsers;
         this.defintionParser = defintionParser;
         this.component = pageComponent;
+        this.relative = relative;
     }
 
     async parse(file) {
@@ -31,31 +30,25 @@ module.exports = class MarkdownFileParser {
     }
 
     async #render(file) {
-        const root = getRelativeRoot(this.options);
-        let markdown = await files.readFileAsString(file);
-        markdown = `[[toc]]\n${markdown}`;
-
+        const markdown = `[[toc]]\n${await files.readFileAsString(file)}`;
         const response = getTitle(markdown, file);
-
-        let html = await this.renderer.render(response.markdown);
-        html = await this.defintionParser.parse(html, root);
+        const element = await this.renderer.render(response.markdown);
         
-        const menuItems = await this.menu.items();
+        for (const parser of this.parsers) {
+            await parser.parse(element, file);
+        }
 
         const logout = getlogoutInfo(this.options, file);
         const showNav = getShowNavInfo(this.options, file);
 
         return this.component.render({
-            basePath: getRelativeBasePath(this.options),
+            relative: this.relative.get(),
             showNav: showNav,
             logout: logout,
-            locale: await this.locale.get(),
-            root: root,
             sourceFile: getSourceFile(this.options, file),
             url: getRelativeUrl(this.options, file),
-            content: html,
-            title: response.title,
-            menu: menuItems,
+            content: element.innerHTML,
+            title: response.title,        
             git: this.gitInfo
         });
     }
@@ -79,22 +72,6 @@ function getlogoutInfo(options, file) {
     }
 
     return options.hosting.routes.logout;
-}
-
-function getRelativeBasePath(options) {
-    const root = path.relative(cwd(), options.basePath);
-    if (root === '')
-        return root;
-
-    return `${root}/`;
-}
-
-function getRelativeRoot(options) {
-    const root = path.relative(cwd(), options.dst);
-    if (root === '')
-        return root;
-
-    return `${root}/`;
 }
 
 function getRelativeUrl(options, file) {

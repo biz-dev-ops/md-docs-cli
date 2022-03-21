@@ -1,10 +1,12 @@
 module.exports = class DefinitionParser {
-    constructor({ defintionStore }) {
+    constructor({ defintionStore, relative }) {
         this.defintionStore = defintionStore;
+        this.relative = relative;
     }
 
-    async parse(html, root) {
+    async parse(html) {
         const defintions = await this.defintionStore.get();
+        const root = this.relative.get().root;
 
         for (const definition of defintions) {
             const regex = new RegExp(`(?![^<]*>)(${createAlias(definition)})`, 'img');

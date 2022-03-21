@@ -25,9 +25,7 @@ const md = require('markdown-it')
     .use(require("markdown-it-attrs"));
 
 module.exports = class MarkdownRenderer {
-    constructor({ htmlParsers }) {
-        this.parsers = htmlParsers
-    }
+    constructor() { }
 
     async render(markdown) {
         const html = md.render(markdown);
@@ -39,10 +37,6 @@ module.exports = class MarkdownRenderer {
             svg.setAttribute('data-generator', 'markdown');
         });
         
-        for (const parser of this.parsers) {
-            await parser.parse(element);
-        }
-
-        return element.innerHTML;
+        return element;
     }
 }
