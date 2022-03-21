@@ -442,12 +442,20 @@ main > aside > div {
     padding: var(--space-md) var(--space-lg);
 }
 
-main > aside > div.header {
-    border-bottom: var(--line-base) solid var(--color-white-a90);
+main > aside > .header {
+    border-top: var(--line-base) solid var(--color-white-a90);
+    padding-bottom: 0;
+    margin-top: var(--space-md);
+}
+
+main > aside > .header:first-child {
+    border-top: none;
+    margin-top: 0;
 }
 
 main > aside h2 {
     font-size: var(--heading-5-size);
+    text-transform: uppercase;
 }
 
 main > aside a {
