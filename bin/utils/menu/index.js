@@ -18,9 +18,14 @@ module.exports = class Menu {
     }
 
     async items() {
-        if (this.#data != null)
+        if (this.#data)
             return this.#data;
         
+        this.#data = await this.#getData();
+        return this.#data;
+    }
+
+    async #getData() {
         if (!await files.exists(this.root)) {
             throw new Error(`menu source ${path.relative(cwd(), this.root)}  not found.`);
         }
@@ -31,14 +36,16 @@ module.exports = class Menu {
         const items = [];
 
         const item = await this.#getMenuItem(this.root);
-        if (item != undefined)
-            items.push(item);
+        if (item != undefined) {
+            items.push(...item.items);
+            item.items = [];
+            items.unshift(item);
+        }
 
         if (env.NODE_ENV === 'development')
             await fs.writeFile(path.resolve(this.root, `menu.json`), JSON.stringify(items));
 
-        this.#data = items;
-        return this.#data;
+        return items;
     }
 
     async #getMenuItem(src) {
@@ -88,4 +95,3 @@ module.exports = class Menu {
         return matches[1];
     }
 }
-

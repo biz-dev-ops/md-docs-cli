@@ -48,14 +48,6 @@ function addToHeadingContainer(locale, element, container, level) {
                         console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: removing element`));
                         element.parentNode.removeChild(element);
                     }
-                    else {
-                        console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: creating toc container`));
-
-                        const parentNode = element.parentNode;
-                        const tocContainer = jsdom.JSDOM.fragment(TOC_CONTAINER_TEMPLATE(locale));
-                        parentNode.insertBefore(tocContainer, element);
-                        parentNode.querySelector("#toc-container").appendChild(element);
-                    }
                 }
                 else {
                     console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: creating headless container`));
@@ -73,13 +65,6 @@ function addToHeadingContainer(locale, element, container, level) {
         element = next;
     }
 }
-
-const TOC_CONTAINER_TEMPLATE = (locale) => `<aside>
-    <div>
-        <h2>${locale["on_this_page"]}</h2>
-    </div>
-    <div id="toc-container"></div>
-</aside>`;
 
 const HEADLESS_CONTAINER_TEMPLATE = `<div class="headless-container"></div>`;
 
