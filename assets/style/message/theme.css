@@ -1,0 +1,30 @@
+:root {
+    --color-primary-base: var(--color-brand-base);
+
+    --space-base: 16pt;
+
+    --font-size-small: 9pt;
+    --font-size-base: 11pt;
+    --font-size-medium: 13pt;
+    --font-size-large: 18pt;
+
+    --font-weight-base: 300;
+    --font-weight-small: 400;
+    --font-weight-heading-small: 600;
+    --font-weight-heading-base: 400;
+
+    --font-weight-table-base: 300;
+    --font-weight-table-heading: 400;
+
+    --line-height-small: 12pt;
+    --line-height-base: var(--space-base);
+    --line-height-medium: calc(var(--font-size-medium) * 1.25);
+    --line-height-large: calc(var(--font-size-large) * 1.25);
+
+    --logo-offset: 28pt;
+    --logo-width: 208pt;
+    --logo-height: 58pt;
+    --page-border: 2pt;
+    --border-width: .1pt;
+    --border-color: var(--color-brand-light);
+}

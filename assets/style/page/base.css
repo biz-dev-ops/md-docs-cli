@@ -258,6 +258,10 @@ header .nav .icon {
     vertical-align: middle;
 }
 
+header .nav .icon + .label {
+    margin-left: var(--space-xs);
+}
+
 header .nav svg {
     fill: currentColor;
 }
@@ -280,6 +284,10 @@ header a[aria-expanded="true"] {
 
 .menu-toggle-branches {
     white-space: nowrap;
+}
+
+.menu-toggle-branches .label {
+    margin: 0 var(--space-xs);
 }
 
 .menu-toggle-branches::after {
@@ -423,9 +431,10 @@ main > aside h2 {
 @media (min-width: 60rem) {
     main > aside {
         grid-area: aside;
+        margin-bottom: 0;
         order: 2;
-        /* position: sticky;
-        top: calc(var(--header-height) + var(--space-lg)); */
+        position: sticky;
+        top: calc(var(--header-height) + var(--space-lg));
     }
 }
 
