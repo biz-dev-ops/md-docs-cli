@@ -56,21 +56,40 @@ html
                 li=val
 
     script.
-      //Polyfill disturbes the iframe resizer, calculate height manually.
-      window.iFrameResizer = {
-        heightCalculationMethod: () => {
-            const body = document.body, html = document.documentElement;
-            const height = Math.max(
-              body.scrollHeight, 
-              body.offsetHeight,
-              html.clientHeight, 
-              html.scrollHeight, 
-              html.offsetHeight
-            );
+      (() => {
+        const calculateHeight = () => {
+          const body = document.body, html = document.documentElement;
 
-            return height;
+          return Math.max(
+            body.scrollHeight,
+            body.offsetHeight,
+            html.clientHeight,
+            html.scrollHeight,
+            html.offsetHeight);
+        };
+
+        if(calculateHeight() === 0) {
+          document.body.style.visibility = "hidden";
+          
+          window.PagedConfig = {
+            auto: false
+          };
+
+          const interval = setInterval(() => {
+            if(calculateHeight() > 0) {
+              window.clearInterval(interval);
+              window.PagedPolyfill.preview();
+              document.body.style.visibility = "visible";
+            }
+          }, 500);
         }
-      };
+
+        //Polyfill disturbes the iframe resizer, calculate height manually.      
+        window.iFrameResizer = {
+          heightCalculationMethod: () => { return calculateHeight(); }
+        };
+      })();
+    
     script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
 
     
