@@ -1,6 +1,6 @@
 {
   "name": "@synion/md-docs",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -52,6 +52,7 @@
     "markdown-it-container": "^3.0.0",
     "markdown-it-multimd-table": "^4.1.2",
     "markdown-it-plantuml-ex": "^1.0.0",
+    "markdown-it-task-lists": "^2.1.1",
     "markdown-it-toc-done-right": "^4.2.0",
     "moment": "^2.29.1",
     "node-plantuml": "^0.9.0",
