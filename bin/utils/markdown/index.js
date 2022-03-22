@@ -22,7 +22,8 @@ const md = require('markdown-it')
     .use(require("markdown-it-plantuml-ex"))
     .use(require("markdown-it-abbr"))
     .use(require("markdown-it-codetabs"))
-    .use(require("markdown-it-attrs"));
+    .use(require("markdown-it-attrs"))
+    .use(require('markdown-it-task-lists'));
 
 module.exports = class MarkdownRenderer {
     constructor() { }
