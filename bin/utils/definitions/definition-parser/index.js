@@ -16,6 +16,16 @@ module.exports = class DefinitionParser {
 
         return html;
     }
+
+    async render(template) {
+        const defintions = await this.defintionStore.get();
+        for (const definition of defintions) {
+            const regex = new RegExp(`(?![^<]*>)({{${definition.name}}})`, 'img');
+
+            template = template.replace(regex, definition.text);
+        }
+        return template;
+    }
 }
 
 function createReplacement(definition, root) {

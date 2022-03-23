@@ -4,13 +4,12 @@ const chalk = require('chalk-next');
 const files = require('../../utils/files');
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, gitInfo, hosting, markdownRenderer, htmlParsers, defintionParser, pageComponent, relative }) {
+    constructor({ options, gitInfo, hosting, markdownRenderer, htmlParsers, pageComponent, relative }) {
         this.options = options;
         this.gitInfo = gitInfo;
         this.hosting = hosting;
         this.renderer = markdownRenderer;
         this.parsers = htmlParsers;
-        this.defintionParser = defintionParser;
         this.component = pageComponent;
         this.relative = relative;
     }
