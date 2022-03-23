@@ -10,10 +10,11 @@ const files = require('../../utils/files');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class AsyncapiAnchorParser extends AnchorParser {
-  constructor({ options, asyncapiComponent, iFrameComponent  }) {
+  constructor({ options, defintionParser, asyncapiComponent, iFrameComponent  }) {
     super();
 
     this.root = options.dst;
+    this.defintionParser = defintionParser;
     this.asyncapiComponent = asyncapiComponent;
     this.iFrameComponent = iFrameComponent;
   }
@@ -22,7 +23,9 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
   async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
-    let json = await jsonSchemaParser.parse(file);
+    let json = await jsonSchemaParser
+      .parse(file)
+      .then(json => this.defintionParser.render(json));
 
     try {
       // Does not work without parsed json.
@@ -39,7 +42,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
     console.info(chalk.green(`\t\t\t\t* rendering page`));
     const html = this.asyncapiComponent.render({
-      schema: JSON.stringify(json),
+      schema: await this.defintionParser.render(JSON.stringify(json)),
       root: relativeRoot
     });
 

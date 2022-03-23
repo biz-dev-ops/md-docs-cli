@@ -13,6 +13,6 @@ module.exports = class DefinitionHtmlParser extends HtmlParser {
 
         const article = element.querySelector('article');
 
-        article.innerHTML = await this.defintionParser.parse(article.innerHTML);        
+        article.innerHTML = await this.defintionParser.parse(article.innerHTML);
     }
 }

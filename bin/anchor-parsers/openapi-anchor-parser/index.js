@@ -9,10 +9,11 @@ const files = require('../../utils/files');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class OpenapiAnchorParser extends AnchorParser {
-  constructor({ options, openapiComponent, iFrameComponent }) {
+  constructor({ options, defintionParser, openapiComponent, iFrameComponent }) {
     super();
 
     this.root = options.dst;
+    this.defintionParser = defintionParser;
     this.openapiComponent = openapiComponent;
     this.iFrameComponent = iFrameComponent;
   }
@@ -21,7 +22,7 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
 
   async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
-    const json = await jsonSchemaParser.parse(file);
+    const json = await jsonSchemaParser.parse(file);    
 
     let relativeRoot = path.relative(path.dirname(file), this.root);
     if (relativeRoot !== '')
@@ -29,7 +30,7 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
 
     console.info(chalk.green(`\t\t\t\t* rendering page`));
     const html = this.openapiComponent.render({
-      spec: JSON.stringify(json),
+      spec: await this.defintionParser.render(JSON.stringify(json)),
       root: relativeRoot
     });
 
