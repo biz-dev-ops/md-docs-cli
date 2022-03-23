@@ -4,9 +4,10 @@ const chalk = require('chalk-next');
 const files = require('../../utils/files');
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, gitInfo, markdownRenderer, htmlParsers, defintionParser, pageComponent, relative }) {
+    constructor({ options, gitInfo, hosting, markdownRenderer, htmlParsers, defintionParser, pageComponent, relative }) {
         this.options = options;
         this.gitInfo = gitInfo;
+        this.hosting = hosting;
         this.renderer = markdownRenderer;
         this.parsers = htmlParsers;
         this.defintionParser = defintionParser;
@@ -41,12 +42,18 @@ module.exports = class MarkdownFileParser {
         const logout = getlogoutInfo(this.options, file);
         const showNav = getShowNavInfo(this.options, file);
 
+        const url = getRelativeUrl(this.options, file);
+        const relative = this.relative.get();
+        if (this.hosting.rewrite(url)) {
+            relative.root = `/${this.gitInfo.branch.path}`;
+        }
+
         return this.component.render({
-            relative: this.relative.get(),
+            relative: relative,
             showNav: showNav,
             logout: logout,
             sourceFile: getSourceFile(this.options, file),
-            url: getRelativeUrl(this.options, file),
+            url: url,
             content: element.innerHTML,
             title: response.title,        
             git: this.gitInfo
