@@ -22,7 +22,7 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
 
   async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
-    const json = await jsonSchemaParser.parse(file);    
+    const json = await this.#getJson(file);
 
     let relativeRoot = path.relative(path.dirname(file), this.root);
     if (relativeRoot !== '')
@@ -30,7 +30,7 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
 
     console.info(chalk.green(`\t\t\t\t* rendering page`));
     const html = this.openapiComponent.render({
-      spec: await this.defintionParser.render(JSON.stringify(json)),
+      spec: JSON.stringify(json),
       root: relativeRoot
     });
 
@@ -46,5 +46,10 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
       name: 'openapi',
       src: `./${path.relative(cwd(), htmlFile)}?_v=${hash}`,
     });
+  }
+
+  async #getJson(file) {
+    const json = await jsonSchemaParser.parse(file);
+    return JSON.parse(await this.defintionParser.render(JSON.stringify(json)));
   }
 };

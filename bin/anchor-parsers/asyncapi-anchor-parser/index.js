@@ -23,9 +23,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
   async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
-    let json = await jsonSchemaParser
-      .parse(file)
-      .then(json => this.defintionParser.render(json));
+    const json = await this.#getJson(file);
 
     try {
       // Does not work without parsed json.
@@ -42,7 +40,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
     console.info(chalk.green(`\t\t\t\t* rendering page`));
     const html = this.asyncapiComponent.render({
-      schema: await this.defintionParser.render(JSON.stringify(json)),
+      schema: JSON.stringify(json),
       root: relativeRoot
     });
 
@@ -58,5 +56,10 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
       name: 'asyncapi',
       src: `./${path.relative(cwd(), htmlFile)}?_v=${hash}`,
     });
+  }
+
+  async #getJson(file) {
+    const json = await jsonSchemaParser.parse(file);
+    return JSON.parse(await this.defintionParser.render(JSON.stringify(json)));
   }
 };
