@@ -1,6 +1,5 @@
 const fs = require('fs').promises;
 const util = require('util');
-const { cwd } = require('process');
 const path = require('path');
 const chalk = require('chalk-next');
 const jsdom = require('jsdom');
@@ -66,7 +65,7 @@ module.exports = class MarkdownMessageFileParser {
         const css = await cssImportResolveAsync({
             ext: 'css',
             pathToMain: cssFile
-        })
+        });
         
         const markdown = await files.readFileAsString(file);
         const response = await this.#renderMarkdown(markdown);
@@ -110,7 +109,7 @@ module.exports = class MarkdownMessageFileParser {
             const merger = new PDFMerger();
             merger.add(pdfFile);
             for (const a of response.attachments) {
-                attachment = path.resolve(path.dirname(file), a);
+                const attachment = path.resolve(path.dirname(file), a);
                 console.info(chalk.green(`\t\t* adding attachment ${path.relative(attachment, pdfFile)}`));
                 merger.add(attachment);                
             }

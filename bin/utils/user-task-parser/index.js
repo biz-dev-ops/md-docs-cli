@@ -35,7 +35,7 @@ function transformToFields(schema, ui, parents) {
             field.items = transformToFields(property, ui, [...parents, key]);
         }
         else {
-            field.value = transformToField(property, ui, [...parents, key]);
+            field.value = transformToField(property);
         }
 
         fields.push(field);
