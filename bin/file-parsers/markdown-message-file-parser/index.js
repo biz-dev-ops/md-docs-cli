@@ -52,8 +52,9 @@ module.exports = class MarkdownMessageFileParser {
         //console.info(chalk.green(`\t* render pdf`));
         //await this.#renderPDF(file, attachments)
 
-        console.info(chalk.green(`\t* deleting ${path.relative(this.options.dst, file)}`));        
-        await fs.unlink(file);
+        // TODO: bug i.c.m. version op de anchor link.
+        // console.info(chalk.green(`\t* deleting ${path.relative(this.options.dst, file)}`));        
+        // await fs.unlink(file);
     }
 
     async #renderHtml(file) {

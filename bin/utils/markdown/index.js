@@ -26,10 +26,12 @@ const md = require('markdown-it')
     .use(require('markdown-it-task-lists'));
 
 module.exports = class MarkdownRenderer {
-    constructor() { }
+    constructor({ defintionParser }) {
+        this.defintionParser = defintionParser;
+    }
 
     async render(markdown) {
-        const html = md.render(markdown);
+        const html = await this.defintionParser.parse(md.render(markdown));        
         
         const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
         element.innerHTML = html;

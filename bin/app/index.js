@@ -43,7 +43,6 @@ const UserTaskComponent = require('../components/user-task-component');
 
 const AnchorHtmlParser = require('../html-parsers/anchor-html-parser');
 const CleanUpHtmlParser = require('../html-parsers/clean-up-html-parser');
-const DefinitionHtmlParser = require('../html-parsers/definition-html-parser');
 const ImageHtmlParser = require('../html-parsers/image-html-parser');
 const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
@@ -216,7 +215,6 @@ module.exports = class App {
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
             'cleanUpHtmlParser': asClass(CleanUpHtmlParser).singleton(),
-            'definitionHtmlParser': asClass(DefinitionHtmlParser).singleton(),
             'fullscreenHtmlParser': asClass(FullscreenHtmlParser).singleton(),
             'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
             'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
@@ -269,7 +267,6 @@ module.exports = class App {
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
                 'menuHtmlParser',
-                'definitionHtmlParser',
                 'cleanUpHtmlParser'
             ],
 
