@@ -16,13 +16,11 @@ module.exports = class MarkdownMessageAnchorParser extends AnchorParser {
   _canParse(anchor) { return path.basename(anchor.href).endsWith('.message.md'); }
 
   async _parse(anchor, file) {
-    console.info(chalk.green(`\t\t\t\t* changing href`));
-
-    const url = `${file}.html`;
-
     console.info(chalk.green(`\t\t\t\t* rendering iframe`));
 
-    const hash = await files.hash(url);
+    const url = `${file}.html`;    
+    
+    const hash = await files.hash(file);
     
     return this.iFrameComponent.render({
       name: 'asyncapi',
