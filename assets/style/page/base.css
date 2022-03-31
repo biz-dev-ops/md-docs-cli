@@ -656,8 +656,8 @@ article > .header-container {
 /* Module: Git branch menu */
 #git-branch-menu {
     padding: var(--space-md);
-    position: absolute;
-    margin-right: calc(var(--space-lg) + var(--space-lg) + var(--space-md) + var(--space-xss));
+    /* position: absolute;
+    margin-right: calc(var(--space-lg) + var(--space-lg) + var(--space-md) + var(--space-xss)); */
 }
 
 /* Module: BPMN */
