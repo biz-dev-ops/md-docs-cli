@@ -24,10 +24,6 @@ module.exports = class MarkdownFileParser {
         const html = await this.#render(file);
 
         await fs.writeFile(htmlFile, html);
-
-        // TODO: bug i.c.m. version op de anchor link.
-        // console.info(chalk.green(`\t* deleting ${path.relative(this.options.dst, file)}`));        
-        // await fs.unlink(file);
     }
 
     async #render(file) {

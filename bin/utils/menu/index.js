@@ -7,7 +7,7 @@ const files = require('../files');
 
 module.exports = class Menu {
     #data = null;
-    #regex = /\d+[_](.*)/;
+    #regex = /(\d+[_])/ig;
 
     constructor({ options }) {
         this.root = options.dst;        
@@ -22,6 +22,7 @@ module.exports = class Menu {
             return this.#data;
         
         this.#data = await this.#getData();
+        this.#data = this.#rewriteUrls(this.#data);
         return this.#data;
     }
 
@@ -59,8 +60,8 @@ module.exports = class Menu {
 
         for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
             if (entry.isDirectory()) {
-                const name = await this.#resolveDirectory(entry, src);
-                const sub = await this.#getMenuItem(path.resolve(src, name));
+                //const name = await this.#resolveDirectory(entry, src);
+                const sub = await this.#getMenuItem(path.resolve(src, entry.name));
                 if (sub != undefined)
                     item.items.push(sub);
             }
@@ -79,19 +80,37 @@ module.exports = class Menu {
         if (this.root === src)
             return 'home';
         
-        const name = path.basename(src);
+        const name = this.#rewriteName(path.basename(src));
 
         return name.charAt(0).toUpperCase() + name.slice(1)
-            .replace("-", " ");
+            .replaceAll("-", " ");
     }
 
-    async #resolveDirectory(entry, src) {
+    #rewriteUrls(items) {
+        return items.map(i => {
+            const item = {
+                name: i.name,
+                items: this.#rewriteUrls(i.items)
+            }
 
-        const matches = entry.name.match(this.#regex);
-        if (!matches)
-            return entry.name;
+            if (i.url)
+                item.url = this.#rewriteUrl(i.url);            
+            
+            return item;
+            
+        });
+    }
+
+    #rewriteName(name) {
+        return name.replaceAll(this.#regex, '');
+    }
+
+    #rewriteUrl(url) {
+        const rewrite = url.replaceAll(this.#regex, '');
+        if (rewrite === url)
+            return url;
         
-        await fs.rename(path.resolve(src, matches[0]), path.resolve(src, matches[1]));
-        return matches[1];
+        console.info(chalk.green(`\t* rewrite url ${url} => ${rewrite}`));
+        return rewrite;
     }
 }

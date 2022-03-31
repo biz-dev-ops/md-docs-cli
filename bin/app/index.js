@@ -60,6 +60,7 @@ const MarkdownMessageAnchorParser = require('../anchor-parsers/markdown-message-
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const UmlAnchorParser = require('../anchor-parsers/uml-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
+const { runInThisContext } = require('vm');
 
 module.exports = class App {
     #options = null;
@@ -86,6 +87,11 @@ module.exports = class App {
         await hosting.apply();
 
         await this.#parse(options);
+        
+        console.info(chalk.green('\nrenaming directories:'));
+        await this.#rename(options.dst);
+
+        console.info(chalk.greenBright('\nready, shutting down.....'));
     }
 
     dispose() {
@@ -116,8 +122,8 @@ module.exports = class App {
         console.info(chalk.greenBright('Initializing stores....'));
 
         await this.container.resolve('defintionStore').init();
-        await this.container.resolve('locale').init();
-        await this.container.resolve('menu').init();        
+        await this.container.resolve('locale').init();        
+        await this.container.resolve('menu').init();
         await this.container.resolve('testExecutionStore').init();
 
         this.#options = null;
@@ -127,9 +133,6 @@ module.exports = class App {
         const fileParser = this.container.resolve('fileParser');
 
         await files.each(options.dst, async (file) => {
-            // //Change from src to dst location.
-            // file = path.resolve(options.dst, path.relative(options.src, file));
-
             console.info();
             console.info(chalk.yellow(`parsing ${path.relative(options.dst, file)}`));
 
@@ -143,9 +146,23 @@ module.exports = class App {
             //Reset current working directory
             chdir(dir);
         });
+    }
 
-        console.info();
-        console.info(chalk.greenBright('ready, shutting down.....'));
+    async #rename(dir) {
+        const entries = await fs.readdir(dir, { withFileTypes: true });
+
+        for (let entry of entries) {
+            if (entry.isDirectory()) {
+                const src = path.resolve(dir, entry.name);
+                const dst = path.resolve(dir, entry.name.replace(/(\d+[_])/ig, ''));
+                
+                if (src != dst) {
+                    console.info(chalk.green(`\trenaming ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
+                    await fs.rename(src, dst);
+                }
+                await this.#rename(dst);
+            }
+        }
     }
 
     //Protected
