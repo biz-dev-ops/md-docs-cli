@@ -23,7 +23,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
   async _parse(anchor, file) {
     console.info(chalk.green(`\t\t\t\t* parsing yaml`));
-    const json = await this.#getJson(file);
+    let json = await this.#getJson(file);
 
     try {
       // Does not work without parsed json.
