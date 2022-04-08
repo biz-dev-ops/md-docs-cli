@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="viewer.min.js" charset="UTF-8"></script>
+</head>
+<body>
+    <script>
+        const params = new URLSearchParams(document.location.search);
+        const data = decodeURIComponent(params.get("data"));
+
+        const div = document.createElement("div");
+        div.setAttribute("class", "mxgraph");
+        div.setAttribute("data-mxgraph", data);
+        document.body.appendChild(div);
+
+        GraphViewer.processElements();
+    </script>
+</body>
+</html>

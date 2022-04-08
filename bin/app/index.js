@@ -23,7 +23,10 @@ const AzureStaticWebApp = require('../hosting/azure-static-web-app');
 const DefinitionParser = require('../utils/definitions/definition-parser');
 const DefinitionStore = require('../utils/definitions/definition-store');
 
+const DrawIORenderer = require('../utils/draw-io-renderer');
+
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
+const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 
@@ -32,6 +35,7 @@ const BpmnComponent = require('../components/bpmn-component');
 const DashboardComponent = require('../components/dashboard-component');
 const FeatureComponent = require('../components/feature-component');
 const FullscreenComponent = require('../components/fullscreen-component');
+const GraphViewerComponent = require('../components/graph-viewer-component');
 const IFrameComponent = require('../components/iframe-component');
 const ImageComponent = require('../components/image-component');
 const MenuComponent = require('../components/menu-component');
@@ -53,6 +57,7 @@ const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser')
 const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
+const DrawioAnchorParser = require('../anchor-parsers/drawio-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
@@ -216,6 +221,11 @@ module.exports = class App {
             'locale': asClass(Locale).singleton(),
             'relative': asClass(Relative).singleton(),
 
+            //DrawIO
+            'graphViewerComponent': asClass(GraphViewerComponent).singleton(),
+            'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
+            'drawIORenderer': asClass(DrawIORenderer).singleton(),
+
             //Hosting services
             'hosting': asClass(CompositeHostingService).singleton(),
             'azureStaticWebApp': asClass(AzureStaticWebApp).singleton(),
@@ -243,6 +253,7 @@ module.exports = class App {
             'bpmnAnchorParser': asClass(BPMNAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
+            'drawioAnchorParser': asClass(DrawioAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
@@ -265,13 +276,14 @@ module.exports = class App {
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
             'userTaskComponent': asClass(UserTaskComponent).singleton().inject(container => allowUnregistered(container, 'userTaskComponentRenderFn')),
-
+            
             'hostingServices': [
                 'azureStaticWebApp'
             ],
 
             //File parsers: order can be important!
             'fileParsers': [
+                'drawIOFileParser',
                 'markdownFileParser',
                 'markdownMessageFileParser'
             ],
@@ -293,6 +305,7 @@ module.exports = class App {
                 'bpmnAnchorParser',
                 'codeAnchorParser',
                 'dashboardAnchorParser',
+                'drawioAnchorParser',
                 'featureAnchorParser',
                 'featuresAnchorParser',
                 'markdownAnchorParser',
