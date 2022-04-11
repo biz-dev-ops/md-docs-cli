@@ -1,0 +1,67 @@
+@startuml
+
+class MarkdownRenderer
+
+interface FileParser {
+    async parse(file: string) : void
+}
+class CompositeFileParser
+class DrawIOFileParser
+Class MarkdownFileParser
+Class MarkdownMessageFileParser
+class UMLFileParser
+
+interface HtmlParser {
+    async parse(element: Element) : void
+}
+class AnchorHtmlParser
+class CleanUpHtmlParser
+class FullscreenHtmlParser
+class HeadingHtmlParser
+class ImageHtmlParser
+class UnsortedListHtmlParser
+
+interface AnchorParser {
+    canParse(anchor: HTMLAnchorElement) : bool
+    async parse(file: string, anchor: HTMLAnchorElement) : string;
+}
+class AsyncapiAnchorParser
+class BPMNAnchorParser
+class CodeAnchorParser
+class DashboardAnchorParser
+class FeatureAnchorParser
+class MarkdownAnchorParser
+class OpenapiAnchorParser
+class UmlAnchorParser
+class UserTaskAnchorParser
+
+CompositeFileParser *-- "has many" FileParser
+FileParser <|.. DrawIOFileParser
+FileParser <|.. MarkdownFileParser
+FileParser <|.. MarkdownMessageFileParser
+FileParser <|.. UMLFileParser
+CompositeFileParser ..|> FileParser
+
+MarkdownFileParser --> "uses" MarkdownRenderer
+
+MarkdownRenderer *-- "has many" HtmlParser
+
+HtmlParser <|.. AnchorHtmlParser
+HtmlParser <|.. CleanUpHtmlParser
+HtmlParser <|.. FullscreenHtmlParser
+HtmlParser <|.. HeadingHtmlParser
+HtmlParser <|.. ImageHtmlParser
+HtmlParser <|.. UnsortedListHtmlParser
+
+AnchorHtmlParser *-- "has many" AnchorParser
+AnchorParser <|.. AsyncapiAnchorParser
+AnchorParser <|.. BPMNAnchorParser
+AnchorParser <|.. CodeAnchorParser
+AnchorParser <|.. DashboardAnchorParser
+AnchorParser <|.. FeatureAnchorParser
+AnchorParser <|.. MarkdownAnchorParser
+AnchorParser <|.. OpenapiAnchorParser
+AnchorParser <|.. UserTaskAnchorParser
+AnchorParser <|.. UrlRewriteAnchorParser
+
+@enduml

@@ -95,14 +95,13 @@ module.exports = class MarkdownMessageFileParser {
         const pdfFile = `${file}.pdf`;
         console.info(chalk.green(`\t\t* creating ${path.relative(this.options.dst, pdfFile)}`));
         
-        const browser = await puppeteer.launch();
+        if(!this.browser)
+            this.browser = await puppeteer.launch();
 
-        const page = await browser.newPage();
+        const page = await this.browser.newPage();
         await page.goto(`file:${htmlFile}`, { waitUntil: 'networkidle2' });
         await page.pdf({ path: pdfFile, preferCSSPageSize: true, printBackground: true });
         await page.close();
-
-        await browser.close();
 
         if (attachments) {            
             console.info(chalk.green(`\t\t* adding ${attachments.length} attachments`));
@@ -167,6 +166,14 @@ module.exports = class MarkdownMessageFileParser {
         const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
         element.innerHTML = html;
         return element;
+    }
+
+    async dispose() {
+        if (!this.browser)
+            return;
+        
+        await this.browser.close();        
+        this.browser = null;        
     }
 }
 

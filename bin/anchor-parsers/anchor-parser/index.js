@@ -13,7 +13,7 @@ module.exports = class AnchorParser {
         
         console.info(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
 
-        const file = path.resolve(cwd(), `${anchor.href}`);
+        const file = path.resolve(cwd(), `${anchor.href.split('?')[0].split('#')[0]}`);
         const html = await this._parse(anchor, file);
         if (html != undefined)
             replace(anchor, html);

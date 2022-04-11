@@ -23,15 +23,20 @@ const AzureStaticWebApp = require('../hosting/azure-static-web-app');
 const DefinitionParser = require('../utils/definitions/definition-parser');
 const DefinitionStore = require('../utils/definitions/definition-store');
 
+const DrawIORenderer = require('../utils/draw-io-renderer');
+
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
+const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
+const UmlFileParser = require('../file-parsers/uml-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BpmnComponent = require('../components/bpmn-component');
 const DashboardComponent = require('../components/dashboard-component');
 const FeatureComponent = require('../components/feature-component');
 const FullscreenComponent = require('../components/fullscreen-component');
+const GraphViewerComponent = require('../components/graph-viewer-component');
 const IFrameComponent = require('../components/iframe-component');
 const ImageComponent = require('../components/image-component');
 const MenuComponent = require('../components/menu-component');
@@ -49,18 +54,18 @@ const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const MenuHtmlParser = require('../html-parsers/menu-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
 
+const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
+const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const MarkdownMessageAnchorParser = require('../anchor-parsers/markdown-message-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
-const UmlAnchorParser = require('../anchor-parsers/uml-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
-const { runInThisContext } = require('vm');
 
 module.exports = class App {
     #options = null;
@@ -216,6 +221,11 @@ module.exports = class App {
             'locale': asClass(Locale).singleton(),
             'relative': asClass(Relative).singleton(),
 
+            //DrawIO
+            'graphViewerComponent': asClass(GraphViewerComponent).singleton(),
+            'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
+            'drawIORenderer': asClass(DrawIORenderer).singleton(),
+
             //Hosting services
             'hosting': asClass(CompositeHostingService).singleton(),
             'azureStaticWebApp': asClass(AzureStaticWebApp).singleton(),
@@ -228,6 +238,7 @@ module.exports = class App {
             'fileParser': asClass(CompositeFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
+            'umlFileParser': asClass(UmlFileParser).singleton(),
 
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
@@ -245,10 +256,11 @@ module.exports = class App {
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
+            'imageAnchorParser': asClass(ImageAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'markdownMessageAnchorParser': asClass(MarkdownMessageAnchorParser).singleton(),
-            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
-            'umlAnchorParser': asClass(UmlAnchorParser).singleton(),
+            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),            
+            'urlRewriteAnchorParser': asClass(UrlRewriteAnchorParser).singleton(),
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
 
             //Component
@@ -265,15 +277,17 @@ module.exports = class App {
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
             'userTaskComponent': asClass(UserTaskComponent).singleton().inject(container => allowUnregistered(container, 'userTaskComponentRenderFn')),
-
+            
             'hostingServices': [
                 'azureStaticWebApp'
             ],
 
             //File parsers: order can be important!
             'fileParsers': [
+                'drawIOFileParser',
                 'markdownFileParser',
-                'markdownMessageFileParser'
+                'markdownMessageFileParser',
+                'umlFileParser'
             ],
 
             //Html parsers, order is important!
@@ -289,6 +303,7 @@ module.exports = class App {
 
             //Anchor parsers, order can be important!
             'anchorParsers': [
+                'urlRewriteAnchorParser',
                 'asyncapiAnchorParser',
                 'bpmnAnchorParser',
                 'codeAnchorParser',
@@ -298,8 +313,8 @@ module.exports = class App {
                 'markdownAnchorParser',
                 'markdownMessageAnchorParser',
                 'openapiAnchorParser',
-                'umlAnchorParser',
-                'userTaskAnchorParser'
+                'userTaskAnchorParser',
+                'imageAnchorParser'
             ]
         };
     }
@@ -359,5 +374,8 @@ function parseResolver(resolver) {
     if (Array.isArray(resolver))
         return asArray(resolver);    
     
-    return resolver;
+    if (!resolver.disposer)
+        return resolver;
+    
+    return resolver.disposer?.(async service => await service.dispose?.());
 }
