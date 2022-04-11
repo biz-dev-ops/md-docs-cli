@@ -21,8 +21,10 @@ module.exports = class DrawIORenderer {
     }
 
     async #renderSVG(url, data) {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
+        if(!this.browser)
+            this.browser = await puppeteer.launch();
+        
+        const page = await this.browser.newPage();
         const json = encodeURIComponent(JSON.stringify(data));
 
         await page.goto(`${url}?data=${json}`, {
@@ -35,13 +37,15 @@ module.exports = class DrawIORenderer {
         });
         
         await page.close();
-        await browser.close();
-
+        
         return svg;
     }
 
     async dispose() {
-        //await browser.close();
-        console.log(`disposing......`);
+        if (!this.browser)
+            return;
+        
+        await this.browser.close();        
+        this.browser = null;        
     }
 }

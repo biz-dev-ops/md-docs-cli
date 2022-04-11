@@ -375,5 +375,8 @@ function parseResolver(resolver) {
     if (Array.isArray(resolver))
         return asArray(resolver);    
     
-    return resolver;
+    if (!resolver.disposer)
+        return resolver;
+    
+    return resolver.disposer?.(async service => await service.dispose?.());
 }
