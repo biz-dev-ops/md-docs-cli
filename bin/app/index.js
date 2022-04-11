@@ -66,7 +66,6 @@ const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser')
 const MarkdownMessageAnchorParser = require('../anchor-parsers/markdown-message-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
-const { runInThisContext } = require('vm');
 
 module.exports = class App {
     #options = null;

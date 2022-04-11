@@ -28,7 +28,7 @@ module.exports = class DrawIORenderer {
         const json = encodeURIComponent(JSON.stringify(data));
 
         await page.goto(`${url}?data=${json}`, {
-            timeout: 5000,
+            timeout: 2000,
             waitUntil: 'domcontentloaded'
         });
         
