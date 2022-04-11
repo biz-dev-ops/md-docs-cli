@@ -14,7 +14,16 @@
         div.setAttribute("data-mxgraph", data);
         document.body.appendChild(div);
 
-        GraphViewer.processElements();
+        GraphViewer.createViewerForElement(div, (viewer) => {
+            const svg = viewer.graph.getSvg();
+
+            const result = document.createElement("div");
+            result.setAttribute("id", "result");            
+            result.innerText = svg.outerHTML;
+
+            document.body.appendChild(result);
+        });
+
     </script>
 </body>
 </html>

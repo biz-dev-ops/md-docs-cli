@@ -22,8 +22,6 @@ module.exports = class ImageHtmlParser extends HtmlParser {
         for (const element of elements) {
             console.info(chalk.green(`\t\t* parsing ${element.nodeName}`));            
 
-            
-
             if (element.parentNode.nodeName === 'A') {
                 const parent = element.parentNode;
 

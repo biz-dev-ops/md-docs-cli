@@ -29,6 +29,7 @@ const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
+const UmlFileParser = require('../file-parsers/uml-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BpmnComponent = require('../components/bpmn-component');
@@ -53,17 +54,17 @@ const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const MenuHtmlParser = require('../html-parsers/menu-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
 
+const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
-const DrawioAnchorParser = require('../anchor-parsers/drawio-anchor-parser');
+const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const MarkdownMessageAnchorParser = require('../anchor-parsers/markdown-message-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
-const UmlAnchorParser = require('../anchor-parsers/uml-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
 const { runInThisContext } = require('vm');
 
@@ -238,6 +239,7 @@ module.exports = class App {
             'fileParser': asClass(CompositeFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
+            'umlFileParser': asClass(UmlFileParser).singleton(),
 
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
@@ -253,13 +255,13 @@ module.exports = class App {
             'bpmnAnchorParser': asClass(BPMNAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
-            'drawioAnchorParser': asClass(DrawioAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
+            'imageAnchorParser': asClass(ImageAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'markdownMessageAnchorParser': asClass(MarkdownMessageAnchorParser).singleton(),
-            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
-            'umlAnchorParser': asClass(UmlAnchorParser).singleton(),
+            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),            
+            'urlRewriteAnchorParser': asClass(UrlRewriteAnchorParser).singleton(),
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
 
             //Component
@@ -285,7 +287,8 @@ module.exports = class App {
             'fileParsers': [
                 'drawIOFileParser',
                 'markdownFileParser',
-                'markdownMessageFileParser'
+                'markdownMessageFileParser',
+                'umlFileParser'
             ],
 
             //Html parsers, order is important!
@@ -301,18 +304,18 @@ module.exports = class App {
 
             //Anchor parsers, order can be important!
             'anchorParsers': [
+                'urlRewriteAnchorParser',
                 'asyncapiAnchorParser',
                 'bpmnAnchorParser',
                 'codeAnchorParser',
                 'dashboardAnchorParser',
-                'drawioAnchorParser',
                 'featureAnchorParser',
                 'featuresAnchorParser',
                 'markdownAnchorParser',
                 'markdownMessageAnchorParser',
                 'openapiAnchorParser',
-                'umlAnchorParser',
-                'userTaskAnchorParser'
+                'userTaskAnchorParser',
+                'imageAnchorParser'
             ]
         };
     }

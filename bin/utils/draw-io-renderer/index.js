@@ -23,20 +23,25 @@ module.exports = class DrawIORenderer {
     async #renderSVG(url, data) {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
+        const json = encodeURIComponent(JSON.stringify(data));
 
-        await page.goto(`${url}?data=${encodeURIComponent(JSON.stringify(data))}`, {
+        await page.goto(`${url}?data=${json}`, {
             timeout: 5000,
             waitUntil: 'domcontentloaded'
         });
         
         const svg = await page.evaluate(() => {
-            const svg = document.body.querySelector('svg');
-            return svg.outerHTML;
+            return document.getElementById('result').innerText;
         });
         
         await page.close();
         await browser.close();
 
         return svg;
+    }
+
+    async dispose() {
+        //await browser.close();
+        console.log(`disposing......`);
     }
 }
