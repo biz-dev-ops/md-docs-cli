@@ -8,11 +8,11 @@ const jsonSchemaParser = require('../../utils/json-schema-parser');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class UserTaskAnchorParser extends AnchorParser {
-  constructor({ userTaskComponent, defintionParser, locale }) {
+  constructor({ userTaskComponent, definitionParser, locale }) {
     super();
 
     this.component = userTaskComponent;
-    this.defintionParser = defintionParser;
+    this.definitionParser = definitionParser;
     this.locale = locale;
   }
 
@@ -44,6 +44,6 @@ module.exports = class UserTaskAnchorParser extends AnchorParser {
 
   async #getJson(file) {
     const json = await jsonSchemaParser.parse(file);
-    return JSON.parse(await this.defintionParser.render(JSON.stringify(json)));
+    return JSON.parse(await this.definitionParser.render(JSON.stringify(json)));
   }
 };

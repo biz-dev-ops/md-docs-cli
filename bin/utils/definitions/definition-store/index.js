@@ -22,13 +22,13 @@ module.exports = class DefinitionStore {
 
         this.#data = [];
         if (!await files.exists(this.options.definitionsFile)) {
-            console.info(chalk.yellow(`no defintion file found.`));
+            console.info(chalk.yellow(`no definition file found.`));
             return this.#data;
         }
 
         const content = await files.readFileAsString(this.options.definitionsFile);
         this.#data = yaml.load(content);
-        console.info(chalk.yellow(`${this.#data.length} defintions found.`));
+        console.info(chalk.yellow(`${this.#data.length} definitions found.`));
         return this.#data;
     }
 }

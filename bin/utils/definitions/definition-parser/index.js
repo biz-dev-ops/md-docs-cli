@@ -1,14 +1,14 @@
 module.exports = class DefinitionParser {
-    constructor({ defintionStore, relative }) {
-        this.defintionStore = defintionStore;
+    constructor({ definitionStore, relative }) {
+        this.definitionStore = definitionStore;
         this.relative = relative;
     }
 
     async parse(html) {
-        const defintions = await this.defintionStore.get();
+        const definitions = await this.definitionStore.get();
         const root = this.relative.get().root;
 
-        for (const definition of defintions) {
+        for (const definition of definitions) {
             const regex = new RegExp(`(?![^<]*>)(${createAlias(definition)})`, 'img');
 
             html = html.replace(regex, createReplacement(definition, root));
@@ -18,8 +18,8 @@ module.exports = class DefinitionParser {
     }
 
     async render(template) {
-        const defintions = await this.defintionStore.get();
-        for (const definition of defintions) {
+        const definitions = await this.definitionStore.get();
+        for (const definition of definitions) {
             const regex = new RegExp(`(?![^<]*>)({{${definition.name}}})`, 'img');
 
             template = template.replace(regex, definition.text);

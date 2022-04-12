@@ -10,11 +10,11 @@ const files = require('../../utils/files');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class AsyncapiAnchorParser extends AnchorParser {
-  constructor({ options, defintionParser, asyncapiComponent, iFrameComponent  }) {
+  constructor({ options, definitionParser, asyncapiComponent, iFrameComponent  }) {
     super();
 
     this.root = options.dst;
-    this.defintionParser = defintionParser;
+    this.definitionParser = definitionParser;
     this.asyncapiComponent = asyncapiComponent;
     this.iFrameComponent = iFrameComponent;
   }
@@ -60,6 +60,6 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
 
   async #getJson(file) {
     const json = await jsonSchemaParser.parse(file);
-    return JSON.parse(await this.defintionParser.render(JSON.stringify(json)));
+    return JSON.parse(await this.definitionParser.render(JSON.stringify(json)));
   }
 };
