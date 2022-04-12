@@ -9,11 +9,11 @@ const files = require('../../utils/files');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class OpenapiAnchorParser extends AnchorParser {
-  constructor({ options, defintionParser, openapiComponent, iFrameComponent }) {
+  constructor({ options, definitionParser, openapiComponent, iFrameComponent }) {
     super();
 
     this.root = options.dst;
-    this.defintionParser = defintionParser;
+    this.definitionParser = definitionParser;
     this.openapiComponent = openapiComponent;
     this.iFrameComponent = iFrameComponent;
   }
@@ -50,6 +50,6 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
 
   async #getJson(file) {
     const json = await jsonSchemaParser.parse(file);
-    return JSON.parse(await this.defintionParser.render(JSON.stringify(json)));
+    return JSON.parse(await this.definitionParser.render(JSON.stringify(json)));
   }
 };

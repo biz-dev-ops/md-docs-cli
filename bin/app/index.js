@@ -48,6 +48,7 @@ const UserTaskComponent = require('../components/user-task-component');
 
 const AnchorHtmlParser = require('../html-parsers/anchor-html-parser');
 const CleanUpHtmlParser = require('../html-parsers/clean-up-html-parser');
+const DefinitionHtmlParser = require('../html-parsers/definition-html-parser');
 const ImageHtmlParser = require('../html-parsers/image-html-parser');
 const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
@@ -126,7 +127,7 @@ module.exports = class App {
         console.info();
         console.info(chalk.greenBright('Initializing stores....'));
 
-        await this.container.resolve('defintionStore').init();
+        await this.container.resolve('definitionStore').init();
         await this.container.resolve('locale').init();        
         await this.container.resolve('menu').init();
         await this.container.resolve('testExecutionStore').init();
@@ -230,9 +231,9 @@ module.exports = class App {
             'hosting': asClass(CompositeHostingService).singleton(),
             'azureStaticWebApp': asClass(AzureStaticWebApp).singleton(),
 
-            //Defintions
-            'defintionParser': asClass(DefinitionParser).singleton(),
-            'defintionStore': asClass(DefinitionStore).singleton(),
+            //Definitions
+            'definitionParser': asClass(DefinitionParser).singleton(),
+            'definitionStore': asClass(DefinitionStore).singleton(),
 
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
@@ -243,6 +244,7 @@ module.exports = class App {
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
             'cleanUpHtmlParser': asClass(CleanUpHtmlParser).singleton(),
+            'definitionHtmlParser': asClass(DefinitionHtmlParser).singleton(),
             'fullscreenHtmlParser': asClass(FullscreenHtmlParser).singleton(),
             'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
             'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
@@ -292,6 +294,7 @@ module.exports = class App {
 
             //Html parsers, order is important!
             'htmlParsers': [
+                'definitionHtmlParser',
                 'headingHtmlParser',
                 'anchorHtmlParser',
                 'unsortedListHtmlParser',
