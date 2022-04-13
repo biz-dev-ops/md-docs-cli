@@ -1,7 +1,7 @@
 exports.parse = function (actions) {
     if (actions == undefined)
         return null;
-    
+
     return Object.entries(actions)
         .map(kvp => transformToAction(kvp[0], kvp[1]));
 }
@@ -11,37 +11,60 @@ function transformToAction(key, action) {
         id: key,
         name: action.name ?? key,
         items: transformToFormFields(action.schema, action.ui, [])
-    }    
+    }
 }
 
 function transformToFormFields(schema, ui, parents) {
-    return Object.entries(schema.properties)
-        .filter(kvp => !hide(parents, kvp[0], ui?.hidden))
-        .map(kvp => {
-            const key = kvp[0];
-            const property = kvp[1];
+    if (schema.properties) {
+        return Object.entries(schema.properties)
+            .filter(kvp => !hide(parents, kvp[0], ui?.hidden))
+            .map(kvp => {
+                const key = kvp[0];
+                const property = kvp[1];
+                const required = schema.required != undefined ? schema.required.includes(key) : false;
 
-            const field = {
-                id: key,
-                name: key,
-                label: property.title ?? key,
-                description: property.description,
-                required: schema.required != undefined ? schema.required.includes(key) : false,            
-                value: property.example
-            }
+                return transformToFormField(property, ui, parents, key, required);
+            });
+    }
 
-            if (property.type == "object") {
-                field.items = transformToFormFields(property, ui, [...parents, key]);
-            }
-            else {
-                field.editor = parseFormField(property);
-            }
-
-            return field;        
-        });
+    if (schema.oneOf) {
+        return schema.oneOf.map(p => transformToFormField(p, ui, parents, 'oneOf', false));
+    }
 }
 
-function parseFormField(property) {
+
+function transformToFormField(property, ui, parents, key, required) {
+    const field = {
+        id: key,
+        name: key,
+        label: property.title ?? key,
+        description: property.description,
+        required: required,
+        value: property.example
+    }
+
+    if (property.type === 'object' || property.properties)
+        field.items = transformToFormFields(property, ui, [...parents, key]);
+    else if (property.type === 'array')
+        field.items = transformToFormFields(property.items, ui, [...parents, key]);
+    else
+        field.editor = transformToEditor(property, getEditor(parents, key, ui?.editors));
+
+    return field;
+}
+
+function transformToEditor(property, editor) {
+    switch (editor) {
+        case "EnumCheckbox":
+            return {
+                type: "checkbox-group",
+                options: property.enum.map(o => ({
+                    name: o,
+                    value: o
+                }))
+            }         
+    }
+    
     if (property.type === "boolean") {
         return {
             type: "input",
@@ -85,8 +108,13 @@ function parseFormField(property) {
                     pattern: property.pattern ?? false
                 }
             }
-        
+
             switch (property.format) {
+                case "byte":
+                    return {
+                        type: "input",
+                        inputType: "file"
+                    }
                 case "text":
                     return {
                         type: "textarea",
@@ -112,9 +140,19 @@ function parseFormField(property) {
 function hide(parents, key, hidden) {
     if (hidden == undefined)
         return false;
-    
-    const id = `${[...parents, key].join(".")}`;    
+
+    const id = `${[...parents, key].join(".")}`;
+
     return hidden.includes(id);
+}
+
+function getEditor(parents, key, editors) {
+    if(editors == undefined)
+        return false;
+
+    const id = `${[...parents, key].join(".")}`;
+
+    return editors[id];
 }
 
 function mapHtml5InpputType(property) {
@@ -122,17 +160,17 @@ function mapHtml5InpputType(property) {
 
     if (format == undefined)
         return null;
-    
+
     if (!HTML5_TYPES.includes(format))
         return null;
-    
+
     return format;
 }
 
 function mapFormat(format) {
     if (format == undefined)
         return null;
-    
+
     return OPENAPI_HTML5_MAPPING[format];
 }
 

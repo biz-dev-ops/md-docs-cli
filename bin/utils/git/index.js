@@ -46,14 +46,15 @@ exports.info = async function (options) {
         info.branches = branches;
     }
     catch (ex) {
-        if (!ex?.message?.includes('fatal: not a git repository')) {     
-            throw ex;
-        }
-        else {
+        if (!ex?.message?.includes('fatal: not a git repository')) {
+            console.warn(chalk.yellowBright(`\t* git command failed, falling back to default.`));
             console.error(chalk.redBright(ex));
         }
+        else {
+            console.warn(chalk.yellowBright(`\t* directory is not a git repository, falling back to default.`));
+        }
 
-        console.warn(chalk.yellowBright(`\t* directory is not a git repository, falling back to default.`));
+        
         
         const branch = {
             name: 'main',
