@@ -46,6 +46,6 @@ module.exports = class DrawIORenderer {
             return;
         
         await this.browser.close();        
-        this.browser = null;        
+        this.browser = null;
     }
 }
