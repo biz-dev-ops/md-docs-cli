@@ -41,11 +41,21 @@ jobs:
         run: |
           echo 'tag version: ${{ steps.tag_version.outputs.tag }}'
 
-      - uses: actions-ecosystem/action-push-tag@v1
+
+      - name: push tag
         if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
-        with:
-          tag: ${{ steps.version.outputs.value}}
-          message: '${{ steps.version.outputs.value }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+          git tag -a "${{ steps.version.outputs.value}}" -m "${{ steps.version.outputs.value }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}"
+          git push origin "${{ steps.version.outputs.value}}"
+
+      # - uses: actions-ecosystem/action-push-tag@v1
+      #   if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
+      #   with:
+      #     tag: ${{ steps.version.outputs.value}}
+      #     message: '${{ steps.version.outputs.value }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
 
       - name: build release notes
         if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
