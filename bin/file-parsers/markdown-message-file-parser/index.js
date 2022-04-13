@@ -80,6 +80,7 @@ module.exports = class MarkdownMessageFileParser {
             locale: await this.locale.get(),
             time: response.time,
             address: response.address,
+            reference: response.reference,
             sender: response.sender,
             attachments: response.attachments?.map(a => path.parse(a).name),
             content: response.html
@@ -144,6 +145,13 @@ module.exports = class MarkdownMessageFileParser {
             };
             
             time.parentNode.removeChild(time);
+        }
+
+        const reference = element.querySelector('reference');
+        if (reference) {
+            response.reference = reference.innerHTML;
+            
+            reference.parentNode.removeChild(reference);
         }
     
         const attachments = element.querySelector('ul.attachments');
