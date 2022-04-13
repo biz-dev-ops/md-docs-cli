@@ -46,6 +46,10 @@ html
         if(time)
           p(class='time')
             time(datetime=time.value)=time.text
+
+        if(reference)
+          div(class='reference')
+            | !{reference}
         
         | !{content}
         
