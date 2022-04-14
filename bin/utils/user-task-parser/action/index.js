@@ -1,20 +1,24 @@
+const { v4: uuidv4 } = require('uuid');
+
 exports.parse = function (actions) {
     if (actions == undefined)
         return null;
-
+    
+    const id = uuidv4();
+    
     return Object.entries(actions)
-        .map(kvp => transformToAction(kvp[0], kvp[1]));
+        .map(kvp => transformToAction(id, kvp[0], kvp[1]));
 }
 
-function transformToAction(key, action) {
+function transformToAction(id, key, action) {
     return {
-        id: key,
+        id: `${id}-${key}`,
         name: action.name ?? key,
-        items: transformToFormFields(action.schema, action.ui, [])
+        items: transformToFormFields(id, action.schema, action.ui, [])
     }
 }
 
-function transformToFormFields(schema, ui, parents) {
+function transformToFormFields(id, schema, ui, parents) {
     if (schema.properties) {
         return Object.entries(schema.properties)
             .filter(kvp => !hide(parents, kvp[0], ui?.hidden))
@@ -23,19 +27,19 @@ function transformToFormFields(schema, ui, parents) {
                 const property = kvp[1];
                 const required = schema.required != undefined ? schema.required.includes(key) : false;
 
-                return transformToFormField(property, ui, parents, key, required);
+                return transformToFormField(id, property, ui, parents, key, required);
             });
     }
 
     if (schema.oneOf) {
-        return schema.oneOf.map(p => transformToFormField(p, ui, parents, 'oneOf', false));
+        return schema.oneOf.map(p => transformToFormField(id, p, ui, parents, 'oneOf', false));
     }
 }
 
 
-function transformToFormField(property, ui, parents, key, required) {
+function transformToFormField(id, property, ui, parents, key, required) {
     const field = {
-        id: key,
+        id: `${id}-${key}`,
         name: key,
         label: property.title ?? key,
         description: property.description,
@@ -44,9 +48,9 @@ function transformToFormField(property, ui, parents, key, required) {
     }
 
     if (property.type === 'object' || property.properties)
-        field.items = transformToFormFields(property, ui, [...parents, key]);
+        field.items = transformToFormFields(id, property, ui, [...parents, key]);
     else if (property.type === 'array')
-        field.items = transformToFormFields(property.items, ui, [...parents, key]);
+        field.items = transformToFormFields(id, property.items, ui, [...parents, key]);
     else
         field.editor = transformToEditor(property, getEditor(parents, key, ui?.editors));
 
