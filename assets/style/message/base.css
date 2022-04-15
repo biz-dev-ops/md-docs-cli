@@ -143,6 +143,7 @@ figure {
 }
 
 .reference dt {
+    font-weight: var(--font-weight-heading-base);
     padding-right: var(--space-base);
     width: 33.3%;
 }
