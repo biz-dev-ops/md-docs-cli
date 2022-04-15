@@ -48,7 +48,7 @@ html
             time(datetime=time.value)=time.text
 
         if(reference)
-          div(class='reference')
+          dl(class='reference')
             | !{reference}
         
         | !{content}
@@ -95,5 +95,3 @@ html
       })();
     
     script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
-
-    

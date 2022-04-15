@@ -137,6 +137,22 @@ figure {
     font-style: normal;
 }
 
+.reference dt {
+    padding-right: var(--space-base);
+    width: 33.3%;
+}
+
+.reference dt::after {
+    content: ':';
+}
+
+.reference dd {
+    margin-left: 25%;
+}
+
+.reference dt + dd {
+    margin-top: calc(var(--line-height-base) * -1);
+}
 
 header {
     position: running(firstPageHeader)
