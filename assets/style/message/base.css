@@ -88,11 +88,16 @@ li ol {
 }
 
 table {
+    border-collapse: collapse;
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
     margin: calc(var(--space-base) * -1/4) 0 var(--line-height-base);
     page-break-inside: avoid;
     width: 100%;
+}
+
+thead:empty {
+    display: none;
 }
 
 td,
@@ -174,7 +179,7 @@ main .address {
 }
 
 main .time {
-    margin: 0 calc(var(--space-base) * -1/2);
+    margin: 0 calc(var(--space-base) * -1/2) var(--line-height-base);
 }
 
 main time {
@@ -214,8 +219,6 @@ footer p {
 }
 
 @media print {
-    
-
     @page :first {
         @top-left-corner{
             content: element(firstPageHeader);
