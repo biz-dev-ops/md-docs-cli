@@ -43,3 +43,29 @@
 .ui button[type="submit"] {
     font-weight: 600;
 }
+
+.ui dl dl {
+    padding-inline-start: var(--space-md);
+    margin-block: var(--space-sm);
+    border-left: var(--line-base) solid var(--color-grey-100);
+    margin-inline-start: var(--space-sm);
+}
+
+.ui dd {
+    border-bottom: none;
+}
+
+.ui dl dl dt {
+    position: relative;
+}
+
+.ui dl dl dt:before {
+    background-color: var(--color-grey-100);
+    content: '';
+    height: 1px;
+    width: var(--space-sm);
+    position: absolute;
+    top: calc(var(--line-height-base) / 2 * 1rem);
+    left: calc(var(--space-md) * -1);
+}
+
