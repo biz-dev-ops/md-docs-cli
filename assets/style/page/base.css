@@ -157,6 +157,17 @@ select {
     font-size: inherit;
 }
 
+fieldset {
+    border-color: var(--color-grey-100);
+    padding: var(--space-sm) var(--space-md);
+}
+
+legend {
+    font-size: var(--heading-4-size);
+    font-weight: 600;
+    padding-inline: var(--space-xs);
+}
+
 dt {
     font-weight: 600;
 }
