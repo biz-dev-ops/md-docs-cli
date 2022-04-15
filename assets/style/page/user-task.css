@@ -14,7 +14,16 @@
 }
 
 .ui .form-item {
-    margin-bottom: 1rem;
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+.ui .form-item > label {
+    display: inline-block;
+    margin-bottom: var(--space-xs);
+}
+
+.ui .form-check input + label {
+    margin-left: var(--space-xs);
 }
 
 .ui .form-submit {

@@ -39,8 +39,8 @@ mixin formItem(item)
     else if(item.editor)
       label(for=item.id class={required: item.required})=item.label
 
-        div(class='input-group')
-          include .generated/editor.pug
+      div(class='input-group')
+        include .generated/editor.pug
     else
       p(class=error)='No editor defined!'
 
