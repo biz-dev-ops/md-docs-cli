@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    title=title
+    
+    link(rel='stylesheet' type='text/css' href=root + 'assets/style/email/style.css')
+
+    if(googleFont)
+      link(rel='preconnect' href='https://fonts.googleapis.com')
+      link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
+      link(href=googleFont rel='stylesheet')
+  body
+    article
+      header
+        dl 
+          dt=locale.from
+          dd. 
+            !{from}
+          dt=locale.to
+          dd.
+            !{to}
+          dt=locale.subject
+          dd=subject
+
+      main        
+        
+        | !{message}
+        
+        if attachments
+          attachments
+            h3=locale.attachments
+            ul
+              each attachment in attachments
+                li=attachment
+  
+    script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')

@@ -104,7 +104,7 @@ iframe {
 
 iframe.openapi,
 iframe.asyncapi,
-iframe.json-form {
+iframe.message {
     min-width: calc(100% + (var(--space-lg) * 2));
     margin-left: calc(var(--space-lg) * -1);
     margin-right: calc(var(--space-lg) * -1);

@@ -15,7 +15,7 @@ module.exports = class MarkdownFileParser {
     }
 
     async parse(file) {
-        if (!(file.endsWith('.md') && !file.endsWith('.message.md')))
+        if (!(file.endsWith('.md') && !file.endsWith('.message.md') && !file.endsWith('.email.md')))
             return;
 
         const htmlFile = `${file.slice(0, -3)}.html`;

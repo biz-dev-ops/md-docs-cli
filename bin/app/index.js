@@ -29,10 +29,12 @@ const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
+const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
 const UmlFileParser = require('../file-parsers/uml-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BpmnComponent = require('../components/bpmn-component');
+const EmailComponent = require('../components/email-component');
 const DashboardComponent = require('../components/dashboard-component');
 const FeatureComponent = require('../components/feature-component');
 const FullscreenComponent = require('../components/fullscreen-component');
@@ -64,7 +66,7 @@ const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
-const MarkdownMessageAnchorParser = require('../anchor-parsers/markdown-message-anchor-parser');
+const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
 
@@ -111,7 +113,6 @@ module.exports = class App {
 
         const options = Object.assign({}, opts);        
         options.basePath = options.dst;
-
         const gitInfo = await git.info(options);
 
         this.container.register('gitInfo', asValue(gitInfo));        
@@ -238,6 +239,7 @@ module.exports = class App {
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
+            'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
             'umlFileParser': asClass(UmlFileParser).singleton(),
 
@@ -260,7 +262,7 @@ module.exports = class App {
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
             'imageAnchorParser': asClass(ImageAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
-            'markdownMessageAnchorParser': asClass(MarkdownMessageAnchorParser).singleton(),
+            'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
             'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),            
             'urlRewriteAnchorParser': asClass(UrlRewriteAnchorParser).singleton(),
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
@@ -269,6 +271,7 @@ module.exports = class App {
             'asyncapiComponent': asClass(AsyncapiComponent).singleton().inject(container => allowUnregistered(container, 'asyncapiComponentRenderFn')),
             'bpmnComponent': asClass(BpmnComponent).singleton().inject(container => allowUnregistered(container, 'bpmnComponentRenderFn')),
             'dashboardComponent': asClass(DashboardComponent).singleton().inject(container => allowUnregistered(container, 'dashboardComponentRenderFn')),
+            'emailComponent': asClass(EmailComponent).singleton().inject(container => allowUnregistered(container, 'emailComponentRenderFn')),
             'featureComponent': asClass(FeatureComponent).singleton().inject(container => allowUnregistered(container, 'featureComponentRenderFn')),
             'fullscreenComponent': asClass(FullscreenComponent).singleton().inject(container => allowUnregistered(container, 'fullscreenComponentRenderFn')),
             'iFrameComponent': asClass(IFrameComponent).singleton().inject(container => allowUnregistered(container, 'iFrameComponentRenderFn')),
@@ -288,6 +291,7 @@ module.exports = class App {
             'fileParsers': [
                 'drawIOFileParser',
                 'markdownFileParser',
+                'markdownEmailFileParser',
                 'markdownMessageFileParser',
                 'umlFileParser'
             ],
@@ -314,7 +318,7 @@ module.exports = class App {
                 'featureAnchorParser',
                 'featuresAnchorParser',
                 'markdownAnchorParser',
-                'markdownMessageAnchorParser',
+                'iframeAnchorParser',
                 'openapiAnchorParser',
                 'userTaskAnchorParser',
                 'imageAnchorParser'
