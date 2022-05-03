@@ -2,7 +2,10 @@
     "attachments": "Bijlagen",
     "cancel": "Annuleren",
     "context": "Context",
+    "from": "Van",
     "menu": "Andere pagina's:",
     "on_this_page": "Op deze pagina:",
-    "submit": "Versturen"
+    "subject": "Onderwerp",
+    "submit": "Versturen",
+    "to": "Aan"
 }

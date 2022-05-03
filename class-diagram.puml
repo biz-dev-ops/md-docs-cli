@@ -8,6 +8,7 @@ interface FileParser {
 class CompositeFileParser
 class DrawIOFileParser
 Class MarkdownFileParser
+Class MarkdownEmailFileParser
 Class MarkdownMessageFileParser
 class UMLFileParser
 
@@ -30,6 +31,7 @@ class BPMNAnchorParser
 class CodeAnchorParser
 class DashboardAnchorParser
 class FeatureAnchorParser
+class IFrameAnchorParser
 class MarkdownAnchorParser
 class OpenapiAnchorParser
 class UmlAnchorParser
@@ -38,6 +40,7 @@ class UserTaskAnchorParser
 CompositeFileParser *-- "has many" FileParser
 FileParser <|.. DrawIOFileParser
 FileParser <|.. MarkdownFileParser
+FileParser <|.. MarkdownEmailFileParser
 FileParser <|.. MarkdownMessageFileParser
 FileParser <|.. UMLFileParser
 CompositeFileParser ..|> FileParser
@@ -59,6 +62,7 @@ AnchorParser <|.. BPMNAnchorParser
 AnchorParser <|.. CodeAnchorParser
 AnchorParser <|.. DashboardAnchorParser
 AnchorParser <|.. FeatureAnchorParser
+AnchorParser <|.. IFrameAnchorParser
 AnchorParser <|.. MarkdownAnchorParser
 AnchorParser <|.. OpenapiAnchorParser
 AnchorParser <|.. UserTaskAnchorParser

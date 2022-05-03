@@ -34,5 +34,5 @@ function rewrite(href, name, rule) {
 
 const rules = [
   ['.drawio', '.drawio.svg'],
-  ['.puml', '.puml.svg']
+  ['.puml', '.puml.svg'],
 ];

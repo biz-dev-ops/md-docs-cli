@@ -13,6 +13,7 @@ md-docs is a cli tool which generates a static webiste by resolving files recurs
 This script copies every file and directory from the **docs** directory into the **dist** directory and transforms every `*.md` file into a html file while adding the following features:
 
 1. Every *.md is transformed in a static web page;
+1. Every *.email.md is transformed in a static document web page;
 1. Every *.message.md is transformed in a static document web page and PDF;
 1. Every index.md is added to the menu;
 1. Every heading is automaticly converted into a container;

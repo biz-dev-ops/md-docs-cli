@@ -1,0 +1,135 @@
+html, body {
+    -webkit-font-smoothing: antialiased;
+    color: var(--text-color-base);
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+body {
+    font-weight: var(--font-weight-base);
+    margin: 0;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+a {
+    color: currentColor;
+}
+
+sup {
+    vertical-align: baseline;
+    position: relative;
+    top: -.5em;
+}
+
+p,
+ul,
+ol,
+dl {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    margin: 0 0 var(--line-height-base);
+}
+
+ul,
+ol,
+dl {
+    page-break-before: avoid;
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--text-color-heading);
+    font-weight: var(--font-weight-heading-base);
+    margin: 0 0 calc(var(--line-height-base) * 1/2);
+    page-break-after: avoid;
+}
+
+h4, h5 {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    margin-bottom: 0;
+}
+
+h1, h2 {
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+}
+
+h3 {
+    font-size: var(--font-size-medium);
+    line-height: var(--line-height-medium);
+}
+
+h4 {
+    font-weight: var(--font-weight-heading-small);
+}
+
+h5 {
+    font-style: italic;
+}
+
+ul,
+ol {
+    padding-left: var(--space-base);
+}
+
+li  ul,
+li ol {
+    padding-left: var(--space-base);
+    margin-bottom: calc(var(--space-base) * 1/2);
+}
+
+table {
+    border-collapse: collapse;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    margin: calc(var(--space-base) * -1/4) 0 var(--line-height-base);
+    page-break-inside: avoid;
+    width: 100%;
+}
+
+thead:empty {
+    display: none;
+}
+
+td,
+th {
+    padding: calc(var(--space-base) * 1/4) 0;
+    border-bottom: var(--border-width) solid var(--border-color);
+    text-align: left;
+}
+
+th {
+    font-weight: var(--font-weight-table-heading);
+    color: var(--color-primary-base);
+}
+
+tr:last-child td {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+figure {
+    margin: 0;
+}
+
+header dl dt {
+    font-weight: var(--font-weight-heading-base);
+    padding-right: var(--space-base);
+    width: 33.3%;
+}
+
+header dl dt::after {
+    content: ':';
+}
+
+header dl dd {
+    margin-left: 17%;
+}
+
+header dl dt + dd {
+    margin-top: calc(var(--line-height-base) * -1);
+}

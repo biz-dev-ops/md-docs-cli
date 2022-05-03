@@ -2,7 +2,10 @@
     "attachments": "Attachments",
     "cancel": "Cancel",
     "context": "Context",
+    "from": "From",
     "menu": "Menu",
     "on_this_page": "On this page:",
-    "submit": "Submit"
+    "subject": "Subject",
+    "submit": "Submit",
+    "to": "To"
 }
