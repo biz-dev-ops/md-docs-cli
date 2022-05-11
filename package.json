@@ -44,7 +44,7 @@
     "js-yaml": "^4.1.0",
     "jsdom": "^19.0.0",
     "json-schema-merge-allof": "^0.8.1",
-    "markdown-it": "^12.3.2",
+    "markdown-it": "^13.0.1",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-anchor": "^8.4.1",
     "markdown-it-attrs": "^4.1.3",
