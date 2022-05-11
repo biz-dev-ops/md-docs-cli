@@ -34,4 +34,23 @@ html
               each attachment in attachments
                 li=attachment
   
+    script.
+      (() => {
+        const calculateHeight = () => {
+          const body = document.body, html = document.documentElement;
+
+          return Math.max(
+            body.scrollHeight,
+            body.offsetHeight,
+            html.clientHeight,
+            html.scrollHeight,
+            html.offsetHeight);
+        };
+
+        //Polyfill disturbes the iframe resizer, calculate height manually.      
+        window.iFrameResizer = {
+          heightCalculationMethod: () => { return calculateHeight(); }
+        };
+      })();
+    
     script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')

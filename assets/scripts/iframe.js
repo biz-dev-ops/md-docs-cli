@@ -1,5 +1,5 @@
 (() => {
-    iFrameResize({ heightCalculationMethod: 'lowestElement' }, 'iframe');
+    iFrameResize({ }, 'iframe');
 })();
 
 
