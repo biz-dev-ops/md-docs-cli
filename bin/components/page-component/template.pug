@@ -48,7 +48,7 @@ html
             ul 
               each branch in git.branches 
                 li 
-                  a(href=relative.basePath + branch.path + url data-branch-url=relative.basePath + branch.path)= branch.name
+                  a(href=relative.basePath + branch.path data-branch-url=relative.basePath + branch.path)= branch.name
     main
       | !{content}
 

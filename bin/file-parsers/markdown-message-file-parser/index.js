@@ -8,7 +8,9 @@ const md = require('markdown-it')
         html: true,
         linkify: true,
         typographer: true
-    });
+    })
+    .use(require('markdown-it-task-lists'));
+    
 const files = require('../../utils/files');
 const puppeteer = require('puppeteer');
 const moment = require('moment');
