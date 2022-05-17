@@ -1,6 +1,6 @@
 {
   "name": "@synion/md-docs",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
