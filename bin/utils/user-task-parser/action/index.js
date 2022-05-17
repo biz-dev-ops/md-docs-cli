@@ -48,7 +48,7 @@ function transformToFormField(id, property, ui, parents, key, required) {
     }
 
     if (property.oneOf)
-        field.items = property.oneOf.map(p => transformToFormField(id, p, ui, parents, p.name ?? "oneOf", false));
+        field.items = property.oneOf.map(p => transformToFormField(id, p, ui, parents, p.title ?? "oneOf", false));
     else if (property.type === 'object' || property.properties)
         field.items = transformToFormFields(id, property, ui, [...parents, key]);
     else if (property.type === 'array')
@@ -92,7 +92,7 @@ function transformToEditor(property, editor) {
     }
 
     if (property.type === "array") {
-        property.items = [ { a: 1 }];
+        //TODO
     }
 
     if (property.type === "string") {
