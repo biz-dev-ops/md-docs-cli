@@ -86,45 +86,60 @@ ul, ol {
     padding-left: var(--space-md);
 }
 
-header dl {
+.mail-header {
+    border-bottom: var(--line-base) solid var(--color-grey-100);
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+    padding-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+.mail-header dl {
     display: grid;
     gap: calc(var(--line-height-base) / 4 * 1rem) var(--space-md);
     font-size: var(--font-size-sm);
     grid-template-columns: 15ch 1fr;
 }
 
-header dt {
+.mail-header dt {
     font-weight: var(--font-weight-heading-base);
     grid-column-start: 1;
 }
 
-header dt::after {
+.mail-header dt::after {
     content: ':';
 }
 
-header dd {
+.mail-header dd {
     grid-column-start: 2;
     margin-left: 0;
 }
 
-article {
+.mail {
     padding: var(--space-md);
     margin: 0 auto;
     max-width: var(--grid-max-width);
 }
 
 @media (min-width: 40rem) {
-    article {
+    .mail {
         padding: var(--space-lg);
     }
 }
 
-header {
-    border-bottom: var(--line-base) solid var(--color-grey-100);
-    margin-bottom: calc(var(--line-height-base) * 1rem);
-    padding-bottom: calc(var(--line-height-base) * 1rem);
+article {
+    max-width: var(--max-characters-per-line);
+    margin-block: calc(var(--line-height-base) * 1rem);
 }
 
-main {
-    max-width: var(--max-characters-per-line);
+article header {
+    display: flex;
+    justify-content: flex-end;
+    margin-block-end: calc(var(--line-height-base) * 1rem);
+}
+
+article header figure {
+    max-width: 15rem;
+}
+
+article footer {
+    margin-block-start: calc(var(--line-height-base) * 1rem);
 }
