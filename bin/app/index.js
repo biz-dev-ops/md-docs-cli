@@ -298,13 +298,13 @@ module.exports = class App {
 
             //Html parsers, order is important!
             'htmlParsers': [
-                'definitionHtmlParser',
                 'headingHtmlParser',
+                'menuHtmlParser',
+                'definitionHtmlParser',
                 'anchorHtmlParser',
                 'unsortedListHtmlParser',
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
-                'menuHtmlParser',
                 'cleanUpHtmlParser'
             ],
 
