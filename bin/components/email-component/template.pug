@@ -11,29 +11,41 @@ html
       link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
       link(href=googleFont rel='stylesheet')
   body
-    article
-      header
+    section(class='mail')
+      header(class='mail-header')
         dl 
           dt=locale.from
           dd. 
-            !{from}
+            !{from.email}
           dt=locale.to
           dd.
-            !{to}
+            !{to.email}
           dt=locale.subject
           dd=subject
 
-      main        
-        
-        | !{message}
-        
-        if attachments
-          attachments
-            h3=locale.attachments
-            ul
-              each attachment in attachments
-                li=attachment
-  
+      article
+        header
+          figure
+            img(src=root + 'assets/images/message/logo.svg')
+
+        main
+          | !{message}
+
+          if attachments
+            attachments
+              h3=locale.attachments
+              ul
+                each attachment in attachments
+                  li=attachment
+
+        footer
+           div(class='contact')
+            if(from && from.name)
+              p
+                | !{from.name}
+
+            | !{footer}
+
     script.
       (() => {
         const calculateHeight = () => {

@@ -9,7 +9,7 @@ module.exports = class DefinitionParser {
         const root = this.relative.get().root;
 
         for (const definition of definitions) {
-            const regex = new RegExp(`(?![^<]*>)(${createAlias(definition)})`, 'img');
+            const regex = new RegExp(`(?!<a|abbr[^>]*>)(${createAlias(definition)})(?![^<]*<\/a|abbr>)`, 'img');
 
             html = html.replace(regex, createReplacement(definition, root));
         }

@@ -1,30 +1,40 @@
 :root {
-    --color-primary-base: var(--color-brand-base);
+    /* Colors */
+    --color-grey-100: rgb(229, 229, 229);
 
-    --space-base: 16pt;
+    /* Typography */
+    --font-family-base: sans-serif;
+    --font-family-heading: sans-serif;
+    --line-height-base: 1.5;
+    --line-height-heading: 1;
 
-    --font-size-small: 9pt;
-    --font-size-base: 11pt;
-    --font-size-medium: 13pt;
-    --font-size-large: 18pt;
+    --type-scale: 1.25;
 
-    --font-weight-base: 300;
-    --font-weight-small: 400;
-    --font-weight-heading-small: 600;
-    --font-weight-heading-base: 400;
+    --heading-6-size: .6875rem;
+    --heading-5-size: calc(var(--heading-6-size) * var(--type-scale));
+    --heading-4-size: calc(var(--heading-5-size) * var(--type-scale));
+    --heading-3-size: calc(var(--heading-4-size) * var(--type-scale));
+    --heading-2-size: calc(var(--heading-3-size) * var(--type-scale));
+    --heading-1-size: calc(var(--heading-2-size) * var(--type-scale));
 
-    --font-weight-table-base: 300;
-    --font-weight-table-heading: 400;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-md: 1.125rem;
 
-    --line-height-small: 12pt;
-    --line-height-base: var(--space-base);
-    --line-height-medium: calc(var(--font-size-medium) * 1.25);
-    --line-height-large: calc(var(--font-size-large) * 1.25);
+    --font-weight-base: 400;
+    --font-weight-heading-base: 600;
 
-    --logo-offset: 28pt;
-    --logo-width: 208pt;
-    --logo-height: 58pt;
-    --page-border: 2pt;
-    --border-width: .1pt;
-    --border-color: var(--color-brand-light);
+    --max-characters-per-line: 75ch;
+
+    /* Sizing */
+    --space-lg: 3rem;
+    --space-md: 1.5rem;
+    --space-sm: .75rem;
+    --space-xs: .5rem;
+    --space-xss: .25rem;
+
+    /* Lines */
+    --line-base: .0625rem;
+    --line-thin: .125rem;
+    --line-medium: .1875rem;
 }

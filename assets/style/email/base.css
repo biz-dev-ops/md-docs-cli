@@ -1,135 +1,145 @@
 html, body {
     -webkit-font-smoothing: antialiased;
-    color: var(--text-color-base);
-    font-family: 'Source Sans Pro', sans-serif;
 }
 
 body {
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-family-base);
     font-weight: var(--font-weight-base);
+    color: var(--text-color-base);
+    line-height: var(--line-height-base);
     margin: 0;
 }
 
+/*  Box sizing (the nuclear option) */
 *,
-*:before,
-*:after {
+*::before,
+*::after {
     box-sizing: border-box;
+}
+
+
+p, figure, table, ul, ol, dl, pre, blockquote {
+    margin: 0;
+}
+
+:where(p, figure, table, ul, ol, dl, pre, blockquote):not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    margin: 0;
+    line-height: var(--line-height-heading);
+    color: var(--text-color-heading);
+}
+
+:where(h1, h2, h3, h4, h5, h6):not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * .5em);
+}
+
+h1 {
+    font-size: var(--heading-1-size);
+}
+
+h2 {
+    font-size: var(--heading-2-size);
+}
+
+h3 {
+    font-size: var(--heading-3-size);
+}
+
+h4 {
+    font-size: var(--heading-4-size);
+}
+
+h5 {
+    font-size: var(--heading-5-size);
+}
+
+h6 {
+    font-size: var(--heading-6-size);
 }
 
 a {
     color: currentColor;
 }
 
-sup {
-    vertical-align: baseline;
-    position: relative;
-    top: -.5em;
+a:hover,
+a:focus {
+    text-decoration: none;
 }
 
-p,
-ul,
-ol,
-dl {
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    margin: 0 0 var(--line-height-base);
+figure img,
+figure svg {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
 }
 
-ul,
-ol,
-dl {
-    page-break-before: avoid;
+:where(img, svg):not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
 }
 
-h1, h2, h3, h4, h5 {
-    color: var(--text-color-heading);
+ul, ol {
+    padding-left: var(--space-md);
+}
+
+.mail-header {
+    border-bottom: var(--line-base) solid var(--color-grey-100);
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+    padding-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+.mail-header dl {
+    display: grid;
+    gap: calc(var(--line-height-base) / 4 * 1rem) var(--space-md);
+    font-size: var(--font-size-sm);
+    grid-template-columns: 15ch 1fr;
+}
+
+.mail-header dt {
     font-weight: var(--font-weight-heading-base);
-    margin: 0 0 calc(var(--line-height-base) * 1/2);
-    page-break-after: avoid;
+    grid-column-start: 1;
 }
 
-h4, h5 {
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    margin-bottom: 0;
-}
-
-h1, h2 {
-    font-size: var(--font-size-large);
-    line-height: var(--line-height-large);
-}
-
-h3 {
-    font-size: var(--font-size-medium);
-    line-height: var(--line-height-medium);
-}
-
-h4 {
-    font-weight: var(--font-weight-heading-small);
-}
-
-h5 {
-    font-style: italic;
-}
-
-ul,
-ol {
-    padding-left: var(--space-base);
-}
-
-li  ul,
-li ol {
-    padding-left: var(--space-base);
-    margin-bottom: calc(var(--space-base) * 1/2);
-}
-
-table {
-    border-collapse: collapse;
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    margin: calc(var(--space-base) * -1/4) 0 var(--line-height-base);
-    page-break-inside: avoid;
-    width: 100%;
-}
-
-thead:empty {
-    display: none;
-}
-
-td,
-th {
-    padding: calc(var(--space-base) * 1/4) 0;
-    border-bottom: var(--border-width) solid var(--border-color);
-    text-align: left;
-}
-
-th {
-    font-weight: var(--font-weight-table-heading);
-    color: var(--color-primary-base);
-}
-
-tr:last-child td {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-figure {
-    margin: 0;
-}
-
-header dl dt {
-    font-weight: var(--font-weight-heading-base);
-    padding-right: var(--space-base);
-    width: 33.3%;
-}
-
-header dl dt::after {
+.mail-header dt::after {
     content: ':';
 }
 
-header dl dd {
-    margin-left: 17%;
+.mail-header dd {
+    grid-column-start: 2;
+    margin-left: 0;
 }
 
-header dl dt + dd {
-    margin-top: calc(var(--line-height-base) * -1);
+.mail {
+    padding: var(--space-md);
+    margin: 0 auto;
+    max-width: var(--grid-max-width);
+}
+
+@media (min-width: 40rem) {
+    .mail {
+        padding: var(--space-lg);
+    }
+}
+
+article {
+    max-width: var(--max-characters-per-line);
+    margin-block: calc(var(--line-height-base) * 1rem);
+}
+
+article header {
+    display: flex;
+    justify-content: flex-end;
+    margin-block-end: calc(var(--line-height-base) * 1rem);
+}
+
+article header figure {
+    max-width: 15rem;
+}
+
+article footer {
+    margin-block-start: calc(var(--line-height-base) * 1rem);
 }
