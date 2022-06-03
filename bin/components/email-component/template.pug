@@ -16,10 +16,10 @@ html
         dl 
           dt=locale.from
           dd. 
-            !{from}
+            !{from.email}
           dt=locale.to
           dd.
-            !{to}
+            !{to.email}
           dt=locale.subject
           dd=subject
 
@@ -39,12 +39,12 @@ html
                   li=attachment
 
         footer
-          div(class='contact')
-            | !{footer}
-
-            if(sender)
+           div(class='contact')
+            if(from && from.name)
               p
-                | !{sender}
+                | !{from.name}
+
+            | !{footer}
 
     script.
       (() => {

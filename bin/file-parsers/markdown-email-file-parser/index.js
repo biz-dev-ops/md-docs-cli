@@ -49,7 +49,9 @@ module.exports = class MarkdownEmailFileParser {
             to: response.to,
             subject: response.subject,
             message: response.message,
-            attachments: response.attachments
+            attachments: response.attachments,
+            footer: this.options.message.footer,
+            sender: response.sender
         });
 
         await fs.writeFile(htmlFile, html);
@@ -61,14 +63,20 @@ module.exports = class MarkdownEmailFileParser {
         
         const from = element.querySelector('from');
         if (from) {
-            response.from = from.innerHTML;
+            response.from = {
+                name: from.querySelector('name')?.innerHTML,
+                email: from.querySelector('email').innerHTML
+            }
             
             from.parentNode.removeChild(from);
         }
 
         const to = element.querySelector('to');
         if (to) {
-            response.to = to.innerHTML;
+            response.to = {
+                name: to.querySelector('name')?.innerHTML,
+                email: to.querySelector('email').innerHTML
+            }
             
             to.parentNode.removeChild(to);
         }
