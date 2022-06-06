@@ -31,13 +31,6 @@ html
         main
           | !{message}
 
-          if attachments
-            attachments
-              h3=locale.attachments
-              ul
-                each attachment in attachments
-                  li=attachment
-
         footer
            div(class='contact')
             if(from && from.name)
@@ -45,6 +38,13 @@ html
                 | !{from.name}
 
             | !{footer}
+
+        if attachments
+          attachments
+            h3=locale.attachments
+            ul
+              each attachment in attachments
+                li=attachment
 
     script.
       (() => {
