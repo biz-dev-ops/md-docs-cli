@@ -119,6 +119,10 @@ ul, ol {
     max-width: var(--grid-max-width);
 }
 
+attachments {
+    display: block;
+}
+
 @media (min-width: 40rem) {
     .mail {
         padding: var(--space-lg);
@@ -140,6 +144,7 @@ article header figure {
     max-width: 15rem;
 }
 
-article footer {
+article footer,
+article attachments {
     margin-block-start: calc(var(--line-height-base) * 1rem);
 }
