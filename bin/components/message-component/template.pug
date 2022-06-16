@@ -2,7 +2,7 @@ doctype html
 html
   head
     meta(charset='UTF-8')
-    title=title
+    title=data.title
 
     script.
       window.PagedConfig = {
@@ -15,50 +15,49 @@ html
     script(src='https://unpkg.com/pagedjs/dist/paged.polyfill.js')
 
     style
-      | !{css}
+      | !{data.css}
 
-    if(googleFont)
+    if(data.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
       link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
-      link(href=googleFont rel='stylesheet')
+      link(href=data.googleFont rel='stylesheet')
     
   body
     article
       header
         div(class='logo')
           figure
-            img(src=root + 'assets/images/message/logo.svg')
+            img(src=data.root + 'assets/images/message/logo.svg')
         
       footer
         div(class='contact')
-          | !{footer}
-          
-        if(sender)
-          p 
-            | !{sender}
+          | !{data.footer}
 
       main
-        if(address)
+        if(data.to)
           div(class='address')
             address          
-              | !{address}
+              | !{data.to}
 
-        if(time)
+        if(data.date)
           p(class='time')
-            time(datetime=time.value)=time.text
+            time=data.date
 
-        if(reference)
+        if(data.references)
           dl(class='reference')
-            | !{reference}
+            each reference in data.references
+              if(reference.value)
+                dt=reference.name
+                dd=reference.value            
         
-        | !{content}
+        | !{data.message}
         
-        if attachments
+        if data.attachments
           attachments
-            h3=locale.attachments
+            h3=data.locale.attachments
             ul
-              each val in attachments
-                li=val
+              each attachment in data.attachments
+                li=attachment.name
 
     script.
       (() => {
@@ -94,4 +93,4 @@ html
         };
       })();
     
-    script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
+    script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')

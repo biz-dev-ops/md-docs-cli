@@ -2,49 +2,45 @@ doctype html
 html
   head
     meta(charset='UTF-8')
-    title=title
+    title=data.title
     
-    link(rel='stylesheet' type='text/css' href=root + 'assets/style/email/style.css')
+    link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/email/style.css')
 
-    if(googleFont)
+    if(data.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
       link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
-      link(href=googleFont rel='stylesheet')
+      link(href=data.googleFont rel='stylesheet')
   body
     section(class='mail')
       header(class='mail-header')
         dl 
-          dt=locale.from
+          dt=data.locale.from
           dd. 
-            !{from.email}
-          dt=locale.to
+            !{data.from.email}
+          dt=data.locale.to
           dd.
-            !{to.email}
-          dt=locale.subject
-          dd=subject
+            !{data.to.email}
+          dt=data.locale.subject
+          dd=data.subject
 
       article
         header
           figure
-            img(src=root + 'assets/images/message/logo.svg')
+            img(src=data.root + 'assets/images/message/logo.svg')
 
         main
-          | !{message}
+          | !{data.message}
 
         footer
-           div(class='contact')
-            if(from && from.name)
-              p
-                | !{from.name}
+          div(class='contact')
+            | !{data.footer}
 
-            | !{footer}
-
-        if attachments
+        if data.attachments
           attachments
-            h3=locale.attachments
+            h3=data.locale.attachments
             ul
-              each attachment in attachments
-                li=attachment
+              each attachment in data.attachments
+                li=attachment.name
 
     script.
       (() => {
@@ -65,4 +61,4 @@ html
         };
       })();
     
-    script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
+    script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
