@@ -1,8 +1,9 @@
 const fs = require('fs').promises;
+const { env } = require('process');
 const util = require('util');
 const path = require('path');
 const chalk = require('chalk-next');
-const jsdom = require('jsdom');
+const yaml = require('js-yaml');
 const md = require('markdown-it')
     ({
         html: true,
@@ -13,7 +14,6 @@ const md = require('markdown-it')
     
 const files = require('../../utils/files');
 const puppeteer = require('puppeteer');
-const moment = require('moment');
 const PDFMerger = require('pdf-merger-js');
 const cssImportResolve = require('import-resolve');
 cssImportResolve[util.promisify.custom] = (options) => {
@@ -29,15 +29,12 @@ cssImportResolve[util.promisify.custom] = (options) => {
 }
 const cssImportResolveAsync = util.promisify(cssImportResolve);
 
-
 module.exports = class MarkdownMessageFileParser {
     constructor({ options, messageComponent, locale, relative }) {
         this.options = options;
         this.component = messageComponent;
         this.locale = locale;
         this.relative = relative;
-
-        moment.locale(this.options.locale);
     }
 
     async parse(file) {
@@ -49,51 +46,55 @@ module.exports = class MarkdownMessageFileParser {
 
     async #render(file) {
         console.info(chalk.green(`\t* render html`));
-        const attachments = await this.#renderHtml(file);
-
-        //console.info(chalk.green(`\t* render pdf`));
-        //await this.#renderPDF(file, attachments)
-
-        // TODO: bug i.c.m. version op de anchor link.
-        // console.info(chalk.green(`\t* deleting ${path.relative(this.options.dst, file)}`));        
-        // await fs.unlink(file);
-    }
-
-    async #renderHtml(file) {
+        
         const htmlFile = `${file}.html`;
         console.info(chalk.green(`\t\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
-        const root = this.relative.get().root;
-        const cssFile = path.resolve(root, 'assets/style/message/style.css');
-        const css = await cssImportResolveAsync({
-            ext: 'css',
-            pathToMain: cssFile
-        });
-        
-        const markdown = await files.readFileAsString(file);
-        const response = await this.#renderMarkdown(markdown);
-        
-        const html = this.component.render({
-            css: css,
-            title: formatTitle(path.basename(file)),
-            root: root,
-            footer: this.options.message.footer,
-            googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap',
-            locale: await this.locale.get(),
-            time: response.time,
-            address: response.address,
-            reference: response.reference,
-            sender: response.sender,
-            attachments: response.attachments?.map(a => path.parse(a).name),
-            content: response.html
-        });
+        const data = await this.#createData(file);
+
+        if (env.NODE_ENV === 'development')
+            await fs.writeFile(`${file}.json`, JSON.stringify(data));
+
+        const html = this.component.render({ data });
 
         await fs.writeFile(htmlFile, html);
 
-        return response.attachments;
+        //console.info(chalk.green(`\t* render pdf`));
+        //await this.#renderPDF(file, data);
     }
 
-    async #renderPDF(file, attachments) {
+    async #createData(file) {
+        let data = Object.assign(JSON.parse(JSON.stringify(this.options.message)), {
+            locale: await this.locale.get(),
+            root: this.relative.get().root,
+            title: formatTitle(path.basename(file))
+        });
+
+        const cssFile = path.resolve(data.root, 'assets/style/message/style.css');
+        data.css = await cssImportResolveAsync({
+            ext: 'css',
+            pathToMain: cssFile
+        });
+
+        const ymlFile = `${file}.yml`;    
+        if (await files.exists(ymlFile)) {
+            const d = yaml.load(await files.readFileAsString(ymlFile));
+
+            for (const reference of data.references) {
+                const found = d.references.find(r => r.name === reference.name);
+                if (found)
+                    reference.value = found.value;
+            }
+
+            delete d.references;
+            data = Object.assign(data, d);
+        }
+
+        data.message = await renderMessage(file, data);
+        return data;
+    }
+
+    async #renderPDF(file, data) {
         const htmlFile = `${file}.html`;
         const pdfFile = `${file}.pdf`;
         console.info(chalk.green(`\t\t* creating ${path.relative(this.options.dst, pdfFile)}`));
@@ -106,7 +107,7 @@ module.exports = class MarkdownMessageFileParser {
         await page.pdf({ path: pdfFile, preferCSSPageSize: true, printBackground: true });
         await page.close();
 
-        if (attachments) {            
+        if (data.attachments) {            
             console.info(chalk.green(`\t\t* adding ${attachments.length} attachments`));
             
             const merger = new PDFMerger();
@@ -120,64 +121,6 @@ module.exports = class MarkdownMessageFileParser {
         }
     }
 
-    async #renderMarkdown(markdown) {
-        const response = { address: null, sender: null, html: null, time: null, attachments: null };
-        const element = await this.#renderMarkdownAsElement(markdown);
-        
-        const address = element.querySelector('address');
-        if (address) {
-            response.address = address.innerHTML;
-            
-            address.parentNode.removeChild(address);
-        }
-
-        const sender = element.querySelector('sender');
-        if (sender) {
-            response.sender = sender.innerHTML;
-            
-            sender.parentNode.removeChild(sender);
-        }
-    
-        const time = element.querySelector('time');
-        if (time) {
-            response.time =
-            {
-                value: time.innerHTML,
-                text: moment(time.innerHTML).format('DD MMMM YYYY')
-            };
-            
-            time.parentNode.removeChild(time);
-        }
-
-        const reference = element.querySelector('reference');
-        if (reference) {
-            response.reference = reference.innerHTML;
-            
-            reference.parentNode.removeChild(reference);
-        }
-    
-        const attachments = element.querySelector('ul.attachments');
-        if (attachments) {
-            response.attachments = Array
-                .from(attachments.querySelectorAll('li'))
-                .map(li => li.innerHTML);
-            
-            attachments.parentNode.removeChild(attachments);
-        }
-    
-        response.html = element.innerHTML;
-        
-        return response;
-    }
-    
-    async #renderMarkdownAsElement(markdown) {
-        const html = md.render(markdown);
-    
-        const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
-        element.innerHTML = html;
-        return element;
-    }
-
     async dispose() {
         if (!this.browser)
             return;
@@ -185,6 +128,12 @@ module.exports = class MarkdownMessageFileParser {
         await this.browser.close();        
         this.browser = null;        
     }
+}
+
+renderMessage = async function(file, data) {
+    let markdown = await files.readFileAsString(file);
+    markdown = mustache.render(markdown, data);
+    return md.render(markdown);
 }
 
 formatTitle = function (title) {
