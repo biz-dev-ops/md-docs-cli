@@ -18,7 +18,6 @@ async function run(o) {
     const options = await createOptions(o);
 
     options.src = path.resolve(cwd(), `docs`);
-    //options.src = path.resolve(cwd(), `__temp`);
     options.dst = path.resolve(cwd(), `dist`);
     options.testExecutionLocation = path.resolve(cwd(), `.temp/executions`);
     options.definitionsFile = path.resolve(cwd(), `definitions.yml`);
