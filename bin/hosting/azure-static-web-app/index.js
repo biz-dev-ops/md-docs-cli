@@ -57,8 +57,8 @@ module.exports = class AzureStaticWebApp {
                     if (provider === 'google') {
                         config.auth.identityProviders['google'] = {
                             registration: {
-                                clientIdSettingName: '{GOOGLE_CLIENT_ID}',
-                                clientSecretSettingName: '{GOOGLE_CLIENT_SECRET}'
+                                clientIdSettingName: 'GOOGLE_CLIENT_ID',
+                                clientSecretSettingName: 'GOOGLE_CLIENT_SECRET'
                             }
                         };
                     }
