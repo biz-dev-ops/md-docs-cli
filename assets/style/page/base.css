@@ -229,9 +229,11 @@ body > header {
 header .bar {
     align-items: center;
     display: flex;
-    gap: var(--space-md);
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
     justify-content: space-between;
     min-height: var(--header-height);
+    padding-block: var(--space-md);
 }
 
 header .bar .logo {
@@ -242,6 +244,10 @@ header .bar .logo a {
     text-decoration: none !important;
     background-color: unset !important;
     color: unset !important;
+}
+
+header .bar .logo img {
+    vertical-align: middle;
 }
 
 header .bar h1 {
@@ -376,19 +382,17 @@ header nav li span {
 
 @media (min-width: 40rem) {
     header .container {
-        padding-right: var(--space-lg);
-        padding-left: var(--space-lg);
+        padding-inline: var(--space-lg);
     }
 
     header .bar {
-        gap: var(--space-lg);
+        gap: var(--space-sm) var(--space-lg);
     }
 
     header nav {
         right: var(--space-lg);
     }
 }
-
 
 /* Layout: Nav */
 nav a {
@@ -443,7 +447,9 @@ main > aside h2 {
     main > aside {
         grid-area: aside;
         margin-bottom: 0;
+        max-height: calc(100vh - var(--header-height) - var(--space-lg) - var(--space-lg));
         order: 2;
+        overflow: auto;
         position: sticky;
         top: calc(var(--header-height) + var(--space-lg));
     }
