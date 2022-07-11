@@ -170,7 +170,8 @@ header .logo {
     top: var(--logo-offset);
 }
 
-header .logo svg {
+header .logo svg,
+header .logo img {
     width: var(--logo-width);
     height: var(--logo-height);
 }
@@ -220,6 +221,11 @@ footer p {
 }
 
 @media print {
+    @page {
+        size: A4;
+        margin: 25.4mm;
+    }
+
     @page :first {
         @top-left-corner{
             content: element(firstPageHeader);
