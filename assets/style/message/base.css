@@ -221,6 +221,11 @@ footer p {
 }
 
 @media print {
+    @page {
+        size: A4;
+        margin: 25.4mm;
+    }
+
     @page :first {
         @top-left-corner{
             content: element(firstPageHeader);
