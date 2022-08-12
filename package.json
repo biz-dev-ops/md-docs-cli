@@ -55,7 +55,7 @@
     "markdown-it-task-lists": "^2.1.1",
     "markdown-it-toc-done-right": "^4.2.0",
     "mustache": "^4.2.0",
-    "pdf-merger-js": "^3.4.0",
+    "pdf-merger-js": "^4.0.0",
     "plantuml": "^0.0.1",
     "prismjs": "^1.26.0",
     "pug": "^3.0.2",
