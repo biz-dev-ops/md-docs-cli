@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 const path = require('path');
 
 const AnchorParser = require('../anchor-parser');
@@ -14,7 +14,7 @@ module.exports = class MarkdownAnchorParser extends AnchorParser {
     }
 
   async _parse(anchor, file) {
-    console.info(chalk.green(`\t\t\t\t* changing href`));
+    console.info(colors.green(`\t\t\t\t* changing href`));
 
     if (anchor.href.endsWith('.md')) {
       anchor.href = `${anchor.href.substring(0, anchor.href.length - 3)}.html`;

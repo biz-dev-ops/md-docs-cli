@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 const jsdom = require('jsdom');
 const path = require('path');
 
@@ -21,7 +21,7 @@ module.exports = class MenuHtmlParser extends HtmlParser {
         if (!showMenu(file))
             return;
 
-        console.info(chalk.green(`\t* parsing menu`));
+        console.info(colors.green(`\t* parsing menu`));
 
         const locale = await this.locale.get();
         const menuItems = await this.menu.items();

@@ -3,7 +3,7 @@ const { asClass, asValue } = require('awilix');
 const fs = require('fs').promises;
 const path = require('path');
 const { chdir, cwd } = require('process');
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 const git = require('../utils/git');
 const files = require('../utils/files');
@@ -87,19 +87,19 @@ module.exports = class App {
 
         if (options.branches) {
             console.info();
-            console.info(chalk.greenBright('ready, shutting down.....'));
+            console.info(colors.brightGreen('ready, shutting down.....'));
             return;
         }
 
         const hosting = this.container.resolve('hosting');
         await hosting.apply();
 
-        await this.#parse(options);
+        //await this.#parse(options);
         
-        console.info(chalk.green('\nrenaming directories:'));
+        console.info(colors.green('\nrenaming directories:'));
         await this.#rename(options.dst);
 
-        console.info(chalk.greenBright('\nready, shutting down.....'));
+        console.info(colors.brightGreen('\nready, shutting down.....'));
     }
 
     dispose() {
@@ -126,7 +126,7 @@ module.exports = class App {
 
         // Init stores
         console.info();
-        console.info(chalk.greenBright('Initializing stores....'));
+        console.info(colors.brightGreen('Initializing stores....'));
 
         await this.container.resolve('definitionStore').init();
         await this.container.resolve('locale').init();        
@@ -141,7 +141,7 @@ module.exports = class App {
 
         await files.each(options.dst, async (file) => {
             console.info();
-            console.info(chalk.yellow(`parsing ${path.relative(options.dst, file)}`));
+            console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
             const dir = cwd();
 
@@ -164,7 +164,7 @@ module.exports = class App {
                 const dst = path.resolve(dir, entry.name.replace(/(\d+[_])/ig, ''));
                 
                 if (src != dst) {
-                    console.info(chalk.green(`\trenaming ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
+                    console.info(colors.green(`\trenaming ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
                     await fs.rename(src, dst);
                 }
                 await this.#rename(dst);
@@ -342,8 +342,8 @@ function allowUnregistered(container, ...names) {
 
 async function createDestination(options) {
     console.info();
-    console.info(chalk.yellow(`reading from source ${options.src}`));
-    console.info(chalk.yellow(`writing to destination: ${options.dst}`));
+    console.info(colors.yellow(`reading from source ${options.src}`));
+    console.info(colors.yellow(`writing to destination: ${options.dst}`));
 
     await fs.rm(options.dst, { recursive: true, force: true });
     await fs.mkdir(options.dst, { recursive: true });
@@ -351,26 +351,26 @@ async function createDestination(options) {
 
 async function createBranches(options, gitInfo) {
     console.info();
-    console.info(chalk.yellow(`creating branches.json`));
+    console.info(colors.yellow(`creating branches.json`));
     await fs.writeFile(`${options.dst}/branches.json`, JSON.stringify(gitInfo.branches));
 }
 
 async function copyFiles(fileTransfers) {
     console.info();
-    console.info(chalk.yellow(`copying files:`));
+    console.info(colors.yellow(`copying files:`));
     for (const fileTransfer of fileTransfers) {
-        console.info(chalk.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(cwd(), fileTransfer.dst)}`));
+        console.info(colors.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(cwd(), fileTransfer.dst)}`));
         await files.copy(fileTransfer.src, fileTransfer.dst);
     }
 }
 
 function registerServices(container, services) {
     console.info();
-    console.info(chalk.yellow(`registering services:`));
+    console.info(colors.yellow(`registering services:`));
     const parsed = {};
 
     for (const [key, value] of Object.entries(services)) {
-        console.info(chalk.yellow(`\t* registering service ${key}`));
+        console.info(colors.yellow(`\t* registering service ${key}`));
         parsed[key] = parseResolver(value);
     }
 

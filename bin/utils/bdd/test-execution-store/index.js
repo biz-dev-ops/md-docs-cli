@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 const fs = require('fs').promises;
 const path = require('path');
 const { env } = require('process');
@@ -24,7 +24,7 @@ module.exports = class TestExecutionsStore {
         this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branch.name));
         
         if (this.#data === null && this.gitInfo.branch.feature) {            
-            console.info(chalk.yellowBright(`feature branch executions not found, falling back to default branch executions.`));
+            console.info(colors.brightYellow(`feature branch executions not found, falling back to default branch executions.`));
             this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branches.find(b => b.feature === false).name));
         }
 
@@ -42,14 +42,14 @@ module.exports = class TestExecutionsStore {
 async function get(location) {
     if (!await files.exists(location)) {
         console.info();
-        console.info(chalk.yellowBright(`test execution source ${location} does not exsits.`));
+        console.info(colors.brightYellow(`test execution source ${location} does not exsits.`));
         return null;
     }
 
     const executions = {};
 
     console.info();
-    console.info(chalk.yellow(`scanning ${location} for test executions:`));
+    console.info(colors.yellow(`scanning ${location} for test executions:`));
 
     const directories = await getDirectories(location);
 
@@ -59,13 +59,13 @@ async function get(location) {
             items: []
         };
 
-        console.debug(chalk.yellow(`\t* execution type ${type} found:`));
+        console.debug(colors.yellow(`\t* execution type ${type} found:`));
 
         await files.each(directory, async (file) => {
             if (!file.endsWith('.json'))
                 return;
         
-            console.info(chalk.green(`\t\t* adding test execution ${path.relative(directory, file)}`));
+            console.info(colors.green(`\t\t* adding test execution ${path.relative(directory, file)}`));
 
             const execution = JSON.parse(await files.readFileAsString(file));
 

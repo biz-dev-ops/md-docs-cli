@@ -1,5 +1,5 @@
 const path = require('path');
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 const AnchorParser = require('../anchor-parser');
 
@@ -19,7 +19,7 @@ module.exports = class UrlRewriteAnchorParser extends AnchorParser {
         continue;
 
       const rewritten = rewrite(anchor.href, name, rule);
-      console.info(chalk.green(`\t\t\t\t* rewriting ${anchor.href} => ${rewritten}`));
+      console.info(colors.green(`\t\t\t\t* rewriting ${anchor.href} => ${rewritten}`));
       anchor.href = rewritten;
       break;
     }

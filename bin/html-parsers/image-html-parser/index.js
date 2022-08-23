@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 const HtmlParser = require('../html-parser');
 
@@ -13,14 +13,14 @@ module.exports = class ImageHtmlParser extends HtmlParser {
         const elements = element.querySelectorAll('img,svg[data-generator=markdown]');
 
         if (elements.length === 0) {
-            console.info(chalk.green(`\t* html contains no image elements`));
+            console.info(colors.green(`\t* html contains no image elements`));
             return;
         }
 
-        console.info(chalk.green(`\t* parsing ${elements.length} image elements:`));
+        console.info(colors.green(`\t* parsing ${elements.length} image elements:`));
 
         for (const element of elements) {
-            console.info(chalk.green(`\t\t* parsing ${element.nodeName}`));            
+            console.info(colors.green(`\t\t* parsing ${element.nodeName}`));            
 
             if (element.parentNode.nodeName === 'A') {
                 const parent = element.parentNode;

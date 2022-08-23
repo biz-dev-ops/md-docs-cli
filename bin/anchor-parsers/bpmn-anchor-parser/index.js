@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
@@ -15,7 +15,7 @@ module.exports = class BpmnAnchorParser extends AnchorParser {
   _canParse(anchor) { return anchor.href.endsWith('.bpmn'); }
 
   async _parse(anchor, file) {
-    console.info(chalk.green(`\t\t\t\t* rendering`));
+    console.info(colors.green(`\t\t\t\t* rendering`));
 
     const id = `bpmn-container-${uuidv4()}`;
     const xml = (await this._readFileAsString(file))

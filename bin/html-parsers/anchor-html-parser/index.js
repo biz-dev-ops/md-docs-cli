@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 module.exports = class AnchorHtmlParser {
     constructor({ options, anchorParsers }) { 
@@ -11,14 +11,14 @@ module.exports = class AnchorHtmlParser {
             .filter(a => !a.href.startsWith("http"));
         
         if (anchors.length === 0) {
-            console.info(chalk.green(`\t* html contains no anchors`));
+            console.info(colors.green(`\t* html contains no anchors`));
             return;
         }            
         
-        console.info(chalk.green(`\t* parsing ${anchors.length} anchors:`));
+        console.info(colors.green(`\t* parsing ${anchors.length} anchors:`));
         
         for (const anchor of anchors) {
-            console.info(chalk.green(`\t\t* parsing anchor ${anchor.href}:`));
+            console.info(colors.green(`\t\t* parsing anchor ${anchor.href}:`));
             
             for (const parser of this.parsers) {
                 await parser.parse(anchor);
