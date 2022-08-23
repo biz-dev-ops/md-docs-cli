@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const chalk = require('chalk-next');
+const colors = require('colors');
 const path = require('path');
 const { env, cwd } = require('process');
 const files = require('../files');
@@ -32,7 +32,7 @@ module.exports = class Menu {
         }
 
         console.info();
-        console.info(chalk.yellow(`scanning ${this.root} for menu items:`));
+        console.info(colors.yellow(`scanning ${this.root} for menu items:`));
 
         const items = [];
 
@@ -67,7 +67,7 @@ module.exports = class Menu {
             }
             else if (entry.name === 'index.md') {
                 const file = path.relative(this.root, path.resolve(src, entry.name));
-                console.info(chalk.green(`\t* adding menu item ${file}`));
+                console.info(colors.green(`\t* adding menu item ${file}`));
                 item.url = `${file.slice(0, -3)}.html`;
             }
         }
@@ -110,7 +110,7 @@ module.exports = class Menu {
         if (rewrite === url)
             return url;
         
-        console.info(chalk.green(`\t* rewrite url ${url} => ${rewrite}`));
+        console.info(colors.green(`\t* rewrite url ${url} => ${rewrite}`));
         return rewrite;
     }
 }

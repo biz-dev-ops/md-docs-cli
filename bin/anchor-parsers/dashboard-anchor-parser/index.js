@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const { env } = require('process');
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 const AnchorParser = require('../anchor-parser');
 
@@ -25,7 +25,7 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.files.json`, JSON.stringify(files));
 
-    console.info(chalk.green(`\t\t\t\t* parsing feature files`));
+    console.info(colors.green(`\t\t\t\t* parsing feature files`));
     const features = await gherkin.parse(files);
     
     if (env.NODE_ENV === 'development')
@@ -33,19 +33,19 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
     
     const executions = await this.testExecutionParser.get();
 
-    console.info(chalk.green(`\t\t\t\t* parsing executions file`));
+    console.info(colors.green(`\t\t\t\t* parsing executions file`));
     specflow.parse(features, executions);
 
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.features.json`, JSON.stringify(features));
 
-    console.info(chalk.green(`\t\t\t\t* summarizing features`));
+    console.info(colors.green(`\t\t\t\t* summarizing features`));
     const summary = summarizer.summarize(features);
 
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.json`, JSON.stringify(summary));
 
-    console.info(chalk.green(`\t\t\t\t* rendering`));
+    console.info(colors.green(`\t\t\t\t* rendering`));
     return this.component.render({ summary, features });
   }
 };

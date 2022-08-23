@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs').promises;
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 const buildInProviders = ['aad', 'github', 'twitter'];
 
@@ -16,7 +16,7 @@ module.exports = class AzureStaticWebApp {
 
         
         console.info();
-        console.info(chalk.yellow(`hosting ${hosting.type} found.`));
+        console.info(colors.yellow(`hosting ${hosting.type} found.`));
         
         const config = {
             routes: [],
@@ -34,7 +34,7 @@ module.exports = class AzureStaticWebApp {
         };
 
         if ('privateAccess' in hosting) {
-            console.info(chalk.green(`\t* configuring role based access.`));
+            console.info(colors.green(`\t* configuring role based access.`));
 
             config.routes.push({
                 route: '/assets/*',
@@ -49,7 +49,7 @@ module.exports = class AzureStaticWebApp {
 
             if ('providers' in hosting.privateAccess) {                
                 for (const provider of hosting.privateAccess.providers) {
-                    console.info(chalk.green(`\t* adding ${provider} identity provider.`));
+                    console.info(colors.green(`\t* adding ${provider} identity provider.`));
 
                     if (buildInProviders.includes(provider))
                         continue;
@@ -68,7 +68,7 @@ module.exports = class AzureStaticWebApp {
                     if (hosting.privateAccess.providers.includes(provider))
                         continue;
 
-                    console.info(chalk.green(`\t* removing ${provider} identity provider.`));
+                    console.info(colors.green(`\t* removing ${provider} identity provider.`));
 
                     config.routes.unshift({
                         route: `/.auth/login/${provider}`,
@@ -80,7 +80,7 @@ module.exports = class AzureStaticWebApp {
 
         if ('routes' in hosting) {
             if ('logout' in hosting.routes) {
-                console.info(chalk.green(`\t* adding logout route.`));
+                console.info(colors.green(`\t* adding logout route.`));
 
                 config.routes.unshift({
                     route: hosting.routes.logout.route,
@@ -91,7 +91,7 @@ module.exports = class AzureStaticWebApp {
 
         if ('responseOverrides' in hosting) {
             if ('401' in hosting.responseOverrides) {
-                console.info(chalk.green(`\t* adding 401 route.`));
+                console.info(colors.green(`\t* adding 401 route.`));
 
                 config.routes.unshift({
                     route: hosting.responseOverrides[401],
@@ -104,7 +104,7 @@ module.exports = class AzureStaticWebApp {
             }
 
             if ('403' in hosting.responseOverrides) {
-                console.info(chalk.green(`\t* adding 403 route.`));
+                console.info(colors.green(`\t* adding 403 route.`));
 
                 config.routes.unshift({
                     route: hosting.responseOverrides[403],
@@ -117,7 +117,7 @@ module.exports = class AzureStaticWebApp {
             }
 
             for (const [key, value] of Object.entries(hosting.responseOverrides)) {
-                console.info(chalk.green(`\t* adding ${key} response override.`));
+                console.info(colors.green(`\t* adding ${key} response override.`));
 
                 config.responseOverrides[key] = {
                     redirect: value

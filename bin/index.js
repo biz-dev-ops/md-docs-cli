@@ -1,9 +1,9 @@
 #! /usr/bin/env node
 
 const util = require('util');
-const chalk = require('chalk-next');
 const yargs = require('yargs');
 const figlet = util.promisify(require('figlet'));
+const colors = require('colors');
 const path = require('path');
 const yaml = require('js-yaml');
 const { cwd } = require('process');
@@ -13,7 +13,7 @@ const App = require('./app');
 
 async function run(o) {
     const logo = await figlet('md-docs-cli');
-    console.info(chalk.blueBright(logo));
+    console.info(logo);
 
     const options = await createOptions(o);
 
@@ -31,7 +31,7 @@ async function run(o) {
 
 async function find(src, folder, index = 0) {
     if (index == 5) {
-        console.error(chalk.redBright(`\t* ${folder} directory not found.`));
+        console.error(colors.redBright(`\t* ${folder} directory not found.`));
         throw new Error(`${folder} directory not found.`);
     }
 

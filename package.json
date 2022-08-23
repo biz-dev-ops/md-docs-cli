@@ -1,6 +1,6 @@
 {
   "name": "@synion/md-docs",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -37,7 +37,7 @@
     "@cucumber/gherkin-streams": "^5.0.0",
     "awilix": "^7.0.1",
     "bpmn-js": "^9.0.2",
-    "chalk-next": "^6.1.5",
+    "colors": "^1.4.0",
     "figlet": "^1.5.2",
     "iframe-resizer": "^4.3.2",
     "import-resolve": "^0.5.1",

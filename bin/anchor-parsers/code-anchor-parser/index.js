@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 const files = require('../../utils/files');
 
 const AnchorParser = require('../anchor-parser');
@@ -13,7 +13,7 @@ module.exports = class CodeAnchorParser extends AnchorParser {
   _canParse(anchor) { return CODE_LANGUAGES.some(item => anchor.href.endsWith(item.extension)); }
 
   async _parse(anchor, file) {
-    console.info(chalk.green(`\t\t\t\t* rendering`));
+    console.info(colors.green(`\t\t\t\t* rendering`));
     
     const language = CODE_LANGUAGES.find(item => anchor.href.endsWith(item.extension)).name;
     const content = (await files.readFileAsString(file))

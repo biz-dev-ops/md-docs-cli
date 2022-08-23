@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 const jsdom = require('jsdom');
 const path = require('path');
 const files = require('../../utils/files');
@@ -11,7 +11,7 @@ module.exports = class AnchorParser {
         if (!this._canParse(anchor))
             return;
         
-        console.info(chalk.green(`\t\t\t* [${this.constructor.name}]:`));
+        console.info(colors.green(`\t\t\t* [${this.constructor.name}]:`));
 
         const file = path.resolve(cwd(), `${anchor.href.split('?')[0].split('#')[0]}`);
         const html = await this._parse(anchor, file);

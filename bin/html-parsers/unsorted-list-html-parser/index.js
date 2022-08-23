@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 const HtmlParser = require('../html-parser');
 
@@ -16,15 +16,15 @@ module.exports = class UnsortedListHtmlParser extends HtmlParser {
             .filter(ul => ul.querySelector('.replaced') != undefined);
 
         if (uls.length === 0) {
-            console.info(chalk.green(`\t* html contains no ul's`));
+            console.info(colors.green(`\t* html contains no ul's`));
             return;
         }
 
-        console.info(chalk.green(`\t* parsing ${uls.length} ul's:`));
+        console.info(colors.green(`\t* parsing ${uls.length} ul's:`));
 
         for (const ul of uls) {
             const id = createUniqueId(ul);
-            console.info(chalk.green(`\t\t* parsing ul ${id}:`));
+            console.info(colors.green(`\t\t* parsing ul ${id}:`));
 
             const tabs = getTabs(ul, id).map(t => {
                 if (t.text === 'context')
@@ -33,10 +33,10 @@ module.exports = class UnsortedListHtmlParser extends HtmlParser {
                 return t;
             });
 
-            console.info(chalk.green(`\t\t\t* rendering ${tabs.length} tabs`));
+            console.info(colors.green(`\t\t\t* rendering ${tabs.length} tabs`));
             const html = this.component.render({ tabs });
 
-            console.info(chalk.green(`\t\t\t* replacing ul with tabs`));
+            console.info(colors.green(`\t\t\t* replacing ul with tabs`));
             this._replace(ul, html);
         }
     }

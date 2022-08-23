@@ -1,5 +1,5 @@
 const jsdom = require('jsdom');
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 module.exports = class HeadingHtmlParser {
     constructor({ locale })
@@ -9,7 +9,7 @@ module.exports = class HeadingHtmlParser {
 
     async parse(element) {
         const locale = await this.locale.get();
-        console.info(chalk.green(`\t* parsing headings:`));
+        console.info(colors.green(`\t* parsing headings:`));
 
         const container = jsdom.JSDOM.fragment("<article></article>").firstElementChild;
         
@@ -28,7 +28,7 @@ function addToHeadingContainer(locale, element, container, level) {
             const newLevel = Number.parseInt(element.localName.substring((1)));
 
             if (newLevel > level) {
-                console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: creating header container level ${newLevel}`));
+                console.info(colors.green(`\t\t* parsing ${element.localName || element.nodeName}: creating header container level ${newLevel}`));
 
                 const headerContainer = jsdom.JSDOM.fragment(HEADER_CONTAINER_TEMPLATE(element.localName)).firstElementChild;
                 container.appendChild(headerContainer);
@@ -36,7 +36,7 @@ function addToHeadingContainer(locale, element, container, level) {
                 next = addToHeadingContainer(locale, next, headerContainer.getElementsByClassName("container")[0], newLevel);
             }
             else {
-                console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: moving to level ${level - 1}`));
+                console.info(colors.green(`\t\t* parsing ${element.localName || element.nodeName}: moving to level ${level - 1}`));
 
                 return element;
             }
@@ -45,12 +45,12 @@ function addToHeadingContainer(locale, element, container, level) {
             if (level === -1) {
                 if (element.localName && element.localName === "nav") {
                     if (element.querySelectorAll("a").length === 0) {
-                        console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: removing element`));
+                        console.info(colors.green(`\t\t* parsing ${element.localName || element.nodeName}: removing element`));
                         element.parentNode.removeChild(element);
                     }
                 }
                 else {
-                    console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: creating headless container`));
+                    console.info(colors.green(`\t\t* parsing ${element.localName || element.nodeName}: creating headless container`));
 
                     const headlessContainer = jsdom.JSDOM.fragment(HEADLESS_CONTAINER_TEMPLATE).firstElementChild;
                     container.appendChild(headlessContainer);
@@ -58,7 +58,7 @@ function addToHeadingContainer(locale, element, container, level) {
                 }
             }
             else {
-                console.info(chalk.green(`\t\t* parsing ${element.localName || element.nodeName}: add element to container`));
+                console.info(colors.green(`\t\t* parsing ${element.localName || element.nodeName}: add element to container`));
                 container.appendChild(element);
             }
         }

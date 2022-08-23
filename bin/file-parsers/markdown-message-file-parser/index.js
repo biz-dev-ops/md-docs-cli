@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const { env } = require('process');
 const util = require('util');
 const path = require('path');
-const chalk = require('chalk-next');
+const colors = require('colors');
 const yaml = require('js-yaml');
 const md = require('markdown-it')
     ({
@@ -45,10 +45,10 @@ module.exports = class MarkdownMessageFileParser {
     }
 
     async #render(file) {
-        console.info(chalk.green(`\t* render html`));
+        console.info(colors.green(`\t* render html`));
         
         const htmlFile = `${file}.html`;
-        console.info(chalk.green(`\t\t* creating ${path.relative(this.options.dst, htmlFile)}`));
+        console.info(colors.green(`\t\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
         const data = await this.#createData(file);
 
@@ -59,7 +59,7 @@ module.exports = class MarkdownMessageFileParser {
 
         await fs.writeFile(htmlFile, html);
 
-        //console.info(chalk.green(`\t* render pdf`));
+        //console.info(colors.green(`\t* render pdf`));
         //await this.#renderPDF(file, data);
     }
 
@@ -97,7 +97,7 @@ module.exports = class MarkdownMessageFileParser {
     async #renderPDF(file, data) {
         const htmlFile = `${file}.html`;
         const pdfFile = `${file}.pdf`;
-        console.info(chalk.green(`\t\t* creating ${path.relative(this.options.dst, pdfFile)}`));
+        console.info(colors.green(`\t\t* creating ${path.relative(this.options.dst, pdfFile)}`));
         
         if(!this.browser)
             this.browser = await puppeteer.launch();
@@ -108,13 +108,13 @@ module.exports = class MarkdownMessageFileParser {
         await page.close();
 
         if (data.attachments) {            
-            console.info(chalk.green(`\t\t* adding ${attachments.length} attachments`));
+            console.info(colors.green(`\t\t* adding ${attachments.length} attachments`));
             
             const merger = new PDFMerger();
             merger.add(pdfFile);
             for (const a of response.attachments) {
                 const attachment = path.resolve(path.dirname(file), a);
-                console.info(chalk.green(`\t\t* adding attachment ${path.relative(attachment, pdfFile)}`));
+                console.info(colors.green(`\t\t* adding attachment ${path.relative(attachment, pdfFile)}`));
                 merger.add(attachment);                
             }
             await merger.save(pdfFile);

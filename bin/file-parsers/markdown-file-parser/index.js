@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-const chalk = require('chalk-next');
+const colors = require('colors');
 const files = require('../../utils/files');
 
 module.exports = class MarkdownFileParser {
@@ -19,7 +19,7 @@ module.exports = class MarkdownFileParser {
             return;
 
         const htmlFile = `${file.slice(0, -3)}.html`;
-        console.info(chalk.green(`\t* creating ${path.relative(this.options.dst, htmlFile)}`));
+        console.info(colors.green(`\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
         const html = await this.#render(file);
 

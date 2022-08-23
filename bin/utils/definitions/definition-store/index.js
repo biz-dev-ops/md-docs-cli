@@ -1,6 +1,6 @@
 const files = require('../../files');
 const yaml = require('js-yaml');
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 
 module.exports = class DefinitionStore {
@@ -22,13 +22,13 @@ module.exports = class DefinitionStore {
 
         this.#data = [];
         if (!await files.exists(this.options.definitionsFile)) {
-            console.info(chalk.yellow(`no definition file found.`));
+            console.info(colors.yellow(`no definition file found.`));
             return this.#data;
         }
 
         const content = await files.readFileAsString(this.options.definitionsFile);
         this.#data = yaml.load(content);
-        console.info(chalk.yellow(`${this.#data.length} definitions found.`));
+        console.info(colors.yellow(`${this.#data.length} definitions found.`));
         return this.#data;
     }
 }

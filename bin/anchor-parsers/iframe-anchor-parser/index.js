@@ -1,4 +1,4 @@
-const chalk = require('chalk-next');
+const colors = require('colors');
 const path = require('path');
 const { cwd } = require('process');
 
@@ -23,7 +23,7 @@ module.exports = class IFrameAnchorParser extends AnchorParser {
    }
 
   async _parse(anchor, file) {
-    console.info(chalk.green(`\t\t\t\t* rendering iframe`));
+    console.info(colors.green(`\t\t\t\t* rendering iframe`));
 
     const name = path.basename(file).split('.')[1];
     const hash = await files.hash(file);

@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-const chalk = require('chalk-next');
+const colors = require('colors');
 
 module.exports = class DrawIOFileParser {
     constructor({ options, drawIORenderer }) {
@@ -13,7 +13,7 @@ module.exports = class DrawIOFileParser {
             return;
 
         const svgFile = `${file}.svg`;
-        console.info(chalk.green(`\t* creating ${path.relative(this.options.dst, svgFile)}`));
+        console.info(colors.green(`\t* creating ${path.relative(this.options.dst, svgFile)}`));
 
         const svg = await this.drawIORenderer.render(file);
 

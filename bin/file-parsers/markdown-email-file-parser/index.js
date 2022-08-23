@@ -1,7 +1,7 @@
 const fs = require('fs').promises;
 const { env } = require('process');
 const path = require('path');
-const chalk = require('chalk-next');
+const colors = require('colors');
 const yaml = require('js-yaml');
 const md = require('markdown-it')
     ({
@@ -30,10 +30,10 @@ module.exports = class MarkdownEmailFileParser {
     }
 
     async #render(file) {
-        console.info(chalk.green(`\t* render html`));
+        console.info(colors.green(`\t* render html`));
         
         const htmlFile = `${file}.html`;
-        console.info(chalk.green(`\t\t* creating ${path.relative(this.options.dst, htmlFile)}`));
+        console.info(colors.green(`\t\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
         const data = await this.#createData(file);
 
