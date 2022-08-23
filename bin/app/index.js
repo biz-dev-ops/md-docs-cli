@@ -94,7 +94,7 @@ module.exports = class App {
         const hosting = this.container.resolve('hosting');
         await hosting.apply();
 
-        //await this.#parse(options);
+        await this.#parse(options);
         
         console.info(colors.green('\nrenaming directories:'));
         await this.#rename(options.dst);
