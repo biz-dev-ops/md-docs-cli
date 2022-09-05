@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const { cwd } = require('process');
+const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
 
@@ -49,7 +50,13 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
   }
 
   async #getJson(file) {
-    const json = await jsonSchemaParser.parse(file);
-    return JSON.parse(await this.definitionParser.render(JSON.stringify(json)));
+    let json = await jsonSchemaParser.parse(file);
+    json = (await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n");
+    
+    if (env.NODE_ENV === 'development') {
+      await fs.writeFile(`${file}.json`, json);
+    }
+
+    return JSON.parse(json);
   }
 };

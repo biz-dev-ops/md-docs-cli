@@ -11,9 +11,9 @@ module.exports = class DefinitionHtmlParser extends HtmlParser {
     async parse(element) {
         const elements = element
                 .querySelector('article')
-                .querySelectorAll('p,li,td,th');
+                ?.querySelectorAll('p,li,td,th');
 
-        if (elements.length === 0) {
+        if (elements === undefined || elements.length === 0) {
             console.info(colors.green(`\t* html contains no paragraphs`));
             return;
         }

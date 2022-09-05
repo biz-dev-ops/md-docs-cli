@@ -27,7 +27,7 @@ module.exports = class DefinitionStore {
         }
 
         const content = await files.readFileAsString(this.options.definitionsFile);
-        this.#data = yaml.load(content);
+        this.#data = yaml.load(content) || [];
         console.info(colors.yellow(`${this.#data.length} definitions found.`));
         return this.#data;
     }
