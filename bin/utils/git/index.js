@@ -48,7 +48,7 @@ exports.info = async function (options) {
     catch (ex) {
         if (!ex?.message?.includes('fatal: not a git repository')) {
             console.warn(colors.brightYellow(`\t* git command failed, falling back to default.`));
-            console.error(colors.redBright(ex));
+            console.error(colors.brightRed(ex));
         }
         else {
             console.warn(colors.brightYellow(`\t* directory is not a git repository, falling back to default.`));

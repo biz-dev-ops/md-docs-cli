@@ -31,7 +31,7 @@ async function run(o) {
 
 async function find(src, folder, index = 0) {
     if (index == 5) {
-        console.error(colors.redBright(`\t* ${folder} directory not found.`));
+        console.error(colors.brightRed(`\t* ${folder} directory not found.`));
         throw new Error(`${folder} directory not found.`);
     }
 

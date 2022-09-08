@@ -30,7 +30,7 @@ module.exports = class AsyncapiAnchorParser extends AnchorParser {
       json = (await AsyncApiParser.parse(json))['_json'];
     }
     catch (ex) {
-      console.info(colors.redBright(`\t\t\t\t* error parsing json`));
+      console.info(colors.brightRed(`\t\t\t\t* error parsing json`));
       throw new Error(ex);
     }
 
