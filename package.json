@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.9",
-    "@asyncapi/html-template": "^0.24.5",
+    "@asyncapi/html-template": "^0.25.1",
     "@cucumber/gherkin-streams": "^5.0.0",
     "awilix": "^7.0.1",
     "bpmn-js": "^9.0.2",
