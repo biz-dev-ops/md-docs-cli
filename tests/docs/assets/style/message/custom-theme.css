@@ -1,0 +1,30 @@
+:root {
+    /* Theming */
+    --color-brand-base: var(--a-brand-color-green);
+    --color-brand-light: var(--a-brand-color-green);
+    --text-color-heading: var(--a-brand-color-blue);
+}
+
+header .logo {
+    left: auto;
+}
+
+header .logo img {
+    height: 60pt;
+}
+
+footer .contact {
+    color: var(--a-brand-color-blue);
+}
+
+@media print {
+    @page :first {
+        @top-left-corner {
+            content: '';
+        }
+
+        @top-right {
+            content: element(firstPageHeader);
+        }
+    }
+}
