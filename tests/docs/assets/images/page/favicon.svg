@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <rect id="Rectangle" fill="#000000" x="0" y="0" width="200" height="200" rx="20"></rect>
+            <path d="M26,94 L26,26 L46,26 L66,51 L86,26 L106,26 L106,94 L86,94 L86,55 L66,80 L46,55 L46,94 L26,94 Z M151,94 L121,61 L141,61 L141,26 L161,26 L161,61 L181,61 L151,94 Z" id="Shape-Copy-2" fill="#FFFFFF" fill-rule="nonzero"></path>
+            <rect id="Rectangle-Copy" fill="#FFFFFF" x="26" y="112" width="148" height="18"></rect>
+            <rect id="Rectangle-Copy-3" fill="#FFFFFF" x="26" y="148" width="74" height="18"></rect>
+        </g>
+    </g>
+</svg>

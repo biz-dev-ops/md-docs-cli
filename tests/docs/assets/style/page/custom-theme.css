@@ -26,10 +26,7 @@
 }
 
 header .bar .logo img {
-    height: 3.25rem;
-    object-fit: cover;
-    object-position: left;
-    width: 3.25rem;
+    height: 4rem;
 }
 
 header a:focus,
@@ -53,18 +50,5 @@ main > aside > .header {
 @media (min-width: 40rem) {
     header .bar .logo {
         display: block;
-    }
-
-    header .bar .logo img {
-        height: 5rem;
-        width: 5rem;
-    }
-}
-
-@media (min-width: 70rem) {
-    header .bar .logo img {
-        height: auto;
-        width: auto;
-        object-fit: initial;
     }
 }
