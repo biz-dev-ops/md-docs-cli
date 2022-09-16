@@ -1,14 +1,14 @@
 :root {
     /* Colors */
-    --a-brand-color-purple: Purple;
-    --a-brand-color-purple-surface: Purple light;
-    --a-brand-color-purple-dark: Purple dark;
-    --a-brand-color-aqua: Aqua;
-    --a-brand-color-aqua-surface: Aqua light;
-    --a-brand-color-aqua-dark: Aqua dark;
+    --a-brand-color-purple: #814cb4;
+    --a-brand-color-purple-surface: #ffedff;
+    --a-brand-color-purple-dark: #639;
+    --a-brand-color-aqua: #85ffff;
+    --a-brand-color-aqua-surface: #e1f8fc;
+    --a-brand-color-aqua-dark: #0ff;
 
-    --a-brand-color-green: Green;
-    --a-brand-color-blue: Blue;
+    --a-brand-color-green: forestgreen;
+    --a-brand-color-blue: dodgerblue;
 
     /* Theming */
     --color-brand-base: var(--a-brand-color-aqua);
