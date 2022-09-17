@@ -1,0 +1,54 @@
+:root {
+    /* Theming */
+    --background-color-base: var(--a-brand-color-aqua-surface);
+    --text-color-heading: var(--a-brand-color-purple);
+
+    /* Radii */
+    --radius-base: 1.5rem;
+
+    /* Header */
+    --header-background-color: var(--color-white);
+    --header-text-color: var(--a-brand-color-purple);
+
+    /* Aside */
+    --aside-background-color: var(--color-white);
+    --aside-text-color: var(--a-brand-color-purple);
+
+    /* Button */
+    --button-text-color: var(--color-white);
+    --button-text-color-active: var(--color-white);
+    --button-background-base: var(--a-brand-color-purple);
+    --button-background-active: var(--a-brand-color-purple-dark);
+
+    /* Shadow */
+    --drop-shadow-base: 0 .125rem 1.25rem rgba(60, 42, 96, .05);
+    --drop-shadow-level2: 0 .25rem 1rem rgba(60, 42, 96, .1);
+}
+
+header .bar .logo img {
+    height: 4rem;
+}
+
+header a:focus,
+header a:hover {
+    background-color: var(--a-brand-color-purple-surface);
+}
+
+header a:active {
+    background-color: transparent;
+}
+
+header a[aria-expanded="true"] {
+    background-color: var(--a-brand-color-purple-surface);
+    color: var(--a-brand-color-purple);
+}
+
+main > aside > .header {
+    border-top-color: var(--color-black-a10);
+}
+
+@media (min-width: 40rem) {
+    header .bar .logo {
+        display: block;
+    }
+}

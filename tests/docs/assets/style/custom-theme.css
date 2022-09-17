@@ -1,0 +1,17 @@
+:root {
+    /* Colors */
+    --a-brand-color-purple: #814cb4;
+    --a-brand-color-purple-surface: #ffedff;
+    --a-brand-color-purple-dark: #639;
+    --a-brand-color-aqua: #85ffff;
+    --a-brand-color-aqua-surface: #e1f8fc;
+    --a-brand-color-aqua-dark: #0ff;
+
+    --a-brand-color-green: forestgreen;
+    --a-brand-color-blue: dodgerblue;
+
+    /* Theming */
+    --color-brand-base: var(--a-brand-color-aqua);
+    --color-brand-light: var(--a-brand-color-aqua-surface);
+    --text-color-heading: var(--a-brand-color-purple);
+}

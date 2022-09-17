@@ -1,0 +1,68 @@
+locale: en
+hosting:
+  type: azure-static-web-app
+  privateAccess:
+    roles:
+      - admin
+    providers:
+      - github
+
+  routes:
+    logout: 
+      text: logout
+      route: /logout
+
+  responseOverrides:
+    401: /signin
+    403: /signedin
+email:  
+  googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap'
+  from:
+    name: The Organisation
+    email: info@organisation.com
+  to:
+    email: john@doe.com
+  subject: No subject defined, please define a subject!
+  salutation: Dear reader,
+  signature: The Boss
+  footer: |
+    <address>
+        The Company<br>
+        The Street 1<br>
+        11111 The City
+    </address>
+    <p>
+        CoC: 111111111<br>
+        VAT: 00000000000000
+    </p>
+message:
+  googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap'
+  to: |
+    John Doe<br>
+    The Street 2<br>
+    11111 The City
+  date: The City, january 1st 2022
+  salutation: Dear reader,
+  signature:
+    The Company,
+    
+    
+    
+    The Boss
+    Managing Director
+  footer: |
+    <address>
+        The Company<br>
+        The Street 1<br>
+        11111 The City
+    </address>
+    <p>
+        CoC: 111111111<br>
+        VAT: 00000000000000
+    </p>
+  references:
+    - name: Subject
+      value: No subject defined, please define a subject!
+    - name: Your reference
+      value: 111111
+    - name: Our reference

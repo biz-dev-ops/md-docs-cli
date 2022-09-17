@@ -8,7 +8,9 @@
 
 ## Product
 
-md-docs is a cli tool which generates a static webiste by resolving files recursivly from a source folder.
+md-docs is a cli tool which generates a static website by resolving files recursivly from a source folder.
+
+See the [test set](https://github.com/synionnl/md-docs-cli/tree/main/tests) for more information.
 
 This script copies every file and directory from the **docs** directory into the **dist** directory and transforms every `*.md` file into a html file while adding the following features:
 
