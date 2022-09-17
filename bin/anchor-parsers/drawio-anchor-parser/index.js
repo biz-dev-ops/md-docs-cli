@@ -1,4 +1,3 @@
-const { cwd } = require('process');
 const colors = require('colors');
 const files = require('../../utils/files');
 

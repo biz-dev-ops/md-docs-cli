@@ -1,4 +1,3 @@
-const fs = require('fs').promises;
 const puppeteer = require('puppeteer');
 const files = require('../files');
 
