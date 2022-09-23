@@ -8,6 +8,7 @@ script.
     });
 
     const bpmnContainer = document.getElementById('#{id}');
+    const zoomButtons = bpmnContainer.parentElement.querySelectorAll('footer [data-bpmn-zoom]');
 
     const drawCanvas = () => {
       viewer.importXML(xml)
@@ -15,7 +16,7 @@ script.
           const canvas = viewer.get('canvas');
           let viewbox = canvas.viewbox();
           if (viewbox.inner.width !== 0 && viewbox.inner.height !== 0) {
-            canvas.zoom('fit-viewport');
+            canvas.zoom('fit-viewport', 'auto');
           }
 
           setTimeout(() => {
@@ -24,8 +25,8 @@ script.
             if (viewbox.inner.width !== 0 && viewbox.inner.height !== 0) {
               bpmnContainer.style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + '%';
 
-              setTimeout(() => canvas.zoom('fit-viewport'), 1);
-              setTimeout(() => canvas.zoom('fit-viewport'), 2);
+              setTimeout(() => canvas.zoom('fit-viewport', 'auto'), 1);
+              setTimeout(() => canvas.zoom('fit-viewport', 'auto'), 2);
             }
           }, 1)
 
@@ -35,9 +36,31 @@ script.
         });
     }
 
+    const handleZoom = event => {
+      const canvas = viewer.get('canvas');
+      const z = canvas.zoom();
+
+      switch (event.currentTarget.dataset.bpmnZoom) {
+        case 'in':
+          canvas.zoom(z + .5, 'auto');
+          break;
+
+        case 'out':
+          canvas.zoom(z - .5, 'auto');
+          break;
+
+        default:
+          canvas.zoom('fit-viewport', 'auto');
+      }
+    }
+
     drawCanvas();
 
     window.addEventListener('resize', () => {
       drawCanvas();
-    });     
+    });
+
+    zoomButtons.forEach(button => {
+      button.addEventListener('click', handleZoom);
+    });
   });

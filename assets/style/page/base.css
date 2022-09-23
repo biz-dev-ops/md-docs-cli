@@ -360,7 +360,6 @@ header nav {
     border-radius: var(--radius-base);
     box-shadow: var(--drop-shadow-level2);
     color: var(--menu-text-color);
-    display: none;
     position: absolute;
     top: 100%;
     margin-top: calc(var(--space-md) * -3/2);
@@ -687,7 +686,54 @@ article > .header-container {
 .bpmn > .bjs-container {
     position: absolute !important;
     top: 0;
+    cursor: move;
 }
+
+[data-fullscreen="false"] .bpmn > .bjs-container {
+    pointer-events: none;
+}
+
+.bpmn-zoom {
+    border-radius: var(--radius-base);
+    box-shadow: var(--drop-shadow-base);
+    display: none;
+    flex-direction: column;
+}
+
+.bpmn-zoom [data-bpmn-zoom] {
+    background-color: var(--color-black-a10);
+    border: none;
+    font-size: var(--heading-2-size);
+    text-align: center;
+    width: var(--space-lg);
+    height: var(--space-lg);
+    line-height: 1;
+    padding: var(--space-sm);
+    transition: background-color var(--duration-base), color var(--duration-base);
+}
+
+.bpmn-zoom [data-bpmn-zoom]:first-child {
+    border-radius: var(--radius-base) var(--radius-base) 0 0;
+}
+
+.bpmn-zoom [data-bpmn-zoom]:last-child {
+    border-radius: 0 0 var(--radius-base) var(--radius-base);
+}
+
+
+.bpmn-zoom [data-bpmn-zoom]:hover,
+.bpmn-zoom [data-bpmn-zoom]:focus {
+    background-color: var(--color-black-a20);
+}
+
+[data-fullscreen="true"] .bpmn-zoom {
+    display: flex;
+}
+
+.bjs-powered-by {
+    display: none;
+}
+
 
 /* Module: Zoom */
 [data-fullscreen] {
@@ -817,13 +863,21 @@ article > .header-container {
     max-width: none;
 }
 
-[data-fullscreen="true"]  iframe.openapi,
-[data-fullscreen="true"]  iframe.asyncapi {
+[data-fullscreen="true"] iframe.openapi,
+[data-fullscreen="true"] iframe.asyncapi {
     min-width: 100%;
     min-height: 100vh;
     margin-left: 0;
     margin-right: 0;
     vertical-align: middle;
+}
+
+[data-fullscreen="true"] .bpmn > .bjs-container {
+    height: 100vh !important;
+}
+
+[data-fullscreen="true"] .bpmn + footer [data-toggle="fullscreen"] {
+    display: none;
 }
 
 /* Tabs */

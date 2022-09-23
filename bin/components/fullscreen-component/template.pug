@@ -2,11 +2,19 @@ mixin button()
   button(type='button' title='Maximize' data-toggle="fullscreen")
     span(class='label')='Zoom'
 
-div(data-fullscreen)
+div(data-fullscreen="false")
   header
     +button()
   
   | !{html}
   
   footer    
-    +button() 
+    +button()
+    div(class='bpmn-zoom')
+        button(type='button' title='Zoom reset' data-bpmn-zoom="reset")
+            span(class='label')!='&#8634;'
+        button(type='button' title='Zoom in' data-bpmn-zoom="in")
+            span(class='label')!='&plus;'
+        button(type='button' title='Zoom uit' data-bpmn-zoom="out")
+            span(class='label')!='&minus;'
+
