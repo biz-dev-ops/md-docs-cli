@@ -1,5 +1,5 @@
 (() => {
-    document.querySelectorAll('div[data-fullscreen=data-fullscreen]').forEach(container => {
+    document.querySelectorAll('div[data-fullscreen]').forEach(container => {
         const buttons = [container.querySelector(':scope > header > button'), container.querySelector(':scope > footer > button')];
         buttons.forEach(button => {
             button.onclick = (event) => {
