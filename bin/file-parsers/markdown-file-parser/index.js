@@ -52,7 +52,8 @@ module.exports = class MarkdownFileParser {
             url: url,
             content: element.innerHTML,
             title: response.title,        
-            git: this.gitInfo
+            git: this.gitInfo,
+            data: this.options.page || {}
         });
     }
 }

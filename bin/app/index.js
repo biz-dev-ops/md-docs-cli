@@ -186,7 +186,7 @@ module.exports = class App {
             { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
             { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
 
-            { src: path.resolve(options.nodeModules, 'bpmn-js/dist/bpmn-viewer.production.min.js'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
+            { src: path.resolve(options.nodeModules, 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
 
             { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
             { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
