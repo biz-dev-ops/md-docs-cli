@@ -7,6 +7,6 @@ module.exports = class EmailComponent {
     }
 
     render(data) {
-        return this.renderFn({...data });
+        return this.renderFn({ data });
     }
 }

@@ -40,13 +40,13 @@ module.exports = class MarkdownEmailFileParser {
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.json`, JSON.stringify(data));
 
-        const html = this.component.render({ data });
+        const html = this.component.render(data);
 
         await fs.writeFile(htmlFile, html);
     }
 
     async #createData(file) {
-        let data = Object.assign(JSON.parse(JSON.stringify(this.options.email)), {
+        let data = Object.assign(JSON.parse(JSON.stringify(this.options.email || {})), {
             locale: await this.locale.get(),
             root: this.relative.get().root,
             title: formatTitle(path.basename(file))

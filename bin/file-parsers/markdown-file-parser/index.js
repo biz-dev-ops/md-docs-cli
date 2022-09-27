@@ -53,7 +53,7 @@ module.exports = class MarkdownFileParser {
             content: element.innerHTML,
             title: response.title,        
             git: this.gitInfo,
-            data: this.options.page || {}
+            options: this.options.page || {}
         });
     }
 }
