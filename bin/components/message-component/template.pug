@@ -4,6 +4,8 @@ html
     meta(charset='UTF-8')
     title=data.title
 
+    link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/message/style.css')
+
     script.
       window.PagedConfig = {
         auto: false,
@@ -13,20 +15,7 @@ html
       };
 
     script(src='https://unpkg.com/pagedjs/dist/paged.polyfill.js')
-
-    //- style.
-    //-   if(data["font-faces"])
-    //-     each fontFace in data["font-faces"]
-    //-        @font-face {
-    //-           font-family: '{{family}}';
-    //-           src: 
-    //-             each source in fontFace.sources
-    //-               url("{{url}}") format("{{format}}"),
-    //-           font-weight: {{weight}};
-    //-           font-style: {{style}};
-    //-         }
-      | !{data.css}
-
+    
     if(data.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
       link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)

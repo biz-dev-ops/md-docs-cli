@@ -7,10 +7,10 @@ html
     title= title 
     link(rel='stylesheet' type='text/css' href=relative.root + 'assets/style/page/style.css')
 
-    if(data.googleFont)
+    if(options.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
       link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
-      link(href=data.googleFont rel='stylesheet')
+      link(href=options.googleFont rel='stylesheet')
 
     link(href=relative.root + 'assets/prismjs/prism-coy.min.css' rel='stylesheet')
     link(href=relative.root + 'assets/prismjs/prism-line-numbers.min.css' rel='stylesheet')
