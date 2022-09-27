@@ -20,7 +20,6 @@ async function run(o) {
     options.src = path.resolve(cwd(), `docs`);
     options.dst = path.resolve(cwd(), `dist`);
     options.testExecutionLocation = path.resolve(cwd(), `.temp/executions`);
-    options.definitionsFile = path.resolve(cwd(), `definitions.yml`);
     options.assets = await find(__dirname, 'assets');
     options.nodeModules = await find(__dirname, 'node_modules');
 
