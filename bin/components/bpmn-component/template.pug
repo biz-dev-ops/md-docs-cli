@@ -8,7 +8,7 @@ script.
     });
 
     const bpmnContainer = document.getElementById('#{id}');
-    const zoomButtons = bpmnContainer.parentElement.querySelectorAll('footer [data-bpmn-zoom]');
+    const zoomButtons = bpmnContainer.parentElement.querySelectorAll('footer [data-figure-zoom]');
 
     const drawCanvas = () => {
       viewer.importXML(xml)
@@ -40,7 +40,7 @@ script.
       const canvas = viewer.get('canvas');
       const z = canvas.zoom();
 
-      switch (event.currentTarget.dataset.bpmnZoom) {
+      switch (event.currentTarget.dataset.figureZoom) {
         case 'in':
           canvas.zoom(z + .5, 'auto');
           break;
