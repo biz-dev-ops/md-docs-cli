@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const colors = require('colors');
 const files = require('../../utils/files');
+const orderPrefixRegex = /(\d+[_])/ig;
 
 module.exports = class MarkdownFileParser {
     constructor({ options, gitInfo, hosting, markdownRenderer, htmlParsers, pageComponent, relative }) {
@@ -23,6 +24,8 @@ module.exports = class MarkdownFileParser {
 
         const html = await this.#render(file);
 
+
+
         await fs.writeFile(htmlFile, html);
     }
 
@@ -30,10 +33,12 @@ module.exports = class MarkdownFileParser {
         const markdown = `[[toc]]\n${await files.readFileAsString(file)}`;
         const response = getTitle(markdown, file);
         const element = await this.renderer.render(response.markdown);
-        
+
         for (const parser of this.parsers) {
             await parser.parse(element, file);
         }
+        
+        element.innerHTML = element.innerHTML.replace(orderPrefixRegex, '');
 
         const logout = getlogoutInfo(this.options, file);
         const showNav = getShowNavInfo(this.options, file);

@@ -57,17 +57,17 @@ const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const MenuHtmlParser = require('../html-parsers/menu-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
 
-const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
-const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
-const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
+const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
+const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
+const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
 
 module.exports = class App {
@@ -261,9 +261,9 @@ module.exports = class App {
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
             'imageAnchorParser': asClass(ImageAnchorParser).singleton(),
-            'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
-            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),            
+            'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
+            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
             'urlRewriteAnchorParser': asClass(UrlRewriteAnchorParser).singleton(),
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
 
