@@ -36,7 +36,7 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 ## Email
 
-[email](test.email.message.md)
+[email](test.email.md)
 
 ## DrawIO
 
@@ -52,5 +52,5 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 * [openapi](test.openapi.yml)
 * [asyncapi](test.asyncapi.yml)
 * [message](test.message.md)
-* [email](test.email.message.md)
+* [email](test.email.md)
 * [drawio](test.drawio)

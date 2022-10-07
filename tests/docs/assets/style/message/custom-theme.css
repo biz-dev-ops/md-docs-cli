@@ -11,6 +11,7 @@ header .logo {
 
 header .logo img {
     height: 60pt;
+    width: 60pt;
 }
 
 footer .contact {
