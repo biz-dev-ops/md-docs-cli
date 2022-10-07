@@ -20,5 +20,5 @@ module.exports = class ImageAnchorParser extends AnchorParser {
 };
 
 function isImage(href) {
-  return (/\.(gif|jpe?g|tiff?|png|webp|bmp|svg)[\?|#]?.*$/i).test(href)
+  return (/\.(gif|jpe?g|tiff?|png|webp|bmp)[\?|#]?.*$/i).test(href)
 }

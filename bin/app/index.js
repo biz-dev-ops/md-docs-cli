@@ -67,6 +67,7 @@ const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
 const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
+const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
 const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
 
@@ -264,6 +265,7 @@ module.exports = class App {
             'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
+            'svgAnchorParser': asClass(SvgAnchorParser).singleton(),
             'urlRewriteAnchorParser': asClass(UrlRewriteAnchorParser).singleton(),
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
 
@@ -321,7 +323,8 @@ module.exports = class App {
                 'iframeAnchorParser',
                 'openapiAnchorParser',
                 'userTaskAnchorParser',
-                'imageAnchorParser'
+                'imageAnchorParser',
+                'svgAnchorParser'
             ]
         };
     }
