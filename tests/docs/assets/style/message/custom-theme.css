@@ -21,6 +21,7 @@ footer .contact {
     @page :first {
         @top-left-corner {
             content: '';
+            content: element(empty); /* reset hack for element */
         }
 
         @top-right {
