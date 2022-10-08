@@ -10,7 +10,7 @@ module.exports = class ImageHtmlParser extends HtmlParser {
     }
 
     async parse(element) {
-        const elements = element.querySelectorAll('img,svg[data-generator=markdown]');
+        const elements = element.querySelectorAll('img,svg[data-generator=markdown],embed[type=image\\/svg\\+xml]');
 
         if (elements.length === 0) {
             console.info(colors.green(`\t* html contains no image elements`));
