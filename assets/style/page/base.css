@@ -68,13 +68,14 @@ a:focus {
 }
 
 figure img,
-figure svg {
+figure svg,
+figure embed {
     max-width: 100%;
     height: auto;
     vertical-align: middle;
 }
 
-:where(img, svg):not(:last-child) {
+:where(img, svg, embed):not(:last-child) {
     margin-bottom: calc(var(--line-height-base) * 1rem);
 }
 
@@ -854,11 +855,13 @@ article > .header-container {
     text-align: center;
 }
 
-[data-fullscreen] figure svg {
+[data-fullscreen] figure svg,
+[data-fullscreen] figure embed {
     height: auto !important; /* TODO: Maak PlantUML specifiek */
 }
 
-[data-fullscreen="true"] svg {
+[data-fullscreen="true"] svg,
+[data-fullscreen="true"] embed  {
     max-width: none;
 }
 
