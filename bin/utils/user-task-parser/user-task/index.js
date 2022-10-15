@@ -32,7 +32,7 @@ function transformToFields(schema, ui, parents) {
     }
         
     else {
-        fields.push(transformToFieldValue(schema))
+        fields.push(transformToField(schema, ui, parents, 'item'))
     }
     
     return fields;
