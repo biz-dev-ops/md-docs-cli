@@ -1,0 +1,8 @@
+themes:
+  - theme_a
+  - theme_b
+references:
+  - name: Subject
+    value: a subject
+model:
+  value: A value! 

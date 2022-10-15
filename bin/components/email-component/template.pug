@@ -11,6 +11,11 @@ html
       link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
       link(href=data.googleFont rel='stylesheet')
   body
+    if(data.themes)
+      select
+        each theme in data.themes 
+          option=theme
+          
     section(class='mail')
       header(class='mail-header')
         dl 

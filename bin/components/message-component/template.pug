@@ -22,6 +22,11 @@ html
       link(href=data.googleFont rel='stylesheet')
     
   body
+    if(data.themes)
+      select
+        each theme in data.themes 
+          option=theme
+          
     article
       header
         div(class='logo')
