@@ -29,18 +29,19 @@ mixin formItems(items)
   each item in items
     +formItem(item)
 
+mixin editor(item)
+  include .generated/editor.pug  
+
 mixin formItem(item)
   div(class='form-item')
-    if(item.items)
+    if(item.editor)
+      +editor(item)
+
+    else if(item.items)
       fieldset
         legend=item.label
 
-        +formItems(item.items)        
-    else if(item.editor)
-      label(for=item.id class={required: item.required})=item.label
-
-      div(class='input-group')
-        include .generated/editor.pug
+        +formItems(item.items)
     else
       p(class=error)='No editor defined!'
 

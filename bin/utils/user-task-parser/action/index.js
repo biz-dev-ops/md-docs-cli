@@ -34,6 +34,12 @@ function transformToFormFields(id, schema, ui, parents) {
     if (schema.oneOf) {
         return schema.oneOf.map(p => transformToFormField(id, p, ui, parents, 'oneOf', false));
     }
+
+    if (schema.items) {
+        return transformToFormField(id, schema.items, ui, parents, 'array', false);
+    }
+
+    return transformToFormField(id, schema, ui, parents, 'item', false);
 }
 
 
@@ -47,12 +53,20 @@ function transformToFormField(id, property, ui, parents, key, required) {
         value: property.example
     }
 
-    if (property.oneOf)
+    if (property.oneOf) {
         field.items = property.oneOf.map(p => transformToFormField(id, p, ui, parents, p.title ?? "oneOf", false));
-    else if (property.type === 'object' || property.properties)
+        field.editor = {
+            type: 'one-of'
+        };
+    }
+    else if (property.properties)
         field.items = transformToFormFields(id, property, ui, [...parents, key]);
-    else if (property.type === 'array')
-        field.items = transformToFormFields(id, property.items, ui, [...parents, key]);
+    else if (property.items) {
+        field.value = transformToFormField(id, property.items, ui, [...parents, key], required);
+        field.editor = {
+            type: 'collection'
+        };
+    }
     else
         field.editor = transformToEditor(property, getEditor(parents, key, ui?.editors));
 
@@ -89,10 +103,6 @@ function transformToEditor(property, editor) {
             exclusiveMinimum: property.format ?? false,
             exclusiveMaximum: property.format ?? false,
         };
-    }
-
-    if (property.type === "array") {
-        //TODO
     }
 
     if (property.type === "string") {

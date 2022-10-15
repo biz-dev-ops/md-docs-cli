@@ -1,9 +1,11 @@
-if(item.required)
-  div(class='form-check')
-    input(type='radio' name=item.name id=item.id value='')
-    label(for=item.id)='None'
+label(for=item.id class={required: item.required})=item.label
+div(class='input-group')   
+  if(item.required)
+    div(class='form-check')
+      input(type='radio' name=item.name id=item.id value='')
+      label(for=item.id)='None'
 
-each option in item.editor.options
-  div(class='form-check')
-    input(type='radio' name=option.name.name id=option.id value=option.value)
-    label(for=option.id)=option.name
+  each option in item.editor.options
+    div(class='form-check')
+      input(type='radio' name=option.name.name id=option.id value=option.value)
+      label(for=option.id)=option.name

@@ -1,0 +1,11 @@
+fieldset
+  legend=item.label
+
+  span='TODO make editor visible by options selected index'
+
+  select
+    option
+    each x in item.items
+      option=x.label 
+
+  +formItems(item.items)
