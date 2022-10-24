@@ -14,16 +14,14 @@ module.exports = class Menu {
     }
 
     async init() {
-        await this.items();
+        this.#data = await this.#getData();
     }
 
-    async items() {
-        if (this.#data)
-            return this.#data;
+    async items(currentUrl) {
+        if (!this.#data)
+            this.#data = await this.#getData();        
         
-        this.#data = await this.#getData();
-        this.#data = this.#rewriteUrls(this.#data);
-        return this.#data;
+        return this.#rewriteUrls(this.#data, currentUrl);
     }
 
     async #getData() {
@@ -55,12 +53,12 @@ module.exports = class Menu {
 
         const item = {
             name: this.#format(src),
+            path: path.relative(this.root, src),
             items: []
         };
 
         for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
             if (entry.isDirectory()) {
-                //const name = await this.#resolveDirectory(entry, src);
                 const sub = await this.#getMenuItem(path.resolve(src, entry.name));
                 if (sub != undefined)
                     item.items.push(sub);
@@ -86,15 +84,25 @@ module.exports = class Menu {
             .replaceAll("-", " ");
     }
 
-    #rewriteUrls(items) {
+    #rewriteUrls(items, currentUrl) {
         return items.map(i => {
             const item = {
                 name: i.name,
-                items: this.#rewriteUrls(i.items)
+                classes: [],
+                items: this.#rewriteUrls(i.items, currentUrl)
             }
 
-            if (i.url)
-                item.url = this.#rewriteUrl(i.url);            
+            if(currentUrl.startsWith(i.path)) {
+                item.classes.push("open");
+            }
+                
+            if (i.url === currentUrl) {
+                item.classes.push("active");
+            }
+
+            if (i.url) {
+                item.url = this.#rewriteUrl(i.url);
+            }
             
             return item;
             

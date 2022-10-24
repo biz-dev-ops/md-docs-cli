@@ -1,6 +1,6 @@
 (() => {
-    const links = document.querySelectorAll("#toc-container a");
-    const anchors = document.querySelectorAll(".header-container h2, .header-container h3");
+    const links = document.querySelectorAll(".toc-container a");
+    const anchors = document.querySelectorAll(".header-container h2");
 
     const scrollspy = () => {
         const pageYPosition = document.documentElement.scrollTop || document.body.scrollTop;

@@ -1,3 +1,15 @@
+mixin menuItems(items)
+  if items && items.length > 0
+    ul
+      each item in items 
+        li(class=item.classes.join(' '))
+          if item.url
+            a(href=relative.root + '' + item.url)= item.name
+          else
+            span= item.name
+
+          +menuItems(item.items)            
+
 doctype html
 html 
   head
@@ -53,7 +65,17 @@ html
               each branch in git.branches 
                 li 
                   a(href=relative.basePath + branch.path data-branch-url=relative.basePath + branch.path)= branch.name
+        
+        if toc && toc.length > 0
+          div(class='toc-container')
+            ul
+              each item in toc 
+                li
+                  a(href='#' + item.id)= item.name
+                  
     main
+      aside
+        +menuItems(menu, root)
       | !{content}
 
     script(src=relative.root + 'assets/iframe-resizer-dist/iframeResizer.min.js' charset='UTF-8')
