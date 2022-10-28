@@ -1,0 +1,67 @@
+/* Layout: Nav */
+.menu {
+    color: var(--menu-text-color);
+    display: grid;
+    grid-area: nav;
+    grid-template-rows: auto 1fr auto;
+    max-height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.menu > :where( div) {
+    padding: var(--space-sm);
+}
+
+.menu-logo {
+    padding-block-start: var(--space-lg);
+}
+
+.menu-logo img {
+    max-height: var(--logo-height);
+    height: auto;
+    max-width: 100%;
+}
+
+.menu-main {
+    overflow: auto;
+}
+
+.menu-main a {
+    text-decoration: none;
+}
+
+.menu-main a:hover,
+.menu-main a:focus {
+    text-decoration: underline;
+}
+
+.menu-github {
+}
+
+.menu-github {
+    background-color: var(--color-black-a10);
+    display: flex;
+}
+
+.menu-github a {
+    transition: all var(--duration-base);
+    border-radius: var(--radius-base);
+    display: block;
+    height: var(--space-lg);
+    margin-left: var(--space-xss);
+    padding: var(--space-sm);
+    text-decoration: none;
+}
+
+.menu-github .icon {
+    vertical-align: middle;
+}
+
+.menu-github .icon + .label {
+    margin-left: var(--space-xs);
+}
+
+.menu-github svg {
+    fill: currentColor;
+}

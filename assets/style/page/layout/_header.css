@@ -1,0 +1,22 @@
+/* Layout: Header */
+main > header {
+    background: inherit;
+    box-shadow: 0 var(--line-base) 0 var(--color-black-a10);
+    border-radius: var(--radius-base) var(--radius-base) 0 0;
+    padding: var(--space-xl) var(--space-xl) var(--space-md);
+    position: sticky;
+    top: calc((var(--space-sm) + var(--space-lg)) * -1);
+    z-index: var(--z-header);
+}
+
+.toc-container ul {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.toc-container li.active > a {
+    font-weight: 700;
+}
