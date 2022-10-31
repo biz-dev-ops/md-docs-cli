@@ -21,7 +21,9 @@ module.exports = class Menu {
         if (!this.#data)
             this.#data = await this.#getData();        
         
-        return this.#rewriteUrls(this.#data, currentUrl);
+        const urls = this.#rewriteUrls(this.#data, currentUrl);
+
+        return urls;
     }
 
     async #getData() {
@@ -54,6 +56,7 @@ module.exports = class Menu {
         const item = {
             name: this.#format(src),
             path: path.relative(this.root, src),
+            classes: [],
             items: []
         };
 
@@ -85,28 +88,38 @@ module.exports = class Menu {
     }
 
     #rewriteUrls(items, currentUrl) {
-        return items.map(i => {
-            const item = {
-                name: i.name,
-                classes: [],
-                items: this.#rewriteUrls(i.items, currentUrl)
-            }
+        return items
+            .map(i => {
+                const item = {
+                    name: i.name,
+                    classes: [],
+                    items: this.#rewriteUrls(i.items, currentUrl)
+                }
 
-            if(currentUrl.startsWith(i.path)) {
-                item.classes.push("open");
-            }
+                if(currentUrl.startsWith(i.url)) {
+                    item.classes.push("active-child");
+                }
+                    
+                if (i.url === currentUrl) {
+                    item.classes.push("active");
+                }
+
+                if (i.url) {
+                    item.url = this.#rewriteUrl(i.url);
+                }
                 
-            if (i.url === currentUrl) {
-                item.classes.push("active");
-            }
+                return item;
+                
+            })
+            .map(i => {
+                if (!i.classes.some(c => c.startsWith('active')))
+                    return i;
 
-            if (i.url) {
-                item.url = this.#rewriteUrl(i.url);
-            }
-            
-            return item;
-            
-        });
+                if (items.some(item => i.url != item.url && item.classes.some(c => c.startsWith('active'))))
+                    i.classes.push('active-sibbling');
+                
+                return i;
+            });
     }
 
     #rewriteName(name) {
