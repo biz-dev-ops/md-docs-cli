@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const colors = require('colors');
+const { connect } = require('http2');
 const path = require('path');
 const { env, cwd } = require('process');
 const files = require('../files');
@@ -10,7 +11,7 @@ module.exports = class Menu {
     #regex = /(\d+[_])/ig;
 
     constructor({ options }) {
-        this.root = options.dst;        
+        this.root = options.dst;
     }
 
     async init() {
@@ -19,8 +20,8 @@ module.exports = class Menu {
 
     async items(currentUrl) {
         if (!this.#data)
-            this.#data = await this.#getData();        
-        
+            this.#data = await this.#getData();
+
         const urls = this.#rewriteUrls(this.#data, currentUrl);
 
         return urls;
@@ -80,7 +81,7 @@ module.exports = class Menu {
     #format(src) {
         if (this.root === src)
             return 'home';
-        
+
         const name = this.#rewriteName(path.basename(src));
 
         return name.charAt(0).toUpperCase() + name.slice(1)
@@ -96,29 +97,29 @@ module.exports = class Menu {
                     items: this.#rewriteUrls(i.items, currentUrl)
                 }
 
-                if(currentUrl.startsWith(i.url)) {
-                    item.classes.push("active-child");
-                }
-                    
                 if (i.url === currentUrl) {
                     item.classes.push("active");
+                }
+                else if (currentUrl.startsWith(i.path)) {
+                    item.classes.push("active-child");
                 }
 
                 if (i.url) {
                     item.url = this.#rewriteUrl(i.url);
                 }
-                
-                return item;
-                
-            })
-            .map(i => {
-                if (!i.classes.some(c => c.startsWith('active')))
-                    return i;
 
-                if (items.some(item => i.url != item.url && item.classes.some(c => c.startsWith('active'))))
-                    i.classes.push('active-sibbling');
+                return item;
+
+            })
+            .map((item, index, items) => {
+                if (item.classes.some(c => c.startsWith('active')))
+                    return item;
                 
-                return i;
+                if (items.some(i => i.classes.some(c => c.startsWith('active')))) {
+                    item.classes.push('active-sibbling');
+                }
+
+                return item;
             });
     }
 
@@ -130,7 +131,7 @@ module.exports = class Menu {
         const rewrite = url.replaceAll(this.#regex, '');
         if (rewrite === url)
             return url;
-        
+
         console.info(colors.green(`\t* rewrite url ${url} => ${rewrite}`));
         return rewrite;
     }
