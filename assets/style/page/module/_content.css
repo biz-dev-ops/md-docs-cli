@@ -28,6 +28,11 @@
     visibility: visible;
 }
 
+.header-container .header * {
+    margin-bottom: calc(var(--line-height-base) * .5em);
+}
+
+/* Module: Header container - level 2 */
 .header-container.h2 > .header h2 {
     border-bottom: var(--line-base) solid var(--color-black-a10);
     margin-bottom: var(--space-md);
