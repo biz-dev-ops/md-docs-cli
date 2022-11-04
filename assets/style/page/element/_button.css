@@ -11,7 +11,7 @@
 }
 
 .button + .button {
-    margin-left: var(--space-xss);
+    margin-left: var(--space-xxs);
 }
 
 .button:active,

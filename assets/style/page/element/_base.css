@@ -63,6 +63,7 @@ h6, .heading-size-6 {
 
 a {
     color: currentColor;
+    text-underline-offset: .25ex;
 }
 
 a:hover,
@@ -124,7 +125,7 @@ blockquote {
 
 blockquote::before {
     background: var(--background-color-base);
-    border-radius: var(--space-xss);
+    border-radius: var(--space-xxs);
     content: '';
     display: block;
     height: 100%;
@@ -196,7 +197,7 @@ summary {
     list-style: none;
     margin-inline-start: calc(var(--space-md) * -1);
     padding-inline-start: var(--space-md);
-    margin-block-end: var(--space-xss);
+    margin-block-end: var(--space-xxs);
     position: relative;
 }
 

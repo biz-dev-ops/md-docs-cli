@@ -6,6 +6,7 @@
   --color-white: rgb(var(--color-white-r), var(--color-white-g), var(--color-white-b));
   --color-white-a10: rgba(var(--color-white-r), var(--color-white-g), var(--color-white-b), .1);
   --color-white-a20: rgba(var(--color-white-r), var(--color-white-g), var(--color-white-b), .2);
+  --color-white-a50: rgba(var(--color-white-r), var(--color-white-g), var(--color-white-b), .5);
   --color-white-a90: rgba(var(--color-white-r), var(--color-white-g), var(--color-white-b), .9);
 
   --color-black-r: 0;
@@ -74,7 +75,7 @@
   --font-size-md: 1.125rem;
 
   /* Dimensions */
-  --logo-height: 4.5rem;
+  --logo-height: 3rem;
   --max-text-width: 42rem;
   --nav-width: 20rem;
   --header-height: 12rem;
@@ -95,7 +96,7 @@
   --space-md: 1.5rem;
   --space-sm: 1rem;
   --space-xs: .5rem;
-  --space-xss: .25rem;
+  --space-xxs: .25rem;
 
   /* Transition */
   --duration-base: 250ms;

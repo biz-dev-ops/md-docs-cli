@@ -14,7 +14,6 @@
                 anchor.setAttribute('aria-expanded', 'true');
                 target.removeAttribute('hidden');
             }
-            
         }
     });
 })();

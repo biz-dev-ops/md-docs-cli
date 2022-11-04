@@ -19,12 +19,12 @@ details.feature ul {
 }
 
 details.feature li {
-    margin-bottom: var(--space-xss);
+    margin-bottom: var(--space-xxs);
 }
 
 /* Status */
 .status {
-    padding: var(--space-xss);
+    padding: var(--space-xxs);
     position: relative;
     padding-left: var(--space-md);
 }
@@ -177,12 +177,12 @@ details.feature li {
     color: var(--text-color-base);
     font-size: var(--heading-3-size);
     font-weight: 600;
-    padding: var(--space-xss) 0 var(--space-xs) 0;
+    padding: var(--space-xxs) 0 var(--space-xs) 0;
 }
 
 .legend .label {
     border-top: var(--line-medium) solid currentColor;
-    padding-top: var(--space-xss);
+    padding-top: var(--space-xxs);
 }
 
 

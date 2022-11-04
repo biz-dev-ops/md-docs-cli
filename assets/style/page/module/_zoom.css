@@ -1,6 +1,5 @@
 /* Module: Zoom */
 [data-fullscreen] {
-    outline: 1px dashed hotpink;
     position: relative;
     overflow: hidden;
     margin-left: calc(var(--space-xl) * -1);
@@ -9,7 +8,7 @@
 }
 
 [data-fullscreen] [data-toggle="fullscreen"] {
-    --icon-padding: calc(var(--space-sm) + var(--space-xss));
+    --icon-padding: calc(var(--space-sm) + var(--space-xxs));
 
     background-color: var(--color-black-a10);
     box-shadow: var(--drop-shadow-base);

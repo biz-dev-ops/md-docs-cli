@@ -2,8 +2,8 @@
 .menu {
     color: var(--menu-text-color);
     display: grid;
-    flex-direction: column;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas: "logo" "branch" "main" "footer";
     inset-block: var(--main-margin) 0;
     inset-inline-start: 0;
     overflow: auto;
@@ -13,10 +13,49 @@
 
 .menu > :where( div) {
     padding: var(--space-sm);
+
+    /*border: 1px dotted hotpink;*/menu-toggle-branches
 }
 
+.menu a {
+    /*transition: all var(--duration-base);*/
+    /*height: var(--space-lg);*/
+    /*margin-left: var(--space-xxs);*/
+    /*padding: var(--space-sm);*/
+    text-decoration: none;
+}
+
+.menu a:hover,
+.menu a:focus-visible {
+    text-decoration: underline;
+}
+
+@supports not selector(:focus-visible) {
+    .menu a:focus {
+        text-decoration: underline;
+    }
+}
+
+.menu .icon {
+    vertical-align: middle;
+}
+
+.menu .icon + .label {
+    margin-left: var(--space-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu svg {
+    fill: currentColor;
+}
+
+
+/* Logo memie*/
 .menu-logo {
-    /*padding-block-start: var(--space-lg);*/
+    padding-inline-end: var(--space-xl);
+    padding-block: var(--space-lg);
 }
 
 .menu-logo img {
@@ -25,11 +64,75 @@
     max-width: 100%;
 }
 
+/* Branch menu  */
+.menu-branch {
+    background-color: var(--color-black-a10);
+    padding: 0;
+}
+
+/* Branches menu  */
+.menu-branches {
+    background: var(--color-black-a10);
+    grid-area: main;
+    padding-block-start: 0;
+}
+
+.menu-branches:where(:not([hidden])) ~ div {
+    display: none;
+}
+
+.menu-branches ul {
+    list-style: none;
+    padding-inline-start: 0;
+}
+
+.menu-branches ul li + li {
+    border-block-start: var(--line-base) solid var(--color-white-a20);
+}
+
+.menu-branches a {
+    display: inline-block;
+    padding-block: var(--space-xs);
+}
+
+/* Main menu */
 .menu-main {
+    grid-area: main;
+}
+
+.menu-main > ul {
+    list-style: none;
+    padding-inline-start: 0;
+}
+
+.menu-main > ul > li + li {
+    border-block-start: var(--line-base) solid var(--color-white-a20);
+}
+
+.menu-main .active > a {
+    text-decoration: underline;
+    text-decoration-color: var(--color-white-a50);
+}
+
+.menu-main > ul > li > a {
+    display: inline-block;
+    padding-block: var(--space-xs);
+}
+
+.menu-main > ul > li li {
+    padding-block: var(--space-xxs);
+}
+
+.menu-main li > ul {
+    display: none;
+}
+
+.menu-main li:where(.active, .active-child) > ul {
+    display: block;
 }
 
 .menu-main a {
-    text-decoration: none;
+    /*text-decoration: none;*/
 }
 
 .menu-main a:hover,
@@ -37,33 +140,49 @@
     text-decoration: underline;
 }
 
-.menu-github {
-    margin-block-end: auto;
-}
-
-.menu-github {
-    background-color: var(--color-black-a10);
+/* Menu footer */
+.menu-footer ul {
     display: flex;
+    list-style: none;
+    padding-left: 0;
+    gap: var(--space-sm);
 }
 
-.menu-github a {
-    transition: all var(--duration-base);
-    border-radius: var(--radius-base);
-    display: block;
-    height: var(--space-lg);
-    margin-left: var(--space-xss);
+
+/* Menu toggle */
+.menu-toggle-branches {
+    white-space: nowrap;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
     padding: var(--space-sm);
-    text-decoration: none;
 }
 
-.menu-github .icon {
+.menu-toggle-branches .icon svg {
     vertical-align: middle;
 }
 
-.menu-github .icon + .label {
-    margin-left: var(--space-xs);
+.menu-toggle-branches .label {
+    margin-inline-start: var(--space-xs);
+    margin-inline-end: var(--space-md);
 }
 
-.menu-github svg {
-    fill: currentColor;
+.menu-toggle-branches::after {
+    content: "";
+    display: inline-block;
+    border-color: currentColor;
+    border-width: 0 0 var(--line-thin) var(--line-thin);
+    border-style: solid;
+    height: var(--space-xs);
+    width: var(--space-xs);
+    position: relative;
+    top: calc(var(--space-xxs) / -2);
+    transform: rotate(-45deg);
+    justify-self: end;
+    transition: transform var(--duration-base);
+    transform-origin: 30% 70%;
+}
+
+.menu-toggle-branches[aria-expanded="true"]::after {
+    transform: rotate(135deg);
 }
