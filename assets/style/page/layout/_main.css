@@ -2,8 +2,8 @@
 main {
     background-color: var(--main-surface);
     border-radius: var(--radius-base) var(--radius-base) 0 0;
-    grid-area: main;
-
+    inset: var(--main-margin) var(--main-margin) auto var(--nav-width);
     min-height: 100vh;
-    margin: var(--space-sm) var(--space-sm) 0 0;
+    padding-block-start: var(--space-md);
+    position: absolute;
 }

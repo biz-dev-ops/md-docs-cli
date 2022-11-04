@@ -1,0 +1,254 @@
+/* Feature-list  */
+.feature-list:not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+/* Details: feature */
+details.feature:not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+details.feature + details.feature {
+    margin-top: calc(var(--line-height-base) * 1rem * -1);
+}
+
+details.feature ul {
+    list-style: none;
+    margin: 0 0 var(--space-sm);
+    padding-left: 0;
+}
+
+details.feature li {
+    margin-bottom: var(--space-xss);
+}
+
+/* Status */
+.status {
+    padding: var(--space-xss);
+    position: relative;
+    padding-left: var(--space-md);
+}
+
+.status::before {
+    border-radius: var(--space-sm);
+    background-color: currentColor;
+    content: "";
+    display: block;
+    height: var(--space-sm);
+    width: var(--space-sm);
+    position: absolute;
+    left: 0;
+    top: .625rem;
+}
+
+.status-bg {
+    display: block;
+    border-radius: var(--radius-base);
+    padding-left: calc(var(--space-xs) + var(--space-md));
+    padding-right: var(--space-sm);
+}
+
+.status-bg::before {
+    display: block;
+    left: var(--space-xs);
+}
+
+.status-passed.status-bg  {
+    background-color: var(--status-passed-100);
+}
+
+.status-passed::before {
+    color: var(--status-passed);
+}
+
+.status-failed.status-bg  {
+    background-color: var(--color-error-100);
+}
+
+.status-failed::before {
+    color: var(--status-failed);
+}
+
+.status-skipped.status-bg  {
+    background-color: var(--status-skipped-100);
+}
+
+.status-skipped::before {
+    color: var(--status-skipped);
+}
+
+.status-undefined.status-bg  {
+    background-color: var(--status-undefined-100);
+}
+
+.status-undefined::before{
+    color: var(--status-undefined);
+}
+
+.status-pending.status-bg  {
+    background-color: var(--status-pending-100);
+}
+
+.status-pending::before {
+    color: var(--status-pending);
+}
+
+.keyword {
+    font-family: monospace;
+    font-size: var(--heading-5-size);
+    color: var(--color-info);
+}
+
+/* Dashboard */
+.dashboard-list {
+    display: flex;
+    flex-wrap: wrap;;
+    grid-gap: var(--space-lg);
+}
+
+.dashboard-list:not(:last-child) {
+    margin-bottom: calc(var(--line-height-base) * 1rem);
+}
+
+.dashboard {
+    display: flex;
+    flex: 1 0 calc((100% /3) - var(--space-lg));
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.dashboard h3 {
+    font-size: var(--heading-4-size)
+}
+
+.dashboard figure {
+    flex: 0 1 6.5rem;
+    margin-bottom: var(--space-sm);
+}
+
+.dashboard .legend {
+    flex: 0 1 auto;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.legend li {
+    flex: 1 0 calc((100% /3) - var(--space-md));
+    max-width: 5rem;
+}
+
+.legend-passed {
+    color: var(--status-passed);
+}
+
+.legend-failed {
+    color: var(--status-failed);
+}
+
+.legend-skipped {
+    color: var(--status-skipped);
+}
+
+.legend-undefined {
+    color: var(--status-undefined);
+}
+
+.legend-pending {
+    color: var(--status-pending);
+}
+
+.legend span {
+    display: block;
+    font-size: var(--font-size-sm);
+}
+
+.legend .count {
+    color: var(--text-color-base);
+    font-size: var(--heading-3-size);
+    font-weight: 600;
+    padding: var(--space-xss) 0 var(--space-xs) 0;
+}
+
+.legend .label {
+    border-top: var(--line-medium) solid currentColor;
+    padding-top: var(--space-xss);
+}
+
+
+
+/* Charts */
+.chart-doughnut {
+    margin: 0;
+}
+
+.chart-doughnut svg {
+    vertical-align: middle;
+}
+
+.chart-doughnut figcaption {
+    align-items: center;
+    font-size: var(--heading-1-size);
+    font-weight: 600;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.chart-doughnut .text {
+    font-family: var(--font-family-heading);
+    font-size: .5em;
+    text-anchor: middle;
+}
+
+.chart-doughnut .circle {
+    stroke: var(--background-color-base);
+    fill: none;
+    /*stroke-linecap: round;*/
+}
+
+.chart-doughnut .circle-passed {
+    stroke: var(--color-success);
+    animation: stroke-progress 1s ease-out;
+}
+
+.chart-doughnut .circle-failed {
+    stroke: var(--color-error);
+    animation: stroke-progress 1s ease-out;
+}
+
+.chart-doughnut .circle-skipped {
+    stroke: var(--color-info);
+    animation: stroke-progress 1s ease-out;
+}
+
+.chart-doughnut .circle-undefined {
+    stroke: var(--color-warning);
+    animation: stroke-progress 1s ease-out;
+}
+
+.chart-doughnut .circle-pending {
+    stroke: var(--color-black-a30);
+    animation: stroke-progress 1s ease-out;
+}
+
+@keyframes stroke-progress {
+    0% {
+        stroke-dasharray: 0 100;
+        stroke-dashoffset: 0;
+    }
+}

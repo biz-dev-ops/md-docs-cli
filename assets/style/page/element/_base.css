@@ -1,7 +1,7 @@
 /* Basic elements */
 html {
     background-color: var(--page-surface);
-    scroll-padding-block-start: calc(130px + var(--space-sm));
+    scroll-padding-block-start: var(--header-height);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -16,9 +16,6 @@ body {
     color: var(--text-color-base);
     line-height: var(--line-height-base);
     margin: 0;
-    display: grid;
-    grid-template-columns: 20rem 1fr;
-    grid-template-areas: "nav main";
 }
 
 p, figure, table, ul, ol, dl, pre, blockquote {
@@ -116,8 +113,8 @@ iframe {
 iframe.openapi,
 iframe.asyncapi,
 iframe.message {
-    min-width: calc(100% + (var(--space-lg) * 2));
-    margin-inline: calc(var(--space-lg) * -1);
+    min-width: calc(100% + (var(--content-padding-inline) * 2));
+    margin-inline: calc(var(--content-padding-inline) * -1);
 }
 
 blockquote {

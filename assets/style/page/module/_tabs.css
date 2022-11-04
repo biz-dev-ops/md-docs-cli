@@ -5,11 +5,11 @@
 }
 
 .tabs-list-container {
-    border-bottom: var(--line-base) solid var(--background-color-base);
-    margin-right: calc(var(--space-lg) * -1);
-    margin-left: calc(var(--space-lg) * -1);
-    padding-right: var(--space-lg);
-    padding-left: var(--space-lg);
+    border-bottom: var(--line-base) solid var(--color-brand-base);
+    margin-right: calc(var(--content-padding-inline) * -1);
+    margin-left: calc(var(--content-padding-inline) * -1);
+    padding-right: var(--content-padding-inline);
+    padding-left: var(--content-padding-inline);
 }
 
 .tabs-scroll-container {
@@ -27,7 +27,7 @@
 }
 
 .tabs-list-container ul li a {
-    border-bottom: var(--line-thin) solid var(--background-color-base);
+    border-bottom: var(--line-thin) solid var(--color-brand-base);
     display: block;
     padding:  var(--space-xs) var(--space-sm);
     text-decoration: none;
@@ -36,7 +36,7 @@
 
 .tabs-list-container ul li a:hover,
 .tabs-list-container ul li a:focus {
-    background-color: var(--background-color-base);
+    background-color: var(--color-brand-base);
     border-bottom-color: transparent;
     border-radius: var(--radius-base) var(--radius-base) 0 0 ;
 }

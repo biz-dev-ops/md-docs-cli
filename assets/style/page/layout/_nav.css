@@ -2,11 +2,13 @@
 .menu {
     color: var(--menu-text-color);
     display: grid;
-    grid-area: nav;
+    flex-direction: column;
     grid-template-rows: auto 1fr auto;
-    max-height: 100vh;
-    position: sticky;
-    top: 0;
+    inset-block: var(--main-margin) 0;
+    inset-inline-start: 0;
+    overflow: auto;
+    position: fixed;
+    width: var(--nav-width);
 }
 
 .menu > :where( div) {
@@ -14,7 +16,7 @@
 }
 
 .menu-logo {
-    padding-block-start: var(--space-lg);
+    /*padding-block-start: var(--space-lg);*/
 }
 
 .menu-logo img {
@@ -24,7 +26,6 @@
 }
 
 .menu-main {
-    overflow: auto;
 }
 
 .menu-main a {
@@ -37,6 +38,7 @@
 }
 
 .menu-github {
+    margin-block-end: auto;
 }
 
 .menu-github {

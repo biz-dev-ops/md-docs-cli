@@ -6,7 +6,7 @@
 .headless-container {
     /*outline: 1px dotted red;*/
 
-    margin: var(--space-lg) var(--space-xl);
+    margin: var(--space-lg) var(--content-padding-inline);
 }
 
 /* Module: Header container */
@@ -22,7 +22,7 @@
 
 .header-container > * {
     margin: 0 calc(var(--space-lg) * -1);
-    padding: 0 var(--space-xl);
+    padding: 0 var(--content-padding-inline);
 }
 
 .header-container .header * {

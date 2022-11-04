@@ -1,6 +1,6 @@
 /* Module: Zoom */
 [data-fullscreen] {
-    background-color: rgba(0,0,0,.05);
+    outline: 1px dashed hotpink;
     position: relative;
     overflow: hidden;
     margin-left: calc(var(--space-xl) * -1);
