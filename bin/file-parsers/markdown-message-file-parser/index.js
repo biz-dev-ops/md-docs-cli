@@ -10,6 +10,7 @@ const md = require('markdown-it')
         typographer: true
     })
     .use(require('markdown-it-task-lists'));
+const mustache = require('mustache');
     
 const files = require('../../utils/files');
 
