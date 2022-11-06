@@ -5,7 +5,7 @@ const files = require('../../utils/files');
 const orderPrefixRegex = /(\d+[_])/ig;
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, gitInfo, hosting, markdownRenderer, htmlParsers, pageComponent, menu, relative, tocParser }) {
+    constructor({ options, gitInfo, hosting, markdownRenderer, htmlParsers, pageComponent, menu, relative, tocParser, locale }) {
         this.options = options;
         this.gitInfo = gitInfo;
         this.hosting = hosting;
@@ -15,6 +15,7 @@ module.exports = class MarkdownFileParser {
         this.menu = menu;
         this.relative = relative;
         this.tocParser = tocParser;
+        this.locale = locale;
     }
 
     async parse(file) {
@@ -61,7 +62,8 @@ module.exports = class MarkdownFileParser {
             git: this.gitInfo,
             options: this.options.page || {},
             menu: menuItems,
-            toc: this.tocParser.parse(element)
+            toc: this.tocParser.parse(element),
+            locale: await this.locale.get()
         });
     }
 }
