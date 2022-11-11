@@ -2,9 +2,8 @@
 [data-fullscreen] {
     position: relative;
     overflow: hidden;
-    margin-left: calc(var(--space-xl) * -1);
-    margin-right: calc(var(--space-xl) * -1);
-    padding: 0 var(--space-xl);
+    margin: -1px;
+    padding: 1px;
 }
 
 [data-fullscreen] [data-toggle="fullscreen"] {
@@ -71,18 +70,18 @@
 [data-fullscreen] header,
 [data-fullscreen] footer {
     position: absolute;
-    right: calc(var(--space-lg) + var(--space-md));
-    top: var(--space-md);
+    inset-inline-end: var(--space-md);
+    inset-block-start: var(--space-md);
     z-index: var(--z-fullscreen-button);
 }
 
 [data-fullscreen] footer {
-    bottom: var(--space-md);
-    top: auto;
+    inset-block: auto  var(--space-md);
 }
 
 [data-fullscreen="true"] {
     background-color: #fff;
+    border-radius: 0;
     height: 100%;
     left: 0;
     margin: 0;
@@ -130,13 +129,22 @@
     max-width: none;
 }
 
+[data-fullscreen] iframe:where(.openapi, .asyncapi, .message, .email),
+[data-fullscreen] figure,
+[data-fullscreen] .bpmn {
+    border-radius: var(--radius-base);
+    box-shadow: 0 0 0 var(--line-base) var(--color-brand-light);
+}
+
+[data-fullscreen] figure,
+[data-fullscreen] .bpmn {
+    padding: var(--space-md);
+}
+
+
 [data-fullscreen="true"] iframe.openapi,
 [data-fullscreen="true"] iframe.asyncapi {
-    min-width: 100%;
     min-height: 100vh;
-    margin-left: 0;
-    margin-right: 0;
-    vertical-align: middle;
 }
 
 [data-fullscreen="true"] .bpmn > .bjs-container {

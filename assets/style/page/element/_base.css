@@ -111,13 +111,6 @@ iframe {
     vertical-align: middle;
 }
 
-iframe.openapi,
-iframe.asyncapi,
-iframe.message {
-    min-width: calc(100% + (var(--content-padding-inline) * 2));
-    margin-inline: calc(var(--content-padding-inline) * -1);
-}
-
 blockquote {
     padding-inline: var(--space-md);
     position: relative;

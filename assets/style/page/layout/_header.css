@@ -1,7 +1,7 @@
 /* Layout: Header */
 main > header {
     background: inherit;
-    box-shadow: 0 var(--line-base) 0 var(--color-black-a10);
+    box-shadow: 0 var(--line-thin) 0 var(--color-brand-light);
     border-radius: var(--radius-base) var(--radius-base) 0 0;
     padding: var(--space-md) var(--content-padding-inline);
     position: sticky;

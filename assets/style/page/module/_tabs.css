@@ -5,11 +5,11 @@
 }
 
 .tabs-list-container {
-    border-bottom: var(--line-base) solid var(--color-brand-base);
-    margin-right: calc(var(--content-padding-inline) * -1);
-    margin-left: calc(var(--content-padding-inline) * -1);
-    padding-right: var(--content-padding-inline);
-    padding-left: var(--content-padding-inline);
+    /*border-bottom: var(--line-base) solid var(--color-brand-base);*/
+    /*margin-right: calc(var(--content-padding-inline) * -1);*/
+    /*margin-left: calc(var(--content-padding-inline) * -1);*/
+    /*padding-right: var(--content-padding-inline);*/
+    /*padding-left: var(--content-padding-inline);*/
 }
 
 .tabs-scroll-container {
@@ -32,13 +32,6 @@
     padding:  var(--space-xs) var(--space-sm);
     text-decoration: none;
     height: 100%;
-}
-
-.tabs-list-container ul li a:hover,
-.tabs-list-container ul li a:focus {
-    background-color: var(--color-brand-base);
-    border-bottom-color: transparent;
-    border-radius: var(--radius-base) var(--radius-base) 0 0 ;
 }
 
 .tabs-list-container ul li a[aria-expanded="true"] {

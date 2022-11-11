@@ -8,12 +8,12 @@
 
 :root {
     /* Randstad colors */
-    --rs-color-brand-primary: rgb(33, 117, 217);
-    --rs-color-brand-secondary: rgb(15, 25, 65);
-    --rs-color-brand-tertiary: rgb(247, 245, 240);
-    --rs-color-brand-quaternary: rgb(107, 165, 180);
-    --rs-color-brand-quinary: rgb(231, 69, 54);
-    --rs-color-brand-senary: rgb(255, 181, 17);
+    --rs-color-brand-primary: 33, 117, 217;
+    --rs-color-brand-secondary: 15, 25, 65;
+    --rs-color-brand-tertiary: 247, 245, 240;
+    --rs-color-brand-quaternary: 107, 165, 180;
+    --rs-color-brand-quinary: 231, 69, 54;
+    --rs-color-brand-senary: 255, 181, 17;
 
     --rs-brand-secondary-alpha-70: rgba(15, 25, 65, .7);
 

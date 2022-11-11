@@ -113,7 +113,7 @@
   --line-medium: .1875rem;
 
   /* Radii */
-  --radius-base: .625rem;
+  --radius-base: .75rem;
 
   /* Page */
   --page-surface: var(--color-brand-base, var(--color-black-a80));

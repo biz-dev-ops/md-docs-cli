@@ -9,7 +9,8 @@
 
 /* Module: Header container */
 .content > .header-container {
-    padding: var(--space-lg) var(--content-padding-inline);
+    border-block-start: var(--line-base) solid var(--color-brand-light);
+    padding: var(--space-lg) var(--content-padding-inline) calc(var(--space-xl) * 2);
 }
 
 * > .header-anchor {
@@ -34,9 +35,7 @@
 
 /* Module: Header container - level 2 */
 .header-container.h2 > .header h2 {
-    border-bottom: var(--line-base) solid var(--color-black-a10);
     margin-bottom: var(--space-md);
-    padding-bottom: var(--space-sm);
 }
 
 .header-container.h2 > .header * {
