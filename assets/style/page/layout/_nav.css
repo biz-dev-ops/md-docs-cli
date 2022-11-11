@@ -13,15 +13,9 @@
 
 .menu > :where( div) {
     padding: var(--space-sm);
-
-    /*border: 1px dotted hotpink;*/menu-toggle-branches
 }
 
 .menu a {
-    /*transition: all var(--duration-base);*/
-    /*height: var(--space-lg);*/
-    /*margin-left: var(--space-xxs);*/
-    /*padding: var(--space-sm);*/
     text-decoration: none;
 }
 
@@ -109,12 +103,22 @@
     border-block-start: var(--line-base) solid var(--color-white-a20);
 }
 
-.menu-main .active > a {
+.menu-main .menu-toggle {
+    cursor: s-resize;
+}
+
+.menu-main .menu-toggle[aria-expanded="true"] {
+    cursor: n-resize;
+}
+
+.menu-main .active > a,
+.menu-main .active > .menu-toggle {
     text-decoration: underline;
     text-decoration-color: var(--color-white-a50);
 }
 
-.menu-main > ul > li > a {
+.menu-main > ul > li > a,
+.menu-main > ul > li > .menu-toggle {
     display: inline-block;
     padding-block: var(--space-xs);
 }
@@ -123,20 +127,24 @@
     padding-block: var(--space-xxs);
 }
 
-.menu-main li > ul {
-    display: none;
-}
-
 .menu-main li:where(.active, .active-child) > ul {
     display: block;
 }
 
-.menu-main a {
-    /*text-decoration: none;*/
+.menu-main li > ul {
+    display: none;
+}
+
+.menu-main li:where(.active, .active-child) > ul,
+.menu-main ul:where([hidden]),
+.menu-main [aria-expanded="true"] + ul {
+    display: block;
 }
 
 .menu-main a:hover,
-.menu-main a:focus {
+.menu-main a:focus,
+.menu-main .menu-toggle:hover,
+.menu-main .menu-toggle:focus {
     text-decoration: underline;
 }
 
