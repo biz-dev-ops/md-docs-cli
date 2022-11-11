@@ -16,9 +16,6 @@ const md = require('markdown-it')
     .use(require("markdown-it-container"), "warning")
     .use(require("markdown-it-container"), "error")
     .use(require("markdown-it-container"), "context")
-    /*.use(require("markdown-it-toc-done-right"), {
-        level: [2]
-    })*/
     .use(require("markdown-it-plantuml-ex"))
     .use(require("markdown-it-abbr"))
     .use(require("markdown-it-codetabs"))
