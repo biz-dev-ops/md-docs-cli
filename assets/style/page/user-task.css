@@ -22,17 +22,27 @@
     margin-bottom: var(--space-xs);
 }
 
+.ui .fieldset-controls [data-fieldset-action='remove'] {
+    display: none;
+}
+
+.ui .form-item + .form-item + .fieldset-controls [data-fieldset-action='remove'] {
+    display: inline-block;
+}
+
+.ui .fieldset-controls {
+    display: flex;
+    gap: var(--space-sm);
+}
+
 .ui .form-check input + label {
     margin-left: var(--space-xs);
 }
 
 .ui .form-submit {
     display: flex;
+    gap: var(--space-sm);
     justify-content: flex-end;
-}
-
-.ui .form-submit button + button {
-    margin-left: var(--space-sm);
 }
 
 .ui button {

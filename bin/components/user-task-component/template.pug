@@ -55,7 +55,7 @@ section(class='ui card' fullscreen)
     section(class='action-list')
       div(class='form-submit')
         each action in actions
-          button(aria-controls='action-' + action.id)= action.name
+          button(aria-controls='action-' + action.id  type='button')= action.name
 
     each action in actions
       section(class='action card' id='action-' + action.id hidden='hidden')
