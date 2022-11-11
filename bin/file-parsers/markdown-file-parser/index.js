@@ -5,14 +5,16 @@ const files = require('../../utils/files');
 const orderPrefixRegex = /(\d+[_])/ig;
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, gitInfo, hosting, markdownRenderer, htmlParsers, pageComponent, relative, locale }) {
+    constructor({ options, gitInfo, hosting, markdownRenderer, htmlParsers, pageComponent, menu, relative, tocParser, locale }) {
         this.options = options;
         this.gitInfo = gitInfo;
         this.hosting = hosting;
         this.renderer = markdownRenderer;
         this.parsers = htmlParsers;
         this.component = pageComponent;
+        this.menu = menu;
         this.relative = relative;
+        this.tocParser = tocParser;
         this.locale = locale;
     }
 
@@ -29,7 +31,7 @@ module.exports = class MarkdownFileParser {
     }
 
     async #render(file) {
-        const markdown = `[[toc]]\n${await files.readFileAsString(file)}`;
+        const markdown = await files.readFileAsString(file);
         const response = getTitle(markdown, file);
         const element = await this.renderer.render(response.markdown);
 
@@ -41,6 +43,7 @@ module.exports = class MarkdownFileParser {
 
         const logout = getlogoutInfo(this.options, file);
         const showNav = getShowNavInfo(this.options, file);
+        const menuItems = await this.menu.items(`${path.relative(this.options.dst, file).slice(0, -3)}.html`);
 
         const url = getRelativeUrl(this.options, file);
         const relative = this.relative.get();
@@ -58,6 +61,8 @@ module.exports = class MarkdownFileParser {
             title: response.title,        
             git: this.gitInfo,
             options: this.options.page || {},
+            menu: menuItems,
+            toc: this.tocParser.parse(element),
             locale: await this.locale.get()
         });
     }
@@ -135,7 +140,7 @@ getTitleFromFile = function (file) {
 
 formatTitle = function (title) {
     if (title === "dist")
-        title = "home";
+        title = "Home";
 
     if (title.indexOf(".") > -1)
         title = title.substring(0, title.indexOf("."))

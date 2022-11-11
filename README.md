@@ -38,7 +38,6 @@ This script copies every file and directory from the **docs** directory into the
 1. Markdown is transformed into html using [markdow-it](https://www.npmjs.com/package/markdown-it), the following plugins are installed:
     * [markdown-it-multimd-table](https://www.npmjs.com/package/markdown-it-multimd-table) => additional table options;
     * [markdown-it-container](https://www.npmjs.com/package/markdown-it-container) => info, warning and error containers;
-    * [markdown-it-toc-done-right](https://www.npmjs.com/package/markdown-it-toc-done-right) => table of contents for h1, h2 and h3;    
     * [markdown-it-plantuml-ex](https://www.npmjs.com/package/markdown-it-plantuml-ex) => UML is automaticly converted into a SVG;
     * [markdown-it-abbr](https://www.npmjs.com/package/markdown-it-abbr);
     * [markdown-it-codetabs](https://www.npmjs.com/package/markdown-it-codetabs);

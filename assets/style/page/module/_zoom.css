@@ -1,0 +1,162 @@
+/* Module: Zoom */
+[data-fullscreen] {
+    position: relative;
+    overflow: hidden;
+    margin: -1px;
+    padding: 1px;
+}
+
+[data-fullscreen]:not(:last-child) {
+    margin-bottom: var(--space-md);
+}
+
+[data-fullscreen] [data-toggle="fullscreen"] {
+    --icon-padding: calc(var(--space-sm) + var(--space-xxs));
+
+    background-color: var(--color-black-a10);
+    box-shadow: var(--drop-shadow-base);
+    color: currentColor;
+    border: 0;
+    border-radius: var(--radius-base);
+    display: block;
+    height: var(--space-lg);
+    outline: none;
+    padding: var(--space-sm);
+    position: relative;
+    text-decoration: none;
+    transition: background-color var(--duration-base), color var(--duration-base);
+    transform: translateX(calc(var(--space-lg) * 3));
+    width: var(--space-lg);
+}
+
+[data-fullscreen] [data-toggle="fullscreen"]:active,
+[data-fullscreen] [data-toggle="fullscreen"]:focus,
+[data-fullscreen]:hover [data-toggle="fullscreen"] {
+    transform: none;
+}
+
+[data-fullscreen] [data-toggle="fullscreen"]:hover,
+[data-fullscreen] [data-toggle="fullscreen"]:focus {
+    background-color: var(--color-black-a20);
+}
+
+[data-fullscreen] [data-toggle="fullscreen"]:active {
+    background-color: transparent;
+}
+
+[data-fullscreen] [data-toggle="fullscreen"] .label {
+    display: none;
+}
+
+[data-fullscreen] [data-toggle="fullscreen"]::before,
+[data-fullscreen] [data-toggle="fullscreen"]::after {
+    border-style: solid;
+    border-color: currentColor;
+    content: "";
+    display: block;
+    height: var(--space-xs);
+    width: var(--space-xs);
+    position: absolute;
+}
+
+[data-fullscreen] [data-toggle="fullscreen"]::before {
+    border-width: 0 0 var(--line-thin) var(--line-thin);
+    bottom: var(--icon-padding);
+    left: var(--icon-padding);
+}
+
+[data-fullscreen] [data-toggle="fullscreen"]::after {
+    border-width: var(--line-thin) var(--line-thin) 0 0;
+    right: var(--icon-padding);
+    top: var(--icon-padding);
+}
+
+[data-fullscreen] header,
+[data-fullscreen] footer {
+    position: absolute;
+    inset-inline-end: var(--space-md);
+    inset-block-start: var(--space-md);
+    z-index: var(--z-fullscreen-button);
+}
+
+[data-fullscreen] footer {
+    inset-block: auto  var(--space-md);
+}
+
+[data-fullscreen="true"] {
+    background-color: #fff;
+    border-radius: 0;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    overflow: auto;
+    padding: 0;
+    position: fixed;
+    scroll-behavior: smooth;
+    top: 0;
+    width: 100%;
+    z-index: var(--z-fullscreen);
+}
+
+[data-fullscreen="true"] header,
+[data-fullscreen="true"] footer {
+    position: fixed;
+    right: var(--space-md);
+}
+
+[data-fullscreen="true"] button {
+    --icon-padding: calc(var(--space-sm));
+    transform: none;
+}
+
+[data-fullscreen="true"] button::before,
+[data-fullscreen="true"] button::after {
+    transform: rotate(180deg);
+}
+
+[data-fullscreen] figure {
+    margin-block-end: 0;
+}
+
+[data-fullscreen="true"] figure {
+    float: none;
+    margin: var(--space-md);
+    padding: 0;
+    text-align: center;
+}
+
+[data-fullscreen] figure svg {
+    height: auto !important; /* TODO: Maak PlantUML specifiek */
+}
+
+[data-fullscreen="true"] svg {
+    max-width: none;
+}
+
+[data-fullscreen] iframe:where(.openapi, .asyncapi, .message, .email),
+[data-fullscreen] figure,
+[data-fullscreen] .bpmn {
+    border-radius: var(--radius-base);
+    box-shadow: 0 0 0 var(--line-base) var(--color-brand-a20);
+}
+
+[data-fullscreen] figure {
+    padding: var(--space-md);
+}
+
+[data-fullscreen] .bpmn > * {
+    margin: var(--space-md);
+}
+
+[data-fullscreen="true"] iframe.openapi,
+[data-fullscreen="true"] iframe.asyncapi {
+    min-height: 100vh;
+}
+
+[data-fullscreen="true"] .bpmn > .bjs-container {
+    height: 100vh !important;
+}
+
+[data-fullscreen="true"] .bpmn + footer [data-toggle="fullscreen"] {
+    display: none;
+}

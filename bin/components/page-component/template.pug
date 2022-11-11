@@ -1,3 +1,14 @@
+mixin menuItems(items, hidden)
+  if items && items.length > 0
+    ul(hidden=hidden)
+      each item in items 
+        li(class=item.classes.join(' '))
+          if item.url
+            a(href=relative.root + '' + item.url aria-expanded=item.classes.some(i => i === 'active' || i === 'active-child') ? 'true' : 'false')= item.name
+          else
+            span(class='menu-toggle' aria-controls='next-sibling' aria-expanded=item.classes.some(i => i === 'active' || i === 'active-child') ? 'true' : 'false')=item.name
+          +menuItems(item.items, !item.classes.some(i => i === 'active' || i === 'active-child'))
+
 doctype html
 html 
   head
@@ -6,7 +17,7 @@ html
     meta(name='robots' content='noindex, nofollow')
     title=title 
     link(rel='stylesheet' type='text/css' href=relative.root + 'assets/style/page/style.css')
-
+    
     if(options.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
       link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
@@ -21,39 +32,57 @@ html
 
   body(class='line-numbers' class={feature: git.branch.feature})
 
-    header
-      div(class='container')
-        div(class='bar')
-          div(class='logo')
-            a(href=relative.root + 'index.html' title='home')
-              img(src=relative.root + 'assets/images/page/logo.svg' alt=title)
+    nav(class='menu')
+      div(class='menu-logo')
+        a(href=relative.root + 'index.html' title='Home')
+          img(src=relative.root + 'assets/images/page/logo.svg' alt=title)
 
-          h1(class='title')=title
+      if(showNav)
+        div(class='menu-branch')
+          a(href='#menu-branches' class='menu-toggle menu-toggle-branches' aria-controls='menu-branches' aria-expanded='false')
+            span(class='icon')
+              svg(aria-hidden='true' height='16' viewBox='0 0 16 16' version='1.1' width='16' data-view-component='true' class='octicon octicon-git-branch')
+                path(fill-rule='evenodd' d='M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25zM4.25 12a.75.75 0 100 1.5.75.75 0 000-1.5zM3.5 3.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0z')/
+            span(class='label')= git.branch.name
 
-          if(showNav)
-            div(class='nav')
-              if(logout)
-                a(href=logout.route)
-                  span=logout.text
+        div(id='menu-branches' class='menu-branches' hidden='true')
+          ul
+            each branch in git.branches
+              li
+                a(href=relative.basePath + branch.path data-branch-url=relative.basePath + branch.path)= branch.name
 
-              a(href='#git-branch-menu' class='menu-toggle menu-toggle-branches' aria-controls='git-branch-menu' aria-expanded='false')
-                span(class='icon')
-                  svg(aria-hidden='true' height='16' viewBox='0 0 16 16' version='1.1' width='16' data-view-component='true' class='octicon octicon-git-branch')
-                    path(fill-rule='evenodd' d='M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25zM4.25 12a.75.75 0 100 1.5.75.75 0 000-1.5zM3.5 3.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0z')/
-                span(class='label')= git.branch.name
+      div(id='menu-main' class='menu-main')
+        +menuItems(menu, false)
 
+      div(class='menu-footer')
+        if(showNav)
+          ul
+            if(logout)
+              li
+                a(href=logout.route title=logout.text)
+                  span(class='icon')
+                    svg(width='24' height='24' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg' title='logout.text')
+                      path(d='M2 2.75C2 1.784 2.784 1 3.75 1h2.5a.75.75 0 010 1.5h-2.5a.25.25 0 00-.25.25v10.5c0 .138.112.25.25.25h2.5a.75.75 0 010 1.5h-2.5A1.75 1.75 0 012 13.25V2.75zm10.44 4.5H6.75a.75.75 0 000 1.5h5.69l-1.97 1.97a.75.75 0 101.06 1.06l3.25-3.25a.75.75 0 000-1.06l-3.25-3.25a.75.75 0 10-1.06 1.06l1.97 1.97z')/
+
+            li
               a(href=git.branch.url + '/docs/' + sourceFile class='git' title=locale.view_source_file)
                 span(class='icon')
-                  svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' title=git.type)
+                  svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 16 16' fill='none' title=git.type)
                     path(d='M15.698 7.287 8.712.302a1.03 1.03 0 0 0-1.457 0l-1.45 1.45 1.84 1.84a1.223 1.223 0 0 1 1.55 1.56l1.773 1.774a1.224 1.224 0 0 1 1.267 2.025 1.226 1.226 0 0 1-2.002-1.334L8.58 5.963v4.353a1.226 1.226 0 1 1-1.008-.036V5.887a1.226 1.226 0 0 1-.666-1.608L5.093 2.465l-4.79 4.79a1.03 1.03 0 0 0 0 1.457l6.986 6.986a1.03 1.03 0 0 0 1.457 0l6.953-6.953a1.031 1.031 0 0 0 0-1.457')
-        if(showNav)
-          nav(id='git-branch-menu' hidden='true')
-            ul 
-              each branch in git.branches 
-                li 
-                  a(href=relative.basePath + branch.path data-branch-url=relative.basePath + branch.path)= branch.name
+
     main
+      header
+        h1(class='title')=title
+
+        if toc && toc.length > 0
+          nav(class='toc-container')
+            ul
+              each item in toc
+                li
+                  a(href='#' + item.id)= item.name
+
       | !{content}
+
 
     script(src=relative.root + 'assets/iframe-resizer-dist/iframeResizer.min.js' charset='UTF-8')
     script(src=relative.root + 'assets/bpmn-js-dist/bpmn-navigated-viewer.production.min.js' charset='UTF-8')
