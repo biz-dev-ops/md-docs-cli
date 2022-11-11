@@ -1,4 +1,10 @@
 :root {
+  /* Brand colors */
+  --color-brand-base: rgb(var(--color-brand));
+  --color-brand-a80: rgba(var(--color-brand), .8);
+  --color-brand-a40: rgba(var(--color-brand), .4);
+  --color-brand-a20: rgba(var(--color-brand), .2);
+
   /* Colors */
   --color-white-r: 255;
   --color-white-g: 255;
@@ -83,7 +89,7 @@
   /* Button */
   --button-text-color: var(--text-color-heading, var(--color-black));
   --button-text-color-active: var(--button-text-color);
-  --button-background-base: var(--color-brand-light);
+  --button-background-base: var(--color-brand-a20);
   --button-background-active: var(--color-black-a20);
 
   /* Shadow */

@@ -4,13 +4,13 @@
 
 /* Module: Headless container */
 .headless-container {
-    padding: var(--space-lg) var(--content-padding-inline);
+    padding: var(--space-lg) var(--content-padding-inline) calc(var(--space-lg) * 2);
 }
 
 /* Module: Header container */
 .content > .header-container {
-    border-block-start: var(--line-base) solid var(--color-brand-light);
-    padding: var(--space-lg) var(--content-padding-inline) calc(var(--space-xl) * 2);
+    border-block-start: var(--line-base) solid var(--color-brand-a40);
+    padding: var(--space-lg) var(--content-padding-inline) calc(var(--space-lg) * 2);
 }
 
 * > .header-anchor {

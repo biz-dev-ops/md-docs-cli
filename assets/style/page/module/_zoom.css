@@ -133,7 +133,7 @@
 [data-fullscreen] figure,
 [data-fullscreen] .bpmn {
     border-radius: var(--radius-base);
-    box-shadow: 0 0 0 var(--line-base) var(--color-brand-light);
+    box-shadow: 0 0 0 var(--line-base) var(--color-brand-a20);
 }
 
 [data-fullscreen] figure,
