@@ -4,12 +4,11 @@ mixin menuItems(items, hidden)
       each item in items 
         li(class=item.classes.join(' '))
           if item.url
-            a(href=relative.root + '' + item.url)= item.name
-            +menuItems(item.items, false)
+            a(href=relative.root + '' + item.url aria-expanded=item.classes.some(i => i === 'active' || i === 'active-child') ? 'true' : 'false')= item.name
           else
-            span(class='menu-toggle' aria-controls='next-sibling' aria-expanded='false')=item.name
-            +menuItems(item.items, true)
-            
+            span(class='menu-toggle' aria-controls='next-sibling' aria-expanded=item.classes.some(i => i === 'active' || i === 'active-child') ? 'true' : 'false')=item.name
+          +menuItems(item.items, !item.classes.some(i => i === 'active' || i === 'active-child'))
+
 doctype html
 html 
   head

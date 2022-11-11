@@ -127,20 +127,6 @@
     padding-block: var(--space-xxs);
 }
 
-.menu-main li:where(.active, .active-child) > ul {
-    display: block;
-}
-
-.menu-main li > ul {
-    display: none;
-}
-
-.menu-main li:where(.active, .active-child) > ul,
-.menu-main ul:where([hidden]),
-.menu-main [aria-expanded="true"] + ul {
-    display: block;
-}
-
 .menu-main a:hover,
 .menu-main a:focus,
 .menu-main .menu-toggle:hover,
