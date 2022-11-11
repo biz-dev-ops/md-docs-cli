@@ -1,5 +1,6 @@
 :root {
-    --color-brand: 229,229,229;
-    --text-color-base: rgba(0, 0, 0, .9);
-    --text-color-heading: rgb(var(--color-brand));
+    --rgb-brand: 26,26,26;
+    --color-brand-base: rgb(var(--rgb-brand));
+    --text-color-base: rgba(26, 26, 26, .9);
+    --text-color-heading: rgb(var(--rgb-brand));
 }

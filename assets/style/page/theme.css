@@ -1,9 +1,8 @@
 :root {
   /* Brand colors */
-  --color-brand-base: rgb(var(--color-brand));
-  --color-brand-a80: rgba(var(--color-brand), .8);
-  --color-brand-a40: rgba(var(--color-brand), .4);
-  --color-brand-a20: rgba(var(--color-brand), .2);
+  --color-brand-a80: rgba(var(--rgb-brand), .8);
+  --color-brand-a40: rgba(var(--rgb-brand), .4);
+  --color-brand-a20: rgba(var(--rgb-brand), .2);
 
   /* Colors */
   --color-white-r: 255;

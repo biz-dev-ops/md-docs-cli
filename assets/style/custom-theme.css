@@ -8,22 +8,19 @@
 
 :root {
     /* Randstad colors */
-    --rs-color-brand-primary: 33, 117, 217;
-    --rs-color-brand-secondary: 15, 25, 65;
-    --rs-color-brand-tertiary: 247, 245, 240;
-    --rs-color-brand-quaternary: 107, 165, 180;
-    --rs-color-brand-quinary: 231, 69, 54;
-    --rs-color-brand-senary: 255, 181, 17;
+    --rs-rgb-brand-primary: 33, 117, 217;
+    --rs-rgb-brand-secondary: 15, 25, 65;
+    --rs-rgb-brand-tertiary: 247, 245, 240;
+    --rs-rgb-brand-quaternary: 107, 165, 180;
+    --rs-rgb-brand-quinary: 231, 69, 54;
+    --rs-rgb-brand-senary: 255, 181, 17;
 
     --rs-brand-secondary-alpha-70: rgba(15, 25, 65, .7);
 
     /* md-docs colors */
-    --color-brand-base: var(--rs-color-brand-primary);
-    --color-brand-aside: var(--rs-color-brand-secondary);
-    --color-brand-light: var(--rs-color-brand-tertiary);
-
-    --text-color-base: var(--rs-color-brand-secondary);
-    --text-color-heading: var(--rs-color-brand-secondary);
+    --rgb-brand: var(--rs-rgb-brand-primary);
+    --text-color-base: rgba(var(--rs-rgb-brand-secondary));
+    --text-color-heading: rgb(var(--rs-rgb-brand-secondary));
 
     /* Typography */
     --font-family-base: Graphik, Tahoma, "sans-serif";

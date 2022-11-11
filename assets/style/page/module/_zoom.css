@@ -6,6 +6,10 @@
     padding: 1px;
 }
 
+[data-fullscreen]:not(:last-child) {
+    margin-bottom: var(--space-md);
+}
+
 [data-fullscreen] [data-toggle="fullscreen"] {
     --icon-padding: calc(var(--space-sm) + var(--space-xxs));
 
@@ -136,11 +140,13 @@
     box-shadow: 0 0 0 var(--line-base) var(--color-brand-a20);
 }
 
-[data-fullscreen] figure,
-[data-fullscreen] .bpmn {
+[data-fullscreen] figure {
     padding: var(--space-md);
 }
 
+[data-fullscreen] .bpmn > * {
+    margin: var(--space-md);
+}
 
 [data-fullscreen="true"] iframe.openapi,
 [data-fullscreen="true"] iframe.asyncapi {
