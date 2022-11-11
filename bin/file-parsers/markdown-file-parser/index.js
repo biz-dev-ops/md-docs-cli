@@ -140,7 +140,7 @@ getTitleFromFile = function (file) {
 
 formatTitle = function (title) {
     if (title === "dist")
-        title = "home";
+        title = "Home";
 
     if (title.indexOf(".") > -1)
         title = title.substring(0, title.indexOf("."))

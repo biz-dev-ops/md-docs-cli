@@ -80,7 +80,7 @@ module.exports = class Menu {
 
     #format(src) {
         if (this.root === src)
-            return 'home';
+            return 'Home';
 
         const name = this.#rewriteName(path.basename(src));
 
