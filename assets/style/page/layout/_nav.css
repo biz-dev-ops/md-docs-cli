@@ -1,0 +1,182 @@
+/* Layout: Nav */
+.menu {
+    color: var(--menu-text-color);
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas: "logo" "branch" "main" "footer";
+    inset-block: var(--main-margin) 0;
+    inset-inline-start: 0;
+    overflow: auto;
+    position: fixed;
+    width: var(--nav-width);
+}
+
+.menu > :where( div) {
+    padding: var(--space-sm);
+}
+
+.menu a {
+    text-decoration: none;
+}
+
+.menu a:hover,
+.menu a:focus-visible {
+    text-decoration: underline;
+}
+
+@supports not selector(:focus-visible) {
+    .menu a:focus {
+        text-decoration: underline;
+    }
+}
+
+.menu .icon {
+    vertical-align: middle;
+}
+
+.menu .icon + .label {
+    margin-left: var(--space-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menu svg {
+    fill: currentColor;
+}
+
+
+/* Logo memie*/
+.menu-logo {
+    padding-inline-end: var(--space-xl);
+    padding-block: var(--space-lg);
+}
+
+.menu-logo img {
+    max-height: var(--logo-height);
+    height: auto;
+    max-width: 100%;
+}
+
+/* Branch menu  */
+.menu-branch {
+    background-color: var(--color-black-a10);
+    padding: 0;
+}
+
+/* Branches menu  */
+.menu-branches {
+    background: var(--color-black-a10);
+    grid-area: main;
+    padding-block-start: 0;
+}
+
+.menu-branches:where(:not([hidden])) ~ div {
+    display: none;
+}
+
+.menu-branches ul {
+    list-style: none;
+    padding-inline-start: 0;
+}
+
+.menu-branches ul li + li {
+    border-block-start: var(--line-base) solid var(--color-white-a20);
+}
+
+.menu-branches a {
+    display: inline-block;
+    padding-block: var(--space-xs);
+}
+
+/* Main menu */
+.menu-main {
+    grid-area: main;
+}
+
+.menu-main > ul {
+    list-style: none;
+    padding-inline-start: 0;
+}
+
+.menu-main > ul > li + li {
+    border-block-start: var(--line-base) solid var(--color-white-a20);
+}
+
+.menu-main .menu-toggle {
+    cursor: s-resize;
+}
+
+.menu-main .menu-toggle[aria-expanded="true"] {
+    cursor: n-resize;
+}
+
+.menu-main .active > a,
+.menu-main .active > .menu-toggle {
+    text-decoration: underline;
+    text-decoration-color: var(--color-white-a50);
+}
+
+.menu-main > ul > li > a,
+.menu-main > ul > li > .menu-toggle {
+    display: inline-block;
+    padding-block: var(--space-xs);
+}
+
+.menu-main > ul > li li {
+    padding-block: var(--space-xxs);
+}
+
+.menu-main a:hover,
+.menu-main a:focus,
+.menu-main .menu-toggle:hover,
+.menu-main .menu-toggle:focus {
+    text-decoration: underline;
+}
+
+/* Menu footer */
+.menu-footer ul {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    gap: var(--space-sm);
+}
+
+
+/* Menu toggle */
+.menu-toggle-branches {
+    white-space: nowrap;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: var(--space-sm);
+}
+
+.menu-toggle-branches .icon svg {
+    vertical-align: middle;
+}
+
+.menu-toggle-branches .label {
+    margin-inline-start: var(--space-xs);
+    margin-inline-end: var(--space-md);
+}
+
+.menu-toggle-branches::after {
+    content: "";
+    display: inline-block;
+    border-color: currentColor;
+    border-width: 0 0 var(--line-thin) var(--line-thin);
+    border-style: solid;
+    height: var(--space-xs);
+    width: var(--space-xs);
+    position: relative;
+    top: calc(var(--space-xxs) / -2);
+    transform: rotate(-45deg);
+    justify-self: end;
+    transition: transform var(--duration-base);
+    transform-origin: 30% 70%;
+}
+
+.menu-toggle-branches[aria-expanded="true"]::after {
+    transform: rotate(135deg);
+}

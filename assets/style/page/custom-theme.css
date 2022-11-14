@@ -1,0 +1,67 @@
+:root {
+    /* Typography */
+    --line-height-base: 1.66666667;
+
+    --heading-6-size: 16px;
+    --heading-5-size: 18px;
+    --heading-4-size: 20px;
+    --heading-3-size: 26px;
+    --heading-2-size: 32px;
+    --heading-1-size: 40px;
+
+    --font-size-sm: 12px;
+    --font-size-base: 16px;
+    --font-size-md: 18px;
+
+    /* Dimensions */
+    --logo-height: 1.5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    color: var(--rs-color-brand-primary);
+    text-transform: lowercase;
+}
+
+h1, h2 {
+    color: var(--text-color-base);
+}
+
+p,
+address,
+ul,
+ol,
+dl {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+}
+
+/* Menu */
+.menu-main {
+    text-transform: lowercase;
+}
+
+
+/* Tabs */
+.tabs-scroll-container {
+    text-transform: lowercase;
+}
+
+
+@media (min-width: 40rem) {
+    :root {
+        /* Header */
+        /*--header-title-size: var(--heading-4-size);*/
+    }
+
+    header .bar .logo {
+        display: block;
+    }
+}
+
+@media (min-width: 60rem) {
+    :root {
+        /* Header */
+        --header-title-size: var(--heading-3-size);
+    }
+}

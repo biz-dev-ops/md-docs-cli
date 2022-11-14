@@ -9,8 +9,8 @@ const git = require('../utils/git');
 const files = require('../utils/files');
 
 const Locale = require('../locale');
-
 const Relative = require('../utils/relative');
+const TocParser = require('../utils/toc-parser');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
@@ -41,7 +41,6 @@ const FullscreenComponent = require('../components/fullscreen-component');
 const GraphViewerComponent = require('../components/graph-viewer-component');
 const IFrameComponent = require('../components/iframe-component');
 const ImageComponent = require('../components/image-component');
-const MenuComponent = require('../components/menu-component');
 const MessageComponent = require('../components/message-component');
 const OpenapiComponent = require('../components/openapi-component');
 const PageComponent = require('../components/page-component');
@@ -54,7 +53,6 @@ const DefinitionHtmlParser = require('../html-parsers/definition-html-parser');
 const ImageHtmlParser = require('../html-parsers/image-html-parser');
 const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
-const MenuHtmlParser = require('../html-parsers/menu-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
 
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
@@ -222,6 +220,7 @@ module.exports = class App {
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
             'locale': asClass(Locale).singleton(),
             'relative': asClass(Relative).singleton(),
+            'tocParser': asClass(TocParser).singleton(),
 
             //DrawIO
             'graphViewerComponent': asClass(GraphViewerComponent).singleton(),
@@ -250,7 +249,6 @@ module.exports = class App {
             'fullscreenHtmlParser': asClass(FullscreenHtmlParser).singleton(),
             'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
             'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
-            'menuHtmlParser': asClass(MenuHtmlParser).singleton(),
             'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
@@ -276,7 +274,6 @@ module.exports = class App {
             'fullscreenComponent': asClass(FullscreenComponent).singleton().inject(container => allowUnregistered(container, 'fullscreenComponentRenderFn')),
             'iFrameComponent': asClass(IFrameComponent).singleton().inject(container => allowUnregistered(container, 'iFrameComponentRenderFn')),
             'imageComponent': asClass(ImageComponent).singleton().inject(container => allowUnregistered(container, 'imageComponentRenderFn')),
-            'menuComponent': asClass(MenuComponent).singleton().inject(container => allowUnregistered(container, 'menuComponentRenderFn')),
             'messageComponent': asClass(MessageComponent).singleton().inject(container => allowUnregistered(container, 'messageComponentRenderFn')),
             'openapiComponent': asClass(OpenapiComponent).singleton().inject(container => allowUnregistered(container, 'openapiComponentRenderFn')),
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
@@ -299,7 +296,6 @@ module.exports = class App {
             //Html parsers, order is important!
             'htmlParsers': [
                 'headingHtmlParser',
-                'menuHtmlParser',
                 'definitionHtmlParser',
                 'anchorHtmlParser',
                 'unsortedListHtmlParser',
