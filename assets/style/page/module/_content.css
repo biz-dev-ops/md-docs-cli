@@ -1,0 +1,80 @@
+.content :where(p, ul, ol, dl, h1, h2, h3, h4, h5, h6) {
+    max-width: var(--max-text-width);
+}
+
+/* Module: Headless container */
+.headless-container {
+    padding: var(--space-lg) var(--content-padding-inline) calc(var(--space-lg) * 2);
+}
+
+/* Module: Header container */
+.content > .header-container {
+    border-block-start: var(--line-base) solid var(--color-brand-a40);
+    padding: var(--space-lg) var(--content-padding-inline) calc(var(--space-lg) * 2);
+}
+
+* > .header-anchor {
+    visibility: hidden;
+    text-decoration: none;
+    opacity: .5;
+    font-size: calc(100% / var(--line-height-base));
+}
+
+* > .header-anchor:hover,
+* > .header-anchor:focus{
+    opacity: 1;
+}
+
+*:hover > .header-anchor {
+    visibility: visible;
+}
+
+.header-container .header * {
+    margin-bottom: calc(var(--line-height-base) * .5em);
+}
+
+/* Module: Header container - level 2 */
+.header-container.h2 > .header h2 {
+    margin-bottom: var(--space-md);
+}
+
+.header-container.h2 > .header * {
+    margin-bottom: 0;
+}
+
+/* Module: Header container - level 3 */
+.header-container.h3 h3 {
+    position: relative;
+}
+
+.header-container.h3 h3:hover {
+    cursor: pointer;
+}
+
+.header-container.h3 h3:after {
+    border-color: var(--text-color-base);
+    border-width: var(--line-base) var(--line-base) 0 0;
+    transform: rotate(135deg);
+    transform-origin: 60% 40%;
+    border-style: solid;
+    content: "";
+    display: block;
+    height: var(--space-xs);
+    width: var(--space-xs);
+    position: absolute;
+    right: .25rem;
+    top: .75rem;
+    transition: transform var(--duration-base);
+}
+
+.header-container.h3.active h3:after {
+    transform: rotate(45deg);
+}
+
+.header-container.h3.active > .container {
+    display: block;
+}
+
+.header-container.h3 > .container {
+    display: none;
+}

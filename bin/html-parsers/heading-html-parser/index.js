@@ -11,7 +11,7 @@ module.exports = class HeadingHtmlParser {
         const locale = await this.locale.get();
         console.info(colors.green(`\t* parsing headings:`));
 
-        const container = jsdom.JSDOM.fragment("<article></article>").firstElementChild;
+        const container = jsdom.JSDOM.fragment("<div class='content'></div>").firstElementChild;
         
         const main = element;
         addToHeadingContainer(locale, main.firstChild, container, -1);

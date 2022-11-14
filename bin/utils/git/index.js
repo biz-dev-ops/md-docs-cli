@@ -1,11 +1,14 @@
 const colors = require('colors');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const mustache = require('mustache');
 
 exports.info = async function (options) {
     console.info();
     console.info(colors.yellow(`downloading git information:`));
-    const info = {};
+    const info = {
+        type: options.git.type
+    };
 
     try {
         const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
@@ -29,7 +32,7 @@ exports.info = async function (options) {
             .map(b => ({
                 name: b,
                 repository: repository,
-                url: `https://github.com/${repository}/tree/${b}`,
+                url: mustache.render(options.git.urlTemplate, { repository, branch: b }),
                 feature: b != remote.mainBranch,
             }))
             .map(b => Object.assign(b, {
@@ -57,7 +60,7 @@ exports.info = async function (options) {
         const branch = {
             name: 'main',
             repository: 'undefined',
-            url: `https://github.com/undefined/undefined/tree/main`,
+            url: mustache.render(options.git.urlTemplate, { repository: 'undefined', branch: 'undefined' }),
             path: '',
             feature: false
         };
