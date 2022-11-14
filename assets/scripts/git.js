@@ -31,7 +31,7 @@
         }
     });
 
-    const menu = document.getElementById('git-branch-menu');
+    const menu = document.getElementById('menu-branches');
     if (!menu)
         return;
         

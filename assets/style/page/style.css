@@ -1,11 +1,9 @@
-@import "reset.css";
-
 @import "../theme.css";
 @import "theme.css";
 
-@import "base.css";
-@import "feature.css";
-@import "user-task.css";
+@import "element/index.css";
+@import "layout/index.css";
+@import "module/index.css";
 
 @import "../custom-theme.css";
 @import "custom-theme.css";

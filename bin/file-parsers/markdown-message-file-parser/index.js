@@ -10,6 +10,7 @@ const md = require('markdown-it')
         typographer: true
     })
     .use(require('markdown-it-task-lists'));
+const mustache = require('mustache');
     
 const files = require('../../utils/files');
 
@@ -86,7 +87,7 @@ renderMessage = async function(file, data) {
 
 formatTitle = function (title) {
     if (title === "dist")
-        title = "home";
+        title = "Home";
 
     if (title.indexOf(".") > -1)
         title = title.substring(0, title.indexOf("."))

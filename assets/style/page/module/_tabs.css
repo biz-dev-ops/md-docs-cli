@@ -1,0 +1,45 @@
+
+/* Module: Tabs */
+.tabs-container:not(:last-child) {
+    margin-bottom: var(--space-md);
+}
+
+.tabs-list-container {
+    /*border-bottom: var(--line-base) solid var(--color-brand-base);*/
+    /*margin-right: calc(var(--content-padding-inline) * -1);*/
+    /*margin-left: calc(var(--content-padding-inline) * -1);*/
+    /*padding-right: var(--content-padding-inline);*/
+    /*padding-left: var(--content-padding-inline);*/
+}
+
+.tabs-scroll-container {
+    color: var(--text-color-heading);
+}
+
+.tabs-list-container ul {
+    background-color: var(--color-white);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--space-xs) var(--space-sm);
+    list-style: none;
+    padding-left: 0;
+}
+
+.tabs-list-container ul li a {
+    border-bottom: var(--line-thin) solid var(--color-brand-base);
+    display: block;
+    padding:  var(--space-xs) var(--space-sm);
+    text-decoration: none;
+    height: 100%;
+}
+
+.tabs-list-container ul li a[aria-expanded="true"] {
+    background-color: var(--color-white);
+    border-bottom-color: currentColor;
+    font-weight: 600;
+}
+
+.tabs-panels-container > div {
+    padding-top: var(--space-sm);
+}
