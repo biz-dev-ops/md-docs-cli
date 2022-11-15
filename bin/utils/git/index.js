@@ -33,18 +33,18 @@ exports.info = async function (options) {
                 name: b,
                 repository: repository,
                 url: mustache.render(options.git.urlTemplate, { repository, branch: b }),
-                feature: b != remote.mainBranch,
+                mainBranch: remote.mainBranch,
             }))
             .map(b => Object.assign(b, {
                 path: createPath(b)
             }))
-            .sort((a, b) => `${a.feature ? 'z' : 'a'}${a.name}`.localeCompare(`${b.feature ? 'z' : 'a'}${b.name}`));
+            .sort((a, b) => `${a.mainBranch ? 'a' : 'x'}${a.name}`.localeCompare(`${b.mainBranch ? 'a' : 'z'}${b.name}`));
             
 
         info.branch = branches.find(b => b.name === branch);
         if (!info.branch) {
             console.warn(colors.brightYellow(`\t* branch not found falling back to default branch.`));
-            info.branch = branches.find(b => b.feature === false);
+            info.branch = branches.find(b => b.mainBranch === true);
         }
         info.branches = branches;
     }
@@ -61,8 +61,8 @@ exports.info = async function (options) {
             name: 'main',
             repository: 'undefined',
             url: mustache.render(options.git.urlTemplate, { repository: 'undefined', branch: 'undefined' }),
-            path: '',
-            feature: false
+            path: 'main',
+            mainBranch: true
         };
 
         info.branch = branch;
@@ -149,8 +149,5 @@ function parseGitReponse(response) {
 }
 
 function createPath(branch) {
-    if (!branch.feature)
-        return '';
-
     return `${branch.name.replace(' ', '-').toLowerCase()}/`;
 }

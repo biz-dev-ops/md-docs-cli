@@ -23,9 +23,9 @@ module.exports = class TestExecutionsStore {
         
         this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branch.name));
         
-        if (this.#data === null && this.gitInfo.branch.feature) {            
+        if (this.#data === null && !this.gitInfo.branch.mainBranch) {            
             console.info(colors.brightYellow(`feature branch executions not found, falling back to default branch executions.`));
-            this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branches.find(b => b.feature === false).name));
+            this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branches.find(b => b.mainBranch === true).name));
         }
 
         if (this.#data === null) {
