@@ -3,33 +3,17 @@ div(id=id class='bpmn' fullscreen)
 script.
   window.addEventListener('load', function() {
     const xml = '!{xml}';
-    const viewer = new BpmnJS({
+    const bpmnViewer = new BpmnJS({
       container: '#{'#' + id}'
     });
-
+    const bpmnCanvas = bpmnViewer.get('canvas');
     const bpmnContainer = document.getElementById('#{id}');
     const zoomButtons = bpmnContainer.parentElement.querySelectorAll('footer [data-figure-zoom]');
 
     const drawCanvas = () => {
-      viewer.importXML(xml)
+      bpmnViewer.importXML(xml)
         .then(() => {
-          const canvas = viewer.get('canvas');
-          let viewbox = canvas.viewbox();
-          if (viewbox.inner.width !== 0 && viewbox.inner.height !== 0) {
-            canvas.zoom('fit-viewport', 'auto');
-          }
-
-          setTimeout(() => {
-            viewbox = canvas.viewbox();
-
-            if (viewbox.inner.width !== 0 && viewbox.inner.height !== 0) {
-              bpmnContainer.style.paddingTop = (viewbox.inner.height / viewbox.inner.width * 100) + '%';
-
-              setTimeout(() => canvas.zoom('fit-viewport', 'auto'), 1);
-              setTimeout(() => canvas.zoom('fit-viewport', 'auto'), 2);
-            }
-          }, 1)
-
+          bpmnCanvas.zoom('fit-viewport', 'auto');
         })
         .catch(error => {
           console.error('Error rendering bpmn file: #{file}', error);
@@ -37,20 +21,19 @@ script.
     }
 
     const handleZoom = event => {
-      const canvas = viewer.get('canvas');
-      const z = canvas.zoom();
+      const z = bpmnCanvas.zoom();
 
       switch (event.currentTarget.dataset.figureZoom) {
         case 'in':
-          canvas.zoom(z + .5, 'auto');
+          bpmnCanvas.zoom(z + .5, 'auto');
           break;
 
         case 'out':
-          canvas.zoom(z - .5, 'auto');
+          bpmnCanvas.zoom(z - .5, 'auto');
           break;
 
         default:
-          canvas.zoom('fit-viewport', 'auto');
+          bpmnCanvas.zoom('fit-viewport', 'auto');
       }
     }
 
