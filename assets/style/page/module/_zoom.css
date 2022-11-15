@@ -145,7 +145,14 @@
 }
 
 [data-fullscreen] .bpmn > * {
-    margin: var(--space-md);
+    /* Uitgezet door Arjan i.v.m. verkeerde grote van de bbox */
+    /* margin: var(--space-md); */
+}
+
+[data-fullscreen="true"] iframe:where(.openapi, .asyncapi, .message, .email),
+[data-fullscreen="true"] figure,
+[data-fullscreen="true"] .bpmn {
+    box-shadow: none;
 }
 
 [data-fullscreen="true"] iframe.openapi,
