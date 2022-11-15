@@ -33,7 +33,7 @@ exports.info = async function (options) {
                 name: b,
                 repository: repository,
                 url: mustache.render(options.git.urlTemplate, { repository, branch: b }),
-                mainBranch: remote.mainBranch,
+                mainBranch: remote.mainBranch === b,
             }))
             .map(b => Object.assign(b, {
                 path: createPath(b)
