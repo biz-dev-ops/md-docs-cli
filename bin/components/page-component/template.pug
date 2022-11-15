@@ -30,7 +30,7 @@ html
     link(rel='icon' href=relative.root + 'assets/images/page/favicon.svg' type='image/svg+xml')
     link(rel='apple-touch-icon' type='image/png' href=relative.root + 'assets/images/page/favicon-180w.png')
 
-  body(class='line-numbers' class={feature: git.branch.feature})
+  body(class='line-numbers' class={feature: !git.branch.mainBranch})
 
     nav(class='menu')
       div(class='menu-logo')
