@@ -17,11 +17,8 @@ mixin scenarios(scenarios)
                     span=' '
                     span= step.text
 
-if(features.length === 1)
-  +scenarios(features[0].scenarios)
-else
-  div(class='feature-list')
-    each feature in features
-      details(class='feature')
-        +summary (feature)
-        +scenarios(feature.scenarios)
+div(class='feature-list')
+  each feature in features
+    details(class='feature')
+      +summary (feature)
+      +scenarios(feature.scenarios)
