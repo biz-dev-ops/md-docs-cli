@@ -39,7 +39,7 @@ module.exports = class AzureStaticWebApp {
             console.info(colors.green(`\t* configuring role based access.`));
 
             config.routes.push({
-                route: '/assets/*',
+                route: `/${mainBranch}/assets/*`,
                 allowedRoles: ['anonymous', 'authenticated']
             }, {
                 route: '/*',
