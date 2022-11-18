@@ -1,0 +1,10 @@
+fieldset
+    legend=item.label
+
+    +formItem(item.value)
+
+    div(class='fieldset-controls')
+      button(data-fieldset-action="add" type='button')
+        | + Add
+      button(data-fieldset-action="remove" type='button')
+        | - Remove

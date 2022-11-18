@@ -1,4 +1,8 @@
 /* Feature-list  */
+ul.steps {
+    list-style-type: none;
+}
+
 .feature-list:not(:last-child) {
     margin-bottom: calc(var(--line-height-base) * 1rem);
 }
@@ -38,7 +42,7 @@ details.feature li {
     width: var(--space-sm);
     position: absolute;
     left: 0;
-    top: .625rem;
+    top: .35rem;
 }
 
 .status-bg {

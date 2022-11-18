@@ -13,13 +13,35 @@
     padding: var(--space-md);
 }
 
-.ui .form-item {
-    margin-bottom: calc(var(--line-height-base) * 1rem);
+/*.ui .form-item,*/
+/*.ui .select-one-of {*/
+/*    margin-bottom: calc(var(--line-height-base) * 1rem);*/
+/*}*/
+
+.ui fieldset,
+.ui form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
 }
 
 .ui .form-item > label {
     display: inline-block;
     margin-bottom: var(--space-xs);
+}
+
+.ui .fieldset-controls [data-fieldset-action='remove'] {
+    display: none;
+}
+
+.ui .form-item + .form-item + .fieldset-controls [data-fieldset-action='remove'] {
+    display: inline-block;
+}
+
+.ui .fieldset-controls {
+    padding-block-start: var(--space-sm);
+    display: flex;
+    gap: var(--space-xs);
 }
 
 .ui .form-check input + label {
@@ -28,29 +50,13 @@
 
 .ui .form-submit {
     display: flex;
+    gap: var(--space-xs);
     justify-content: flex-end;
 }
 
-.ui .form-submit button + button {
-    margin-left: var(--space-sm);
-}
-
 .ui button {
-    background-color: var(--color-black-a10);
-    border: 0;
-    border-radius: 10em;
-    font-size: inherit;
-    padding: var(--space-xs) var(--space-md);
-    transition: background-color var(--duration-base);
-}
-
-.ui button:hover,
-.ui button:focus-visible {
-    background-color: var(--color-black-a20);
-}
-
-.ui button[type="submit"] {
-    font-weight: 600;
+    border-radius: var(--radius-pill);
+    padding-block: var(--space-xxs);
 }
 
 .ui dl dl {

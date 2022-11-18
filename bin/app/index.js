@@ -98,15 +98,18 @@ module.exports = class App {
         console.info(colors.green('\nrenaming directories:'));
         await this.#rename(options.dst);
 
-        if(!await files.exists(path.resolve(options.dst, 'index.html'))) {
-            console.info(colors.green('\creating index.html:'));
-            files.writeFile(path.resolve(options.dst, 'index.html'), `<!DOCTYPE html>
+        if(await files.exists(path.resolve(options.basePath, 'index.html'))) {
+            console.info(colors.green('\nindex.html already exists'));
+        } 
+        else {
+            console.info(colors.green('\ncreating index.html'));
+            await fs.writeFile(path.resolve(options.basePath, 'index.html'), `<!DOCTYPE html>
             <html> 
                 <head>
                     <meta http-equiv="Refresh" content="0; URL=./main/" />
                 </head>
             </html>`);
-        }
+        }        
 
         console.info(colors.brightGreen('\nready, shutting down.....'));
     }

@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 exports.parse = function (actions) {
     if (actions == undefined)
         return null;
-    
+
     const id = uuidv4();
     
     return Object.entries(actions)
@@ -21,7 +21,7 @@ function transformToAction(id, key, action) {
 function transformToFormFields(id, schema, ui, parents) {
     if (schema.properties) {
         return Object.entries(schema.properties)
-            .filter(kvp => !hide(parents, kvp[0], ui?.hidden))
+            .filter(kvp => !containsKey(parents, kvp[0], ui?.hidden))
             .map(kvp => {
                 const key = kvp[0];
                 const property = kvp[1];
@@ -34,6 +34,12 @@ function transformToFormFields(id, schema, ui, parents) {
     if (schema.oneOf) {
         return schema.oneOf.map(p => transformToFormField(id, p, ui, parents, 'oneOf', false));
     }
+
+    if (schema.items) {
+        return transformToFormField(id, schema.items, ui, parents, 'array', false);
+    }
+
+    return transformToFormField(id, schema, ui, parents, 'item', false);
 }
 
 
@@ -41,18 +47,26 @@ function transformToFormField(id, property, ui, parents, key, required) {
     const field = {
         id: `${id}-${key}`,
         name: key,
-        label: property.title ?? key,
+        label: containsKey(parents, key, ui?.use_description_as_label) ? property.description : (property.title ?? key),
         description: property.description,
         required: required,
         value: property.example
     }
 
-    if (property.oneOf)
+    if (property.oneOf) {
         field.items = property.oneOf.map(p => transformToFormField(id, p, ui, parents, p.title ?? "oneOf", false));
-    else if (property.type === 'object' || property.properties)
+        field.editor = {
+            type: 'one-of'
+        };
+    }
+    else if (property.properties)
         field.items = transformToFormFields(id, property, ui, [...parents, key]);
-    else if (property.type === 'array')
-        field.items = transformToFormFields(id, property.items, ui, [...parents, key]);
+    else if (property.items) {
+        field.value = transformToFormField(id, property.items, ui, [...parents, key], required);
+        field.editor = {
+            type: 'collection'
+        };
+    }
     else
         field.editor = transformToEditor(property, getEditor(parents, key, ui?.editors));
 
@@ -89,10 +103,6 @@ function transformToEditor(property, editor) {
             exclusiveMinimum: property.format ?? false,
             exclusiveMaximum: property.format ?? false,
         };
-    }
-
-    if (property.type === "array") {
-        //TODO
     }
 
     if (property.type === "string") {
@@ -143,13 +153,13 @@ function transformToEditor(property, editor) {
     }
 }
 
-function hide(parents, key, hidden) {
-    if (hidden == undefined)
+function containsKey(parents, key, collection) {
+    if (collection == undefined)
         return false;
 
     const id = `${[...parents, key].join(".")}`;
 
-    return hidden.includes(id);
+    return collection.includes(id);
 }
 
 function getEditor(parents, key, editors) {
