@@ -155,6 +155,7 @@ select {
     width: 100%;
     font-family: inherit;
     font-size: inherit;
+    padding: var(--space-xxs);
 }
 
 fieldset {
@@ -165,7 +166,7 @@ fieldset {
 legend {
     font-size: var(--heading-4-size);
     font-weight: 600;
-    padding-inline: var(--space-xs);
+    padding-inline: var(--space-sm);
 }
 
 dt {
