@@ -6,6 +6,7 @@ info:
 servers:
   - url: http://localhost:9000/
 paths:
+  
   /api/my-user-tasks:
     get:
       tags:

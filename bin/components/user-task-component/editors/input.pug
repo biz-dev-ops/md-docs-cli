@@ -1,1 +1,3 @@
-input(type=item.editor.inputType name=item.name id=item.id value=item.value required=item.required)
+label(for=item.id class={required: item.required})=item.label
+div(class='input-group')   
+    input(type=item.editor.inputType name=item.name id=item.id value=item.value required=item.required)

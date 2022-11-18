@@ -20,10 +20,19 @@ function transformToFields(schema, ui, parents) {
             fields.push(transformToField(schema.properties[key], ui, parents, key))
         }
     }
+    else if (schema.items) {
+        fields.push(transformToField(schema, ui, parents, key))
+    }
     else if (schema.oneOf) {
+        let i = 1;
         for (const child of schema.oneOf) {
-            fields.push(transformToField(child, ui, parents, "oneOf"));
+            fields.push(transformToField(child, ui, parents, `${parents[parents.length - 1]}-${i}`));
+            i++;
         }
+    }
+        
+    else {
+        fields.push(transformToField(schema, ui, parents, 'item'))
     }
     
     return fields;
@@ -31,19 +40,26 @@ function transformToFields(schema, ui, parents) {
 
 function transformToField(property, ui, parents, key) {
     const field = {
-        id: key,
         name: key,
         label: property.title ?? key,
         description: property.description
     }
 
-    if (property.type === 'object' || property.properties)
+    if (property.properties) {
+        field.type = "object";
         field.items = transformToFields(property, ui, [...parents, key]);
-    else if (property.type === 'array')
+    }
+    else if (property.items) {
+        field.type = "array";
         field.items = transformToFields(property.items, ui, [...parents, key]);
-    else
+    }
+    else if (property.oneOf) {
+        field.type = "one-of";
+        field.items = transformToFields(property, ui, [...parents, key]);
+    }
+    else {
         field.value = transformToFieldValue(property);
-    
+    }
     
     return field;
 }

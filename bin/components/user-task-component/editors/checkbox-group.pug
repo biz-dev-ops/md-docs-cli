@@ -1,4 +1,7 @@
-each option in item.editor.options
-  div(class='form-check')
-    input(type='checkbox' name=option.name id=option.id value=option.value)
-    label(for=option.id)=option.name
+label(for=item.id class={required: item.required})=item.label
+div(class='input-group')   
+
+  each option in item.editor.options
+    div(class='form-check')
+      input(type='checkbox' name=option.name id=option.id value=option.value)
+      label(for=option.id)=option.name

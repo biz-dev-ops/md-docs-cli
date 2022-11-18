@@ -1,0 +1,159 @@
+user-task:
+  name: Test
+  schema:
+    properties:
+      user_task_id:
+        type: string
+        format: uuid
+        example: 087c424e-dca7-434e-a9d9-b7ac4eb602b2
+      text:
+        type: string
+        format: markdown
+        example: This is an example text.
+      array_example:
+        title: array example
+        items:
+          title: text
+          type: string
+          example: This is an example text.
+      array_object_example:
+        title: object array example
+        items:
+          title: object
+          oneOf:
+            - title: type a
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type a text.
+            - title: type b
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type b text.
+            - title: type c
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type c text.
+      one_of_example:
+        title: one of example
+        oneOf:
+          - title: type a
+            properties:
+              text:
+                type: string
+                format: markdown
+                example: This is an example type a text.
+          - title: type b
+            properties:
+              text:
+                type: string
+                format: markdown
+                example: This is an example type b text.
+          - title: type c
+            properties:
+              text:
+                type: string
+                format: markdown
+                example: This is an example type c text.
+  ui:
+    hidden:
+      - user_task_id
+actions:
+  approve:
+    name: Approve
+    schema: 
+      properties:
+        text:
+          type: string
+          format: markdown
+          example: This is an example approve text.
+        array_example:
+          title: array example
+          items:
+            title: text
+            type: string
+            example: This is an example text.
+        array_object_example:
+          title: object array example
+          items:
+            title: object
+            oneOf:
+              - title: type a
+                properties:
+                  text:
+                    type: string
+                    format: markdown
+                    example: This is an example type a text.
+              - title: type b
+                properties:
+                  text:
+                    type: string
+                    format: markdown
+                    example: This is an example type b text.
+              - title: type c
+                properties:
+                  text:
+                    type: string
+                    format: markdown
+                    example: This is an example type c text.
+        one_of_example:
+          title: one of example
+          oneOf:
+            - title: type a
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type a text.
+            - title: type b
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type b text.
+            - title: type c
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type c text.
+  reject:
+    name: Reject
+    schema: 
+      properties:
+        text:
+          type: string
+          format: markdown
+          example: This is an example reject text.
+        array_example:
+          title: array example
+          items:
+            title: text
+            type: string
+            example: This is an example text.
+        one_of_example:
+          title: one of example
+          oneOf:
+            - title: type a
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type d text.
+            - title: type b
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type e text.
+            - title: type c
+              properties:
+                text:
+                  type: string
+                  format: markdown
+                  example: This is an example type f text.
