@@ -5,8 +5,9 @@ const colors = require('colors');
 const buildInProviders = ['aad', 'github', 'twitter'];
 
 module.exports = class AzureStaticWebApp {
-    constructor({ options }) {
+    constructor({ options, gitInfo }) {
         this.options = options;
+        this.gitInfo = gitInfo;
     }
 
     async apply() {
@@ -14,6 +15,7 @@ module.exports = class AzureStaticWebApp {
         if (!hosting || hosting.type !== 'azure-static-web-app')
             return;
 
+        const mainBranch = this.gitInfo.branches.find(b => b.mainBranch).name;
         
         console.info();
         console.info(colors.yellow(`hosting ${hosting.type} found.`));
@@ -22,7 +24,7 @@ module.exports = class AzureStaticWebApp {
             routes: [],
             responseOverrides: {
                 404: {
-                    rewrite: '/404.html',
+                    rewrite: `/${mainBranch}/404.html`,
                     headers: {
                         "Cache-Control": "no-store"
                     }
@@ -95,7 +97,7 @@ module.exports = class AzureStaticWebApp {
 
                 config.routes.unshift({
                     route: hosting.responseOverrides[401],
-                    rewrite: '/401.html',
+                    rewrite: `/${mainBranch}/401.html`,
                     allowedRoles: ['anonymous'],
                     headers: {
                         "Cache-Control": "no-store"
@@ -108,7 +110,7 @@ module.exports = class AzureStaticWebApp {
 
                 config.routes.unshift({
                     route: hosting.responseOverrides[403],
-                    rewrite: '/403.html',
+                    rewrite: `/${mainBranch}/403.html`,
                     allowedRoles: ['authenticated'],
                     headers: {
                         "Cache-Control": "no-store"
@@ -125,7 +127,7 @@ module.exports = class AzureStaticWebApp {
             }
         }
 
-        await fs.writeFile(path.resolve(this.options.dst, 'staticwebapp.config.json'), JSON.stringify(config));
+        await fs.writeFile(path.resolve(this.options.basePath, 'staticwebapp.config.json'), JSON.stringify(config));
     }
 
     rewrite(url) {
