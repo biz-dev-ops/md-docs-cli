@@ -89,7 +89,7 @@
   --button-text-color: var(--text-color-heading, var(--color-black));
   --button-text-color-active: var(--button-text-color);
   --button-background-base: var(--color-brand-a20);
-  --button-background-active: var(--color-black-a20);
+  --button-background-active: var(--color-brand-a40);
 
   /* Shadow */
   --drop-shadow-base: 0 .125rem 1.25rem rgba(0, 0, 0, .05);
@@ -119,6 +119,7 @@
 
   /* Radii */
   --radius-base: .75rem;
+  --radius-pill: 99rem;
 
   /* Page */
   --page-surface: var(--color-brand-base, var(--color-black-a80));

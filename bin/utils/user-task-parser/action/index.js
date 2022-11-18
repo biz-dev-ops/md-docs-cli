@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 exports.parse = function (actions) {
     if (actions == undefined)
         return null;
-    
+
     const id = uuidv4();
     
     return Object.entries(actions)
@@ -21,7 +21,7 @@ function transformToAction(id, key, action) {
 function transformToFormFields(id, schema, ui, parents) {
     if (schema.properties) {
         return Object.entries(schema.properties)
-            .filter(kvp => !hide(parents, kvp[0], ui?.hidden))
+            .filter(kvp => !containsKey(parents, kvp[0], ui?.hidden))
             .map(kvp => {
                 const key = kvp[0];
                 const property = kvp[1];
@@ -47,7 +47,7 @@ function transformToFormField(id, property, ui, parents, key, required) {
     const field = {
         id: `${id}-${key}`,
         name: key,
-        label: property.title ?? key,
+        label: containsKey(parents, key, ui?.use_description_as_label) ? property.description : (property.title ?? key),
         description: property.description,
         required: required,
         value: property.example
@@ -153,13 +153,13 @@ function transformToEditor(property, editor) {
     }
 }
 
-function hide(parents, key, hidden) {
-    if (hidden == undefined)
+function containsKey(parents, key, collection) {
+    if (collection == undefined)
         return false;
 
     const id = `${[...parents, key].join(".")}`;
 
-    return hidden.includes(id);
+    return collection.includes(id);
 }
 
 function getEditor(parents, key, editors) {
