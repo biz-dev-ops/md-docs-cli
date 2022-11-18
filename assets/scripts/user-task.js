@@ -1,7 +1,7 @@
 (() => {
   document.querySelectorAll('.ui').forEach((userTask) => {
     const initActionList = (actionList) => {
-      const actionCards = [];
+      const sections = [];
 
       const hide = (el) => {
         el.setAttribute('hidden', 'hidden');
@@ -12,33 +12,33 @@
       }
 
       actionList.querySelectorAll('button').forEach((action) => {
-        const targetId = action.getAttribute('aria-controls');
-        const target = document.getElementById(targetId);
+        const sectionId = action.dataset.controlsForm;
+        const section = userTask.querySelector(`[data-form-id=${sectionId}]`);
 
-        actionCards.push(target);
+        sections.push(section);
 
         action.onclick = event => {
-          show(target);
+          show(section);
           hide(actionList);
         }
       })
 
-      const closeActionCard = (card) => {
+      const closeActionCard = (section) => {
         show(actionList);
-        hide(card);
+        hide(section);
       }
 
-      actionCards.forEach(card => {
-        const form = card.querySelector('form');
-        const submit = card.querySelector('[type="submit"]');
-        const cancel = card.querySelector('[data-cancel]');
+      sections.forEach(section => {
+        const form = section.querySelector('form');
+        const submit = section.querySelector('[type="submit"]');
+        const cancel = section.querySelector('[data-cancel]');
 
         submit.onclick = (event) => {
           const confirmText = submit.getAttribute("data-confirm");
 
           if (form.checkValidity()) {
             if (window.confirm(confirmText || "")) {
-              closeActionCard(card);
+              closeActionCard(section);
             }
           }
 
@@ -46,7 +46,7 @@
         }
 
         cancel.onclick = (event) => {
-          closeActionCard(card);
+          closeActionCard(section);
 
           event.preventDefault();
         }

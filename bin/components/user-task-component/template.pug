@@ -55,10 +55,10 @@ section(class='ui card' fullscreen)
     section(class='action-list')
       div(class='form-submit')
         each action in actions
-          button(aria-controls='action-' + action.id  type='button')= action.name
+          button(data-controls-form=action.name type='button')= action.name
 
     each action in actions
-      section(class='action card' id='action-' + action.id hidden='hidden')
+      section(class='action card' data-form-id=action.name hidden='hidden')
         +form(action)
   else
     +form(actions[0])
