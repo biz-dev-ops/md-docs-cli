@@ -13,11 +13,11 @@ hosting:
   routes:
     logout: 
       text: logout
-      route: /logout
+      route: /main/logout
 
   responseOverrides:
-    401: /signin
-    403: /signedin
+    401: /main/signin
+    403: /main/signedin
 page:
   googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap'
 email:  
