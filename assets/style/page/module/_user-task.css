@@ -55,21 +55,8 @@
 }
 
 .ui button {
-    background-color: var(--color-black-a10);
-    border: 0;
-    border-radius: 10em;
-    font-size: inherit;
-    padding: var(--space-xs) var(--space-md);
-    transition: background-color var(--duration-base);
-}
-
-.ui button:hover,
-.ui button:focus-visible {
-    background-color: var(--color-black-a20);
-}
-
-.ui button[type="submit"] {
-    font-weight: 600;
+    border-radius: var(--radius-pill);
+    padding-block: var(--space-xxs);
 }
 
 .ui dl dl {
