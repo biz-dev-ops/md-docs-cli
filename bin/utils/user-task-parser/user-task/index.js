@@ -13,7 +13,7 @@ function transformToFields(schema, ui, parents) {
 
     if (schema.properties) {
         for (const key in schema.properties) {
-            if (hide(parents, key, ui?.hidden)) {
+            if (containsKey(parents, key, ui?.hidden)) {
                 continue;
             }
 
@@ -41,7 +41,7 @@ function transformToFields(schema, ui, parents) {
 function transformToField(property, ui, parents, key) {
     const field = {
         name: key,
-        label: property.title ?? key,
+        label: containsKey(parents, key, ui?.use_description_as_label) ? property.description : (property.title ?? key),
         description: property.description
     }
 
@@ -71,10 +71,11 @@ function transformToFieldValue(property) {
         return property.example;
 }
 
-function hide(parents, key, hidden) {
-    if (hidden == undefined)
+function containsKey(parents, key, collection) {
+    if (collection == undefined)
         return false;
 
     const id = `${[...parents, key].join(".")}`;
-    return hidden.includes(id);
+
+    return collection.includes(id);
 }
