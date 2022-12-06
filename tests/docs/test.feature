@@ -1,12 +1,12 @@
-Feature: Guess the word
+Feature: Guess the word lorem and ipsum
 
   Background:
-    Given a global administrator named "Greg"
+    Given a global administrator named "lorem"
     And a blog named "Greg's anti-tax rants"
-    And a customer named "Dr. Bill"
-    And a blog named "Expensive Therapy" owned by "Dr. Bill"
+    And a customer named "Dr. Bill lorem"
+    And a blog named "Expensive Therapy" owned by "Dr. Bill ipsum"
 
-  Scenario: Maker starts a game
+  Scenario: Maker starts a game ipsum
     When the Maker starts a game
     Then the Maker waits for a Breaker to join
 

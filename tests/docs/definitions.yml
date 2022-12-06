@@ -1,4 +1,4 @@
-- name: Lorem
+- name: lorem
   alias:
     - ipsum
   link: https://nl.wikipedia.org/wiki/Lorem_ipsum
