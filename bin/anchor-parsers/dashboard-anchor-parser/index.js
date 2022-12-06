@@ -10,11 +10,12 @@ const specflow = require('../../utils/bdd/specflow-test-executions-parser');
 const summarizer = require('../../utils/bdd/features-summarizer');
 
 module.exports = class DasboardAnchorParser extends AnchorParser {
-  constructor({ testExecutionParser, dashboardComponent }) {
+  constructor({ testExecutionParser, dashboardComponent, definitionParser }) {
     super();
 
     this.testExecutionParser = testExecutionParser;
     this.component = dashboardComponent;
+    this.definitionParser = definitionParser;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.dashboard.yml') || anchor.href.endsWith('.dashboard.yaml'); }
@@ -46,6 +47,8 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.json`, JSON.stringify(summary));
 
     console.info(colors.green(`\t\t\t\t* rendering`));
-    return this.component.render({ summary, features });
+    const html = this.component.render({ summary, features });
+    
+    return await this.definitionParser.parse(html);
   }
 };
