@@ -16,6 +16,11 @@ user-task:
           title: text
           type: string
           example: This is an example text.
+      boolean_example:
+        title: boolean example
+        type: boolean
+        nullable: true
+        example: true
       array_object_example:
         title: object array example
         items:
@@ -67,11 +72,18 @@ actions:
   approve:
     name: Approve
     schema: 
+      required:
+        - boolean_example
       properties:
         text:
           type: string
           format: markdown
           example: This is an example approve text.
+        boolean_example:
+          title: boolean example
+          type: boolean
+          nullable: true
+          example: true
         array_example:
           title: array example
           items:
