@@ -9,11 +9,12 @@ const gherkin = require('../../utils/bdd/gherkin-parser');
 const specflow = require('../../utils/bdd/specflow-test-executions-parser');
 
 module.exports = class FeatureAnchorParser extends AnchorParser {
-  constructor({ options, testExecutionParser, featureComponent }) {
+  constructor({ options, testExecutionParser, featureComponent, definitionParser }) {
     super();
 
     this.testExecutionParser = testExecutionParser;
     this.component = featureComponent;
+    this.definitionParser = definitionParser;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.feature'); }
@@ -30,6 +31,8 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.json`, JSON.stringify(features));
 
     console.info(colors.green(`\t\t\t\t* rendering`));
-    return this.component.render({ features });
+    const html = this.component.render({ features });
+    
+    return await this.definitionParser.parse(html);
   }
 };
