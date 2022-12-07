@@ -29,7 +29,7 @@ parseFeatureReference = async function (file) {
     if (path.extname(file) === '.feature')
         return [ file ];
     
-    if (file.endsWith('.features.yml'))
+    if (file.endsWith('features.yml'))
         return await parseConfigFile(file);
 
     throw new Error(`Unsupported file type: ${file}`);        

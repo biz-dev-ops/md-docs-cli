@@ -1,6 +1,5 @@
 const fs = require('fs').promises;
 const colors = require('colors');
-const { connect } = require('http2');
 const path = require('path');
 const { env, cwd } = require('process');
 const files = require('../files');
