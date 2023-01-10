@@ -45,7 +45,7 @@ This script copies every file and directory from the **docs** directory into the
 
 All links are relative so you do not need a webserver.
 
-![Class diagram](https://docs.synion.nl/products/md-docs-cli/class-diagram.puml.svg)
+![Class diagram](https://raw.githubusercontent.com/synionnl/md-docs-cli/main/class-diagram.puml.svg)
 
 ## Architecture
 
