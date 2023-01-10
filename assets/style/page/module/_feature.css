@@ -26,6 +26,11 @@ details.feature li {
     margin-bottom: var(--space-xxs);
 }
 
+/* Details: step */
+details.step table {
+    padding: var(--space-xxs);
+}
+
 /* Status */
 .status {
     padding: var(--space-xxs);

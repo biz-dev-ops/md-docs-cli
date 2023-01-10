@@ -1,6 +1,13 @@
 mixin summary(item)
   summary
     span(class='status status-'+ item.result.status)=item.name
+
+mixin step(step)
+  li(class='step ' + step.type)
+    span(class='status status-bg status-' + step.result.status) 
+      span(class='keyword')=step.keyword
+      span=' '
+      span=step.text
       
 mixin scenarios(scenarios)  
     each scenario in scenarios    
@@ -11,12 +18,18 @@ mixin scenarios(scenarios)
           else       
             ul(class='steps')              
               each step in scenario.steps 
-                li(class='step ' + step.type)
-                  span(class='status status-bg status-' + step.result.status) 
-                    span(class='keyword')= step.keyword
-                    span=' '
-                    span= step.text
-
+                if step.dataTable
+                  details(class='step')
+                    summary=''
+                      +step(step)
+                    table
+                      each row in step.dataTable
+                        tr 
+                          each cell in row
+                            td=cell
+                else
+                  +step(step)
+                      
 div(class='feature-list')
   each feature in features
     details(class='feature')
