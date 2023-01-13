@@ -1,4 +1,4 @@
-div(id=id class='bpmn' fullscreen)
+div(id=id class='bpmn' data-fullscreen)
 
 script.
   window.addEventListener('load', function() {
@@ -8,6 +8,8 @@ script.
     });
     const bpmnCanvas = bpmnViewer.get('canvas');
     const bpmnContainer = document.getElementById('#{id}');
+    const fullscreenContainer = bpmnContainer.closest('[data-fullscreen]');
+    console.log(fullscreenContainer);
     const zoomButtons = bpmnContainer.parentElement.querySelectorAll('footer [data-figure-zoom]');
 
     const drawCanvas = () => {
@@ -40,6 +42,14 @@ script.
     drawCanvas();
 
     window.addEventListener('resize', () => {
+      drawCanvas();
+    });
+
+    fullscreenContainer.addEventListener('openfullscreen', () => {
+      drawCanvas();
+    });
+
+    fullscreenContainer.addEventListener('closefullscreen', () => {
       drawCanvas();
     });
 

@@ -6,10 +6,6 @@
     padding: 1px;
 }
 
-[data-fullscreen]:not(:last-child) {
-    margin-bottom: var(--space-md);
-}
-
 [data-fullscreen] [data-toggle="fullscreen"] {
     --icon-padding: calc(var(--space-sm) + var(--space-xxs));
 
@@ -147,15 +143,21 @@
     padding: var(--space-md);
 }
 
-[data-fullscreen] .bpmn > * {
-    /* Uitgezet door Arjan i.v.m. verkeerde grote van de bbox */
-    /* margin: var(--space-md); */
-}
 
 [data-fullscreen="true"] iframe:where(.openapi, .asyncapi, .message, .email),
 [data-fullscreen="true"] figure,
 [data-fullscreen="true"] .bpmn {
     box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+[data-fullscreen="true"] figure,
+[data-fullscreen="true"] figure svg,
+[data-fullscreen="true"] figure embed {
+    height: 100%;
+    width: 100%;
+    cursor: move;
 }
 
 [data-fullscreen="true"] iframe.openapi,
@@ -169,4 +171,44 @@
 
 [data-fullscreen="true"] .bpmn + footer [data-toggle="fullscreen"] {
     display: none;
+}
+
+
+
+
+.figure-zoom {
+    border-radius: var(--radius-base);
+    box-shadow: var(--drop-shadow-base);
+    display: none;
+    flex-direction: column;
+}
+
+.figure-zoom [data-figure-zoom] {
+    font-size: var(--heading-2-size);
+    text-align: center;
+    width: var(--space-lg);
+    height: var(--space-lg);
+    line-height: 1;
+    transition: background-color var(--duration-base), color var(--duration-base);
+}
+
+.figure-zoom [data-figure-zoom]:first-child {
+    border-radius: var(--radius-base) var(--radius-base) 0 0;
+}
+
+.figure-zoom [data-figure-zoom]:last-child {
+    border-radius: 0 0 var(--radius-base) var(--radius-base);
+}
+
+.figure-zoom [data-figure-zoom]:hover,
+.figure-zoom [data-figure-zoom]:focus {
+    background-color: var(--color-black-a20);
+}
+
+[data-fullscreen="false"] .bpmn > .bjs-container {
+    pointer-events: none;
+}
+
+[data-fullscreen="true"] .bpmn + footer .figure-zoom {
+    display: flex;
 }
