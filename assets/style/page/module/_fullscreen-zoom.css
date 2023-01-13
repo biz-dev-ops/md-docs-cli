@@ -1,0 +1,34 @@
+/* Module: Fullscreen zoom */
+.figure-zoom {
+    border-radius: var(--radius-base);
+    box-shadow: var(--drop-shadow-base);
+    display: none;
+    flex-direction: column;
+}
+
+.figure-zoom [data-figure-zoom] {
+    border-radius: 0;
+    font-size: var(--heading-2-size);
+    text-align: center;
+    width: var(--space-lg);
+    height: var(--space-lg);
+    line-height: 1;
+    padding: 0;
+    transition: background-color var(--duration-base), color var(--duration-base);
+}
+
+.figure-zoom [data-figure-zoom]:first-child {
+    border-radius: var(--radius-base) var(--radius-base) 0 0;
+}
+
+.figure-zoom [data-figure-zoom]:last-child {
+    border-radius: 0 0 var(--radius-base) var(--radius-base);
+}
+
+[data-fullscreen="false"][data-fullscreen-zoom] > *:not(header, footer) {
+    pointer-events: none;
+}
+
+[data-fullscreen="true"][data-fullscreen-zoom] .figure-zoom {
+    display: flex;
+}

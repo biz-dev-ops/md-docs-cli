@@ -9,8 +9,7 @@ script.
     const bpmnCanvas = bpmnViewer.get('canvas');
     const bpmnContainer = document.getElementById('#{id}');
     const fullscreenContainer = bpmnContainer.closest('[data-fullscreen]');
-    console.log(fullscreenContainer);
-    const zoomButtons = bpmnContainer.parentElement.querySelectorAll('footer [data-figure-zoom]');
+    const zoomButtons = fullscreenContainer.querySelectorAll('[data-figure-zoom]');
 
     const drawCanvas = () => {
       bpmnViewer.importXML(xml)
@@ -40,6 +39,8 @@ script.
     }
 
     drawCanvas();
+
+    fullscreenContainer.setAttribute('data-fullscreen-zoom', true);
 
     window.addEventListener('resize', () => {
       drawCanvas();

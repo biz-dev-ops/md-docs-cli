@@ -12,10 +12,8 @@
 
                 if (!show) {
                     container.dispatchEvent(new Event('openfullscreen'));
-                    console.log('dispatchEvent', 'openfullscreen');
                 } else {
                     container.dispatchEvent(new Event('closefullscreen'));
-                    console.log('dispatchEvent', 'closefullscreen');
                 }
 
                 window.dispatchEvent(new Event('resize'));

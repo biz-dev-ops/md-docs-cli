@@ -1,13 +1,2 @@
-figure(id=id class=align data-fullscreen)
+figure(class=align data-fullscreen)
   | !{html}
-
-script.
-  window.addEventListener('load', function() {
-    const svgPanZoomElements = document.querySelectorAll('[data-fullscreen] figure svg, [data-fullscreen] figure embed');
-    svgPanZoomElements.forEach(el => {
-      el.addEventListener('load', function(event) {
-        console.log(event.target);
-        svgPanZoom(event.target);
-      })
-    })
-  });
