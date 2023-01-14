@@ -44,6 +44,7 @@ jobs:
           for B in $(echo $BRANCHES | jq -r 'sort_by(.path) | .[].name')
           do
               git checkout "$B"
+              npm ci
               node ../bin/index.js
           done
         env:

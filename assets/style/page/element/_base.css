@@ -392,12 +392,13 @@ main > aside .table-of-contents > * {
 .figure-zoom [data-figure-zoom] {
     background-color: var(--color-black-a10);
     border: none;
+    border-radius: 0;
     font-size: var(--heading-2-size);
     text-align: center;
     width: var(--space-lg);
     height: var(--space-lg);
     line-height: 1;
-    padding: var(--space-sm);
+    padding: 0;
     transition: background-color var(--duration-base), color var(--duration-base);
 }
 
