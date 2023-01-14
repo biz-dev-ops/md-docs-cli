@@ -68,17 +68,18 @@ function transformToFormField(id, property, ui, parents, key, required) {
         };
     }
     else
-        field.editor = transformToEditor(property, getEditor(parents, key, ui?.editors));
+        field.editor = transformToEditor(id, property, getEditor(parents, key, ui?.editors));
 
     return field;
 }
 
-function transformToEditor(property, editor) {
+function transformToEditor(id, property, editor) {
     switch (editor) {
         case "EnumCheckbox":
             return {
                 type: "checkbox-group",
                 options: property.enum.map(o => ({
+                    id: `${id}-${o}`,
                     name: o,
                     value: o
                 }))
@@ -86,10 +87,22 @@ function transformToEditor(property, editor) {
     }
     
     if (property.type === "boolean") {
-        return {
-            type: "input",
-            inputType: 'checkbox'
-        };
+        if(property.nullable) {
+            return {
+                type: "radio-group",
+                options: [ "true", "false" ].map(o => ({
+                    id: `${id}-${o}`,
+                    name: o,
+                    value: o
+                }))
+            }
+        }
+        else {
+            return {
+                type: "input",
+                inputType: 'checkbox'
+            };
+        }
     }
 
     if (property.type === "number" || property.type === "integer") {

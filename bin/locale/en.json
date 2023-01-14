@@ -2,11 +2,15 @@
     "attachments": "Attachments",
     "cancel": "Cancel",
     "context": "Context",
+    "false": "No",
     "from": "From",
     "menu": "Menu",
+    "no": "No",
     "on_this_page": "On this page:",
     "subject": "Subject",
     "submit": "Submit",
     "to": "To",
-    "view_source_file": "View source file"
+    "true": "Yes",
+    "view_source_file": "View source file",
+    "yes": "Yes"
 }

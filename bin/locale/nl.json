@@ -2,11 +2,15 @@
     "attachments": "Bijlagen",
     "cancel": "Annuleren",
     "context": "Context",
+    "false": "Nee",
     "from": "Van",
     "menu": "Andere pagina's:",
+    "no": "Nee",
     "on_this_page": "Op deze pagina:",
     "subject": "Onderwerp",
     "submit": "Versturen",
+    "true": "Ja",
     "to": "Aan",
-    "view_source_file": "Bron bestand bekijken"
+    "view_source_file": "Bron bestand bekijken",
+    "yes": "Ja"
 }

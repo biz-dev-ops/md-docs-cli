@@ -81,8 +81,17 @@ function mapStep(pickle, step, index) {
         type: step.keyword.trim().toLowerCase(),
         keyword: step.keyword.trim(),
         text: pickleStep.text,
-        template: step.text
+        template: step.text,
+        dataTable: getDataTable(pickleStep)
     };
+}
+
+function getDataTable(step) {
+    const dataTable = step?.argument?.dataTable;
+    if(dataTable == undefined)
+        return null;
+
+    return dataTable.rows.map(row => row.cells.map(c => c.value));
 }
 
 function getArguments(scenario, index) {

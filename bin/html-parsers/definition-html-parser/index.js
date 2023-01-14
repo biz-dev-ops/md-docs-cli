@@ -10,15 +10,13 @@ module.exports = class DefinitionHtmlParser extends HtmlParser {
 
     async parse(element) {
         const elements = element
-                .querySelector('article')
-                ?.querySelectorAll('p,li,td,th');
+            .querySelectorAll('p,li,td,th,span');
 
         if (elements === undefined || elements.length === 0) {
-            console.info(colors.green(`\t* html contains no paragraphs`));
             return;
         }
 
-        console.info(colors.green(`\t* parsing ${elements.length} paragraph elements:`));
+        console.info(colors.green(`\t* parsing ${elements.length} elements:`));
 
         for (const element of elements) {
             element.innerHTML = await this.definitionParser.parse(element.innerHTML);

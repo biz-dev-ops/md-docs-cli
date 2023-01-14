@@ -1,6 +1,6 @@
 {
   "name": "@synion/md-docs",
-  "version": "1.0.49",
+  "version": "1.0.51",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -36,13 +36,13 @@
     "@asyncapi/html-template": "^0.28.0",
     "@cucumber/gherkin-streams": "^5.0.0",
     "awilix": "^8.0.0",
-    "bpmn-js": "^10.0.0",
+    "bpmn-js": "^11.0.0",
     "colors": "^1.4.0",
     "figlet": "^1.5.2",
     "iframe-resizer": "^4.3.2",
     "import-resolve": "^0.5.1",
     "js-yaml": "^4.1.0",
-    "jsdom": "^20.0.0",
+    "jsdom": "^21.0.0",
     "json-schema-merge-allof": "^0.8.1",
     "markdown-it": "^13.0.1",
     "markdown-it-abbr": "^1.0.4",
