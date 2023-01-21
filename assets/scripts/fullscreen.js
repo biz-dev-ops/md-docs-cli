@@ -15,8 +15,6 @@
                 } else {
                     container.dispatchEvent(new Event('closefullscreen'));
                 }
-
-                window.dispatchEvent(new Event('resize'));
             };
         })
     });
