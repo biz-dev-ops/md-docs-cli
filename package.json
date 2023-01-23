@@ -32,7 +32,7 @@
     "bin/"
   ],
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^9.0.9",
+    "@apidevtools/json-schema-ref-parser": "^10.0.0",
     "@asyncapi/html-template": "^0.28.0",
     "@cucumber/gherkin-streams": "^5.0.0",
     "awilix": "^8.0.0",
