@@ -128,8 +128,7 @@
     box-shadow: 0 0 0 var(--line-base) var(--color-brand-a20);
 }
 
-[data-fullscreen] figure,
-[data-fullscreen] embed {
+[data-fullscreen] figure {
     padding: var(--space-md);
 }
 

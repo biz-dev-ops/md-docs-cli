@@ -42,16 +42,14 @@ script.
 
     fullscreenContainer.setAttribute('data-fullscreen-zoom', true);
 
-    window.addEventListener('resize', () => {
-      drawCanvas();
-    });
-
     fullscreenContainer.addEventListener('openfullscreen', () => {
-      drawCanvas();
+      bpmnCanvas.zoom('fit-viewport', 'auto');
+      bpmnCanvas.zoom('fit-viewport', 'auto');
     });
 
     fullscreenContainer.addEventListener('closefullscreen', () => {
-      drawCanvas();
+      bpmnCanvas.zoom('fit-viewport', 'auto');
+      bpmnCanvas.zoom('fit-viewport', 'auto');
     });
 
     zoomButtons.forEach(button => {
