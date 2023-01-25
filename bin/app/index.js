@@ -51,6 +51,7 @@ const AnchorHtmlParser = require('../html-parsers/anchor-html-parser');
 const CleanUpHtmlParser = require('../html-parsers/clean-up-html-parser');
 const DefinitionHtmlParser = require('../html-parsers/definition-html-parser');
 const ImageHtmlParser = require('../html-parsers/image-html-parser');
+const ImageSVGHtmlParser = require('../html-parsers/image-svg-html-parser');
 const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
@@ -65,6 +66,7 @@ const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
 const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
+const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
 const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
 
@@ -199,6 +201,8 @@ module.exports = class App {
 
             { src: path.resolve(options.nodeModules, 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
 
+            { src: path.resolve(options.nodeModules, 'svg-pan-zoom/dist/svg-pan-zoom.min.js'), dst: path.resolve(options.dst, 'assets/svg-pan-zoom-dist') },
+
             { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
             { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
             { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/js/asyncapi-ui.min.js'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
@@ -262,6 +266,7 @@ module.exports = class App {
             'fullscreenHtmlParser': asClass(FullscreenHtmlParser).singleton(),
             'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
             'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
+            'imageSVGHtmlParser': asClass(ImageSVGHtmlParser).singleton(),
             'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
@@ -275,6 +280,7 @@ module.exports = class App {
             'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
+            'svgAnchorParser': asClass(SvgAnchorParser).singleton(),
             'urlRewriteAnchorParser': asClass(UrlRewriteAnchorParser).singleton(),
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
 
@@ -308,6 +314,7 @@ module.exports = class App {
 
             //Html parsers, order is important!
             'htmlParsers': [
+                'imageSVGHtmlParser',
                 'headingHtmlParser',
                 'definitionHtmlParser',
                 'anchorHtmlParser',
@@ -330,7 +337,8 @@ module.exports = class App {
                 'iframeAnchorParser',
                 'openapiAnchorParser',
                 'userTaskAnchorParser',
-                'imageAnchorParser'
+                'imageAnchorParser',
+                'svgAnchorParser'
             ]
         };
     }

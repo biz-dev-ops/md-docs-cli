@@ -1,4 +1,4 @@
-/* Module: Zoom */
+/* Module: Fullscreen */
 [data-fullscreen] {
     position: relative;
     overflow: hidden;
@@ -6,14 +6,9 @@
     padding: 1px;
 }
 
-[data-fullscreen]:not(:last-child) {
-    margin-bottom: var(--space-md);
-}
-
 [data-fullscreen] [data-toggle="fullscreen"] {
     --icon-padding: calc(var(--space-sm) + var(--space-xxs));
 
-    background-color: var(--color-black-a10);
     box-shadow: var(--drop-shadow-base);
     color: currentColor;
     border: 0;
@@ -33,15 +28,6 @@
 [data-fullscreen] [data-toggle="fullscreen"]:focus,
 [data-fullscreen]:hover [data-toggle="fullscreen"] {
     transform: none;
-}
-
-[data-fullscreen] [data-toggle="fullscreen"]:hover,
-[data-fullscreen] [data-toggle="fullscreen"]:focus {
-    background-color: var(--color-black-a20);
-}
-
-[data-fullscreen] [data-toggle="fullscreen"]:active {
-    background-color: transparent;
 }
 
 [data-fullscreen] [data-toggle="fullscreen"] .label {
@@ -125,11 +111,13 @@
     text-align: center;
 }
 
-[data-fullscreen] figure svg {
-    height: auto !important; /* TODO: Maak PlantUML specifiek */
+[data-fullscreen="false"] figure svg,
+[data-fullscreen="false"] figure embed {
+    height: auto !important;
 }
 
-[data-fullscreen="true"] svg {
+[data-fullscreen="true"] svg,
+[data-fullscreen="true"] embed {
     max-width: none;
 }
 
@@ -144,15 +132,28 @@
     padding: var(--space-md);
 }
 
-[data-fullscreen] .bpmn > * {
-    /* Uitgezet door Arjan i.v.m. verkeerde grote van de bbox */
-    /* margin: var(--space-md); */
-}
 
 [data-fullscreen="true"] iframe:where(.openapi, .asyncapi, .message, .email),
 [data-fullscreen="true"] figure,
 [data-fullscreen="true"] .bpmn {
     box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+[data-fullscreen="true"] figure,
+[data-fullscreen="true"] figure svg,
+[data-fullscreen="true"] figure embed {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+}
+
+[data-fullscreen="true"] figure svg,
+[data-fullscreen="true"] figure embed,
+[data-fullscreen="true"] figure svg *,
+[data-fullscreen="true"] figure embed * {
+    cursor: move;
 }
 
 [data-fullscreen="true"] iframe.openapi,
@@ -164,6 +165,10 @@
     height: 100vh !important;
 }
 
-[data-fullscreen="true"] .bpmn + footer [data-toggle="fullscreen"] {
+[data-fullscreen="true"] [data-toggle="fullscreen"] {
+    transform: none;
+}
+
+[data-fullscreen="true"] footer [data-toggle="fullscreen"] {
     display: none;
 }

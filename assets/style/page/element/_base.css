@@ -378,47 +378,6 @@ main > aside .table-of-contents > * {
     cursor: move;
 }
 
-[data-fullscreen="false"] .bpmn > .bjs-container {
-    pointer-events: none;
-}
-
-.figure-zoom {
-    border-radius: var(--radius-base);
-    box-shadow: var(--drop-shadow-base);
-    display: none;
-    flex-direction: column;
-}
-
-.figure-zoom [data-figure-zoom] {
-    background-color: var(--color-black-a10);
-    border: none;
-    border-radius: 0;
-    font-size: var(--heading-2-size);
-    text-align: center;
-    width: var(--space-lg);
-    height: var(--space-lg);
-    line-height: 1;
-    padding: 0;
-    transition: background-color var(--duration-base), color var(--duration-base);
-}
-
-.figure-zoom [data-figure-zoom]:first-child {
-    border-radius: var(--radius-base) var(--radius-base) 0 0;
-}
-
-.figure-zoom [data-figure-zoom]:last-child {
-    border-radius: 0 0 var(--radius-base) var(--radius-base);
-}
-
-.figure-zoom [data-figure-zoom]:hover,
-.figure-zoom [data-figure-zoom]:focus {
-    background-color: var(--color-black-a20);
-}
-
-[data-fullscreen="true"] .bpmn + footer .figure-zoom {
-    display: flex;
-}
-
 .bjs-powered-by {
     display: none;
 }

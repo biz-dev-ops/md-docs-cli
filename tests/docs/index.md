@@ -26,6 +26,10 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 [features](test.features.yml)
 
+## Message
+
+[message](test.message.md)
+
 ## Openapi
 
 [openapi](test.openapi.yml)
@@ -34,9 +38,13 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 [process](process.bpmn)
 
-## Message
+## SVG (inline)
 
-[message](test.message.md)
+[Logo](assets/images/page/logo.svg)
+
+## SVG (img)
+
+![Logo](assets/images/page/logo.svg)
 
 ## Uml
 

@@ -1,6 +1,6 @@
 (() => {
     document.querySelectorAll('div[data-fullscreen]').forEach(container => {
-        const buttons = [container.querySelector(':scope > header > button'), container.querySelector(':scope > footer > button')];
+        const buttons = container.querySelectorAll('[data-toggle="fullscreen"]');
         buttons.forEach(button => {
             button.onclick = (event) => {
                 event.preventDefault();
@@ -10,7 +10,11 @@
                     button => button.setAttribute('title', show ? 'Maximize' : 'Close')
                 );
 
-                window.dispatchEvent(new Event('resize'));
+                if (!show) {
+                    container.dispatchEvent(new Event('openfullscreen'));
+                } else {
+                    container.dispatchEvent(new Event('closefullscreen'));
+                }
             };
         })
     });

@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
 const files = require('../../utils/files');
@@ -34,6 +35,9 @@ module.exports = class MarkdownFileParser {
         const markdown = await files.readFileAsString(file);
         const response = getTitle(markdown, file);
         const element = await this.renderer.render(response.markdown);
+
+        if (env.NODE_ENV === 'development')
+            await fs.writeFile(`${file}.html`, element.outerHTML);
 
         for (const parser of this.parsers) {
             await parser.parse(element, file);
