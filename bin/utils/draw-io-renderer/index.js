@@ -21,7 +21,10 @@ module.exports = class DrawIORenderer {
 
     async #renderSVG(url, data) {
         if(!this.browser)
-            this.browser = await puppeteer.launch();
+            this.browser = await puppeteer.launch({ 
+                args: ['--no-sandbox', 
+                '--disable-setuid-sandbox']
+            });
         
         const page = await this.browser.newPage();
         const json = encodeURIComponent(JSON.stringify(data));
