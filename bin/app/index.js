@@ -51,6 +51,7 @@ const AnchorHtmlParser = require('../html-parsers/anchor-html-parser');
 const CleanUpHtmlParser = require('../html-parsers/clean-up-html-parser');
 const DefinitionHtmlParser = require('../html-parsers/definition-html-parser');
 const ImageHtmlParser = require('../html-parsers/image-html-parser');
+const ImageSVGHtmlParser = require('../html-parsers/image-svg-html-parser');
 const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
@@ -265,6 +266,7 @@ module.exports = class App {
             'fullscreenHtmlParser': asClass(FullscreenHtmlParser).singleton(),
             'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
             'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
+            'imageSVGHtmlParser': asClass(ImageSVGHtmlParser).singleton(),
             'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
@@ -312,6 +314,7 @@ module.exports = class App {
 
             //Html parsers, order is important!
             'htmlParsers': [
+                'imageSVGHtmlParser',
                 'headingHtmlParser',
                 'definitionHtmlParser',
                 'anchorHtmlParser',
