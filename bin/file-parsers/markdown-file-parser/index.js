@@ -42,6 +42,9 @@ module.exports = class MarkdownFileParser {
         for (const parser of this.parsers) {
             await parser.parse(element, file);
         }
+
+        if (env.NODE_ENV === 'development')
+            await fs.writeFile(`${file}.parsed.html`, element.outerHTML);
         
         element.innerHTML = element.innerHTML.replace(orderPrefixRegex, '');
 

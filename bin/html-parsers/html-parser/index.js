@@ -16,6 +16,7 @@ module.exports = class HtmlParser {
         }
 
         parent.insertBefore(fragment, ref);
+
         element.classList.add('replaced');
     }
 }
