@@ -110,7 +110,10 @@ module.exports = class App {
                     <meta http-equiv="Refresh" content="0; URL=./main/" />
                 </head>
             </html>`);
-        }        
+        }
+        
+        console.info(colors.green('\ncreating release:'));
+        await this.#release(options);
 
         console.info(colors.brightGreen('\nready, shutting down.....'));
     }
@@ -130,8 +133,10 @@ module.exports = class App {
 
         this.container.register('gitInfo', asValue(gitInfo));        
         options.dst = path.resolve(options.dst, gitInfo.branch.path);
+        options.release = path.resolve(options.release, gitInfo.branch.path);
 
         await createDestination(options);
+        await createRelease(options);
         await createBranches(opts, gitInfo);
         await copyFiles(this._getFileTransfers(options));
 
@@ -182,6 +187,27 @@ module.exports = class App {
                 }
                 await this.#rename(dst);
             }
+        }
+    }
+
+    async #release(options, dir) {
+        const contracts = ['.bpmn', '.feature', '.openapi.yml.json'];
+        dir = dir || options.dst;
+        const entries = await fs.readdir(dir, { withFileTypes: true });
+
+        for (let entry of entries) {
+            const src = path.resolve(dir, entry.name);
+
+            if (entry.isDirectory()) {
+                await this.#release(options, src);
+            }
+
+            if(!contracts.some(c => src.endsWith(c)))
+                continue;
+                
+            console.info(colors.yellow(`\t* releasing ${path.relative(options.dst, src)}`));
+            
+            await files.copy(src, src.replace(options.dst, options.release));
         }
     }
 
@@ -364,6 +390,15 @@ async function createDestination(options) {
 
     await fs.rm(options.dst, { recursive: true, force: true });
     await fs.mkdir(options.dst, { recursive: true });
+}
+
+async function createRelease(options) {
+    console.info();
+    console.info(colors.yellow(`reading from source ${options.dst}`));
+    console.info(colors.yellow(`writing to release: ${options.release}`));
+
+    await fs.rm(options.release, { recursive: true, force: true });
+    await fs.mkdir(options.release, { recursive: true });
 }
 
 async function createBranches(options, gitInfo) {
