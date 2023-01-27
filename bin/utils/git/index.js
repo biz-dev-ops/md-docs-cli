@@ -27,7 +27,7 @@ exports.info = async function (options) {
             .filter(b =>
                 !b.includes('remotes/') &&
                 !b.includes('HEAD detached') &&
-                (options.skip == undefined || !options.skip.includes(b))
+                (options.args.skip == undefined || !options.args.skip.includes(b))
             )
             .map(b => ({
                 name: b,

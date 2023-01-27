@@ -1,6 +1,6 @@
 {
   "name": "@synion/md-docs",
-  "version": "1.0.55",
+  "version": "1.0.56",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -38,6 +38,7 @@
     "awilix": "^8.0.0",
     "bpmn-js": "^11.0.0",
     "colors": "^1.4.0",
+    "copyfiles": "^2.4.1",
     "figlet": "^1.5.2",
     "iframe-resizer": "^4.3.2",
     "import-resolve": "^0.5.1",

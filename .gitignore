@@ -112,3 +112,4 @@ dist
 # Generated files
 .generated/
 tests/dist/
+tests/release/

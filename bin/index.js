@@ -19,6 +19,7 @@ async function run(o) {
 
     options.src = path.resolve(cwd(), `docs`);
     options.dst = path.resolve(cwd(), `dist`);
+    options.release = path.resolve(cwd(), `release`);
     options.testExecutionLocation = path.resolve(cwd(), `.temp/executions`);
     options.assets = await find(__dirname, 'assets');
     options.nodeModules = await find(__dirname, 'node_modules');
@@ -46,6 +47,7 @@ const options = yargs
     .usage("Usage: -b")
     .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
     .option("s", { alias: "skip", describe: "Branches to skip", array: true, type: "string", demandOption: false })
+    .option("r", { alias: "release", describe: "Create release", type: "boolean", demandOption: false })
     .argv;
 
 async function createOptions(options) {
@@ -57,7 +59,7 @@ async function createOptions(options) {
     const json = yaml.load(content);
     
     return {
-        ...options,
+        ...{ args: options },
         ...json
     };
 }
