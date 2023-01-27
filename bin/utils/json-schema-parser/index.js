@@ -4,11 +4,16 @@ const mergeAllOf = require("json-schema-merge-allof");
 const refParser = require("@apidevtools/json-schema-ref-parser");
 
 exports.parse = async function (file) {
-    const json = mergeAllOfInSchema(await refParser.dereference(file));
+    let json = await refParser.dereference(file);
 
     if (env.NODE_ENV === 'development')
-        await fs.writeFile(`${file}.json`, JSON.stringify(json));
+        await fs.writeFile(`${file}.dereferenced.json`, JSON.stringify(json));
     
+    json = mergeAllOfInSchema(json);
+
+    if (env.NODE_ENV === 'development')
+        await fs.writeFile(`${file}.merged.json`, JSON.stringify(json));
+
     return json;
 }
 
@@ -16,7 +21,7 @@ mergeAllOfInSchema = (object) => {
     if(!!object["allOf"]){
         object = mergeAllOf(object, {
             resolvers: {
-              defaultResolver: mergeAllOf.options.resolvers.title
+                defaultResolver: mergeAllOf.options.resolvers.title
             }
           });
     }

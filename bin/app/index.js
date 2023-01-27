@@ -85,7 +85,7 @@ module.exports = class App {
 
         const options = this.container.resolve('options');
 
-        if (options.branches) {
+        if (options.args.branches) {
             console.info();
             console.info(colors.brightGreen('ready, shutting down.....'));
             return;
@@ -112,8 +112,11 @@ module.exports = class App {
             </html>`);
         }
         
-        console.info(colors.green('\ncreating release:'));
-        await this.#release(options);
+        
+        if(options.args.release) {
+            console.info(colors.green('\ncreating release:'));
+            await this.#release(options);
+        }
 
         console.info(colors.brightGreen('\nready, shutting down.....'));
     }
@@ -136,7 +139,10 @@ module.exports = class App {
         options.release = path.resolve(options.release, gitInfo.branch.path);
 
         await createDestination(options);
-        await createRelease(options);
+        
+        if(options.release)
+            await createRelease(options);
+        
         await createBranches(opts, gitInfo);
         await copyFiles(this._getFileTransfers(options));
 
