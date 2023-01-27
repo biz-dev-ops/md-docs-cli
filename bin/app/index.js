@@ -139,10 +139,7 @@ module.exports = class App {
         options.release = path.resolve(options.release, gitInfo.branch.path);
 
         await createDestination(options);
-        
-        if(options.release)
-            await createRelease(options);
-        
+        await createRelease(options);
         await createBranches(opts, gitInfo);
         await copyFiles(this._getFileTransfers(options));
 
@@ -404,7 +401,8 @@ async function createRelease(options) {
     console.info(colors.yellow(`writing to release: ${options.release}`));
 
     await fs.rm(options.release, { recursive: true, force: true });
-    await fs.mkdir(options.release, { recursive: true });
+    if(options.args.release)
+        await fs.mkdir(options.release, { recursive: true });
 }
 
 async function createBranches(options, gitInfo) {
