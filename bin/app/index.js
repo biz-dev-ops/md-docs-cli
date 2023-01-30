@@ -85,6 +85,8 @@ module.exports = class App {
 
         const options = this.container.resolve('options');
 
+        console.log(options)
+
         if (options.args.branches) {
             console.info();
             console.info(colors.brightGreen('ready, shutting down.....'));
@@ -111,7 +113,6 @@ module.exports = class App {
                 </head>
             </html>`);
         }
-        
         
         if(options.args.release) {
             console.info(colors.green('\ncreating release:'));
@@ -396,10 +397,6 @@ async function createDestination(options) {
 }
 
 async function createRelease(options) {
-    console.info();
-    console.info(colors.yellow(`reading from source ${options.dst}`));
-    console.info(colors.yellow(`writing to release: ${options.release}`));
-
     await fs.rm(options.release, { recursive: true, force: true });
     if(options.args.release)
         await fs.mkdir(options.release, { recursive: true });
@@ -409,6 +406,7 @@ async function createBranches(options, gitInfo) {
     console.info();
     console.info(colors.yellow(`creating branches.json`));
     await fs.writeFile(`${options.dst}/branches.json`, JSON.stringify(gitInfo.branches));
+    await fs.writeFile(`${options.dst}/branches.js`, `window.x_md_docs_cli_branches = ${JSON.stringify(gitInfo.branches)};`);
 }
 
 async function copyFiles(fileTransfers) {

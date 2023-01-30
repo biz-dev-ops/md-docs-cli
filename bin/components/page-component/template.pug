@@ -46,10 +46,6 @@ html
             span(class='label')= git.branch.name
 
         div(id='menu-branches' class='menu-branches' hidden='true')
-          ul
-            each branch in git.branches
-              li
-                a(href=relative.basePath + branch.path data-branch-url=relative.basePath + branch.path)= branch.name
 
         div(id='menu-main' class='menu-main')
           +menuItems(menu, false)
@@ -81,7 +77,10 @@ html
                   a(href='#' + item.id)= item.name
 
       | !{content}
+    script.
+      window.x_md_docs_cli_basePath = '!{relative.basePath}';
 
+    script(src=relative.basePath + 'branches.js' charset='UTF-8')
 
     script(src=relative.root + 'assets/iframe-resizer-dist/iframeResizer.min.js' charset='UTF-8')
     script(src=relative.root + 'assets/bpmn-js-dist/bpmn-navigated-viewer.production.min.js' charset='UTF-8')
