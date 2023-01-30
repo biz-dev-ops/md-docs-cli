@@ -85,8 +85,6 @@ module.exports = class App {
 
         const options = this.container.resolve('options');
 
-        console.log(options)
-
         if (options.args.branches) {
             console.info();
             console.info(colors.brightGreen('ready, shutting down.....'));
