@@ -1,8 +1,9 @@
 const fs = require('fs').promises;
 const path = require('path');
-const { env, cwd } = require('process');
+const { env, cwd, getgroups, features } = require('process');
 
 const { GherkinStreams } = require('@cucumber/gherkin-streams');
+const { group } = require('console');
 
 exports.parse = async (files) => {
     if (files == undefined)
@@ -13,7 +14,7 @@ exports.parse = async (files) => {
 
     const chunks = await getChunks(files);
 
-    if(env.NODE_ENV === 'development')
+    if (env.NODE_ENV === 'development')
         await fs.writeFile(path.resolve(cwd(), 'chunks.json'), JSON.stringify(chunks));
 
     return chunks
@@ -32,6 +33,8 @@ exports.parse = async (files) => {
 
             return {
                 name: feature.name,
+                title: formatName(feature.name).name,
+                group: formatName(feature.name).group,
                 scenarios: feature.children
                     .filter(child => child.scenario)
                     .map(child => child.scenario)
@@ -39,7 +42,7 @@ exports.parse = async (files) => {
                         const pickles = chunks
                             .filter(chunk => chunk.pickle?.astNodeIds.includes(scenario.id))
                             .map(chunk => chunk.pickle);
-                        
+
                         const steps = (background?.steps ?? []).concat(scenario.steps);
 
                         if (pickles.length === 0)
@@ -71,6 +74,38 @@ exports.parse = async (files) => {
         });
 }
 
+exports.group = (features) => {
+    const groups = [];
+
+    features.forEach(f => {
+        if(!f.group) {
+            groups.push(f);
+            return;
+        }
+        
+        let group = groups.find(g => g.name === f.group);
+        if(!group) {
+            group = {
+                name: f.group,
+                title: f.group,
+                features: [],
+                result: null
+            }
+            groups.push(group);
+        }
+        
+        group.features.push(f);
+        group.result = maxResult(group.result, f.result);
+    });
+
+    return groups;
+};
+
+function maxResult(result1, result2) {
+    //TODO: set max result
+    return result2;
+}
+
 function mapStep(pickle, step, index) {
     const pickleStep = pickle.steps[index];
     if (pickleStep == undefined)
@@ -88,10 +123,20 @@ function mapStep(pickle, step, index) {
 
 function getDataTable(step) {
     const dataTable = step?.argument?.dataTable;
-    if(dataTable == undefined)
+    if (dataTable == undefined)
         return null;
 
     return dataTable.rows.map(row => row.cells.map(c => c.value));
+}
+
+function formatName(name) {
+    const parts = name.split('|')
+        .map(n => n.trim());
+    
+    if (parts.length === 1)
+        return { name: name, group: null };
+    else
+        return { name: parts[1], group: parts[0] };
 }
 
 function getArguments(scenario, index) {
@@ -108,7 +153,7 @@ function getArguments(scenario, index) {
     else {
         if (example.tableBody == undefined)
             return [];
-        
+
         return example.tableBody[index].cells.map(c => c.value);
     }
 }

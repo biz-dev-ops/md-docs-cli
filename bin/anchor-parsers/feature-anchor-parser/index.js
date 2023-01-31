@@ -21,7 +21,7 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
 
   async _parse(anchor, file) {
     console.info(colors.green(`\t\t\t\t* parsing feature file`));
-    const features = await gherkin.parse(file);
+    let features = await gherkin.parse(file);
     const executions = await this.testExecutionParser.get();
     
     console.info(colors.green(`\t\t\t\t* parsing executions file`));    
@@ -29,6 +29,11 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
     
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.json`, JSON.stringify(features));
+
+    features = gherkin.group(features);
+
+    if (env.NODE_ENV === 'development')
+      await fs.writeFile(`${file}.grouped.json`, JSON.stringify(features));
 
     console.info(colors.green(`\t\t\t\t* rendering`));
     const html = this.component.render({ features });
