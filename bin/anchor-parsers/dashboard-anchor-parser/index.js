@@ -27,7 +27,7 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.files.json`, JSON.stringify(files));
 
     console.info(colors.green(`\t\t\t\t* parsing feature files`));
-    const features = await gherkin.parse(files);
+    let features = await gherkin.parse(files);
     
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.features.json`, JSON.stringify(features));
@@ -46,6 +46,11 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.json`, JSON.stringify(summary));
 
+    features = gherkin.group(features);
+
+    if (env.NODE_ENV === 'development')
+      await fs.writeFile(`${file}.grouped.json`, JSON.stringify(features));
+    
     console.info(colors.green(`\t\t\t\t* rendering`));
     const html = this.component.render({ summary, features });
     

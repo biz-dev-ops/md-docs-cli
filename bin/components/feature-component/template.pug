@@ -1,6 +1,6 @@
 mixin summary(item)
   summary
-    span(class='status status-'+ item.result.status)=item.name
+    span(class='status status-'+ item.result.status)=item.title || item.name
 
 mixin step(step)
   li(class='step ' + step.type)
@@ -10,28 +10,34 @@ mixin step(step)
       span=step.text
       
 mixin scenarios(scenarios)  
-    each scenario in scenarios    
-        details(class='scenario')
-          +summary(scenario)      
-          if scenario.scenarios
-            +scenarios(scenario.scenarios)
-          else       
-            ul(class='steps')              
-              each step in scenario.steps 
-                if step.dataTable
-                  details(class='step')
-                    summary=''
-                      +step(step)
-                    table
-                      each row in step.dataTable
-                        tr 
-                          each cell in row
-                            td=cell
-                else
-                  +step(step)
+  each scenario in scenarios    
+      details(class='scenario')
+        +summary(scenario)      
+        if scenario.scenarios
+          +scenarios(scenario.scenarios)
+        else       
+          ul(class='steps')              
+            each step in scenario.steps 
+              if step.dataTable
+                details(class='step')
+                  summary=''
+                    +step(step)
+                  table
+                    each row in step.dataTable
+                      tr 
+                        each cell in row
+                          td=cell
+              else
+                +step(step)
+
+mixin features(features)  
+  each feature in features    
+      details(class='feature')
+        +summary(feature)
+        if feature.scenarios
+          +scenarios(feature.scenarios)
+        else
+          +features(feature.features)
                       
 div(class='feature-list')
-  each feature in features
-    details(class='feature')
-      +summary (feature)
-      +scenarios(feature.scenarios)
+  +features(features)
