@@ -171,7 +171,6 @@ function containsKey(parents, key, collection) {
         return false;
 
     const id = `${[...parents, key].join(".")}`;
-
     return collection.includes(id);
 }
 
