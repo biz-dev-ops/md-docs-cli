@@ -44,6 +44,6 @@ module.exports = class UserTaskAnchorParser extends AnchorParser {
 
   async #getJson(file) {
     const json = await jsonSchemaParser.parse(file);
-    return JSON.parse(await this.definitionParser.render(JSON.stringify(json)));
+    return JSON.parse((await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n"));
   }
 };
