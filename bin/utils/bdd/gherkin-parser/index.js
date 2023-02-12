@@ -5,7 +5,7 @@ const { env, cwd } = require('process');
 
 const { GherkinStreams } = require('@cucumber/gherkin-streams');
 
-exports.parse = async (files) => {
+exports.parse = async (files, options) => {
     if (files == undefined)
         throw new Error(`files is not defined`);
 
@@ -157,32 +157,29 @@ async function getChunks(files, group) {
     const chunks = [];
 
     for (const file of files) {
-        if(typeof file === 'object') {
+        if(typeof file === 'object')
             chunks.push(...await getChunks(file.files, file.name));
-        }
-        else {
-            const chunk = await getChunk(file);
-            chunk[0].source.hash = md5(file);
-            if(group)
-                chunk[0].source.group = group;
-
-            chunks.push(...chunk);
-        }
+        else
+            chunks.push(... await getFileChunks(file, group));
     }
 
     return chunks;
 }
 
-async function getChunk(file) {
+async function getFileChunks(file, group) {
     return new Promise((resolve, reject) => {
         const stream = GherkinStreams.fromPaths([file])
         const chunks = [];
 
         stream.on("data", function (chunk) {
+            if(chunk.source) {
+                chunk.source.hash = md5(file);
+                if(group)
+                    chunk.source.group = group;
+            }
             chunks.push(chunk);
         });
 
-        // Send the buffer or you can put it into a var
         stream.on("end", function () {
             resolve(chunks);
         });

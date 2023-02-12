@@ -21,7 +21,7 @@ module.exports = class FeatureFileParser {
     async #addHash(file) {
         const feature = await files.readFileAsString(file);
         const lines = feature.split('\n');
-        const hash = md5(file);
+        const hash = md5(path.relative(this.options.dst, file));
         const index = lines.findIndex(l => l.includes(':'));
         lines[index] = `${lines[index]} (${hash})`;
         await fs.writeFile(file.replace('.feature', '.release.feature'), lines.join('\n'));
