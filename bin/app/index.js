@@ -25,6 +25,8 @@ const DefinitionStore = require('../utils/definitions/definition-store');
 
 const DrawIORenderer = require('../utils/draw-io-renderer');
 
+const GherkinParser = require('../utils/bdd/gherkin-parser');
+
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
@@ -212,7 +214,7 @@ module.exports = class App {
             
             const dst = src.replace(options.dst, options.release)
                 .replace( '.release.feature',  '.feature');
-                
+
             await files.copy(src, dst);
         }
     }
@@ -271,6 +273,9 @@ module.exports = class App {
             'relative': asClass(Relative).singleton(),
             'tocParser': asClass(TocParser).singleton(),
 
+            //BDD
+            'gherkinParser': asClass(GherkinParser).singleton(),
+            
             //DrawIO
             'graphViewerComponent': asClass(GraphViewerComponent).singleton(),
             'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
