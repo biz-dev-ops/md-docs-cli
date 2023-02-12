@@ -15,7 +15,7 @@ parseConfigFile = async function(configFile) {
     for (const ref of config.features) {
         files.push(...await parseFeatureReference(path.resolve(path.dirname(configFile), ref)));
     }
-
+    
     return files;
 }
 
@@ -29,8 +29,13 @@ parseFeatureReference = async function (file) {
     if (path.extname(file) === '.feature')
         return [ file ];
     
-    if (file.endsWith('features.yml'))
-        return await parseConfigFile(file);
+    if (file.endsWith('features.yml')) {
+        const container = path.basename(path.dirname(file));
+        return [{
+            name: container,
+            files: await parseConfigFile(file)
+        }];
+    }
 
     throw new Error(`Unsupported file type: ${file}`);        
 }

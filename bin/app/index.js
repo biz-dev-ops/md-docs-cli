@@ -193,7 +193,7 @@ module.exports = class App {
     }
 
     async #release(options, dir) {
-        const contracts = ['.bpmn', '.feature', '.openapi.yml.json'];
+        const contracts = ['.bpmn', '.release.feature', '.openapi.yml.json'];
         dir = dir || options.dst;
         const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -209,7 +209,8 @@ module.exports = class App {
                 
             console.info(colors.yellow(`\t* releasing ${path.relative(options.dst, src)}`));
             
-            await files.copy(src, src.replace(options.dst, options.release));
+            const dst = src.replace(options.dst, options.release);
+            await files.copy(src, dst);
         }
     }
 
