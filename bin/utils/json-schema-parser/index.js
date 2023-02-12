@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const { env } = require('process');;
 const mergeAllOf = require("json-schema-merge-allof");
 const refParser = require("@apidevtools/json-schema-ref-parser");
+const { parse } = require('path');
 
 exports.parse = async function (file) {
     let json = await refParser.dereference(file);
@@ -13,6 +14,19 @@ exports.parse = async function (file) {
 
     if (env.NODE_ENV === 'development')
         await fs.writeFile(`${file}.merged.json`, JSON.stringify(json));
+
+    return json;
+}
+
+exports.derefence = async function (file) {
+    return await parse(file);
+}
+
+exports.bundle = async function (file) {
+    let json = await refParser.bundle(file);
+
+    if (env.NODE_ENV === 'development')
+        await fs.writeFile(`${file}.bundled.json`, JSON.stringify(json));
 
     return json;
 }
