@@ -27,6 +27,7 @@ const DrawIORenderer = require('../utils/draw-io-renderer');
 
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
+const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
@@ -209,7 +210,9 @@ module.exports = class App {
                 
             console.info(colors.yellow(`\t* releasing ${path.relative(options.dst, src)}`));
             
-            const dst = src.replace(options.dst, options.release);
+            const dst = src.replace(options.dst, options.release)
+                .replace( '.release.feature',  '.feature');
+                
             await files.copy(src, dst);
         }
     }
@@ -283,6 +286,7 @@ module.exports = class App {
 
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
+            'featureFileParser': asClass(FeatureFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
@@ -335,6 +339,7 @@ module.exports = class App {
             //File parsers: order can be important!
             'fileParsers': [
                 'drawIOFileParser',
+                'featureFileParser',
                 'markdownFileParser',
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',
