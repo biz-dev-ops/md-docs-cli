@@ -25,8 +25,11 @@ const DefinitionStore = require('../utils/definitions/definition-store');
 
 const DrawIORenderer = require('../utils/draw-io-renderer');
 
+const GherkinParser = require('../utils/bdd/gherkin-parser');
+
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
+const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
@@ -193,7 +196,7 @@ module.exports = class App {
     }
 
     async #release(options, dir) {
-        const contracts = ['.bpmn', '.feature', '.openapi.yml.json'];
+        const contracts = ['.bpmn', '.release.feature', '.openapi.yml.json'];
         dir = dir || options.dst;
         const entries = await fs.readdir(dir, { withFileTypes: true });
 
@@ -209,7 +212,10 @@ module.exports = class App {
                 
             console.info(colors.yellow(`\t* releasing ${path.relative(options.dst, src)}`));
             
-            await files.copy(src, src.replace(options.dst, options.release));
+            const dst = src.replace(options.dst, options.release)
+                .replace( '.release.feature',  '.feature');
+
+            await files.copy(src, dst);
         }
     }
 
@@ -267,6 +273,9 @@ module.exports = class App {
             'relative': asClass(Relative).singleton(),
             'tocParser': asClass(TocParser).singleton(),
 
+            //BDD
+            'gherkinParser': asClass(GherkinParser).singleton(),
+            
             //DrawIO
             'graphViewerComponent': asClass(GraphViewerComponent).singleton(),
             'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
@@ -282,6 +291,7 @@ module.exports = class App {
 
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
+            'featureFileParser': asClass(FeatureFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
@@ -334,6 +344,7 @@ module.exports = class App {
             //File parsers: order can be important!
             'fileParsers': [
                 'drawIOFileParser',
+                'featureFileParser',
                 'markdownFileParser',
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',

@@ -1,4 +1,4 @@
-Feature: Group | Guess the word lorem and ipsum
+Feature: Guess the word lorem and ipsum
 
   Background:
     Given a global administrator named "lorem"
