@@ -50,12 +50,9 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
   }
 
   async #getJson(file) {
-    let json = await jsonSchemaParser.bundle(file);
-
+    let json = await jsonSchemaParser.parse(file);
     json = (await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n");
-    
     await fs.writeFile(`${file}.json`, json);
-    
     return JSON.parse(json);
   }
 };

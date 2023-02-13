@@ -24,7 +24,7 @@ module.exports = class TestExecutionsStore {
         this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branch.name));
         
         if (this.#data === null && !this.gitInfo.branch.mainBranch) {            
-            console.info(colors.brightYellow(`feature branch executions not found, falling back to default branch executions.`));
+            console.info(colors.yellow(`feature branch executions not found, falling back to default branch executions.`));
             this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branches.find(b => b.mainBranch === true).name));
         }
 
@@ -42,7 +42,7 @@ module.exports = class TestExecutionsStore {
 async function get(location) {
     if (!await files.exists(location)) {
         console.info();
-        console.info(colors.brightYellow(`test execution source ${location} does not exsits.`));
+        console.info(colors.yellow(`test execution source ${location} does not exsits.`));
         return null;
     }
 

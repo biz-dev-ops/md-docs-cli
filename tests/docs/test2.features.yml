@@ -1,0 +1,5 @@
+name: Custom group name
+features:
+  - test.feature
+  - test-2.feature
+  - outline.feature
