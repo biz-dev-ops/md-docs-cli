@@ -176,6 +176,20 @@ module.exports = class App {
             //Reset current working directory
             chdir(dir);
         });
+
+        const markdownFileParser =  this.container.resolve('markdownFileParser');
+
+        await files.each(options.dst, async (file) => {
+            const dir = cwd();
+
+            //Set current working directory to file path
+            chdir(path.dirname(file));
+
+            await markdownFileParser.parse(file);
+
+            //Reset current working directory
+            chdir(dir);
+        });
     }
 
     async #rename(dir) {
@@ -345,7 +359,6 @@ module.exports = class App {
             'fileParsers': [
                 'drawIOFileParser',
                 'featureFileParser',
-                'markdownFileParser',
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',
                 'umlFileParser'
