@@ -5,8 +5,9 @@ Feature: Guess the word lorem and ipsum
     And a blog named "Greg's anti-tax rants"
     And a customer named "Dr. Bill lorem"
     And a blog named "Expensive Therapy" owned by "Dr. Bill ipsum"
-
-  Scenario: Maker starts a game ipsum
+  #{{#items}}
+  
+  Scenario: Maker starts a game ipsum {{name}}
     When the Maker starts a game
     Then the Maker waits for a Breaker to join
 
@@ -19,3 +20,4 @@ Feature: Guess the word lorem and ipsum
     | start | eat | left |
     |    12 |   5 |    7 |
     |    20 |   5 |   15 |
+  #{{/items}}
