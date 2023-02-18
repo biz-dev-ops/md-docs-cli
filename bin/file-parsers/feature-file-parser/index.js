@@ -33,15 +33,16 @@ module.exports = class FeatureFileParser {
     
         const content = await files.readFileAsString(ymlFile);
         const json = yaml.load(content);
-    
-        feature = mustache.render(feature.replaceAll('#{{', '{{'), json);
+        const temmplate = feature.replaceAll('#{{', '{{');
+
+        feature = mustache.render(temmplate, json);
         return feature;
     }
 
     #addHash(feature, hash) {
         const lines = feature.split('\n');
         const index = lines.findIndex(l => l.includes(':'));
-        lines[index] = `${lines[index]} (${hash}})`;
+        lines[index] = `${lines[index]} (${hash})`;
         return lines.join('\n');
     }
 }
