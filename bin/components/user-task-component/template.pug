@@ -51,7 +51,9 @@ section(class='ui card' fullscreen)
   if(userTask)
     +userTask(userTask)
     
-  if actions.length > 1
+  if actions.length == 1
+    +form(actions[0])
+  else if actions.length > 1
     section(class='action-list')
       div(class='form-submit')
         each action in actions
@@ -60,5 +62,4 @@ section(class='ui card' fullscreen)
     each action in actions
       section(class='action card' data-form-id=action.name hidden='hidden')
         +form(action)
-  else
-    +form(actions[0])
+  
