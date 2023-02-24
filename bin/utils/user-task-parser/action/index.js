@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 
 exports.parse = function (actions) {
     if (actions == undefined)
-        return null;
+        return [];
 
     const id = uuidv4();
     
