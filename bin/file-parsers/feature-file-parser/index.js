@@ -41,7 +41,7 @@ module.exports = class FeatureFileParser {
 
     #addHash(feature, hash) {
         const lines = feature.split('\n');
-        const index = lines.findIndex(l => l.includes(':'));
+        const index = lines.findIndex(l => !l.trim().startsWith('#') && l.includes(':'));
         lines[index] = `${lines[index]} (${hash})`;
         return lines.join('\n');
     }
