@@ -113,3 +113,4 @@ dist
 .generated/
 tests/dist/
 tests/release/
+.DS_Store
