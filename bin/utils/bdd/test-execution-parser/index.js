@@ -1,16 +1,12 @@
 module.exports = class TestExecutionsParser {
     
-    //TODO: create composite parser with Specflow and Cucumber implementations.
-    constructor({ options, testExecutionStore }) {
-        this.root = options.dst;
-        this.testExecutionStore = testExecutionStore;
+    constructor({ testExecutionParsers }) {
+        this.testExecutionParsers = testExecutionParsers;
     }
 
-    async get() {
-        const executions = await this.testExecutionStore.get();
-        if (executions?.specflow == undefined)
-            return null;
-        
-        return executions.specflow.items;
+    async parse(features) {
+        for (const parser of this.testExecutionParsers) {
+            await parser.parse(features);
+        }
     }
 }

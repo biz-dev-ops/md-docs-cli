@@ -4,14 +4,28 @@ const md5 = require('md5');
 const { env, cwd } = require('process');
 
 const { GherkinStreams } = require('@cucumber/gherkin-streams');
-const { captureRejectionSymbol } = require('events');
+
+const grouper = require('../feature-group-parser');
 
 module.exports = class GherkinParser {
-    constructor({ options }) {
+    constructor({ options, testExecutionParser }) {
         this.options = options;
+        this.testExecutionParser = testExecutionParser;
     }
 
     async parse(files) {
+        const features = await this.#parseFeatures(files);
+        await this.testExecutionParser.parse(features);
+        return features;
+    }
+
+
+    async parseAndGroup(files) {
+        const features = await this.parse(files);
+        return grouper.group(features);
+    }
+
+    async #parseFeatures(files) {
         if (files == undefined)
             throw new Error(`files is not defined`);
     

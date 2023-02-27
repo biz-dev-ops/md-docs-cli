@@ -14,6 +14,8 @@ const TocParser = require('../utils/toc-parser');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
+const CucumberTestExecutionParser = require('../utils/bdd//cucumber-test-execution-parser');
+const SpecflowTestExecutionParser = require('../utils/bdd/specflow-test-execution-parser');
 const TestExecutionParser = require('../utils/bdd/test-execution-parser');
 const TestExecutionStore = require('../utils/bdd/test-execution-store');
 
@@ -154,7 +156,6 @@ module.exports = class App {
         await this.container.resolve('definitionStore').init();
         await this.container.resolve('locale').init();        
         await this.container.resolve('menu').init();
-        await this.container.resolve('testExecutionStore').init();
 
         this.#options = null;
     }
@@ -280,6 +281,12 @@ module.exports = class App {
 
             //Utils
             'testExecutionParser': asClass(TestExecutionParser).singleton(),
+            'cucumberTestExecutionParser': asClass(CucumberTestExecutionParser).singleton(),
+            'specflowTestExecutionParser': asClass(SpecflowTestExecutionParser).singleton(),
+            'testExecutionParsers': [
+                'cucumberTestExecutionParser',
+                'specflowTestExecutionParser'
+            ],
             'testExecutionStore': asClass(TestExecutionStore).singleton(),
             'menu': asClass(Menu).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
