@@ -3,4 +3,4 @@ features:
   - test.feature
   - test-2.feature
   - outline.feature
-  - randstad/assess-entrepreneurship-answers.feature
+  - private/assess-entrepreneurship-answers.feature

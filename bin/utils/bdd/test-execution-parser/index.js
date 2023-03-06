@@ -11,11 +11,11 @@ module.exports = class TestExecutionsParser {
         setDefaultValue(features);
         
         for (const feature of features) {
-            const results = await this.#getFeatureResults(feature);
+            const parsers = await this.#getFeatureResultParsers(feature);
 
             for (const outline of feature.scenarios.filter(s => s.scenarios)) {
                 for (const scenario of outline.scenarios) {
-                    results.parse(scenario);
+                    parsers.parse(scenario);
                     scenario.result = {
                         status: getAggregateResult(scenario.steps)
                     };
@@ -27,7 +27,7 @@ module.exports = class TestExecutionsParser {
             }
     
             for (const scenario of feature.scenarios.filter(s => s.steps)) {
-                results.parse(scenario);
+                parsers.parse(scenario);
                 scenario.result = {
                     status: getAggregateResult(scenario.steps)
                 };
@@ -39,13 +39,26 @@ module.exports = class TestExecutionsParser {
         }
     }
     
-    async #getFeatureResults(feature) {
-        for (const parser of this.testExecutionParsers) {
-            const results = await parser.results(feature);
-            if(results)
-                return results;
+    async #getFeatureResultParsers(feature) {
+        const parsers = [];
+
+        for (const testExecutionParser of this.testExecutionParsers) {
+            const parser = await testExecutionParser.results(feature);
+            parsers.push(parser);
         }
-        return null;
+        return new CompositeResultsParser(parsers);
+    }
+}
+
+class CompositeResultsParser {
+    constructor(parsers) {
+        this.parsers = parsers;
+    }
+
+    parse(scenario) {
+        for(const parser of this.parsers) {
+            parser.parse(scenario);
+        }
     }
 }
 

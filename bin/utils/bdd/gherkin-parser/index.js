@@ -120,7 +120,7 @@ module.exports = class GherkinParser {
             stream.on("data", function (chunk) {
                 if(chunk.source) {
                     chunk.source.hash = md5(path.relative(dst, file));
-                    
+
                     if(group)
                         chunk.source.group = group;
                 }
