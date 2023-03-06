@@ -114,3 +114,5 @@ dist
 tests/dist/
 tests/release/
 .DS_Store
+
+private/

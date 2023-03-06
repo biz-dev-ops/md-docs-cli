@@ -26,12 +26,17 @@ module.exports = class FeaturesAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.files.json`, JSON.stringify(files));
 
     console.info(colors.green(`\t\t\t\t* parsing ${files.length} features`));
-    let features = await this.gherkinParser.parseAndGroup(files);
+    const features = await this.gherkinParser.parse(files);
 
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.features.json`, JSON.stringify(features));
+    
+    const grouped = this.gherkinParser.group(features);
+
+    if (env.NODE_ENV === 'development')
+      await fs.writeFile(`${file}.grouped.json`, JSON.stringify(grouped));
 
     console.info(colors.green(`\t\t\t\t* rendering`));
-    return await this.definitionParser.parse(this.component.render({ features }));
+    return await this.definitionParser.parse(this.component.render({ features: grouped }));
   }
 };

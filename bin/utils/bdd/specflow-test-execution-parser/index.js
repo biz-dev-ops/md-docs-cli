@@ -5,8 +5,14 @@ module.exports = class SpecflowTestExecutionParser {
         this.testExecutionStore = testExecutionStore;
     }
 
-    async parse(features) {
+    async results(feature) {
         await this.#init();
+
+        return {
+            parse: (scenario) =>  {
+
+            }
+        }
     }
 
     async #init() {

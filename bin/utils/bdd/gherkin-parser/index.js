@@ -20,8 +20,7 @@ module.exports = class GherkinParser {
     }
 
 
-    async parseAndGroup(files) {
-        const features = await this.parse(files);
+    group(features) {
         return grouper.group(features);
     }
 
@@ -59,6 +58,7 @@ module.exports = class GherkinParser {
                     name: feature.name,
                     title: feature.name,
                     group: ref.group,
+                    hash: ref.hash,
                     scenarios: feature.children
                         .filter(child => child.scenario)
                         .map(child => child.scenario)
