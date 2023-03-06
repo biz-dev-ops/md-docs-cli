@@ -24,7 +24,7 @@ exports.group = (features) => {
         }
 
         group.features.push(f);
-        group.result.status = getAggregateResult([group, f]);
+        group.result.status = getAggregateResult([f]);
     });
 
     return groups;
