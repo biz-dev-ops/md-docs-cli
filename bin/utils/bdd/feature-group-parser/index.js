@@ -16,19 +16,38 @@ exports.group = (features) => {
                 name: f.group,
                 title: f.group,
                 features: [],
-                result: null
+                result: {
+                    status: 'undefined'
+                }
             }
             groups.push(group);
         }
 
         group.features.push(f);
-        group.result = maxResult(group.result, f.result);
+        group.result.status = getAggregateResult([f]);
     });
 
     return groups;
 }
 
-function maxResult(result1, result2) {
-    //TODO
-    return result2;
+getAggregateResult = function (collection) {
+    if(collection.every(child => child.result.status === 'passed'))
+        return 'passed';
+
+    if (collection.some(child => child.result.status === 'failed'))
+        return 'failed';
+
+    if (collection.some(child => child.result.status === 'other'))
+        return 'other';
+    
+    if (collection.some(child => child.result.status === 'pending'))
+        return 'other';
+    
+    if (collection.some(child => child.result.status === 'skipped'))
+        return 'other';
+    
+    if (collection.some(child => child.result.status === 'undefined'))
+        return 'undefined';
+
+    return 'other';
 }

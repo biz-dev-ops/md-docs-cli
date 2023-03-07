@@ -3,31 +3,38 @@ exports.summarize = (features) => {
         .flatMap(feature =>
             feature.scenarios
                 .flatMap(scenario => scenario.scenarios ? scenario.scenarios : [scenario])
-    );
-    
+        );
+
     const steps = scenarios
         .flatMap(scenario => scenario.steps);
-    
+
     const summary = {
         features: getStatusSummary(features),
         scenarios: getStatusSummary(scenarios),
         steps: getStatusSummary(steps)
     }
-    
+
     return summary;
 }
 
-const getStatusSummary = function(collection) {
+const getStatusSummary = function (collection) {
     const statuses = {
         total: { value: 0 },
         passed: { value: 0 },
-        failed: { value: 0 }
+        failed: { value: 0 },
+        undefined: { value: 0 }
     };
 
     if (collection == undefined)
         return statuses;
 
     for (const item of collection) {
+        if (item.result == undefined) {
+            item.result = {
+                status: "undefined"
+            };
+        }
+
         if (statuses[item.result.status] == undefined) {
             statuses[item.result.status] = { value: 0 };
         }

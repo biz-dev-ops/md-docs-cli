@@ -23,17 +23,16 @@ module.exports = class TestExecutionsStore {
         
         this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branch.name));
         
-        if (this.#data === null && !this.gitInfo.branch.mainBranch) {            
+        if (this.#data == null && !this.gitInfo.branch.mainBranch) {            
             console.info(colors.yellow(`feature branch executions not found, falling back to default branch executions.`));
             this.#data = await get(path.resolve(this.testExecutionLocation, this.gitInfo.branches.find(b => b.mainBranch === true).name));
         }
 
-        if (this.#data === null) {
-            this.#data = {};
-        }
-
         if (env.NODE_ENV === 'development')
             await fs.writeFile(path.resolve(this.root, 'test-execution.json'), JSON.stringify(this.#data));
+        
+        if(this.#data == null)
+            this.#data = [];
 
         return this.#data;
     }
@@ -46,39 +45,27 @@ async function get(location) {
         return null;
     }
 
-    const executions = {};
+    const executions = [];
 
     console.info();
     console.info(colors.yellow(`scanning ${location} for test executions:`));
 
-    const directories = await getDirectories(location);
+    const entries = await fs.readdir(location, { withFileTypes: true });
 
-    for (const directory of directories) {
-        const type = path.basename(directory);
-        executions[type] = {
-            items: []
-        };
+    for (let entry of entries) {
+        const file = path.resolve(location, entry.name);
 
-        console.debug(colors.yellow(`\t* execution type ${type} found:`));
-
-        await files.each(directory, async (file) => {
-            if (!file.endsWith('.json'))
-                return;
-        
-            console.info(colors.green(`\t\t* adding test execution ${path.relative(directory, file)}`));
+        if (entry.isDirectory()) {
+            executions.push(...await get(file));
+        }
+        else if(entry.name.endsWith('.json')){
+            console.info(colors.green(`\t\t* adding test execution ${entry.name}`));
 
             const execution = JSON.parse(await files.readFileAsString(file));
-
-            executions[type].items.push(execution);
-        });
+        
+            executions.push(execution);
+        }
     }
 
     return executions;
-}
-
-async function getDirectories(src) {
-    const entries = await fs.readdir(src, { withFileTypes: true });
-    return entries
-        .filter(entry => entry.isDirectory())
-        .map(entry => path.resolve(src, entry.name));
 }

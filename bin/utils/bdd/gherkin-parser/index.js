@@ -4,14 +4,27 @@ const md5 = require('md5');
 const { env, cwd } = require('process');
 
 const { GherkinStreams } = require('@cucumber/gherkin-streams');
-const { captureRejectionSymbol } = require('events');
+
+const grouper = require('../feature-group-parser');
 
 module.exports = class GherkinParser {
-    constructor({ options }) {
+    constructor({ options, testExecutionParser }) {
         this.options = options;
+        this.testExecutionParser = testExecutionParser;
     }
 
     async parse(files) {
+        const features = await this.#parseFeatures(files);
+        await this.testExecutionParser.parse(features);
+        return features;
+    }
+
+
+    group(features) {
+        return grouper.group(features);
+    }
+
+    async #parseFeatures(files) {
         if (files == undefined)
             throw new Error(`files is not defined`);
     
@@ -45,6 +58,7 @@ module.exports = class GherkinParser {
                     name: feature.name,
                     title: feature.name,
                     group: ref.group,
+                    hash: ref.hash,
                     scenarios: feature.children
                         .filter(child => child.scenario)
                         .map(child => child.scenario)
@@ -106,7 +120,7 @@ module.exports = class GherkinParser {
             stream.on("data", function (chunk) {
                 if(chunk.source) {
                     chunk.source.hash = md5(path.relative(dst, file));
-                    
+
                     if(group)
                         chunk.source.group = group;
                 }
