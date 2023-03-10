@@ -211,7 +211,7 @@ module.exports = class App {
     }
 
     async #release(options, dir) {
-        const contracts = ['.bpmn', '.release.feature', '.openapi.yml.json'];
+        const contracts = ['.bpmn', '.release.feature', '.openapi.yml', '.openapi.yml.json'];
         dir = dir || options.dst;
         const entries = await fs.readdir(dir, { withFileTypes: true });
 

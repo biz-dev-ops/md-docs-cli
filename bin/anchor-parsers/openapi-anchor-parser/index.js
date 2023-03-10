@@ -1,8 +1,8 @@
 const fs = require('fs').promises;
 const { cwd } = require('process');
-const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
+const YAML = require('yaml');
 
 const jsonSchemaParser = require('../../utils/json-schema-parser');
 const files = require('../../utils/files');
@@ -53,6 +53,9 @@ module.exports = class OpenapiAnchorParser extends AnchorParser {
     let json = await jsonSchemaParser.parse(file);
     json = (await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n");
     await fs.writeFile(`${file}.json`, json);
-    return JSON.parse(json);
+    const jsonO = JSON.parse(json);
+    const yml = YAML.stringify(jsonO);
+    await fs.writeFile(`${file}`, yml);
+    return jsonO
   }
 };
