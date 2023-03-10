@@ -15,6 +15,45 @@ script.
       bpmnViewer.importXML(xml)
         .then(() => {
           bpmnCanvas.zoom('fit-viewport', 'auto');
+
+          const eventBus = bpmnViewer.get('eventBus');
+          const menu = document.getElementById('menu-main');
+
+          let anchor = null;
+          let page = null;
+
+          eventBus.on('element.hover', function(e) {
+            if(!e.element?.businessObject?.name)
+              return;
+
+            const id = e.element.businessObject.name
+              .trim()
+              .toLowerCase()
+              .replaceAll(' ', '-');
+
+            anchor = document.getElementById(id);
+            page = menu.querySelector(`a[href$="${id}/index.html"]`);
+
+            if(anchor || page) {
+              e.gfx.style.cursor = 'pointer';
+            }
+          });
+
+          eventBus.on('element.out', function(e) {
+            e.gfx.style.cursor = 'auto';
+            anchor = null;
+            page = null;
+          });
+
+          eventBus.on('element.click', function(e) {
+            if(anchor) {
+              anchor.scrollIntoView();
+            }
+            
+            if(page) {
+              window.location.href = page;
+            }
+          });
         })
         .catch(error => {
           console.error('Error rendering bpmn file: #{file}', error);
