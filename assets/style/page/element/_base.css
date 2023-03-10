@@ -72,7 +72,8 @@ a:focus {
 }
 
 figure img,
-figure svg {
+figure svg,
+figure embed {
     max-width: 100%;
     height: auto;
     vertical-align: middle;
