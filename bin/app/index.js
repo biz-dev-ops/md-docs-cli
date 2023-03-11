@@ -164,14 +164,14 @@ module.exports = class App {
     async #parse(options) {
         console.info();
         console.info(colors.yellow(`parsing uml files`));
-        let promise = exec(`java -jar ${__dirname}/../../node_modules/plantuml/vendor/plantuml.jar "${options.dst}/**.puml" -tsvg -enablestats -realtimestats -progress`);
+        let promise = exec(`java -jar ${__dirname}/../plantuml.1.2023.4.jar "${options.dst}/**.puml" -tsvg -enablestats -realtimestats -progress`);
         
         promise.child.stdout.on('data', function(data) {
             console.info(colors.green(`${data.replace(/(\r\n|\n|\r)/gm, "")}`));
         });
         
         promise.child.stderr.on('data', function(data) {
-            console.info(colors.red(`${data.replace(/(\r\n|\n|\r)/gm, "")}`));
+            console.info(colors.green(`${data.replace(/(\r\n|\n|\r)/gm, "")}`));
         });
 
         await promise;
