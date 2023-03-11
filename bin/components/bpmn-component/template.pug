@@ -7,6 +7,7 @@ script.
       container: '#{'#' + id}'
     });
     const bpmnCanvas = bpmnViewer.get('canvas');
+    const zoomScroll = bpmnViewer.get('zoomScroll');
     const bpmnContainer = document.getElementById('#{id}');
     const fullscreenContainer = bpmnContainer.closest('[data-fullscreen]');
     const zoomButtons = fullscreenContainer.querySelectorAll('[data-figure-zoom]');
@@ -47,6 +48,7 @@ script.
 
           eventBus.on('element.click', function(e) {
             if(anchor) {
+              anchor.click();
               anchor.scrollIntoView();
             }
             
@@ -78,20 +80,37 @@ script.
     }
 
     drawCanvas();
+    zoomScroll.toggle();
 
     fullscreenContainer.setAttribute('data-fullscreen-zoom', true);
 
     fullscreenContainer.addEventListener('openfullscreen', () => {
       bpmnCanvas.zoom('fit-viewport', 'auto');
-      bpmnCanvas.zoom('fit-viewport', 'auto');
+      setTimeout(() => {
+        bpmnCanvas.zoom('fit-viewport', 'auto');
+      }, 1);
+      zoomScroll.toggle();
+
     });
 
     fullscreenContainer.addEventListener('closefullscreen', () => {
       bpmnCanvas.zoom('fit-viewport', 'auto');
-      bpmnCanvas.zoom('fit-viewport', 'auto');
+      setTimeout(() => {
+        bpmnCanvas.zoom('fit-viewport', 'auto');
+      }, 1);
+      zoomScroll.toggle();
     });
 
     zoomButtons.forEach(button => {
       button.addEventListener('click', handleZoom);
+    });
+
+    window.addEventListener('resize', () => {
+      if(bpmnCanvas) {
+        bpmnCanvas.zoom('fit-viewport', 'auto');
+        setTimeout(() => {
+          bpmnCanvas.zoom('fit-viewport', 'auto');
+        }, 1);
+      }
     });
   });

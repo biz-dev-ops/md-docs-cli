@@ -26,27 +26,41 @@
     fullscreenContainer.setAttribute('data-fullscreen-zoom', true);
 
     panZoomElement.addEventListener('load', function() {
-      panZoom = svgPanZoom(panZoomElement)
+      panZoom = svgPanZoom(panZoomElement, {
+        controlIconsEnabled: false
+        , zoomEnabled: false
+        , panEnabled: false
+        , fit: 1
+        , center: 1
+      });
     });
 
     window.addEventListener('resize', () => {
       if (panZoom) {
-        panZoom.updateBBox();
-        panZoom.reset();
+        panZoom.resize();
+        panZoom.fit();
+        panZoom.center();
       }
     });
 
     fullscreenContainer.addEventListener('openfullscreen', () => {
       if (panZoom) {
-        panZoom.updateBBox();
-        panZoom.reset();
+        panZoomElement.style.removeProperty('pointer-events');
+        panZoom.resize();
+        panZoom.fit();
+        panZoom.center();
+        panZoom.enablePan(); 
+        panZoom.enableZoom();
       }
     });
 
     fullscreenContainer.addEventListener('closefullscreen', () => {
       if (panZoom) {
-        panZoom.updateBBox();
-        panZoom.reset();
+        panZoom.resize();
+        panZoom.fit();
+        panZoom.center();
+        panZoom.disablePan();
+        panZoom.disableZoom();
       }
     });
 

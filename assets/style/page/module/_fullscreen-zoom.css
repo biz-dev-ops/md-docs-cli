@@ -25,10 +25,6 @@
     border-radius: 0 0 var(--radius-base) var(--radius-base);
 }
 
-[data-fullscreen="false"][data-fullscreen-zoom] > *:not(header, footer) {
-    pointer-events: none;
-}
-
 [data-fullscreen="true"][data-fullscreen-zoom] .figure-zoom {
     display: flex;
 }
