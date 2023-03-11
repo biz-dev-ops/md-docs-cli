@@ -95,8 +95,8 @@
     transform: none;
 }
 
-[data-fullscreen="true"] button::before,
-[data-fullscreen="true"] button::after {
+[data-fullscreen="false"] button::before,
+[data-fullscreen="false"] button::after {
     transform: rotate(180deg);
 }
 
