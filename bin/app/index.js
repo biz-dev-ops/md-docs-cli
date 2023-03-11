@@ -1,4 +1,6 @@
 const awilix = require('awilix');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const { asClass, asValue } = require('awilix');
 const fs = require('fs').promises;
 const path = require('path');
@@ -35,7 +37,6 @@ const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
-const UmlFileParser = require('../file-parsers/uml-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BpmnComponent = require('../components/bpmn-component');
@@ -161,6 +162,21 @@ module.exports = class App {
     }
 
     async #parse(options) {
+        console.info();
+        console.info(colors.yellow(`parsing uml files`));
+        let promise = exec(`java -jar ${__dirname}/../../node_modules/plantuml/vendor/plantuml.jar "${options.dst}/**.puml" -tsvg -enablestats -realtimestats -progress`);
+        
+        promise.child.stdout.on('data', function(data) {
+            console.info(colors.green(`${data.replace(/(\r\n|\n|\r)/gm, "")}`));
+        });
+        
+        promise.child.stderr.on('data', function(data) {
+            console.info(colors.red(`${data.replace(/(\r\n|\n|\r)/gm, "")}`));
+        });
+
+        await promise;
+        console.info(colors.green(`uml files parsed`));
+
         const fileParser = this.container.resolve('fileParser');
 
         await files.each(options.dst, async (file) => {
@@ -316,7 +332,6 @@ module.exports = class App {
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
-            'umlFileParser': asClass(UmlFileParser).singleton(),
 
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
@@ -367,8 +382,7 @@ module.exports = class App {
                 'drawIOFileParser',
                 'featureFileParser',
                 'markdownEmailFileParser',
-                'markdownMessageFileParser',
-                'umlFileParser'
+                'markdownMessageFileParser'
             ],
 
             //Html parsers, order is important!
