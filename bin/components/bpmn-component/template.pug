@@ -4,7 +4,8 @@ script.
   window.addEventListener('load', function() {
     const xml = '!{xml}';
     const bpmnViewer = new BpmnJS({
-      container: '#{'#' + id}'
+      container: '#{'#' + id}',
+      enabled: false
     });
     const bpmnCanvas = bpmnViewer.get('canvas');
     const zoomScroll = bpmnViewer.get('zoomScroll');
@@ -33,7 +34,7 @@ script.
               .replaceAll(' ', '-');
 
             anchor = document.getElementById(id);
-            page = menu.querySelector(`a[href$="${id}/index.html"]`);
+            page = menu.querySelector(`a[href$="/${id}/index.html"], a[href="${id}/index.html"]`);
 
             if(anchor || page) {
               e.gfx.style.cursor = 'pointer';
@@ -80,7 +81,6 @@ script.
     }
 
     drawCanvas();
-    zoomScroll.toggle();
 
     fullscreenContainer.setAttribute('data-fullscreen-zoom', true);
 
