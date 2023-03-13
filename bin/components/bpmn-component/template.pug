@@ -4,8 +4,7 @@ script.
   window.addEventListener('load', function() {
     const xml = '!{xml}';
     const bpmnViewer = new BpmnJS({
-      container: '#{'#' + id}',
-      enabled: false
+      container: '#{'#' + id}'
     });
     const bpmnCanvas = bpmnViewer.get('canvas');
     const zoomScroll = bpmnViewer.get('zoomScroll');
@@ -13,6 +12,8 @@ script.
     const fullscreenContainer = bpmnContainer.closest('[data-fullscreen]');
     const zoomButtons = fullscreenContainer.querySelectorAll('[data-figure-zoom]');
 
+    zoomScroll.toggle(false);
+    
     const drawCanvas = () => {
       bpmnViewer.importXML(xml)
         .then(() => {
