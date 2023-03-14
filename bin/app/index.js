@@ -20,6 +20,7 @@ const CucumberTestExecutionParser = require('../utils/bdd//cucumber-test-executi
 const SpecflowTestExecutionParser = require('../utils/bdd/specflow-test-execution-parser');
 const TestExecutionParser = require('../utils/bdd/test-execution-parser');
 const TestExecutionStore = require('../utils/bdd/test-execution-store');
+const UserTaskParser = require('../utils/user-task-parser');
 
 const CompositeHostingService = require('../hosting/composite-hosting-service');
 const AzureStaticWebApp = require('../hosting/azure-static-web-app');
@@ -304,6 +305,7 @@ module.exports = class App {
                 'specflowTestExecutionParser'
             ],
             'testExecutionStore': asClass(TestExecutionStore).singleton(),
+            'userTaskParser':  asClass(UserTaskParser).singleton(),
             'menu': asClass(Menu).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
             'locale': asClass(Locale).singleton(),

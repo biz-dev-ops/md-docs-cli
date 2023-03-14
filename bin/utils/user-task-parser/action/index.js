@@ -1,16 +1,22 @@
 const { v4: uuidv4 } = require('uuid');
+require("../../../utils/string");
 
-exports.parse = function (actions) {
+exports.parse = function (actions, convention) {
     if (actions == undefined)
         return [];
 
     const id = uuidv4();
     
     return Object.entries(actions)
-        .map(kvp => transformToAction(id, kvp[0], kvp[1]));
+        .map(kvp => transformToAction(id, kvp[0], kvp[1], convention));
 }
 
-function transformToAction(id, key, action) {
+function transformToAction(id, key, action, convention) {
+    
+    action.ui = action.ui || {};
+    action.ui.hidden =  action.ui.hidden || [];
+    action.ui.hidden = action.ui.hidden.concat(convention.ui?.hidden || []);
+
     return {
         id: `${id}-${key}`,
         name: action.name ?? key,
@@ -171,7 +177,8 @@ function containsKey(parents, key, collection) {
         return false;
 
     const id = `${[...parents, key].join(".")}`;
-    return collection.includes(id);
+
+    return collection.some(wildcard => id.wildcardTest(wildcard));
 }
 
 function getEditor(parents, key, editors) {

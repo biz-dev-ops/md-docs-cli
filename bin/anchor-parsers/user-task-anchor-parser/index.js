@@ -2,18 +2,17 @@ const fs = require('fs').promises;
 const { env } = require('process');
 const colors = require('colors');
 
-const userTaskParser = require('../../utils/user-task-parser');
 const jsonSchemaParser = require('../../utils/json-schema-parser');
 
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class UserTaskAnchorParser extends AnchorParser {
-  constructor({ userTaskComponent, definitionParser, locale }) {
+  constructor({ userTaskParser, userTaskComponent, definitionParser }) {
     super();
 
+    this.userTaskParser = userTaskParser;
     this.component = userTaskComponent;
     this.definitionParser = definitionParser;
-    this.locale = locale;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.user-task.yml') || anchor.href.endsWith('.user-task.yaml'); }
@@ -26,9 +25,7 @@ module.exports = class UserTaskAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.json`, JSON.stringify(json));
 
     console.info(colors.green(`\t\t\t\t* parsing user-task`));
-    const userTask = userTaskParser.parse(json);
-
-    userTask.locale = await this.locale.get();
+    const userTask = await this.userTaskParser.parse(json);
 
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.user-task.json`, JSON.stringify(userTask));

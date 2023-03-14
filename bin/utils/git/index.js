@@ -2,6 +2,7 @@ const colors = require('colors');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const mustache = require('mustache');
+require('../string')
 
 exports.info = async function (options) {
     console.info();
@@ -9,7 +10,6 @@ exports.info = async function (options) {
     const info = {
         type: options.git.type
     };
-
     try {
         const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
     
@@ -27,7 +27,7 @@ exports.info = async function (options) {
             .filter(b =>
                 !b.includes('remotes/') &&
                 !b.includes('HEAD detached') &&
-                (options.args.skip == undefined || !options.args.skip.includes(b))
+                (options.args.skip == undefined || !options.args.skip.some(s => b.wildcardTest(s)))
             )
             .map(b => ({
                 name: b,

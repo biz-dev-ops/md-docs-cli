@@ -1,6 +1,12 @@
-exports.parse = function (data) {
+
+
+exports.parse = function (data, convention) {
     if (data == undefined)
         return null;
+
+    data.ui = data.ui || {};
+    data.ui.hidden =  data.ui.hidden || [];
+    data.ui.hidden = data.ui.hidden.concat(convention.ui?.hidden || []);
 
     return {
         name: data.name,
@@ -77,5 +83,5 @@ function containsKey(parents, key, collection) {
 
     const id = `${[...parents, key].join(".")}`;
 
-    return collection.includes(id);
+    return collection.some(wildcard => id.wildcardTest(wildcard));
 }
