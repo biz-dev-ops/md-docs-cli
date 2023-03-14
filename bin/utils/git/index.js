@@ -38,8 +38,7 @@ exports.info = async function (options) {
             .map(b => Object.assign(b, {
                 path: createPath(b)
             }))
-            .sort((a, b) => `${a.mainBranch ? 'a' : 'x'}${a.name}`.localeCompare(`${b.mainBranch ? 'a' : 'z'}${b.name}`));
-            
+            .sort((a, b) => `${a.mainBranch ? 'a' : 'z'}${a.name}`.localeCompare(`${b.mainBranch ? 'a' : 'z'}${b.name}`));
 
         info.branch = branches.find(b => b.name === branch);
         if (!info.branch) {
