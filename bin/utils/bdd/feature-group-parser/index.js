@@ -31,8 +31,12 @@ exports.group = (features) => {
 }
 
 getAggregateResult = function (collection) {
-    if(collection.every(child => child.result.status === 'passed'))
+    if(collection.length === 0)
+        return 'undefined';
+
+    if(collection.every(child => child.result.status === 'passed')) {
         return 'passed';
+    }
 
     if (collection.some(child => child.result.status === 'failed'))
         return 'failed';

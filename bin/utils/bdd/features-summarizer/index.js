@@ -9,7 +9,7 @@ exports.summarize = (features) => {
         .flatMap(scenario => scenario.steps);
 
     const summary = {
-        features: getStatusSummary(features),
+        "use-cases": getStatusSummary(features),
         scenarios: getStatusSummary(scenarios),
         steps: getStatusSummary(steps)
     }

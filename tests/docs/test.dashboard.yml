@@ -1,4 +1,6 @@
 features:
-    - test.feature
-    - outline.feature
-    - test.features.yml
+  - test.feature
+  - outline.feature
+  - name: test features
+    features:
+      - test.features.yml

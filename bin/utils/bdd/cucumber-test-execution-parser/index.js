@@ -71,6 +71,7 @@ class CucumberTestExecutionFeatureResult {
 
         switch (stepResult.status) {
             case 'passed':
+                console.log('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss')
                 result.status = 'passed';
                 break;
             case 'failed':
