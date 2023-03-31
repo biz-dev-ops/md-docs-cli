@@ -1,0 +1,24 @@
+/* Module: Breadcrumb */
+
+.breadcrumb {
+    color: var(--color-black-a60);
+    display: flex;
+    flex-flow: row wrap;
+    font-size: var(--font-size-sm);
+    list-style: none;
+    padding-inline-start: 0;
+}
+
+.breadcrumb li:not(:last-child)::after {
+    content: '\00a0/\00a0';
+}
+
+.breadcrumb a {
+    color: currentcolor;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover,
+.breadcrumb a:focus {
+    text-decoration: underline;
+}
