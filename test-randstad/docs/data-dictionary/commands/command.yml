@@ -1,0 +1,11 @@
+type: object
+properties:
+  command_id:
+    $ref: "../types/command_id.yml"
+  correlation_id:
+    $ref: "../types/correlation_id.yml"
+  causation_id:
+    $ref: "../types/causation_id.yml"
+required:
+  - command_id
+  - correlation_id

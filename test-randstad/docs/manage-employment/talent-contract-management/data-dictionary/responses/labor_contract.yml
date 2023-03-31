@@ -1,0 +1,3 @@
+allOf:
+  - $ref: "../../../../data-dictionary/responses/response.yml"
+  - $ref: "../../../data-dictionary/models/labor_contract.yml"

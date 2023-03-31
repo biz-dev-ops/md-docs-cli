@@ -1,0 +1,12 @@
+subject: purchase order
+model:
+  supplier:
+    name: supplier.name
+    represented_by: suplier.represented_by
+    address:
+      street: supplier.address.street
+      place: supplier.address.place
+  assignment:
+   start_date: assignment.start_date
+  purchase_order:
+   rate: purchase_order.rate

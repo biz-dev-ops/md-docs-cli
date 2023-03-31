@@ -1,0 +1,17 @@
+user-task:
+  name: Submit information
+  schema:
+    $ref: "../../data-dictionary/user-tasks/submit_information.yml"
+  ui:
+    hidden:
+      - task_id
+actions:
+  submit:
+    name: Submit
+    schema: 
+      $ref: "../../data-dictionary/commands/submit_information.yml"
+    ui:
+      hidden:
+        - command_id
+        - correlation_id
+        - causation_id

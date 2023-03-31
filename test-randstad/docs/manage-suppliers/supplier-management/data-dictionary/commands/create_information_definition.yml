@@ -1,0 +1,5 @@
+allOf:
+  - $ref: "../../../../data-dictionary/commands/command.yml"
+  - $ref: "../models/information_definition.yml"
+  - type: object
+    title: create information definition

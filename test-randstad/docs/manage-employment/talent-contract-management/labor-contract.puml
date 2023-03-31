@@ -1,0 +1,10 @@
+@startuml
+
+class LaborLawAndRegulations
+class TermsOfEmployment
+class LaborContract
+
+LaborLawAndRegulations <|-- TermsOfEmployment : overwrites
+TermsOfEmployment <|-- LaborContract : overwrites
+
+@enduml

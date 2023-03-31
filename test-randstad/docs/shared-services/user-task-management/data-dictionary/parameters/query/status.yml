@@ -1,0 +1,5 @@
+in: query
+name: status
+required: false
+schema:
+  $ref: "../../types/status.yml"

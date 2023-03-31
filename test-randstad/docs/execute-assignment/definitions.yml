@@ -1,0 +1,4 @@
+# execute assignment definitions 
+- name: assignment
+  text: |
+    The actual fulfillment of the purchased hours from the talent (labor contract) or supplier (purchase order) to the sold hours of the client (sales order).

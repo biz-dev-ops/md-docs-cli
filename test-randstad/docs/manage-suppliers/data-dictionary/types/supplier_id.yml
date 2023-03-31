@@ -1,0 +1,5 @@
+type: string
+format: uuid
+title: supplier id
+description: The unique id identifing the supplier.
+example: 33055ddd-e24d-4d4e-9623-bcca33e515e6

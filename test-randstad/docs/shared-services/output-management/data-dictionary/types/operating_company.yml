@@ -1,0 +1,11 @@
+title: operating company
+properties:  
+  sender_type:    
+    type: string
+    example: operating_company
+    enum: operating_company
+  operating_company:
+    $ref: "../../../../data-dictionary/types/organization_id.yml"
+required:
+  - sender_type
+  - operating_company

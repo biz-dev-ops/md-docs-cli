@@ -1,0 +1,6 @@
+in: query
+name: year
+description: A year filter.
+required: true
+schema:
+  $ref: "../../types/year.yml"

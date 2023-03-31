@@ -1,0 +1,3 @@
+allOf:
+  - $ref: "../../../../data-dictionary/commands/command.yml"
+  - title: claim

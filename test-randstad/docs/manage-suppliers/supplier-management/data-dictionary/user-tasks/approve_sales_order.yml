@@ -1,0 +1,9 @@
+allOf:
+  - $ref: "../../../../shared-services/data-dictionary/models/user_task.yml"
+  - type: object
+    title: approve sales order
+    properties:
+      assignment:
+        $ref: "../models/assignment.yml"
+    required:
+     - assignment

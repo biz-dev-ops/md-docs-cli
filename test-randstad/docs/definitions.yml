@@ -1,0 +1,22 @@
+# Global definitions
+- name: callbacks
+  alias:
+    - callback
+  text: Asynchronous, out-of-band requests that your service will send to some other service in response to certain events.
+  link: https://swagger.io/docs/specification/callbacks/
+- name: consultant
+  text: |
+    A co-worker of a Randstad Operating Company with commercial contacts with Clients and Talents on an operational level.
+- name: randstad
+  alias:
+    - operating company
+    - operating companies
+  text: |
+    The formal legal entities of Randstad Group in the Netherlands.
+
+    These legal entities can:
+      
+    - Sell our services resulting in Commercial Agreements,
+    - Purchase the services from Talents from other Companies and Dutch ZZP-ers,
+    - Hire talents and have an Individual Labor Agreement with them.
+

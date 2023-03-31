@@ -1,0 +1,10 @@
+allOf:
+  - $ref: "../../../../data-dictionary/commands/command.yml"
+  - type: object
+    title: reject document
+    properties:
+      rejection:
+        type: string
+        format: markdown
+    required:
+     - rejection

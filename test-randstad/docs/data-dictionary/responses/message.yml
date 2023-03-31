@@ -1,0 +1,17 @@
+type: object
+properties:
+  type:
+    type: string
+    description: The type of message.
+    enum:
+      - ERROR
+      - WARN
+      - INFO
+    example: ERROR
+  message:
+    type: string
+    description: The message.
+    example: Service x could not be reached.
+required:
+  - type
+  - message

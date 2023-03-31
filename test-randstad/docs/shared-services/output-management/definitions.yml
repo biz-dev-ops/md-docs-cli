@@ -1,0 +1,13 @@
+# output management definitions
+- name: message_id
+  alias:
+    - message id
+    - message-id
+  text: A unique identifier for a digital message, most commonly a globally unique identifier used in email.
+  link: https://en.wikipedia.org/wiki/Message-ID
+- name: preheader
+  text: |
+    The term preheader describes the first text lines of an email, which are displayed in some mail clients before the subject and the actual content of the email. 
+    The preheader is primarily used on smartphones and mobile devices to give the recipient of the email a first glance at the email content and to offer them an alternative online version if the email does not display correctly on the mobile device. 
+    Against the backdrop of a Mobile First strategy, preheaders are also used to spark the interest of the recipient and increase opening rates with a call for action. 
+    Along with the email sender and subject line, the preheader is the first element mobile device users can see and interact with. 

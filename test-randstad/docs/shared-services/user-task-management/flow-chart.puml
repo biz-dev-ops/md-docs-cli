@@ -1,0 +1,51 @@
+@startuml
+autonumber
+
+actor Principal as user
+participant "my-tasks" as aggregator
+participant "my-tasks-provider" as provider
+participant "business-capability" as bc
+
+user -> aggregator : get tasks
+
+activate aggregator
+
+loop service-discovery
+    aggregator -> provider : get tasks
+    loop for-each-task
+        bc --> bc : authorize task
+    end
+    provider -> aggregator : tasks
+end
+
+aggregator --> aggregator : reduce
+
+aggregator -> user : tasks
+
+deactivate aggregator
+
+user -> aggregator : open task
+
+activate aggregator
+
+aggregator -> provider : claim task
+
+bc --> bc : authorize claim
+
+provider -> aggregator : accepted
+
+aggregator -> user : redirect
+
+deactivate aggregator
+
+activate bc
+
+user -> bc : get task
+bc -> user : task
+
+user -> bc : complete task
+bc -> user : accepted
+
+deactivate bc
+
+@enduml

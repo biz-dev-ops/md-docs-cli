@@ -1,0 +1,12 @@
+@startuml
+
+interface Benefit {
+    Money amount
+}
+
+Benefit <|.. HolidayAllowance
+Benefit <|.. YearEndBonus
+Benefit <|.. HealthInsuranceContribution
+Benefit <|.. BenefitBudget
+
+@enduml

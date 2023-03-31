@@ -1,0 +1,13 @@
+@startuml
+
+interface Leave {
+    Hour hours
+}
+
+Leave <|.. StatutaryLeave
+Leave <|.. ExtraStatutaryLeave
+Leave <|.. ClientSpecificLeave
+Leave <|.. IndividualLeave
+Leave <|.. PurchasedLeave
+
+@enduml

@@ -1,0 +1,9 @@
+allOf:
+  - $ref: "../../../../data-dictionary/commands/command.yml"
+  - type: object
+    title: renew contract
+    properties:
+      assignment:       
+        $ref: "../models/assignment.yml"
+    required:
+     - assignment

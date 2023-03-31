@@ -1,0 +1,8 @@
+type: string
+title: renumeration period
+description: A period in respect of which the talent or supplier is paid renumeration.
+example: weekly
+enum:
+  - weekly
+  - 4 weekly
+  - monthly

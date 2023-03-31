@@ -1,0 +1,27 @@
+user-task:
+  name: Sign contract
+  schema:
+    $ref: "../data-dictionary/user-tasks/sign_purchase_order.yml"
+  ui:
+    hidden:
+      - task_id
+      - process_instance_id
+actions:
+  approve:
+    name: Sign
+    schema: 
+      $ref: "../data-dictionary/commands/sign_purchase_order.yml"
+    ui:
+      hidden:
+        - command_id
+        - correlation_id
+        - causation_id
+  reject:
+    name: Reject
+    schema: 
+      $ref: "../data-dictionary/commands/reject_purchase_order.yml"
+    ui:
+      hidden:
+        - command_id
+        - correlation_id
+        - causation_id

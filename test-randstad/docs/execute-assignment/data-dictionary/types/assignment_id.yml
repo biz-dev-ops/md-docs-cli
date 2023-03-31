@@ -1,0 +1,5 @@
+type: string
+format: uuid
+title: assignment id
+description: The unique id identifing the assignment.
+example: e8c52b15-f28b-459e-b276-6fe127f9cfff

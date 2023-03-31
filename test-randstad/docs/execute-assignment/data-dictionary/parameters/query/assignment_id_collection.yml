@@ -1,0 +1,8 @@
+in: query
+name: assignment-id
+description: An assignment collections filter.
+required: true
+schema:
+  type: array
+  items:
+    $ref: "../../types/assignment_id.yml"

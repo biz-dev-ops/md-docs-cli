@@ -1,0 +1,16 @@
+title: markdown message
+properties:
+  message_type:
+    type: string
+    example: markdown
+    enum: markdown
+  message:
+   type: string
+   format: markdown
+   example: |
+     Dear John Doe,
+
+     Hier een voorbeeld bericht toevoegen
+required:
+  - message_type
+  - message

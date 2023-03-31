@@ -1,0 +1,10 @@
+allOf:
+  - $ref: "../../../../data-dictionary/commands/command.yml"
+  - type: object
+    title: end contract
+    properties:
+      reason:
+        type: string
+        format: markdown
+    required:
+     - reason

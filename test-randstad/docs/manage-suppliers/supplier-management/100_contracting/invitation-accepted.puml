@@ -1,0 +1,41 @@
+@startuml
+
+actor "supplier, talent" as supplier
+
+participant "manage-suppliers" as ms
+participant IAM as iam
+
+supplier <- ms : invitation
+supplier -> ms : navigate to manage-suppliers
+ms -> supplier : redirect
+supplier -> iam : navigate to iam
+
+activate iam
+
+alt sign in
+    iam -> supplier : sign in
+    supplier -> iam : credentials
+    iam --> iam : authenticate
+    iam -> supplier : redirect
+else register
+    iam -> supplier : register
+    supplier -> iam : registration
+    iam --> iam : register
+    iam --> iam : authenticate
+    iam -> supplier : redirect
+end
+
+deactivate iam
+
+supplier -> ms : navigate to manage-suppliers
+
+activate ms
+
+ms --> ms : find process instance
+ms --> ms : correlate message
+ms -> supplier : redirect
+supplier -> ms : navigate to task
+
+deactivate ms
+
+@enduml

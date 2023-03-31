@@ -1,0 +1,68 @@
+@startuml
+
+interface OpenApi {
+    List<UserTask> GetMyUserTasks(Integer limit)
+    UserTask GetMyUserTask(String userTaskId)
+    void ClaimUserTask(String userTaskId)
+    void DelayMyUserTask(String userTaskId, LocalDateTime delayUntil)
+    void DelegateMyUserTask(String userTaskId, String delegateTo, String message)
+    List<UserTaskDelegator> GetMyUserTaskDelegators(String userTaskId, Integer limit, String offset)
+}
+
+abstract class JavaRestServer implements OpenApi
+{
+    abstract List<UserTask> GetMyUserTasks(Integer limit)
+    abstract UserTask GetMyUserTask(String userTaskId)
+    abstract void ClaimUserTask(String userTaskId)
+    abstract void DelayMyUserTask(String userTaskId, LocalDateTime delayUntil)
+    abstract void DelegateMyUserTask(String userTaskId, String delegateTo, String message)
+    abstract List<UserTaskDelegator> GetMyUserTaskDelegators(String userTaskId, Integer limit, String offset)
+}
+
+abstract class "WorkflowSystemAdapter" as JavaWorkflowSystemAdapter implements JavaRestServer
+{
+    abstract Boolean IsAuthorized(WorkflowSystemUserTask userTask)
+    abstract UserTask Map(WorkflowSystemUserTask userTask)
+    abstract List<UserTaskDelegator> GetMyUserTaskDelegators(String userTaskId, Integer limit, String offset)
+}
+
+abstract class "OtherWorkflowSystemAdapter" as JavaOtherWorkflowSystemAdapter implements JavaRestServer
+{
+    abstract Boolean IsAuthorized(OtherWorkflowSystemUserTask userTask)
+    abstract UserTask Map(OtherWorkflowSystemUserTask userTask)
+    abstract List<UserTaskDelegator> GetMyUserTaskDelegators(String userTaskId, Integer limit, String offset)
+}
+
+abstract class CSharpRestServer implements OpenApi
+{
+    abstract List<UserTask> GetMyUserTasks(Integer limit)
+    abstract UserTask GetMyUserTask(String userTaskId)
+    abstract void ClaimUserTask(String userTaskId)
+    abstract void DelayMyUserTask(String userTaskId, LocalDateTime delayUntil)
+    abstract void DelegateMyUserTask(String userTaskId, String delegateTo, String message)
+    abstract List<UserTaskDelegator> GetMyUserTaskDelegators(String userTaskId, Integer limit, String offset)
+}
+
+abstract class "WorkflowSystemAdapter" as CSharpWorkflowSystemAdapter implements CSharpRestServer
+{
+    abstract Task<bool> IsAuthorized(WorkflowSystemUserTask userTask)
+    abstract Task<UserTask> Map(WorkflowSystemUserTask userTask)
+    abstract Task<List<UserTaskDelegator>> GetMyUserTaskDelegators(string userTaskId, int limit, string offset)
+}
+
+abstract class "OtherWorkflowSystemAdapter" as CSharpOtherWorkflowSystemAdapter implements CSharpRestServer
+{
+    abstract Task<bool> IsAuthorized(OtherWorkflowSystemUserTask userTask)
+    abstract Task<UserTask> Map(OtherWorkflowSystemUserTask userTask)
+    abstract Task<List<UserTaskDelegator>> GetMyUserTaskDelegators(string userTaskId, int limit, string offset)
+}
+
+class "Provider" as Provider0 implements OpenApi
+class "Provider" as ProviderJava implements JavaRestServer
+class "Provider" as ProviderCSharp implements CSharpRestServer
+class "Provider" as Provider1 implements JavaWorkflowSystemAdapter
+class "Provider" as Provider2 implements JavaOtherWorkflowSystemAdapter
+class "Provider" as Provider3 implements CSharpWorkflowSystemAdapter
+class "Provider" as Provider4 implements CSharpOtherWorkflowSystemAdapter
+
+@enduml

@@ -1,0 +1,55 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.1
+  title: Randstadgroep Nederland, supplier management
+  description: |
+
+paths:
+
+  /api/screening/submit-information-tasks/{task_id}:
+    parameters:
+      - $ref: "../../../../shared-services/data-dictionary/parameters/path/user_task_id.yml"
+    get:
+      tags:
+        - submit information tasks
+      summary: Gets an instance of a submit information task.
+      operationId: GetSubmitinformationTaskV1
+      responses:
+        200:          
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../../data-dictionary/user-tasks/submit_information.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../../data-dictionary/responses/404.yml"
+    put:
+      tags:
+        - submit information tasks
+      summary: Completes an instance of a submit information task.
+      operationId: CompleteSubmitinformationTaskV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "../../data-dictionary/commands/submit_information.yml"
+      responses:
+        202:
+          $ref: "../../../../data-dictionary/responses/202.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../../data-dictionary/responses/404.yml"

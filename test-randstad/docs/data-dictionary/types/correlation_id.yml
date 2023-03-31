@@ -1,0 +1,5 @@
+
+type: string
+format: uuid
+description: Id of the first command which has started a chain of commands. May be empty if it's the beginning of a command chain.
+example: 48c274d1-0976-49ca-bb70-6e3ced85b629

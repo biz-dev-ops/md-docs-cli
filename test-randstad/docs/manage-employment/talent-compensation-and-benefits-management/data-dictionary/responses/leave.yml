@@ -1,0 +1,7 @@
+allOf:
+  - $ref: "../../../../data-dictionary/responses/response.yml"
+  - properties:
+      leave:
+        $ref: "../../../data-dictionary/models/leave.yml"
+    required:
+     - leave

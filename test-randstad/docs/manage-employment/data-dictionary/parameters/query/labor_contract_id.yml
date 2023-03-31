@@ -1,0 +1,5 @@
+in: query
+name: labor-contract-id
+description: A labor contract filter.
+schema:
+  $ref: "../types/labor_contract_id.yml"
