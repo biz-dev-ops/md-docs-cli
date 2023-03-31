@@ -8,15 +8,3 @@ main > header {
     top: 0;
     z-index: var(--z-header);
 }
-
-.toc-container ul {
-    list-style: none;
-    padding-left: 0;
-    display: flex;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
-}
-
-.toc-container li.active > a {
-    font-weight: 700;
-}
