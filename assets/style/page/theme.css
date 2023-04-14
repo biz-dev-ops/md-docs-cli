@@ -107,6 +107,7 @@
   --line-medium: .1875rem;
 
   /* Radii */
+  --radius-half: .375rem;
   --radius-base: .75rem;
   --radius-pill: 99rem;
   --radius-circle: 50%;

@@ -11,9 +11,9 @@ html {
 }
 
 body {
-    -webkit-font-smoothing: antialiased;
-    font-family: var(--font-family-base);
     color: var(--text-color-base);
+    font-family: var(--font-family-base);
+    -webkit-font-smoothing: antialiased;
     line-height: var(--line-height-base);
     margin: 0;
 }
@@ -27,10 +27,10 @@ p, figure, table, ul, ol, dl, pre, blockquote {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-family-heading);
-    margin: 0;
-    line-height: var(--line-height-heading);
     color: var(--text-color-heading);
+    font-family: var(--font-family-heading);
+    line-height: var(--line-height-heading);
+    margin: 0;
 }
 
 :where(h1, h2, h3, h4, h5, h6):not(:last-child) {
@@ -46,42 +46,34 @@ h2, .heading-size-2 {
 }
 
 h3, .heading-size-3 {
-    font-size: var(--heading-3-size);
-}
-
-h4, .heading-size-4 {
     font-size: var(--heading-4-size);
 }
 
-h5, .heading-size-5 {
+h4, .heading-size-4 {
     font-size: var(--heading-5-size);
 }
 
-h6, .heading-size-6 {
-    font-size: var(--heading-6-size);
-}
-
 abbr[title] {
-    color: var(--link-text-color, currentColor);
     border: 0;
+    color: var(--link-text-color, currentColor);
     outline: 0;
 }
 
 abbr::after {
+    background-color: var(--link-text-color);
+    block-size: 1.5em;
+    border-radius: var(--radius-circle);
+    color: var(--color-white);
+    content: 'i';
+    cursor: text;
+    display: inline-block;
     font-size: .5em;
-    height: 1.5em;
-    width: 1.5em;
+    inline-size: 1.5em;
+    inset-block-start: -.25em;
     line-height: 1.5em;
     margin-left: .5em;
-    display: inline-block;
-    text-align: center;
-    cursor: text;
-    background-color: var(--link-text-color);
-    color: var(--color-white);
-    border-radius: var(--radius-circle);
-    content: 'i';
     position: relative;
-    top: -.25em;
+    text-align: center;
 }
 
 a > abbr {
@@ -106,8 +98,8 @@ a:focus {
 figure img,
 figure svg,
 figure embed {
-    max-width: 100%;
     height: auto;
+    max-inline-size: 100%;
     vertical-align: middle;
 }
 
@@ -151,13 +143,13 @@ blockquote {
 
 blockquote::before {
     background: var(--background-color-base);
+    block-size: 100%;
     border-radius: var(--space-xxs);
     content: '';
     display: block;
-    height: 100%;
-    left: 0;
+    inline-size: var(--space-xs);
+    inset-inline-start: 0;
     position: absolute;
-    width: var(--space-xs);
 }
 
 pre {
@@ -167,9 +159,9 @@ pre {
 }
 
 table tr * {
-    text-align: left;
-    padding: var(--space-xs) var(--space-sm);
     border-block-end: var(--line-base) solid var(--background-color-base);
+    padding: var(--space-xs) var(--space-sm);
+    text-align: left;
 }
 
 table tr *:first-child{
@@ -185,9 +177,9 @@ input:not([type="checkbox"], [type="radio"]),
 textarea,
 select {
     display: block;
-    width: 100%;
     font-family: inherit;
     font-size: inherit;
+    inline-size: 100%;
     padding: var(--space-xxs);
 }
 
@@ -207,8 +199,8 @@ dt {
 }
 
 dd {
-    margin-inline-start: 0;
     border-block-end: var(--line-base) dashed var(--color-grey-100);
+    margin-inline-start: 0;
 }
 
 dd + dt {
@@ -222,25 +214,25 @@ details {
 summary {
     cursor: pointer;
     list-style: none;
+    margin-block-end: var(--space-xxs);
     margin-inline-start: calc(var(--space-md) * -1);
     padding-inline-start: var(--space-md);
-    margin-block-end: var(--space-xxs);
     position: relative;
 }
 
 summary::before {
+    block-size: var(--space-xs);
     border-color: var(--text-color-base);
-    border-width: var(--line-base) var(--line-base) 0 0;
-    transform: rotate(135deg);
-    transform-origin: 60% 40%;
     border-style: solid;
+    border-width: var(--line-base) var(--line-base) 0 0;
     content: "";
     display: block;
-    height: var(--space-xs);
-    width: var(--space-xs);
+    inline-size: var(--space-xs);
+    inset-block-start: .75rem;
+    inset-inline-start: .25rem;
     position: absolute;
-    left: .25rem;
-    top: .75rem;
+    transform: rotate(135deg);
+    transform-origin: 60% 40%;
     transition: transform var(--duration-base);
 }
 
@@ -252,7 +244,7 @@ details:not([open]) > summary:first-of-type::before {
 /* Layout: Content */
 .content {
     grid-area: article;
-    min-width: 0; /* Fix: Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1418727 */
+    min-inline-size: 0; /* Fix: Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1418727 */
     order: 1;
 }
 
@@ -260,8 +252,8 @@ details:not([open]) > summary:first-of-type::before {
 .content div.success,
 .content div.warning,
 .content div.error {
-    padding: var(--space-md);
     margin-block-end: calc(var(--line-height-base) * 1rem);
+    padding: var(--space-md);
 }
 
 .content div.info {
@@ -293,15 +285,15 @@ details:not([open]) > summary:first-of-type::before {
 
 /* Module: BPMN */
 .bpmn {
-    height: 0;
-    padding-top: 75%;
+    block-size: 0;
+    padding-block-start: 75%;
     position: relative;
 }
 
 .bpmn > .bjs-container {
-    position: absolute !important;
-    top: 0;
     cursor: move;
+    inset-block-start: 0;
+    position: absolute !important;
 }
 
 .bjs-powered-by {
