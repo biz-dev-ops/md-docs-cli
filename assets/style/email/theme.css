@@ -1,6 +1,8 @@
 :root {
     /* Colors */
-    --color-grey-100: rgb(229, 229, 229);
+    --color-white-rgb: 255 255 255;
+    --color-white: rgb(var(--color-white-rgb));
+    --color-grey-100: rgb(229 229 229);
 
     /* Typography */
     --font-family-base: sans-serif;
@@ -32,6 +34,9 @@
     --space-sm: .75rem;
     --space-xs: .5rem;
     --space-xxs: .25rem;
+
+    /* Dimensions */
+    --max-width: 42rem;
 
     /* Lines */
     --line-base: .0625rem;
