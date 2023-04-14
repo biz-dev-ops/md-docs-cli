@@ -1,30 +1,26 @@
 :root {
   /* Brand colors */
-  --color-brand-a80: rgba(var(--rgb-brand) .8);
-  --color-brand-a60: rgba(var(--rgb-brand) .6);
-  --color-brand-a40: rgba(var(--rgb-brand) .4);
-  --color-brand-a20: rgba(var(--rgb-brand) .2);
-  --color-brand-a10: rgba(var(--rgb-brand) .1);
+  --color-brand-a80: rgba(var(--rgb-brand) / 80%);
+  --color-brand-a60: rgba(var(--rgb-brand) / 60%);
+  --color-brand-a40: rgba(var(--rgb-brand) / 40%);
+  --color-brand-a20: rgba(var(--rgb-brand) / 20%);
+  --color-brand-a10: rgba(var(--rgb-brand) / 10%);
 
   /* Colors */
-  --color-white-r: 255;
-  --color-white-g: 255;
-  --color-white-b: 255;
-  --color-white: rgb(var(--color-white-r) var(--color-white-g) var(--color-white-b));
-  --color-white-a10: rgba(var(--color-white-r) var(--color-white-g) var(--color-white-b) 10%);
-  --color-white-a20: rgba(var(--color-white-r) var(--color-white-g) var(--color-white-b) 20%);
-  --color-white-a50: rgba(var(--color-white-r) var(--color-white-g) var(--color-white-b) 50%);
-  --color-white-a90: rgba(var(--color-white-r) var(--color-white-g) var(--color-white-b) 90%);
-  --color-black-r: 0;
-  --color-black-g: 0;
-  --color-black-b: 0;
-  --color-black: rgb(var(--color-black-r) var(--color-black-g) var(--color-black-b));
-  --color-black-a10: rgba(var(--color-black-r) var(--color-black-g) var(--color-black-b) 10%);
-  --color-black-a20: rgba(var(--color-black-r) var(--color-black-g) var(--color-black-b) 20%);
-  --color-black-a30: rgba(var(--color-black-r) var(--color-black-g) var(--color-black-b) 30%);
-  --color-black-a40: rgba(var(--color-black-r) var(--color-black-g) var(--color-black-b) 40%);
-  --color-black-a80: rgba(var(--color-black-r) var(--color-black-g) var(--color-black-b) 80%);
-  --color-black-a90: rgba(var(--color-black-r) var(--color-black-g) var(--color-black-b) 90%);
+  --color-white-rgb: 255 255 255;
+  --color-white: rgb(var(--color-white-rgb));
+  --color-white-a10: rgba(var(--color-white-rgb) / 10%);
+  --color-white-a20: rgba(var(--color-white-rgb) / 20%);
+  --color-white-a50: rgba(var(--color-white-rgb) / 50%);
+  --color-white-a90: rgba(var(--color-white-rgb) / 90%);
+  --color-black-rgb: 0 0 0;
+  --color-black: rgb(var(--color-black-rgb));
+  --color-black-a10: rgba(var(--color-black-rgb) / 10%);
+  --color-black-a20: rgba(var(--color-black-rgb) / 20%);
+  --color-black-a30: rgba(var(--color-black-rgb) / 30%);
+  --color-black-a40: rgba(var(--color-black-rgb) / 40%);
+  --color-black-a80: rgba(var(--color-black-rgb) / 80%);
+  --color-black-a90: rgba(var(--color-black-rgb) / 90%);
   --color-grey-100: rgb(229 229 229);
   --color-grey-900: rgb(39 40 48);
 

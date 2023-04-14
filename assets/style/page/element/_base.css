@@ -99,8 +99,8 @@ a:focus {
 }
 
 :focus-visible {
+    box-shadow: 0 0 0 var(--line-thin) var(--link-text-color); 
     outline: none;
-    box-shadow: 0 0 0 var(--line-thin) var(--color-brand-a80); 
 }
 
 figure img,
@@ -251,7 +251,6 @@ details:not([open]) > summary:first-of-type::before {
 
 /* Layout: Content */
 .content {
-    color: var(--article-text-color);
     grid-area: article;
     min-width: 0; /* Fix: Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1418727 */
     order: 1;
