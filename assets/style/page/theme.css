@@ -15,6 +15,7 @@
   --color-white-a90: rgba(var(--color-white-rgb) / 90%);
   --color-black-rgb: 0 0 0;
   --color-black: rgb(var(--color-black-rgb));
+  --color-black-a05: rgba(var(--color-black-rgb) / 5%);
   --color-black-a10: rgba(var(--color-black-rgb) / 10%);
   --color-black-a20: rgba(var(--color-black-rgb) / 20%);
   --color-black-a30: rgba(var(--color-black-rgb) / 30%);
