@@ -38,7 +38,7 @@
 .header-container {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--space-md);
 }
 
 /* Module: Header container - level 2 */
