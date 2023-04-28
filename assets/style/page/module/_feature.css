@@ -40,7 +40,7 @@ details.step table {
 
 .status::before {
     border-radius: var(--space-sm);
-    background-color: currentColor;
+    background-color: currentcolor;
     content: "";
     display: block;
     height: var(--space-sm);
@@ -190,7 +190,7 @@ details.step table {
 }
 
 .legend .label {
-    border-top: var(--line-medium) solid currentColor;
+    border-top: var(--line-medium) solid currentcolor;
     padding-top: var(--space-xxs);
 }
 

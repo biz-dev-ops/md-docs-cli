@@ -17,4 +17,31 @@
             }
         }
     });
+
+    const branchesSearch = document.querySelector('[name="menu-branches-search"]');
+    const branchesList = document.querySelector('#menu-branches ul');
+    const branchesNoResults = document.createElement('li');
+    
+    branchesNoResults.classList.add('no-results');
+    branchesNoResults.setAttribute('hidden', true);
+    branchesNoResults.insertAdjacentHTML('beforeend', '<mark>Geen resultaten</mark>');
+    branchesList.appendChild(branchesNoResults);
+
+    branchesSearch.addEventListener('input', (event) => {
+        const query = event.target.value.trim();
+
+        branchesList.querySelectorAll('li').forEach(item => {
+            if (item.textContent.includes(query)) {
+                item.removeAttribute('hidden');
+            } else {
+                item.setAttribute('hidden', true);
+            }
+        });
+
+        if (branchesList.querySelectorAll('li:not(.no-results):not([hidden])').length === 0) {
+            branchesNoResults.removeAttribute('hidden');
+        } else {
+            branchesNoResults.setAttribute('hidden', true);
+        }
+    });
 })();

@@ -12,12 +12,19 @@
 }
 
 .menu > :where( div) {
+    max-width: var(--nav-width);
     padding: var(--space-sm);
 }
 
 .menu a {
     color: currentcolor;
     text-decoration: none;
+}
+
+.menu .active > a,
+.menu .active > .menu-toggle {
+    text-decoration: underline;
+    text-decoration-color: var(--color-white-a50);
 }
 
 .menu :focus-visible {
@@ -29,37 +36,36 @@
     text-decoration: underline;
 }
 
-@supports not selector(:focus-visible) {
-    .menu a:focus {
-        text-decoration: underline;
-    }
-}
-
 .menu .icon {
     vertical-align: middle;
 }
 
 .menu .icon + .label {
-    margin-left: var(--space-xs);
-    white-space: nowrap;
+    direction: rtl;
+    margin-inline-start: var(--space-xs);
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .menu svg {
-    fill: currentColor;
+    fill: currentcolor;
+}
+
+.menu input {
+    background-color: var(--color-white-a20);
 }
 
 
-/* Logo memie*/
+/* Logo menu */
 .menu-logo {
-    padding-inline-end: var(--space-xl);
     padding-block: var(--space-lg);
+    padding-inline-end: var(--space-xl);
 }
 
 .menu-logo img {
+    block-size: auto;
     max-height: var(--logo-height);
-    height: auto;
     max-width: 100%;
 }
 
@@ -72,12 +78,24 @@
 /* Branches menu  */
 .menu-branches {
     background: var(--color-black-a10);
+    flex-direction: column;
+    gap: var(--space-sm);
     grid-area: main;
     padding-block-start: 0;
 }
 
+.menu-branches:where(:not([hidden])) {
+    display: flex;
+}
+
 .menu-branches:where(:not([hidden])) ~ div {
     display: none;
+}
+
+.menu-branches mark {
+    background-color: transparent;
+    color: currentcolor;
+    font-style: italic;
 }
 
 .menu-branches ul {
@@ -85,12 +103,13 @@
     padding-inline-start: 0;
 }
 
-.menu-branches ul li + li {
+.menu-branches ul li:not([hidden]) + li {
     border-block-start: var(--line-base) solid var(--color-white-a20);
 }
 
 .menu-branches a {
-    display: inline-block;
+    display: inline-flex;
+    flex-wrap: wrap;
     padding-block: var(--space-xs);
 }
 
@@ -114,12 +133,6 @@
 
 .menu-main .menu-toggle[aria-expanded="true"] {
     cursor: n-resize;
-}
-
-.menu-main .active > a,
-.menu-main .active > .menu-toggle {
-    text-decoration: underline;
-    text-decoration-color: var(--color-white-a50);
 }
 
 .menu-main > ul > li > a,
@@ -150,36 +163,32 @@
 
 /* Menu toggle */
 .menu-toggle-branches {
-    white-space: nowrap;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
     align-items: center;
+    display: grid;
+    gap: var(--space-sm);
+    grid-template-columns: auto 1fr auto;
     padding: var(--space-sm);
+    white-space: nowrap;
 }
 
 .menu-toggle-branches .icon svg {
     vertical-align: middle;
 }
 
-.menu-toggle-branches .label {
-    margin-inline-start: var(--space-xs);
-    margin-inline-end: var(--space-md);
-}
-
 .menu-toggle-branches::after {
+    block-size: var(--space-xs);
+    border-color: currentcolor;
+    border-style: solid;
+    border-width: 0 0 var(--line-thin) var(--line-thin);
     content: "";
     display: inline-block;
-    border-color: currentColor;
-    border-width: 0 0 var(--line-thin) var(--line-thin);
-    border-style: solid;
-    height: var(--space-xs);
-    width: var(--space-xs);
-    position: relative;
-    top: calc(var(--space-xxs) / -2);
-    transform: rotate(-45deg);
+    inline-size: var(--space-xs);
+    inset-inline-start: calc(var(--space-xxs) / -2);
     justify-self: end;
-    transition: transform var(--duration-base);
+    position: relative;
+    transform: rotate(-45deg);
     transform-origin: 30% 70%;
+    transition: transform var(--duration-base);
 }
 
 .menu-toggle-branches[aria-expanded="true"]::after {
