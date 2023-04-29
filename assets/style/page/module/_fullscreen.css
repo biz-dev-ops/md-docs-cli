@@ -1,4 +1,8 @@
 /* Module: Fullscreen */
+body[data-fullscreen-active="true"] {
+    overflow: hidden;
+}
+
 [data-fullscreen] {
     position: relative;
     overflow: hidden;

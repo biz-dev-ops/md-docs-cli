@@ -6,6 +6,7 @@
                 event.preventDefault();
                 const show = container.getAttribute('data-fullscreen') === 'true';
                 container.setAttribute('data-fullscreen', !show);
+                document.body.setAttribute('data-fullscreen-active', !show);
                 buttons.forEach(
                     button => button.setAttribute('title', show ? 'Maximize' : 'Close')
                 );
