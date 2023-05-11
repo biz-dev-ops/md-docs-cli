@@ -22,8 +22,8 @@ p, figure, table, ul, ol, dl, pre, blockquote {
     margin: 0;
 }
 
-:where(p, figure, table, ul, ol, dl, pre, blockquote):not(:last-child) {
-    margin-block-end: calc(var(--line-height-base) * 1rem);
+:where(p, table, ul, ol, dl, pre, blockquote, [data-fullscreen="false"]):not(:last-child) {
+    margin-block-end: calc(var(--line-height-base) * 1rem) !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -101,10 +101,6 @@ figure embed {
     height: auto;
     max-inline-size: 100%;
     vertical-align: middle;
-}
-
-:where(img, svg):not(:last-child) {
-    margin-block-end: calc(var(--line-height-base) * 1rem);
 }
 
 :where(a) {

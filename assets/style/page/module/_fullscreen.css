@@ -120,10 +120,6 @@ body[data-fullscreen-active="true"] {
     transform: rotate(180deg);
 }
 
-[data-fullscreen] figure {
-    margin-block-end: 0;
-}
-
 [data-fullscreen="true"] figure {
     float: none;
     margin: var(--space-md);
