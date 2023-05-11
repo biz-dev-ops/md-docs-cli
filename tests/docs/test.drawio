@@ -1,1 +1,19 @@
-<mxfile host="app.diagrams.net" modified="2022-09-14T06:18:30.797Z" agent="5.0 (X11)" etag="T58mRB6OCFs5qF8vgzUr" version="20.0.4"><diagram id="l3VOruldOllGOkXZoJiZ" name="Page-1">zZVbb9sgFMc/jR9ncWkur4vXdtMUaVqrVnukcGyzYmNhUjv99IMY3+RE6iZNbZIH+J/DOXB+BxLRpGhvDavyvRagIoJEG9EvESH4ipDI/5A4dspmtemEzEgRnEbhTr5CEFFQD1JAPXO0Wisrq7nIdVkCtzONGaObuVuq1TxrxTJYCHecqaX6KIXNO3W7QqP+FWSW95kxCpaC9c5BqHMmdDOR6HVEE6O17UZFm4Dyxevr0q27uWAdNmagtG9ZsF1/3/96+EaJwvune1Q+/H7ln0KUF6YO4cBhs/bYV6C2Rj8Ph8cR3Q0nQW4iWJ2DCBOmZFa6MXd7AuOE3BZqXFX5kEWb+VaJC82fD1XswFkmSzB1/ORxgXmU5Sn8zoR28JG7XSRaaXPaFl2fPnML6UwIbXmazk20M/Er/3WmwuW8h7arXOKTAT+YWr7AT6jHtKE8YCy0F+uOB5ruGoAuwJqjc2nO9Es+6ZVVL7LQo9mwdsToBoHkX1AlC6o/fJsThN+RLit57uHtUqcFsngT5ufA9ukUpPatKC43+ZJPiLIOFMIDhUPxJvQwPkOPrP8TPLqAl1vrX7vPPi65aZomFoY1sdQfgeb0kn4wspjO0fakJ2jJuYv5D2jddHzJT7bJ/yG9/gM=</diagram></mxfile>
+<mxfile host="Electron" modified="2023-05-11T19:06:47.598Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="ooSaSlrAi4sQa3FUU9vX" version="21.1.2" type="device">
+  <diagram id="l3VOruldOllGOkXZoJiZ" name="Page-1">
+    <mxGraphModel dx="1314" dy="924" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="86KMYVI32l1MbT0nVjzc-1" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.containers.browserWindow;rSize=0;strokeColor=#666666;strokeColor2=#008cff;strokeColor3=#c4c4c4;mainText=,;recursiveResize=0;" parent="1" vertex="1">
+          <mxGeometry width="850" height="550" as="geometry" />
+        </mxCell>
+        <mxCell id="86KMYVI32l1MbT0nVjzc-2" value="Page 1" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.containers.anchor;fontSize=17;fontColor=#666666;align=left;" parent="86KMYVI32l1MbT0nVjzc-1" vertex="1">
+          <mxGeometry x="60" y="12" width="110" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="86KMYVI32l1MbT0nVjzc-3" value="https://www.draw.io" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.containers.anchor;rSize=0;fontSize=17;fontColor=#666666;align=left;" parent="86KMYVI32l1MbT0nVjzc-1" vertex="1">
+          <mxGeometry x="130" y="60" width="250" height="26" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -26,8 +26,18 @@ module.exports = class DrawIORenderer {
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
         
-        const page = await this.browser.newPage();
+        const page = (await this.browser.newPage())
+        //     .on('console', message => console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+        //     .on('pageerror', ({ message }) => console.log(message))
+        //     .on('response', response => console.log(`${response.status()} ${response.url()}`))
+        //     .on('requestfailed', request => console.log(`${request.failure().errorText} ${request.url()}`))
+        ;
+        
         const json = encodeURIComponent(JSON.stringify(data));
+        
+        // console.log('------------------------------------------------------------')
+        // console.log(`${url}?data=${json}`)
+        // console.log('------------------------------------------------------------')
 
         await page.goto(`${url}?data=${json}`, {
             timeout: 4000,
@@ -35,8 +45,10 @@ module.exports = class DrawIORenderer {
         });
         
         const svg = await page.evaluate(() => {
-            return document.getElementById('result').innerText;
+            return document.body.querySelector('svg').outerHTML;
         });
+
+        console.log(svg);
         
         await page.close();
         

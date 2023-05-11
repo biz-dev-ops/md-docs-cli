@@ -7,22 +7,14 @@
 <body>
     <script>
         const params = new URLSearchParams(document.location.search);
-        const data = decodeURIComponent(params.get("data"));
+        const data = params.get("data");
 
         const div = document.createElement("div");
         div.setAttribute("class", "mxgraph");
         div.setAttribute("data-mxgraph", data);
         document.body.appendChild(div);
 
-        GraphViewer.createViewerForElement(div, (viewer) => {
-            const svg = viewer.graph.getSvg();
-
-            const result = document.createElement("div");
-            result.setAttribute("id", "result");            
-            result.innerText = svg.outerHTML;
-
-            document.body.appendChild(result);
-        });
+        GraphViewer.createViewerForElement(div);
 
     </script>
 </body>
