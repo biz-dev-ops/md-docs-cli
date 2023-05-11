@@ -135,7 +135,7 @@ iframe {
 blockquote {
     padding-inline: var(--space-md);
     position: relative;
-    border-left: 5px solid var(--color-brand-a80, currentColor);
+    border-left: 2px solid var(--color-brand-a80, currentColor);
 }
 
 blockquote::before {
