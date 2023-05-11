@@ -45,10 +45,8 @@ module.exports = class DrawIORenderer {
         });
         
         const svg = await page.evaluate(() => {
-            return document.body.querySelector('svg').outerHTML;
+            return document.getElementById('result').innerText;
         });
-
-        console.log(svg);
         
         await page.close();
         
