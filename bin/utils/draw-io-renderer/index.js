@@ -21,9 +21,9 @@ module.exports = class DrawIORenderer {
 
     async #renderSVG(url, data) {
         if(!this.browser)
-            this.browser = await puppeteer.launch({ 
-                args: ['--no-sandbox', 
-                '--disable-setuid-sandbox']
+            this.browser = await puppeteer.launch({
+                headless: "new",
+                args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
         
         const page = await this.browser.newPage();
