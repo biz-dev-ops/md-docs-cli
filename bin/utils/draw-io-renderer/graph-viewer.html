@@ -7,7 +7,7 @@
 <body>
     <script>
         const params = new URLSearchParams(document.location.search);
-        const data = decodeURIComponent(params.get("data"));
+        const data = params.get("data");
 
         const div = document.createElement("div");
         div.setAttribute("class", "mxgraph");
