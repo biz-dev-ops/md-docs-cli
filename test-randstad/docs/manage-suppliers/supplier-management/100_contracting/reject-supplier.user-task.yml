@@ -1,0 +1,18 @@
+user-task:
+  name: Reject supplier
+  schema:
+    $ref: "../data-dictionary/user-tasks/reject_supplier.yml"
+  ui:
+    hidden:
+      - task_id
+      - process_instance_id
+actions:
+  reject:
+    name: Reject
+    schema: 
+      $ref: "../data-dictionary/commands/reject_supplier.yml"
+    ui:
+      hidden:
+        - command_id
+        - correlation_id
+        - causation_id

@@ -1,0 +1,28 @@
+@startuml
+
+:Principal:
+
+:Client:
+:Consultant:
+:Supplier:
+:Talent:
+
+
+(Get my user tasks) as (Use) <<Aggregator>>
+
+(Get my user tasks) as (Use1) <<Provider, business capability>>
+(Get my user tasks) as (Use2) <<Provider, service now>>
+(Get my user tasks) as (Use3) <<Provider, mondriaan>>
+
+Client --> Principal
+Consultant --> Principal
+Supplier --> Principal
+Talent --> Principal
+
+Principal --> (Use)
+
+(Use) --> (Use1)
+(Use) --> (Use2)
+(Use) --> (Use3)
+
+@enduml

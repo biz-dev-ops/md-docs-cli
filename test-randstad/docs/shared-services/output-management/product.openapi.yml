@@ -1,0 +1,103 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.1
+  title: Randstadgroep Nederland, output management
+  description: |
+
+paths:
+
+  /api/emails:
+    post:
+      tags:
+        - emails
+      summary: Send an email.
+      operationId: SendEmailV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./data-dictionary/commands/send_email.yml"
+      responses:
+        201:
+          $ref: "../../data-dictionary/responses/201.yml"
+        400:
+          $ref: "../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../data-dictionary/responses/403.yml"
+      callbacks:
+        email_sent:
+          '{$request.body#/callback_url}':
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      allOf:
+                        - $ref: "../../data-dictionary/events/event.yml"
+                        - properties:
+                            message_id:
+                              $ref: "./data-dictionary/types/message_id.yml"
+                          required:
+                            - message_id
+              responses:
+                201:
+                  $ref: "../../data-dictionary/responses/201.yml"
+        email_recieved:
+          '{$request.body#/callback_url}':
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      allOf:
+                        - $ref: "../../data-dictionary/events/event.yml"
+                        - properties:
+                            message_id:
+                              $ref: "./data-dictionary/types/message_id.yml"
+                          required:
+                            - message_id
+              responses:
+                201:
+                  $ref: "../../data-dictionary/responses/201.yml"
+        email_read:
+          '{$request.body#/callback_url}':
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      allOf:
+                        - $ref: "../../data-dictionary/events/event.yml"
+                        - properties:
+                            message_id:
+                              $ref: "./data-dictionary/types/message_id.yml"
+                          required:
+                            - message_id
+              responses:
+                201:
+                  $ref: "../../data-dictionary/responses/201.yml"
+        email_bounced:
+          '{$request.body#/callback_url}':
+            post:
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      allOf:
+                        - $ref: "../../data-dictionary/events/event.yml"
+                        - properties:
+                            message_id:
+                              $ref: "./data-dictionary/types/message_id.yml"
+                          required:
+                            - message_id
+              responses:
+                201:
+                  $ref: "../../data-dictionary/responses/201.yml"

@@ -1,0 +1,41 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.1
+  title: My user tasks
+  description: |
+
+paths:
+
+  /api/my-user-tasks:
+    get:
+      tags:
+        - my-user-tasks
+      summary: Gets a list of user tasks.
+      operationId: GetMyUserTasksV1
+      parameters:
+        - $ref: "../../../data-dictionary/parameters/query/limit.yml"
+        - $ref: "../data-dictionary/parameters/query/status.yml"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:                
+                  allOf:
+                    - $ref: "../../../data-dictionary/responses/response.yml"
+                    - properties:
+                        items:
+                          type: array
+                          items:
+                            allOf:
+                              - $ref: "../data-dictionary/models/user_tasks.yml"
+                              - properties:
+                                  user_task_provider_id:
+                                    $ref: "../data-dictionary/types/user_task_provider_id.yml"
+                                required:
+                                  - user_task_provider_id
+        401:
+          $ref: "../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../data-dictionary/responses/403.yml"

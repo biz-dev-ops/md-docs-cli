@@ -1,0 +1,111 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.1
+  title: Randstadgroep Nederland, supplier management
+  description: |
+
+paths:
+
+  /api/information-definitions:
+    post:
+      tags:
+        - information-definitions
+      summary: Creates a information definition.
+      operationId: CreateInformationDefinitionV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../../data-dictionary/commands/create_information_definition.yml"
+      responses:
+        201:
+          $ref: "../../../../data-dictionary/responses/201.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+    get:
+      tags:
+        - information-definitions
+      summary: Gets instances of a information definitions.
+      operationId: GetInformationDefinitionsV1
+      responses:
+        200:          
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../../data-dictionary/responses/information_definitions.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+
+  /api/information-definitions/{information_definition_id}:
+    parameters:
+      - $ref: "../../data-dictionary/parameters/information_definition_id.yml"
+    get:
+      tags:
+        - information-definition
+      summary: Gets an instance of a information definition.
+      operationId: GetInformationDefinitionV1
+      responses:
+        200:          
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../../data-dictionary/responses/information_definition.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../../data-dictionary/responses/404.yml"
+    put:
+      tags:
+        - information-definition
+      summary: Updates an instance of a information definition.
+      operationId: UpdateInformationDefinitionV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "../../data-dictionary/commands/update_information_definition.yml"
+      responses:
+        202:
+          $ref: "../../../../data-dictionary/responses/202.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../../data-dictionary/responses/404.yml"
+    delete:
+      tags:
+        - information-definition
+      summary: Deletes an instance of a information definition.
+      operationId: DeleteInformationDefinitionV1
+      responses:
+        202:
+          $ref: "../../../../data-dictionary/responses/202.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../../data-dictionary/responses/404.yml"

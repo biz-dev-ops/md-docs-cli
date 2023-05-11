@@ -1,6 +1,8 @@
 :root {
-    --rgb-brand: 26,26,26;
+    --rgb-brand: 0 102 255;
+    --rgb-text: 26 26 26;
+    --rgb-heading: 0 51 102;
     --color-brand-base: rgb(var(--rgb-brand));
-    --text-color-base: rgba(26, 26, 26, .9);
-    --text-color-heading: rgb(var(--rgb-brand));
-}
+    --text-color-base: rgba(var(--rgb-text) / 90%);
+    --text-color-heading: rgb(var(--rgb-heading));
+} 

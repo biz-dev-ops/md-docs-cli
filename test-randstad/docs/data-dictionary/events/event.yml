@@ -1,0 +1,15 @@
+type: object
+properties:
+  event_id:
+    $ref: "../types/event_id.yml"
+  occurred:
+    type: string
+    format: date-time
+    description: Time when the event has occurred.
+  correlation_id:
+    $ref: "../types/correlation_id.yml"
+  causation_id:
+    $ref: "../types/causation_id.yml"
+required:
+  - event_id
+  - occurred

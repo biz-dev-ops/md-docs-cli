@@ -1,0 +1,10 @@
+actions:
+  aanvraag:
+    name: Contract supplier
+    schema: 
+      $ref: "../data-dictionary/commands/contract_supplier.yml"
+    ui:
+      hidden:
+        - command_id
+        - correlation_id
+        - causation_id

@@ -3,12 +3,12 @@ html, body {
 }
 
 body {
-    -webkit-font-smoothing: antialiased;
-    font-family: var(--font-family-base);
-    font-weight: var(--font-weight-base);
     color: var(--text-color-base);
+    font-family: var(--font-family-base);
+    -webkit-font-smoothing: antialiased;
+    font-weight: var(--font-weight-base);
     line-height: var(--line-height-base);
-    margin: 0;
+    margin: var(--space-md);
 }
 
 /*  Box sizing (the nuclear option) */
@@ -24,18 +24,18 @@ p, figure, table, ul, ol, dl, pre, blockquote {
 }
 
 :where(p, figure, table, ul, ol, dl, pre, blockquote):not(:last-child) {
-    margin-bottom: calc(var(--line-height-base) * 1rem);
+    margin-block-end: calc(var(--line-height-base) * 1rem);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-family-heading);
-    margin: 0;
-    line-height: var(--line-height-heading);
     color: var(--text-color-heading);
+    font-family: var(--font-family-heading);
+    line-height: var(--line-height-heading);
+    margin: 0;
 }
 
 :where(h1, h2, h3, h4, h5, h6):not(:last-child) {
-    margin-bottom: calc(var(--line-height-base) * .5em);
+    margin-block-end: calc(var(--line-height-base) * .5em);
 }
 
 h1 {
@@ -63,7 +63,7 @@ h6 {
 }
 
 a {
-    color: currentColor;
+    color: currentcolor;
 }
 
 a:hover,
@@ -73,29 +73,29 @@ a:focus {
 
 figure img,
 figure svg {
-    max-width: 100%;
     height: auto;
+    max-width: 100%;
     vertical-align: middle;
 }
 
 :where(img, svg):not(:last-child) {
-    margin-bottom: calc(var(--line-height-base) * 1rem);
+    margin-block-end: calc(var(--line-height-base) * 1rem);
 }
 
 ul, ol {
-    padding-left: var(--space-md);
+    padding-inline-start: var(--space-md);
 }
 
 .mail-header {
-    border-bottom: var(--line-base) solid var(--color-grey-100);
-    margin-bottom: calc(var(--line-height-base) * 1rem);
-    padding-bottom: calc(var(--line-height-base) * 1rem);
+    border-block-end: var(--line-base) solid var(--color-grey-100);
+    margin-block-end: calc(var(--line-height-base) * 1rem);
+    padding-block-end: calc(var(--line-height-base) * 1rem);
 }
 
 .mail-header dl {
     display: grid;
-    gap: calc(var(--line-height-base) / 4 * 1rem) var(--space-md);
     font-size: var(--font-size-sm);
+    gap: calc(var(--line-height-base) / 4 * 1rem) var(--space-md);
     grid-template-columns: 15ch 1fr;
 }
 
@@ -110,13 +110,14 @@ ul, ol {
 
 .mail-header dd {
     grid-column-start: 2;
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 
 .mail {
-    padding: var(--space-md);
+    background-color: var(--color-white);
     margin: 0 auto;
-    max-width: var(--grid-max-width);
+    max-width: var(--max-width);
+    padding: var(--space-md);
 }
 
 attachments {
@@ -130,8 +131,8 @@ attachments {
 }
 
 article {
-    max-width: var(--max-characters-per-line);
     margin-block: calc(var(--line-height-base) * 1rem);
+    max-width: var(--max-characters-per-line);
 }
 
 article header {

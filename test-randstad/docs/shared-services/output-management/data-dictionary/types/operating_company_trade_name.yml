@@ -1,0 +1,15 @@
+title: operating company trade name
+properties:  
+  sender_type:    
+    type: string
+    example: operating_company_trade_name
+    enum: operating_company_trade_name
+  operating_company:
+    $ref: "../../../../data-dictionary/types/organization_id.yml"
+  trade_name:
+    $ref: "../../../../data-dictionary/types/trade_name.yml"
+required:
+  - sender_type
+  - operating_company
+  - trade_name
+

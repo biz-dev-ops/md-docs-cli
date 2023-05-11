@@ -1,0 +1,32 @@
+/* Module: Table of content */
+
+.table-of-content ul {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    row-gap: var(--space-xs);
+    column-gap: var(--space-sm);
+    flex-wrap: wrap;
+    font-weight: 700; 
+}
+
+.table-of-content a {
+    display: inline-block;
+    text-decoration: none;
+    padding-inline: calc(var(--space-sm) - var(--line-base));
+    padding-block: calc(var(--space-xs) - var(--line-base));
+    border-radius: var(--radius-pill);
+    border: var(--line-base) solid transparent;
+    transition: all var(--duration-base);
+}
+
+.table-of-content a:active,
+.table-of-content a:hover,
+.table-of-content a:focus-visible {
+    background-color: var(--color-brand-a10);
+}
+
+.table-of-content li.active a {
+    background-color: var(--color-brand-a10);
+    border-color: var(--color-brand-a20);
+}

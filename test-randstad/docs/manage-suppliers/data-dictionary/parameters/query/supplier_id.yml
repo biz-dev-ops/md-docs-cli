@@ -1,0 +1,5 @@
+in: query
+name: labor-contract-id
+description: A supplier filter.
+schema:
+  $ref: "../types/supplier_id.yml"

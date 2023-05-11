@@ -1,0 +1,69 @@
+allOf:
+  - $ref: "../../../../data-dictionary/commands/command.yml"
+  - type: object
+    title: send email
+    properties:
+      callback_url:
+        $ref: "../../../../data-dictionary/types/callback_url.yml"
+      sender:
+        oneOf:
+          - $ref: "../types/operating_company.yml"
+          - $ref: "../types/operating_company_trade_name.yml"
+          - $ref: "../types/operating_company_on_behalf_of_client.yml"
+          - $ref: "../types/operating_company_on_behalf_of_client_trade_name.yml"
+        discriminator:
+          propertyName: sender_type
+      from:
+        oneOf:
+          - allOf:
+            - $ref: "../types/email_account.yml"
+            - properties:
+                object_type:
+                  type: string
+                  enum:
+                    - account
+              required:
+                - object_type
+        discriminator:
+          propertyName: object_type
+      to:
+        oneOf:
+          - allOf:
+            - $ref: "../types/email_account.yml"
+            - properties:
+                object_type:
+                  type: string
+                  enum:
+                    - account
+              required:
+                - object_type                
+        discriminator:
+          propertyName: object_type
+      subject:
+        $ref: "../types/email_subject.yml"
+      preheader:
+        $ref: "../types/email_preheader.yml"
+      message:
+        oneOf:
+          - $ref: "../types/markdown_message.yml"
+        discriminator:
+          propertyName: message_type
+      attachments:
+        type: array
+        items:
+          $ref: "../types/file.yml"
+      in_reply_to:
+        type: object
+        properties:
+          message_id:
+            $ref: "../types/message_id.yml"
+        required:
+          - message_id
+    required:
+      - callback_url
+      - sender
+      - from
+      - to
+      - subject
+      - preheader
+      - message

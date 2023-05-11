@@ -1,0 +1,15 @@
+type: object
+properties:
+  href:
+    type: string
+    format: uri
+    description: Webpage where the user can handle the user task
+    example: https://task-provider.com//my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d
+  api:
+    type: string
+    format: uri
+    description: Rest uri to modify the user task on behalve of the user.
+    example: https://task-provider.com/api/my-tasks/dcb47fd6-5695-4c98-8f13-11c516fd0b8d
+required:
+  - href
+  - api

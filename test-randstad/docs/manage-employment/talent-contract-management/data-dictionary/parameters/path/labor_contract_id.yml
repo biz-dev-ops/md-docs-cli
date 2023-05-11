@@ -1,0 +1,6 @@
+in: path
+name: labor_contract_id
+description: A labor contract filter.
+required: true
+schema:
+  $ref: "../../../../data-dictionary/types/labor_contract_id.yml"

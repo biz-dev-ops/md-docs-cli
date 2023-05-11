@@ -1,0 +1,5 @@
+# get qualified talent definitions
+- name: talent
+  text: |
+    A Talent is a (commercial nice word for) natural person who wants to work.
+    A talent can be just someone who wants to have a labor contract with us, or a natural person who has a labor contract with one of our suppliers.

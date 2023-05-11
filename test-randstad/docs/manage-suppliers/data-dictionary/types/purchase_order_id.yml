@@ -1,0 +1,5 @@
+type: string
+format: uuid
+title: purchase order id
+description: The unique id identifing the purchase order.
+example: f8cb777d-f42e-4213-948f-694d8184573e

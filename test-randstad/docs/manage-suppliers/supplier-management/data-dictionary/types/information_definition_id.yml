@@ -1,0 +1,4 @@
+type: string
+format: uuid
+description: Unique of the information definition.
+example: 086c882d-b1b1-4b7c-b4d5-005ffddce5e4 

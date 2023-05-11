@@ -1,0 +1,5 @@
+type: integer
+description: A year.
+example: 2022
+pattern: '^SW[0-9]{4}$'
+minimum: 1900

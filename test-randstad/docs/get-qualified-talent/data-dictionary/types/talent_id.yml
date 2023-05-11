@@ -1,0 +1,4 @@
+type: string
+title: talent id
+description: The unique id identifing the talent.
+example: 5e12a750-2371-4868-8998-3b9d058d8f1e

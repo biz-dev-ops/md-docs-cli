@@ -1,0 +1,143 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.1
+  title: My user tasks
+  description: |
+servers:
+  - url: http://localhost:9001/
+
+paths:
+
+  /api/my-user-tasks:
+    get:
+      tags:
+        - my-user-tasks
+      summary: Gets a list of claimed or claimable user tasks.
+      operationId: GetMyUserTasksV1
+      parameters:
+        - $ref: "../../../data-dictionary/parameters/query/limit.yml"
+        - $ref: "../data-dictionary/parameters/query/status.yml"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../data-dictionary/responses/response.yml"
+                  - properties:
+                      items:
+                        type: array
+                        items:                    
+                          $ref: "../data-dictionary/models/user_tasks.yml"
+        401:
+          $ref: "../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../data-dictionary/responses/403.yml"
+
+  /api/my-user-tasks/{user_task_id}:
+    parameters:
+      - $ref: "../../data-dictionary/parameters/path/user_task_id.yml"
+    get:
+      tags:
+        - my-user-task
+      summary: Gets a claimed user task.
+      operationId: GetMyUserTaskV1
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  allOf:
+                    - $ref: "../../../data-dictionary/responses/response.yml"
+                    - $ref: "../data-dictionary/models/user_task.yml"
+        401:
+          $ref: "../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../data-dictionary/responses/404.yml"
+    put:
+      tags:
+        - my-user-task
+      summary: Modifies a claimed user task.
+      operationId: ModifyUserTaskV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - allOf:
+                  - $ref: "../data-dictionary/commands/claim_user_task_command.yml"
+                  - properties:
+                      object_type:
+                        type: string
+                        example: claim
+                    required:
+                      - object_type
+                - allOf:
+                  - $ref: "../data-dictionary/commands/delay_user_task_command.yml"
+                  - properties:
+                      object_type:
+                        type: string
+                        example: delay
+                    required:
+                      - object_type
+                - allOf:
+                  - $ref: "../data-dictionary/commands/delegate_user_task_command.yml"
+                  - properties:
+                      object_type:
+                        type: string
+                        example: delegate
+                    required:
+                      - object_type
+              discriminator:
+                propertyName: object_type
+                mapping:
+                  claim: ../data-dictionary/commands/claim_user_task_command.yml
+                  delay: ../data-dictionary/commands/delay_user_task_command.yml
+                  delegate: ../data-dictionary/commands/delegate_user_task_command.yml
+        
+      responses:
+        202:
+          $ref: "../../../data-dictionary/responses/202.yml"
+        401:
+          $ref: "../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../data-dictionary/responses/404.yml"
+      
+  /api/my-user-tasks/{user_task_id}/delegators:
+    parameters:
+      - $ref: "../../data-dictionary/parameters/path/user_task_id.yml"
+    get:
+      tags:
+        - my-user-task-delegators
+      summary: Gets a list of users who are authorized for this user task delegation.
+      operationId: GetMyUserTaskDelegatorsV1
+      parameters:
+        - $ref: "../../../data-dictionary/parameters/query/limit.yml"
+        - $ref: "../data-dictionary/parameters/query/user_id_offset.yml"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  allOf:
+                    - $ref: "../../../data-dictionary/responses/offset_response.yml"
+                    - properties:
+                          delegators:
+                            type: array
+                            items:                              
+                              $ref: "../data-dictionary/models/user_task_delegators.yml"
+        401:
+          $ref: "../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../data-dictionary/responses/404.yml"

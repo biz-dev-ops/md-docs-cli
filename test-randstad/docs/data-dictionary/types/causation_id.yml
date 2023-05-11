@@ -1,0 +1,4 @@
+type: string
+format: uuid
+description: Id of the (last) command which has caused this command to be triggered.
+example: e62c8928-026e-493b-9ad1-1ffca6e19e61

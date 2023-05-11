@@ -1,0 +1,11 @@
+title: account
+properties:
+  name:
+   type: string
+   example: John Doe
+  email:
+   type: string
+   format: email
+   example: john@doe.com
+required:
+  - email

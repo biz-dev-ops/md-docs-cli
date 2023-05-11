@@ -1,0 +1,19 @@
+title: timesheet
+type: object
+properties:
+  year:
+    $ref: "../../../data-dictionary/types/year.yml"
+  payrolling_period:
+    $ref: "../../../manage-employment/data-dictionary/types/payrolling_period.yml"
+  period_number:
+    oneOf:
+      - $ref: "../../../manage-employment/data-dictionary/types/weekly_period_number.yml"
+      - $ref: "../../../manage-employment/data-dictionary/types/4_weekly_period_number.yml"
+      - $ref: "../../../manage-employment/data-dictionary/types/monthly_period_number.yml"
+  hours:
+    $ref: "../../../data-dictionary/types/time.yml"
+required:
+  - year
+  - payrolling_period
+  - period_number
+  - hours

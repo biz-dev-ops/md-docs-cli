@@ -16,7 +16,12 @@
 }
 
 .menu a {
+    color: currentcolor;
     text-decoration: none;
+}
+
+.menu :focus-visible {
+    box-shadow: 0 0 0 var(--line-thin) var(--color-black-a20); 
 }
 
 .menu a:hover,

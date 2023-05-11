@@ -1,0 +1,10 @@
+allOf:
+  - $ref: "../../../../data-dictionary/commands/command.yml"
+  - type: object
+    title: extend contract
+    properties:
+      # TODO: remove description. With extension the assignment descrition does not change.
+      assignment:       
+        $ref: "../models/assignment.yml"
+    required:
+     - assignment

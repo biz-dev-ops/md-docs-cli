@@ -7,6 +7,7 @@ const md = require('markdown-it')
         typographer: true
     })
     .use(markdown_it_anchor, {  
+        level: [1, 2, 3],
         permalink: markdown_it_anchor.permalink.linkInsideHeader({
             symbol: "¶"            
         })

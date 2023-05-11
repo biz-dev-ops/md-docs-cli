@@ -1,0 +1,6 @@
+type: string
+title: callback url
+description: |
+  {{callbacks}}
+format: uri
+example: https://business-capability.randstad.com/send-email/callbacks

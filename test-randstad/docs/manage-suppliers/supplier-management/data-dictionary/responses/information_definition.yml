@@ -1,0 +1,9 @@
+allOf:
+  - $ref: "../../../../data-dictionary/responses/response.yml"
+  - type: object
+    title: information definition
+    properties:
+      information_definition_id:
+        $ref: "../types/information_definition_id.yml"
+    required:
+      - information_definition_id

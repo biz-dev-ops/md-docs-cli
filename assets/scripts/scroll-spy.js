@@ -1,5 +1,5 @@
 (() => {
-    const links = document.querySelectorAll(".toc-container a");
+    const links = document.querySelectorAll(".table-of-content a");
     const anchors = document.querySelectorAll(".header-container h2");
     let activeAnchorId = null;
 

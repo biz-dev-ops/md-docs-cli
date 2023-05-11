@@ -1,0 +1,33 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.1
+  title: Randstadgroep Nederland, talent compensation and leave management
+  description: |
+paths:
+
+  /api/calculate-leave:
+    post:
+      tags:
+        - calculate leave
+      summary: Calculates the leave.
+      operationId: CalculateLeaveV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../../data-dictionary/commands/calculate_leave.yml"
+      responses:
+        200:          
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../../data-dictionary/responses/leave.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"

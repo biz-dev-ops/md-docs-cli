@@ -1,6 +1,6 @@
 {
   "name": "@synion/md-docs",
-  "version": "1.0.76",
+  "version": "1.0.77",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -65,5 +65,10 @@
     "uuid": "^9.0.0",
     "yaml": "^2.2.1",
     "yargs": "^17.3.1"
+  },
+  "devDependencies": {
+    "stylelint": "^15.3.0",
+    "stylelint-config-standard-scss": "^7.0.1",
+    "stylelint-order": "^6.0.3"
   }
 }

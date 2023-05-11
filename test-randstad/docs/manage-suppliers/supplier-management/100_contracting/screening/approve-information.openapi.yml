@@ -1,0 +1,56 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.1
+  title: Randstadgroep Nederland, supplier management
+  description: |
+
+paths:
+
+  /api/screening/approve-information-tasks/{task_id}:
+    parameters:
+      - $ref: "../../../../shared-services/data-dictionary/parameters/path/user_task_id.yml"
+    get:
+      tags:
+        - approve information tasks
+      summary: Gets an instance of an approve information task.
+      operationId: GetApproveinformationTaskV1
+      responses:
+        200:          
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../../data-dictionary/user-tasks/approve_information.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../../data-dictionary/responses/404.yml"
+    put:
+      tags:
+        - approve information tasks
+      summary: Completes an instance of an approve information task.
+      operationId: CompleteApproveinformationTaskV1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "../../data-dictionary/commands/approve_information.yml"
+                - $ref: "../../data-dictionary/commands/reject_information.yml"
+      responses:
+        202:
+          $ref: "../../../../data-dictionary/responses/202.yml"
+        400:
+          $ref: "../../../../data-dictionary/responses/400.yml"
+        401:
+          $ref: "../../../../data-dictionary/responses/401.yml"
+        403:
+          $ref: "../../../../data-dictionary/responses/403.yml"
+        404:
+          $ref: "../../../../data-dictionary/responses/404.yml"

@@ -1,0 +1,4 @@
+type: string
+format: uuid 
+description: Unique id of the event. May be used as an idemptotency key.
+example: afa0f657-ba5b-4f6f-bc4e-6ac8dd63d76b

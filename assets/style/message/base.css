@@ -1,7 +1,7 @@
 html, body {
-    -webkit-font-smoothing: antialiased;
     color: var(--text-color-base);
     font-family: 'Source Sans Pro', sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -10,19 +10,19 @@ body {
 }
 
 *,
-*:before,
-*:after {
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
 a {
-    color: currentColor;
+    color: currencolor;
 }
 
 sup {
-    vertical-align: baseline;
+    inset-block-start: -.5em;
     position: relative;
-    top: -.5em;
+    vertical-align: baseline;
 }
 
 address {
@@ -55,7 +55,7 @@ h1, h2, h3, h4, h5 {
 h4, h5 {
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
-    margin-bottom: 0;
+    margin-block-end: 0;
 }
 
 h1, h2 {
@@ -78,13 +78,13 @@ h5 {
 
 ul,
 ol {
-    padding-left: var(--space-base);
+    padding-inline-start: var(--space-base);
 }
 
 li  ul,
 li ol {
-    padding-left: var(--space-base);
-    margin-bottom: calc(var(--space-base) * 1/2);
+    margin-block-end: calc(var(--space-base) * 1/2);
+    padding-inline-start: var(--space-base);
 }
 
 table {
@@ -102,19 +102,19 @@ thead:empty {
 
 td,
 th {
+    border-block-end: var(--border-width) solid var(--border-color);
     padding: calc(var(--space-base) * 1/4) 0;
-    border-bottom: var(--border-width) solid var(--border-color);
     text-align: left;
 }
 
 th {
+    color: var(--color-brand-base);
     font-weight: var(--font-weight-table-heading);
-    color: var(--color-primary-base);
 }
 
 tr:last-child td {
-    border-bottom: none;
-    padding-bottom: 0;
+    border-block-end: none;
+    padding-block-end: 0;
 }
 
 figure {
@@ -126,15 +126,15 @@ figure {
 }
 
 .footnotes {
-    border-top: var(--border-width) solid var(--border-color);
-    padding-top: var(--space-base);
-    margin-top: var(--space-base);
+    border-block-start: var(--border-width) solid var(--border-color);
+    margin-block-start: var(--space-base);
+    padding-block-start: var(--space-base);
     page-break-inside: avoid;
 }
 
 .footnotes-list {
     font-style: italic;
-    margin-bottom: 0;
+    margin-block-end: 0;
     page-break-inside: avoid;
 }
 
@@ -144,7 +144,7 @@ figure {
 
 .reference dt {
     font-weight: var(--font-weight-heading-base);
-    padding-right: var(--space-base);
+    padding-inline-end: var(--space-base);
     width: 33.3%;
 }
 
@@ -153,11 +153,11 @@ figure {
 }
 
 .reference dd {
-    margin-left: 25%;
+    margin-inline-start: 25%;
 }
 
 .reference dt + dd {
-    margin-top: calc(var(--line-height-base) * -1);
+    margin-block-start: calc(var(--line-height-base) * -1);
 }
 
 header {
@@ -165,15 +165,15 @@ header {
 }
 
 header .logo {
-    left: var(--logo-offset);
+    inset-block-start: var(--logo-offset);
+    inset-inline-start: var(--logo-offset);
     position: relative;
-    top: var(--logo-offset);
 }
 
 header .logo svg,
 header .logo img {
-    width: var(--logo-width);
     height: var(--logo-height);
+    width: var(--logo-width);
 }
 
 main .address {
@@ -185,24 +185,24 @@ main .time {
 }
 
 main time {
-    color: var(--color-primary-base);
+    color: var(--color-brand-base);
     display: block;
     font-size: var(--font-size-small);
     font-weight: var(--font-weight-small);
-    margin-left: calc(100% * 2/3);
+    margin-inline-start: calc(100% * 2/3);
     padding: 0 calc(var(--space-base) * 1/2);
     text-align: right;
     width: calc(100% * 1/3);
 }
 
 footer {
+    border-block-end: var(--page-border) solid var(--color-brand-base);
+    padding-block-end: calc((var(--space-base) * 5/4) - var(--page-border));
     position: running(firstPageFooter);
-    border-bottom: var(--page-border) solid var(--color-primary-base);
-    padding-bottom: calc((var(--space-base) * 5/4) - var(--page-border));
 }
 
 footer .contact {
-    color: var(--color-primary-base);
+    color: var(--color-brand-base);
     display: flex;
     font-weight: var(--font-weight-small);
     margin: 0 calc(var(--space-base) * -1/2);
@@ -218,6 +218,18 @@ footer p {
     font-size: var(--font-size-small);
     line-height: var(--line-height-small);
     margin: 0;
+}
+
+.pagedjs_pages::before,
+.pagedjs_pages::after {
+    content: "";
+    display: table;
+    width: 100%;
+}
+
+.pagedjs_page {
+    background-color: #fff;
+    margin: 1.5rem auto;
 }
 
 @media print {
@@ -243,34 +255,16 @@ footer p {
     }
 
     main a {
-        border-bottom: .5pt dotted var(--color-primary-base);
-        color: var(--color-primary-base);
+        border-block-end: .5pt dotted var(--color-brand-base);
+        color: var(--color-brand-base);
     }
 
     main a.footnote-backref {
-        border-bottom: none
+        border-block-end: none
     }
 
     .pagedjs_previewed .footnotes {
         bottom: 0;
         position: absolute;
-    }
-}
-
-@media screen {
-    .pagedjs_pages {
-        background: #eee;
-    }
-
-    .pagedjs_pages::before,
-    .pagedjs_pages::after {
-        content: "";
-        display: table;
-        width: 100%;
-    }
-
-    .pagedjs_page {
-        background-color: #fff;
-        margin: 5rem auto;
     }
 }

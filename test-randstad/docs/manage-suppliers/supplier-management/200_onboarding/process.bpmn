@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_09744z5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.0.0">
+  <bpmn:collaboration id="Collaboration_1ffef7p">
+    <bpmn:participant id="Participant_1nwj41q" name="Onboarding talent" processRef="Process_15tlkxp" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_15tlkxp" isExecutable="true">
+    <bpmn:endEvent id="Event_0enow7t" name="Talent onboarded" />
+    <bpmn:startEvent id="StartEvent_1" name="Supplier contracted">
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1l30dko" />
+    </bpmn:startEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1ffef7p">
+      <bpmndi:BPMNShape id="Participant_1nwj41q_di" bpmnElement="Participant_1nwj41q" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="680" height="250" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0enow7t_di" bpmnElement="Event_0enow7t">
+        <dc:Bounds x="692" y="187" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="667" y="230" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_00kbeit_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="259" y="187" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="252" y="230" width="52" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

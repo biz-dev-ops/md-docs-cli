@@ -1,0 +1,6 @@
+in: query
+name: talent-id
+description: A talent filter.
+required: true
+schema:
+  $ref: "../../types/talent_id.yml"

@@ -73,6 +73,22 @@ body[data-fullscreen-active="true"] {
     inset-block: auto  var(--space-md);
 }
 
+[data-fullscreen="false"] iframe:where(.openapi, .asyncapi, .message, .email),
+[data-fullscreen="false"] figure,
+[data-fullscreen="false"] .bpmn {
+    background-color: var(--color-black-a05);
+    border-radius: var(--radius-base);
+}
+
+[data-fullscreen="true"] iframe:where(.message, .email) {
+    background-color: var(--color-black-a05);
+    min-height: 100vh;
+}
+
+[data-fullscreen] figure {
+    padding: var(--space-md);
+}
+
 [data-fullscreen="true"] {
     background-color: #fff;
     border-radius: 0;
@@ -104,10 +120,6 @@ body[data-fullscreen-active="true"] {
     transform: rotate(180deg);
 }
 
-[data-fullscreen] figure {
-    margin-block-end: 0;
-}
-
 [data-fullscreen="true"] figure {
     float: none;
     margin: var(--space-md);
@@ -124,18 +136,6 @@ body[data-fullscreen-active="true"] {
 [data-fullscreen="true"] embed {
     max-width: none;
 }
-
-[data-fullscreen] iframe:where(.openapi, .asyncapi, .message, .email),
-[data-fullscreen] figure,
-[data-fullscreen] .bpmn {
-    border-radius: var(--radius-base);
-    box-shadow: 0 0 0 var(--line-base) var(--color-brand-a20);
-}
-
-[data-fullscreen] figure {
-    padding: var(--space-md);
-}
-
 
 [data-fullscreen="true"] iframe:where(.openapi, .asyncapi, .message, .email),
 [data-fullscreen="true"] figure,

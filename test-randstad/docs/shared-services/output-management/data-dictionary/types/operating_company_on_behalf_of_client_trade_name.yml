@@ -1,0 +1,17 @@
+title: operating company on behalf of client trade name
+properties:
+  sender_type:    
+    type: string
+    example: operating_company_on_behalf_of_client_trade_name
+    enum: operating_company_on_behalf_of_client_trade_name
+  operating_company:
+    $ref: "../../../../data-dictionary/types/organization_id.yml"
+  client:
+    $ref: "../../../../data-dictionary/types/organization_id.yml"
+  trade_name:
+    $ref: "../../../../data-dictionary/types/trade_name.yml"
+required:
+  - sender_type
+  - operating_company
+  - client
+  - trade_name

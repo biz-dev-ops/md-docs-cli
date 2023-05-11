@@ -9,11 +9,11 @@
 
 /* Module: Header container */
 .content > .header-container {
-    border-block-start: var(--line-base) solid var(--color-brand-a40);
+    border-block-start: var(--line-base) solid var(--color-brand-a20);
     padding: var(--space-lg) var(--content-padding-inline) calc(var(--space-lg) * 2);
 }
 
-.content > .header-container .header-container {
+.content > .header-container .header-container:not(.h3) {
     margin-inline: calc(var(--content-padding-inline) * -1);
     padding-inline: var(--content-padding-inline);
 }
@@ -38,7 +38,11 @@
 .header-container {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--space-md);
+}
+
+.header-container > .container:empty {
+    display: none;
 }
 
 /* Module: Header container - level 2 */
@@ -49,14 +53,36 @@
 
 /* Module: Header container - level 3 */
 .header-container.h3 {
+    border-inline: var(--line-base) solid var(--color-brand-a20);
     gap: var(--space-sm);
+    padding-inline: var(--space-sm);
+    padding-block-start: var(--space-xs);
+    padding-block-end: 0;
 }
 
-.header-container.h3 + .header-container.h3 {
-    margin-block-start: var(--space-md);
+.header-container.h3:first-of-type {
+    border-block-start: var(--line-base) solid var(--color-brand-a20);
+    border-radius: var(--radius-base) var(--radius-base) 0 0;
+    padding-block-start: var(--space-sm);
+}
+
+.header-container.h3:last-of-type {
+    border-block-end: var(--line-base) solid var(--color-brand-a20);
+    border-radius: 0 0 var(--radius-base) var(--radius-base);
+    padding-block-end: var(--space-sm);
+}
+
+.header-container.h3:first-of-type:last-of-type {
+    border-radius: var(--radius-base);
 }
 
 .header-container.h3 h3 {
+    background-color: var(--color-brand-a10);
+    border-radius: var(--radius-half);
+    color: var(--link-text-color);
+    max-width: none;
+    padding: var(--space-sm);
+    padding-inline-end: var(--space-lg);
     position: relative;
 }
 
@@ -64,28 +90,29 @@
     cursor: pointer;
 }
 
-.header-container.h3 h3:after {
+.header-container.h3 h3::after {
     border-color: var(--text-color-base);
-    border-width: var(--line-base) var(--line-base) 0 0;
-    transform: rotate(135deg);
-    transform-origin: 60% 40%;
     border-style: solid;
+    border-width: var(--line-base) var(--line-base) 0 0;
     content: "";
     display: block;
     height: var(--space-xs);
-    width: var(--space-xs);
+    inset-block-start: var(--space-md);
+    inset-inline-end: calc(.25rem + var(--space-md));
     position: absolute;
-    right: .25rem;
-    top: .75rem;
+    transform: rotate(135deg);
+    transform-origin: 60% 40%;
     transition: transform var(--duration-base);
+    width: var(--space-xs);
 }
 
-.header-container.h3.active h3:after {
+.header-container.h3.active h3::after {
     transform: rotate(-45deg);
 }
 
 .header-container.h3.active > .container {
     display: block;
+    margin-block-end: var(--space-md);
 }
 
 .header-container.h3 > .container {

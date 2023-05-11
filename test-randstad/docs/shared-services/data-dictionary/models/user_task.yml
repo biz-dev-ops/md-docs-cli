@@ -1,0 +1,6 @@
+title: user task
+properties:
+  user_task_id:
+    $ref: "../types/user_task_id.yml"
+required:
+  - user_task_id

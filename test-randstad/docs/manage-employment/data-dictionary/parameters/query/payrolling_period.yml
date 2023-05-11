@@ -1,0 +1,6 @@
+in: query
+name: payrolling period
+description: A payrolling period filter.
+required: true
+schema:
+  $ref: "../../types/payrolling_period.yml"

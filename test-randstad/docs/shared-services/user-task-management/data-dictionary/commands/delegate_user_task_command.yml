@@ -1,0 +1,11 @@
+allOf:
+  - $ref: "../../../../data-dictionary/commands/command.yml"
+  - title: delegate
+    properties:
+      delegate_to:
+        $ref: "../types/user_id.yml"
+      message:
+        $ref: "../types/markdown_message.yml"
+    required:
+      - delegate_to
+      - message
