@@ -1,8 +1,0 @@
-type: string
-title: payrolling period
-description: A period in respect of which the talent or supplier is paid remuneration.
-example: weekly
-enum:
-  - weekly
-  - 4 weekly
-  - monthly

@@ -1,9 +1,0 @@
-allOf:
-  - $ref: "../../../../data-dictionary/commands/command.yml"
-  - type: object
-    title: submit information
-    properties:
-      information:
-        type: object
-    required:
-     - information

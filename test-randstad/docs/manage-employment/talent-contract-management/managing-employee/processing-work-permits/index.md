@@ -1,4 +1,0 @@
-# Processing work permits
-
-## Description
-

@@ -1,4 +1,0 @@
-# Managing employment history
-
-## Description
-

@@ -1,9 +1,0 @@
-allOf:
-  - $ref: "../../../../shared-services/data-dictionary/models/user_task.yml"
-  - type: object
-    title: submit information
-    properties:
-      todo:
-        type: string
-    required:
-     - todo

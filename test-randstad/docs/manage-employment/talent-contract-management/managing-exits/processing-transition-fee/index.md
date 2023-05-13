@@ -1,4 +1,0 @@
-# Processing transition fee
-
-## Description
-

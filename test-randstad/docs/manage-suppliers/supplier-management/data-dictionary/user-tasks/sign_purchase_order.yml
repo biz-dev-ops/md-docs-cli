@@ -1,9 +1,0 @@
-allOf:
-  - $ref: "../../../../shared-services/data-dictionary/models/user_task.yml"
-  - type: object
-    title: sign purchase order
-    properties:
-      contract:
-        type: string
-    required:
-     - contract

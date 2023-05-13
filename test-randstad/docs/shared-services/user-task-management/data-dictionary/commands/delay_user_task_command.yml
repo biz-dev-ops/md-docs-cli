@@ -1,8 +1,0 @@
-allOf:
-  - $ref: "../../../../data-dictionary/commands/command.yml"
-  - title: delay
-    properties:
-      delay_until:
-        $ref: "../types/user_task_delayed_until.yml"
-    required:
-      - delay_until

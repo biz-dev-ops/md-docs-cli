@@ -1,4 +1,0 @@
-type: string
-format: uuid
-description: The unique id identifing an organisation.
-example: 77e1169c-1575-43c9-ab30-9ce757edaa9a

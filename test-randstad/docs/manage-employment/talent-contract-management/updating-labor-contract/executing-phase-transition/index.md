@@ -1,4 +1,0 @@
-# Executing phase transition
-
-## Description
-

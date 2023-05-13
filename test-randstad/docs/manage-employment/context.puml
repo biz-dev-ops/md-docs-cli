@@ -1,9 +1,0 @@
-@startuml
-
-package "execute-assignment" as EA
-
-package "finance-and-accounting" AS F
-
-package "manage-employment" as ME
-
-@enduml

@@ -1,6 +1,0 @@
-in: query
-name: offset
-description: An id reference to indicate until where items must be skipped.
-schema:
-  type: string
-  example: fff29f18-b3f0-490c-a9b9-b795c8eb856b

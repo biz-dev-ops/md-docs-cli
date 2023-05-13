@@ -1,4 +1,0 @@
-# Updating compliancy documents
-
-## Description
-
