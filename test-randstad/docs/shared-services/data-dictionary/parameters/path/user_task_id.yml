@@ -1,5 +1,0 @@
-in: path
-name: user_task_id
-required: true
-schema:
-  $ref: "../../types/user_task_id.yml"

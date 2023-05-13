@@ -1,7 +1,0 @@
-# supplier management definitions
-- name: concept purchase contract
-  text: |
-    Concept version of the purchase contract for informational purposes. Details in this version may be ommitted.
-- name: concept purchase order
-  text: |
-    Concept version of the purchase order for informational purposes. Details in this version may be ommitted.

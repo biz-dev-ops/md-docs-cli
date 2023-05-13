@@ -1,6 +1,0 @@
-type: integer
-title: weekly period
-description: A weekly period between 1 and 52.
-example: 52
-minimum: 1
-maximum: 52

@@ -1,1 +1,0 @@
-# Manage accounting and financials

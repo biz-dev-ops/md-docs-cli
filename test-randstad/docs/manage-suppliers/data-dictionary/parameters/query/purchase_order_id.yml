@@ -1,5 +1,0 @@
-in: query
-name: purchase-order-id
-description: A purchase order filter.
-schema:
-  $ref: "../types/purchase_order_id.yml"

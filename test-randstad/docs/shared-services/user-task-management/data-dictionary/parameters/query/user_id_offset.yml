@@ -1,4 +1,0 @@
-in: query
-name: offset
-schema:
-  $ref: "../../types/user_id.yml"

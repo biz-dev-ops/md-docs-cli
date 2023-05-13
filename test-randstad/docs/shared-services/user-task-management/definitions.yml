@@ -1,5 +1,0 @@
-# task management definitions
-- name: user task aggregator
-  link: /shared-services/user-task-management/my-tasks/index.html
-- name: user task provider
-  link: /shared-services/shared-services/user-task-management/my-tasks-provider/index.html

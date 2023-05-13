@@ -1,5 +1,0 @@
-in: path
-name: information definition id
-description: Value indicating the id of the information definition 
-schema:
-  $ref: "../types/information_definition_id.yml"

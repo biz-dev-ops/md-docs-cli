@@ -1,9 +1,0 @@
-allOf:
-  - $ref: "../../../../data-dictionary/commands/command.yml"
-  - type: object
-    title: sign purchase order
-    properties:
-      signature:
-        type: string
-    required:
-     - signature

@@ -1,9 +1,0 @@
-type: string
-title: status
-enum:
-  - unclaimed
-  - claimed
-  - delayed
-  - delegated
-example: unclaimed
-default: unclaimed

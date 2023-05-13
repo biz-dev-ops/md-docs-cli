@@ -1,6 +1,0 @@
-in: query
-name: assignment-id
-description: An assignment filter.
-required: true
-schema:
-  $ref: "../../types/assignment_id.yml"

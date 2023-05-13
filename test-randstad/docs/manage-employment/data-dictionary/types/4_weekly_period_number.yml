@@ -1,6 +1,0 @@
-type: integer
-title: 4 weekly period
-description: A 4 weekly period between 1 and 14.
-example: 14
-minimum: 1
-maximum: 14

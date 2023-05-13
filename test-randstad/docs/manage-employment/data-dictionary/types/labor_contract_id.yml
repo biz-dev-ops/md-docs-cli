@@ -1,5 +1,0 @@
-type: string
-format: uuid
-title: labor contract id
-description: The unique id identifing the labor contract.
-example: a10e7db6-2437-4945-baf7-c86f80a4321d

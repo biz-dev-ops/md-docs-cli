@@ -1,4 +1,0 @@
-allOf:
-  - $ref: "../../../../data-dictionary/commands/command.yml"
-  - type: object
-    title: approve sales order
