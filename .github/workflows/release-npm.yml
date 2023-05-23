@@ -50,6 +50,21 @@ jobs:
 
           git tag -a "${{ steps.version.outputs.value}}" -m "${{ steps.version.outputs.value }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}"
           git push origin "${{ steps.version.outputs.value}}"
+      
+      - name: setup node.js
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+          registry-url: 'https://registry.npmjs.org'
+  
+      - name: npm publish
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
+        run: |
+          npm ci
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM }}
 
       - name: build release notes
         if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
@@ -67,18 +82,3 @@ jobs:
           tag_name: ${{ steps.version.outputs.value}}
           title: '${{ steps.version.outputs.value}}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
           body: ${{steps.release_notes.outputs.changelog}}
-      
-      - name: setup node.js
-        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18.x'
-          registry-url: 'https://registry.npmjs.org'
-  
-      - name: npm publish
-        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
-        run: |
-          npm ci
-          npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM }}
