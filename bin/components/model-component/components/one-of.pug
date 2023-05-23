@@ -1,0 +1,10 @@
+div(class='one-of')
+  ul
+    each oneOf, index in item.oneOf
+      li
+        +header(oneOf, 'oneOf-' + index)
+
+  each oneOf, index in item.oneOf
+    +render(oneOf,'oneOf-' + index)
+
+  pre=JSON.stringify(item, null, 2)

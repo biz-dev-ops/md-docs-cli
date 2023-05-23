@@ -1,0 +1,7 @@
+div(class='object')
+  +header(item, key)
+
+  each property, key in item.properties
+    +render(property, key)
+
+  pre=JSON.stringify(item, null, 2)

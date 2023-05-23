@@ -1,0 +1,14 @@
+if(item.type == 'object' || item.properties)
+  include object.pug
+else if(item.type == 'string')
+  include string.pug
+else if(item.type == 'number')
+  include number.pug
+else if(item.type == 'integer')
+  include integer.pug
+else if(item.type == 'boolean')
+  include integer.pug
+else if(item.type == 'array')
+  include array.pug
+else if(item.oneOf)
+  include one-of.pug

@@ -1,0 +1,9 @@
+mixin header(item, key)
+  name=item.title || key 
+  if(item.description)
+    description=item.description
+
+mixin render(item, key)
+  include components/component.pug
+
++render(json, 'todo: model name')

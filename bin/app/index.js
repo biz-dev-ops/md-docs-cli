@@ -49,6 +49,7 @@ const GraphViewerComponent = require('../components/graph-viewer-component');
 const IFrameComponent = require('../components/iframe-component');
 const ImageComponent = require('../components/image-component');
 const MessageComponent = require('../components/message-component');
+const ModelComponent = require('../components/model-component');
 const OpenapiComponent = require('../components/openapi-component');
 const PageComponent = require('../components/page-component');
 const TabsComponent = require('../components/tabs-component');
@@ -72,6 +73,7 @@ const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser')
 const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
 const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
+const ModelAnchorParser = require('../anchor-parsers/model-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
 const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
@@ -355,6 +357,7 @@ module.exports = class App {
             'imageAnchorParser': asClass(ImageAnchorParser).singleton(),
             'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
+            'modelAnchorParser': asClass(ModelAnchorParser).singleton(),
             'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
             'svgAnchorParser': asClass(SvgAnchorParser).singleton(),
             'urlRewriteAnchorParser': asClass(UrlRewriteAnchorParser).singleton(),
@@ -370,6 +373,7 @@ module.exports = class App {
             'iFrameComponent': asClass(IFrameComponent).singleton().inject(container => allowUnregistered(container, 'iFrameComponentRenderFn')),
             'imageComponent': asClass(ImageComponent).singleton().inject(container => allowUnregistered(container, 'imageComponentRenderFn')),
             'messageComponent': asClass(MessageComponent).singleton().inject(container => allowUnregistered(container, 'messageComponentRenderFn')),
+            'modelComponent': asClass(ModelComponent).singleton().inject(container => allowUnregistered(container, 'modelComponentRenderFn')),
             'openapiComponent': asClass(OpenapiComponent).singleton().inject(container => allowUnregistered(container, 'openapiComponentRenderFn')),
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
@@ -413,7 +417,8 @@ module.exports = class App {
                 'openapiAnchorParser',
                 'userTaskAnchorParser',
                 'imageAnchorParser',
-                'svgAnchorParser'
+                'svgAnchorParser',
+                'modelAnchorParser'
             ]
         };
     }
