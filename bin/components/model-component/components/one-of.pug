@@ -1,10 +1,9 @@
 div(class='one-of')
+  +header(item, key)
+
   ul
     each oneOf, index in item.oneOf
-      li
-        +header(oneOf, 'oneOf-' + index)
+      li=oneOf.title || 'oneOf-' + index
 
   each oneOf, index in item.oneOf
     +render(oneOf,'oneOf-' + index)
-
-  pre=JSON.stringify(item, null, 2)

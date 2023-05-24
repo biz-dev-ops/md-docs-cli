@@ -1,9 +1,14 @@
 mixin header(item, key)
-  name=item.title || key 
+  p=item.title || key 
   if(item.description)
-    description=item.description
+    p=item.description
+
+  section
+    button(class='json-toggle') show json
+    pre(hidden='true')=JSON.stringify(item, null, 2)
 
 mixin render(item, key)
   include components/component.pug
 
-+render(json, 'todo: model name')
+section(class='model-component')
+  +render(json, 'todo: model name')
