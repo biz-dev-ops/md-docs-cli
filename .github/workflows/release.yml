@@ -82,8 +82,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          tag_name: ${{ steps.version.outputs.value}}
-          title: '${{ steps.version.outputs.value}}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
+          tag_name: ${{ steps.version.outputs.value }}
+          title: '${{ steps.version.outputs.value }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
           body: ${{steps.release_notes.outputs.changelog}}
 
       - name: Log in to the Container registry
@@ -104,6 +104,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{env.IMAGE_NAME}}:latest,${{env.IMAGE_NAME}}:${{ steps.version.outputs.value}}
+          tags: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}
           labels: ${{ steps.meta.outputs.labels }}
           
