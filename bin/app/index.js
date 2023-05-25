@@ -201,7 +201,9 @@ module.exports = class App {
             const dir = cwd();
 
             //Set current working directory to file path
+            console.info(colors.yellow(`change cwd to ${path.dirname(file)}`));
             chdir(path.dirname(file));
+            console.info(colors.yellow(` cwd changed to ${cwd()}`));
 
             await markdownFileParser.parse(file);
 
@@ -209,6 +211,7 @@ module.exports = class App {
             chdir(dir);
         });
     }
+    
 
     async #rename(dir) {
         const entries = await fs.readdir(dir, { withFileTypes: true });
