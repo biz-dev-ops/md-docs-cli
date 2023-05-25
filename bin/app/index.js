@@ -4,7 +4,7 @@ const exec = util.promisify(require('child_process').exec);
 const { asClass, asValue } = require('awilix');
 const fs = require('fs').promises;
 const path = require('path');
-const { chdir, cwd } = require('process');
+const process = require('process');
 const colors = require('colors');
 
 const git = require('../utils/git');
@@ -184,31 +184,31 @@ module.exports = class App {
             console.info();
             console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-            const dir = cwd();
+            const dir = process.cwd();
 
             //Set current working directory to file path
-            chdir(path.dirname(file));
+            process.chdir(path.dirname(file));
 
             await fileParser.parse(file);
 
             //Reset current working directory
-            chdir(dir);
+            process.chdir(dir);
         });
 
         const markdownFileParser =  this.container.resolve('markdownFileParser');
 
         await files.each(options.dst, async (file) => {
-            const dir = cwd();
+            const dir = process.cwd();
 
             //Set current working directory to file path
             console.info(colors.yellow(`change cwd to ${path.dirname(file)}`));
-            chdir(path.dirname(file));
-            console.info(colors.yellow(` cwd changed to ${cwd()}`));
+            process.chdir(path.dirname(file));
+            console.info(colors.yellow(` cwd changed to ${process.cwd()}`));
 
             await markdownFileParser.parse(file);
 
             //Reset current working directory
-            chdir(dir);
+            process.chdir(dir);
         });
     }
     
@@ -461,7 +461,7 @@ async function copyFiles(fileTransfers) {
     console.info();
     console.info(colors.yellow(`copying files:`));
     for (const fileTransfer of fileTransfers) {
-        console.info(colors.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(cwd(), fileTransfer.dst)}`));
+        console.info(colors.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(process.cwd(), fileTransfer.dst)}`));
         await files.copy(fileTransfer.src, fileTransfer.dst);
     }
 }
