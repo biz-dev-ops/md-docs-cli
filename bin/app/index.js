@@ -201,10 +201,8 @@ module.exports = class App {
             const dir = process.cwd();
 
             //Set current working directory to file path
-            console.info(colors.yellow(`change cwd to ${path.dirname(file)}`));
             process.chdir(path.dirname(file));
-            console.info(colors.yellow(` cwd changed to ${process.cwd()}`));
-
+            
             await markdownFileParser.parse(file);
 
             //Reset current working directory
