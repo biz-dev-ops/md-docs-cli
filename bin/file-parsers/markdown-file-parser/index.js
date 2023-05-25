@@ -35,19 +35,19 @@ module.exports = class MarkdownFileParser {
     }
 
     async #render(file) {
+        cwdBugFix('#render(file)', file);
         const markdown = await files.readFileAsString(file);
+        cwdBugFix('await files.readFileAsString(file)', file);
         const response = getTitle(markdown, file);
+        cwdBugFix('getTitle(markdown, file)', file);
         const element = await this.renderer.render(response.markdown);
+        cwdBugFix('this.renderer.render(response.markdown)', file);
 
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.html`, element.outerHTML);
 
         for (const parser of this.parsers) {
-            if(cwd() != path.dirname(file)) {
-                //Bugfix
-                console.warn(colors.red(`\t* cwd changed unexpectedly after parser ${parser.constructor.name}: expected ${path.dirname(file)} but found: ${cwd()}`))
-                chdir(path.dirname(file));
-            }
+            cwdBugFix(parser.constructor.name, file);
             await parser.parse(element, file);
         }
 
@@ -80,6 +80,14 @@ module.exports = class MarkdownFileParser {
             toc: this.tocParser.parse(element),
             locale: await this.locale.get()
         });
+    }
+}
+
+function cwdBugFix(context, file) {
+    if(cwd() != path.dirname(file)) {
+        //Bugfix
+        console.warn(colors.red(`\t* cwd changed unexpectedly after ${context}: expected ${path.dirname(file)} but found: ${cwd()}`))
+        chdir(path.dirname(file));
     }
 }
 
