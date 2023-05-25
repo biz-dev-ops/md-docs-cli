@@ -21,14 +21,20 @@ module.exports = class MarkdownFileParser {
     }
 
     async parse(file) {
+        cwdBugFix('1', file);
         if (!(file.endsWith('.md') && !file.endsWith('.message.md') && !file.endsWith('.email.md')))
             return;
 
+        cwdBugFix('2', file);
         console.info(colors.yellow(`parsing ${path.relative(this.options.dst, file)}`));
 
+        cwdBugFix('3', file);
         const htmlFile = `${file.slice(0, -3)}.html`;
+
+        cwdBugFix('4', file);
         console.info(colors.green(`\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
+        cwdBugFix('5', file);
         const html = await this.#render(file);
 
         await fs.writeFile(htmlFile, html);
