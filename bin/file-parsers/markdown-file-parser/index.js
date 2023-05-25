@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const { chdir, cwd } = require('process');
 const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
@@ -42,6 +43,11 @@ module.exports = class MarkdownFileParser {
             await fs.writeFile(`${file}.html`, element.outerHTML);
 
         for (const parser of this.parsers) {
+            if(cwd() != path.dirname(file)) {
+                //Bugfix
+                console.warn(colors.red(`\t* cwd changed unexpectedly after parser ${parser.constructor.name}: expected ${path.dirname(file)} but found: ${cwd()}`))
+                chdir(path.dirname(file));
+            }
             await parser.parse(element, file);
         }
 
