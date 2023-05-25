@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { chdir, cwd } = require('process');
+const process = require('process');
 const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
@@ -90,10 +90,10 @@ module.exports = class MarkdownFileParser {
 }
 
 function cwdBugFix(context, file) {
-    if(cwd() != path.dirname(file)) {
+    if(process.cwd() != path.dirname(file)) {
         //Bugfix
-        console.warn(colors.red(`\t* cwd changed unexpectedly after ${context}: expected ${path.dirname(file)} but found: ${cwd()}`))
-        chdir(path.dirname(file));
+        console.warn(colors.red(`\t* cwd changed unexpectedly after ${context}: expected ${path.dirname(file)} but found: ${process.cwd()}`))
+        process.chdir(path.dirname(file));
     }
 }
 
