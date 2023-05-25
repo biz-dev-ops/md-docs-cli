@@ -98,14 +98,6 @@ module.exports = class App {
             return;
         }
 
-        const hosting = this.container.resolve('hosting');
-        await hosting.apply();
-
-        await this.#parse(options);
-        
-        console.info(colors.green('\nrenaming directories:'));
-        await this.#rename(options.dst);
-
         if(await files.exists(path.resolve(options.basePath, 'index.html'))) {
             console.info(colors.green('\nindex.html already exists'));
         } 
@@ -118,6 +110,14 @@ module.exports = class App {
                 </head>
             </html>`);
         }
+
+        const hosting = this.container.resolve('hosting');
+        await hosting.apply();
+
+        await this.#parse(options);
+        
+        console.info(colors.green('\nrenaming directories:'));
+        await this.#rename(options.dst);
         
         if(options.args.release) {
             console.info(colors.green('\ncreating release:'));
