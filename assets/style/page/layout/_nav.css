@@ -78,6 +78,7 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 0;
 }
 
+
 /* Menu toggle */
 .menu-toggle-branches {
     align-items: center;
@@ -95,8 +96,9 @@ input[type="search"]::-webkit-search-cancel-button {
     text-decoration: none;
 }
 
-.menu-toggle-branches[aria-expanded="true"] {
-    background-color: transparent;
+.menu-toggle-branches[aria-expanded="true"],
+.menu-toggle-branches[aria-expanded="true"]:is(:hover, :focus) {
+    background-color: var(--color-black-a10);
     border-block-end-color: transparent;
 }
 
@@ -138,6 +140,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 /* Branches menu  */
 .menu-branches {
+    background-color: var(--color-black-a10);
     flex-direction: column;
     gap: var(--space-sm);
     grid-area: main;
