@@ -1,0 +1,28 @@
+/* Element: Form */
+
+input:not([type="checkbox"], [type="radio"]),
+textarea,
+select {
+    display: block;
+    font-family: inherit;
+    font-size: inherit;
+    inline-size: 100%;
+    padding: var(--space-xs);
+}
+
+input:not([type="checkbox"], [type="radio"]) {
+    border: none;
+    border-radius: var(--radius-pill);
+    padding-inline: var(--space-sm);
+}
+
+fieldset {
+    border-color: var(--color-grey-100);
+    padding: var(--space-sm) var(--space-md);
+}
+
+legend {
+    font-size: var(--heading-4-size);
+    font-weight: 600;
+    padding-inline: var(--space-sm);
+}

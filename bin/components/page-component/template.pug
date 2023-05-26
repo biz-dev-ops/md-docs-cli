@@ -58,6 +58,15 @@ html
             span(class='label')= git.branch.name
 
         div(id='menu-branches' class='menu-branches' hidden='true')
+          div(class='menu-branches-search')
+            input(type="search" name='menu-branches-search')
+
+          ul
+            each branch in git.branches
+              li(class=git.branch.name === branch.name ? 'active' : '')
+                a(href=relative.basePath + branch.path data-branch-url=relative.basePath + branch.path title=branch.name)
+                  each slug, slugIndex in branch.name.split('/') 
+                    span= slug + (slugIndex < branch.name.split('/').length - 1 ? '/' : '')
 
         div(id='menu-main' class='menu-main')
           +menuItems(menu, false)
@@ -109,8 +118,7 @@ html
     script(src=relative.root + 'assets/scripts/h3.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/iframe.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/fullscreen.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/git.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/menu.js' charset='UTF-8')
+    script(src='/assets/scripts/menu.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/scroll-spy.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/svg-pan-zoom.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/tabs.js' charset='UTF-8')

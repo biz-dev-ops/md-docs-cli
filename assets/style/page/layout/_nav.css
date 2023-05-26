@@ -12,12 +12,19 @@
 }
 
 .menu > :where( div) {
+    max-width: var(--nav-width);
     padding: var(--space-sm);
 }
 
 .menu a {
     color: currentcolor;
     text-decoration: none;
+}
+
+.menu .active > a,
+.menu .active > .menu-toggle {
+    text-decoration: underline;
+    text-decoration-color: var(--color-white-a50);
 }
 
 .menu :focus-visible {
@@ -29,18 +36,12 @@
     text-decoration: underline;
 }
 
-@supports not selector(:focus-visible) {
-    .menu a:focus {
-        text-decoration: underline;
-    }
-}
-
 .menu .icon {
     vertical-align: middle;
 }
 
 .menu .icon + .label {
-    margin-left: var(--space-xs);
+    margin-inline-start: var(--space-xs);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -48,6 +49,10 @@
 
 .menu svg {
     fill: currentcolor;
+}
+
+.menu input {
+    background-color: var(--color-white-a20);
 }
 
 
@@ -58,7 +63,7 @@
 }
 
 .menu-logo img {
-    height: auto;
+    block-size: auto;
     max-height: var(--logo-height);
     max-width: 100%;
 }
@@ -116,12 +121,24 @@
 /* Branches menu  */
 .menu-branches {
     background: var(--color-black-a10);
+    flex-direction: column;
+    gap: var(--space-sm);
     grid-area: main;
     padding-block-start: 0;
 }
 
+.menu-branches:where(:not([hidden])) {
+    display: flex;
+}
+
 .menu-branches:where(:not([hidden])) ~ div {
     display: none;
+}
+
+.menu-branches mark {
+    background-color: transparent;
+    color: currentcolor;
+    font-style: italic;
 }
 
 .menu-branches ul {
@@ -129,12 +146,13 @@
     padding-inline-start: 0;
 }
 
-.menu-branches ul li + li {
+.menu-branches ul li:not([hidden]) + li {
     border-block-start: var(--line-base) solid var(--color-white-a20);
 }
 
 .menu-branches a {
-    display: inline-block;
+    display: inline-flex;
+    flex-wrap: wrap;
     padding-block: var(--space-xs);
 }
 
@@ -229,4 +247,5 @@
     gap: var(--space-sm);
     list-style: none;
     padding-left: 0;
+    gap: var(--space-sm);
 }
