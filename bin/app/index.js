@@ -181,32 +181,42 @@ module.exports = class App {
         const fileParser = this.container.resolve('fileParser');
 
         await files.each(options.dst, async (file) => {
-            console.info();
-            console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
+            try {
+                console.info();
+                console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-            const dir = process.cwd();
+                const dir = process.cwd();
 
-            //Set current working directory to file path
-            process.chdir(path.dirname(file));
+                //Set current working directory to file path
+                process.chdir(path.dirname(file));
 
-            await fileParser.parse(file);
+                await fileParser.parse(file);
 
-            //Reset current working directory
-            process.chdir(dir);
+                //Reset current working directory
+                process.chdir(dir);
+            }
+            catch(error) {
+                await this.#createErrorPage(file, error);
+            }
         });
 
-        const markdownFileParser =  this.container.resolve('markdownFileParser');
-
         await files.each(options.dst, async (file) => {
-            const dir = process.cwd();
+            try {
+                const markdownFileParser =  this.container.resolve('markdownFileParser');
 
-            //Set current working directory to file path
-            process.chdir(path.dirname(file));
-            
-            await markdownFileParser.parse(file);
+                const dir = process.cwd();
 
-            //Reset current working directory
-            process.chdir(dir);
+                //Set current working directory to file path
+                process.chdir(path.dirname(file));
+                
+                await markdownFileParser.parse(file);
+
+                //Reset current working directory
+                process.chdir(dir);
+            }
+            catch(error) {
+                await this.#createErrorPage(file, error);
+            }
         });
     }
     
@@ -250,6 +260,37 @@ module.exports = class App {
 
             await files.copy(src, dst);
         }
+    }
+    
+    async #createErrorPage(file, error) {
+        const options = this.container.resolve('options');
+        const markdownFileParser =  this.container.resolve('markdownFileParser');
+        const gitInfo = this.container.resolve('gitInfo');
+
+        console.info(colors.red(error.message));
+        console.trace();
+
+        console.log(Error.captureStackTrace(error));
+    
+        process.chdir(options.dst);
+       
+        const errorFile = path.join(options.dst, 'index.md');
+        const relativeFile = path.relative(options.dst, file);
+        const gitFile = path.join(gitInfo.branch.url, relativeFile);
+            
+        const content = `# Error
+    
+There was an error while processing [${relativeFile}](${gitFile}).
+
+Please review the error and fix the problem. A new version will be automaticly build when you commit a fix.
+
+<pre class="error">
+    ${error.stack}
+</pre>`
+    
+        await fs.writeFile(errorFile, content);
+    
+        await markdownFileParser.parse(errorFile);
     }
 
     //Protected
