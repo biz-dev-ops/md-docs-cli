@@ -62,11 +62,6 @@ html
             input(type="search" name='menu-branches-search' placeholder="Vind een branch" aria-controls="list-branches" class='list-search')
 
           ul(id='list-branches')
-            each branch in git.branches
-              li(class=git.branch.name === branch.name ? 'active' : '')
-                a(href=relative.basePath + branch.path data-branch-url=relative.basePath + branch.path title=branch.name)
-                  each slug, slugIndex in branch.name.split('/') 
-                    span= slug + (slugIndex < branch.name.split('/').length - 1 ? '/' : '')
 
         div(id='menu-main' class='menu-main')
           div(class='menu-pages-search')
@@ -105,6 +100,7 @@ html
       | !{content}
     script.
       window.x_md_docs_cli_basePath = '!{relative.basePath}';
+      window.x_md_docs_cli_branch = '!{git.branch.name}'
 
     script(src=relative.basePath + 'branches.js' charset='UTF-8')
 
@@ -117,9 +113,10 @@ html
     script(src=relative.root + 'assets/prismjs/prism-line-numbers.min.js' charset='UTF-8')
 
     script(src=relative.root + 'assets/scripts/bpmn.js' charset='UTF-8')
+    script(src=relative.root + 'assets/scripts/fullscreen.js' charset='UTF-8')
+    script(src=relative.root + 'assets/scripts/git.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/h3.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/iframe.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/fullscreen.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/menu.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/scroll-spy.js' charset='UTF-8')
     script(src=relative.root + 'assets/scripts/svg-pan-zoom.js' charset='UTF-8')
