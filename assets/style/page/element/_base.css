@@ -155,6 +155,10 @@ pre {
     padding: var(--space-md);
 }
 
+pre.error {
+    border: solid var(--color-error)
+}
+
 table tr * {
     border-block-end: var(--line-base) solid var(--background-color-base);
     padding: var(--space-xs) var(--space-sm);
