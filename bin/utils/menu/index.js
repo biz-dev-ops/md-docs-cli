@@ -107,6 +107,10 @@ module.exports = class Menu {
                     item.url = this.#rewriteUrl(i.url);
                 }
 
+                if (i.items.length) {
+                    item.classes.push("has-sibbling");
+                }
+
                 return item;
 
             })
