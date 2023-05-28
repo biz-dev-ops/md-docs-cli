@@ -12,6 +12,7 @@
 }
 
 .menu > :where( div) {
+    max-width: var(--nav-width);
     padding: var(--space-sm);
 }
 
@@ -20,34 +21,43 @@
     text-decoration: none;
 }
 
+.menu ul li > :is(a, .menu-toggle) {
+    inline-size: 100%;
+    padding: var(--space-xs);
+    padding-inline-end: var(--space-sm);
+}
+
+.menu :is(a, .menu-toggle):is(:hover, :focus),
+.menu li.active > :is(a, .menu-toggle) {
+    background-color: var(--color-white-a10);
+}
+
 .menu :focus-visible {
-    box-shadow: 0 0 0 var(--line-thin) var(--color-black-a20); 
-}
-
-.menu a:hover,
-.menu a:focus-visible {
-    text-decoration: underline;
-}
-
-@supports not selector(:focus-visible) {
-    .menu a:focus {
-        text-decoration: underline;
-    }
+    box-shadow: 0 0 0 var(--line-thin) var(--color-white-a50); 
 }
 
 .menu .icon {
     vertical-align: middle;
 }
 
-.menu .icon + .label {
-    margin-left: var(--space-xs);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .menu svg {
     fill: currentcolor;
+}
+
+.menu input {
+    background-color: var(--color-white-a20);
+}
+
+.menu input::placeholder {
+    color: var(--color-white-a50);
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
+    block-size: 1.25rem;
+    cursor: pointer;
+    inline-size: 1.25rem;
 }
 
 
@@ -58,39 +68,54 @@
 }
 
 .menu-logo img {
-    height: auto;
+    block-size: auto;
     max-height: var(--logo-height);
     max-width: 100%;
 }
 
 /* Branch menu  */
 .menu-branch {
-    border-block-end: var(--line-base) solid var(--color-white-a20);
-    border-block-start: var(--line-base) solid var(--color-white-a20);
-    padding: var(--space-xs) var(--space-sm);
+    padding: 0;
 }
 
-.menu-branch-label {
-    color: var(--color-white-a50);
-    font-size: var(--font-size-sm);
-}
 
 /* Menu toggle */
 .menu-toggle-branches {
     align-items: center;
+    border-block-end: var(--line-base) solid var(--color-white-a20);
+    border-block-start: var(--line-base) solid var(--color-white-a20);
+    column-gap: var(--space-xs);
     display: grid;
     grid-template-columns: auto 1fr auto;
-    padding: 0;
+    padding: var(--space-xs) var(--space-sm);
     white-space: nowrap;
+}
+
+.menu-toggle-branches:is(:hover, :focus) {
+    background-color: var(--color-white-a10);
+    text-decoration: none;
+}
+
+.menu-toggle-branches[aria-expanded="true"],
+.menu-toggle-branches[aria-expanded="true"]:is(:hover, :focus) {
+    background-color: var(--color-black-a10);
+    border-block-end-color: transparent;
+}
+
+.menu-toggle-branches .label {
+    color: var(--color-white-a50);
+    font-size: var(--font-size-sm);
+    grid-column: span 3;
 }
 
 .menu-toggle-branches .icon svg {
     vertical-align: middle;
 }
 
-.menu-toggle-branches .label {
-    margin-inline-end: var(--space-md);
-    margin-inline-start: var(--space-xs);
+.menu-toggle-branches .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .menu-toggle-branches::after {
@@ -115,13 +140,23 @@
 
 /* Branches menu  */
 .menu-branches {
-    background: var(--color-black-a10);
+    background-color: var(--color-black-a10);
+    flex-direction: column;
+    gap: var(--space-sm);
     grid-area: main;
-    padding-block-start: 0;
+}
+
+.menu-branches:where(:not([hidden])) {
+    display: flex;
 }
 
 .menu-branches:where(:not([hidden])) ~ div {
     display: none;
+}
+
+.search-no-results {
+    color: currentcolor;
+    font-style: italic;
 }
 
 .menu-branches ul {
@@ -129,20 +164,23 @@
     padding-inline-start: 0;
 }
 
-.menu-branches ul li + li {
+.menu-branches ul li:not([hidden]) + li {
     border-block-start: var(--line-base) solid var(--color-white-a20);
 }
 
 .menu-branches a {
-    display: inline-block;
+    display: inline-flex;
+    flex-wrap: wrap;
     padding-block: var(--space-xs);
 }
 
 /* Main menu */
 .menu-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
     grid-area: main;
     padding-block-start: var(--space-lg);
-    padding-inline-end: 0;
 }
 
 .menu-main ul {
@@ -152,6 +190,7 @@
 
 .menu-main > ul {
     padding-inline-start: 0;
+    margin-inline-end: -16px;
 }
 
 .menu-main ul ul ul > li {
@@ -229,4 +268,5 @@
     gap: var(--space-sm);
     list-style: none;
     padding-left: 0;
+    gap: var(--space-sm);
 }

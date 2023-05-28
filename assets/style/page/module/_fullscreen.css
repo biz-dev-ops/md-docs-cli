@@ -14,7 +14,7 @@ body[data-fullscreen-active="true"] {
     --icon-padding: calc(var(--space-sm) + var(--space-xxs));
 
     box-shadow: var(--drop-shadow-base);
-    color: currentColor;
+    color: currentcolor;
     border: 0;
     border-radius: var(--radius-base);
     display: block;
@@ -41,7 +41,7 @@ body[data-fullscreen-active="true"] {
 [data-fullscreen] [data-toggle="fullscreen"]::before,
 [data-fullscreen] [data-toggle="fullscreen"]::after {
     border-style: solid;
-    border-color: currentColor;
+    border-color: currentcolor;
     content: "";
     display: block;
     height: var(--space-xs);
