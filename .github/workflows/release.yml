@@ -87,6 +87,7 @@ jobs:
           body: ${{steps.release_notes.outputs.changelog}}
 
       - name: Log in to the Container registry
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
@@ -94,16 +95,18 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}
           labels: ${{ steps.meta.outputs.labels }}
           
