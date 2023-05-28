@@ -12,5 +12,7 @@
     "to": "To",
     "true": "Yes",
     "view_source_file": "View source file",
-    "yes": "Yes"
+    "yes": "Yes",
+    "find_page": "Find a page",
+    "find_branch": "Find a branch"
 }

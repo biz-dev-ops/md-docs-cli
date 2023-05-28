@@ -59,13 +59,13 @@ html
 
         div(id='menu-branches' class='menu-branches' hidden='true')
           div(class='menu-branches-search')
-            input(type="search" name='menu-branches-search' placeholder="Vind een branch" aria-controls="list-branches" class='list-search')
+            input(type="search" name='menu-branches-search' placeholder=locale.find_branch aria-controls="list-branches" class='list-search')
 
           ul(id='list-branches')
 
         div(id='menu-main' class='menu-main')
           div(class='menu-pages-search')
-            input(type="search" name='menu-pages-search' placeholder="Vind een pagina" aria-controls="list-pages" class='list-search')
+            input(type="search" name='menu-pages-search' placeholder=locale.find_page aria-controls="list-pages" class='list-search')
           +menuItems(menu, false, 'list-pages')
 
         div(class='menu-footer')
