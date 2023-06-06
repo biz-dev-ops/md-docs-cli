@@ -48,22 +48,22 @@ class CucumberTestExecutionFeatureResult {
 
     #getScenarioResult(scenario) {
         let scenarioResults = this.result.elements.filter(e => e.type === 'scenario' && e.name === scenario.name);
-        if (scenarioResults.length > 1)
-            scenarioResults = scenarioResults.filter(s => s.keyword === 'Scenario Outline');
-
-        return scenarioResults.find(scenarioResult => {
-            if (scenario.steps.length != scenarioResult.steps.length)
-                return false;
-
-            for (var i = 0, len = scenario.steps.length; i < len; i++) {
-                if (scenario.steps[i].keyword.trim() != scenarioResult.steps[i].keyword.trim())
+ 
+        return this.result.elements
+            .filter(e => e.type === 'scenario' && e.name === scenario.name)
+            .find(scenarioResult => {
+                if (scenario.steps.length != scenarioResult.steps.length)
                     return false;
 
-                if (scenario.steps[i].text != scenarioResult.steps[i].name)
-                    return false;
-            }
-            return true;
-        }) || { steps: [] };
+                for (var i = 0, len = scenario.steps.length; i < len; i++) {
+                    if (scenario.steps[i].keyword.trim() != scenarioResult.steps[i].keyword.trim())
+                        return false;
+
+                    if (scenario.steps[i].text != scenarioResult.steps[i].name)
+                        return false;
+                }
+                return true;
+            }) || { steps: [] };
     }
 
     #parseStepResult(stepResult) {

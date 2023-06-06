@@ -196,7 +196,7 @@ module.exports = class App {
                 process.chdir(dir);
             }
             catch(error) {
-                await this.#createErrorPage(file, error);
+                await this.#onError(file, error);
             }
         });
 
@@ -215,7 +215,7 @@ module.exports = class App {
                 process.chdir(dir);
             }
             catch(error) {
-                await this.#createErrorPage(file, error);
+                await this.#onError(file, error);
             }
         });
     }
@@ -262,8 +262,14 @@ module.exports = class App {
         }
     }
     
-    async #createErrorPage(file, error) {
+    async #onError(file, error) {
         const options = this.container.resolve('options');
+        if (process.env.NODE_ENV === 'development') {
+            console.error(`Error in file ${file}.`);
+            console.trace();
+            throw error;
+        }
+
         const markdownFileParser =  this.container.resolve('markdownFileParser');
         const gitInfo = this.container.resolve('gitInfo');
 
