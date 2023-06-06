@@ -1,3 +1,5 @@
+const { array } = require("yargs");
+
 exports.group = (features) => {
     if (!features.some(f => f.group))
         return features;
@@ -32,26 +34,25 @@ exports.group = (features) => {
 
 getAggregateResult = function (collection) {
     if(collection.length === 0)
-        return 'undefined';
+        return [ 'undefined' ];
 
-    if(collection.every(child => child.result.status === 'passed')) {
-        return 'passed';
-    }
+    const status = [
+        ...new Set (
+            collection.flatMap(child => {
+                if(Array.isArray(child.result.status))
+                    return child.result.status;
 
-    if (collection.some(child => child.result.status === 'failed'))
-        return 'failed';
+                switch(child.result.status) {
+                    case 'passed':
+                    case 'failed':
+                    case 'undefined':
+                        return child.result.status
+                    default: 
+                        return 'other'
+                }
+            })
+        )
+    ];
 
-    if (collection.some(child => child.result.status === 'other'))
-        return 'other';
-    
-    if (collection.some(child => child.result.status === 'pending'))
-        return 'other';
-    
-    if (collection.some(child => child.result.status === 'skipped'))
-        return 'other';
-    
-    if (collection.some(child => child.result.status === 'undefined'))
-        return 'undefined';
-
-    return 'other';
+    return status;
 }

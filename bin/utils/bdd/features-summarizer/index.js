@@ -31,15 +31,17 @@ const getStatusSummary = function (collection) {
     for (const item of collection) {
         if (item.result == undefined) {
             item.result = {
-                status: "undefined"
+                status: [ "undefined" ]
             };
         }
 
-        if (statuses[item.result.status] == undefined) {
-            statuses[item.result.status] = { value: 0 };
+        const status = getSingleStatus(item.result.status);
+
+        if (statuses[status] == undefined) {
+            statuses[status] = { value: 0 };
         }
 
-        statuses[item.result.status].value += 1;
+        statuses[status].value += 1;
         statuses.total.value += 1;
     }
 
@@ -54,3 +56,16 @@ const getStatusSummary = function (collection) {
 
     return statuses;
 }
+
+const getSingleStatus = function (status) {
+    if(status.includes('error'))
+        return 'error';
+
+    if(status.includes('undefined'))
+        return 'undefined';
+
+    if(status.includes('other'))
+        return 'other';
+
+    return 'passed';
+}   

@@ -1,6 +1,9 @@
 mixin summary(item)
   summary
-    span(class='status status-'+ item.result.status)=item.title || item.name
+    if Array.isArray(item.result.status)
+      span='status array'
+    else
+      span(class='status status-'+ item.result.status)=item.title || item.name
 
 mixin step(step)
   li(class='step ' + step.type)
