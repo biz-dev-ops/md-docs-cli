@@ -1,7 +1,15 @@
 mixin summary(item)
   summary
     if Array.isArray(item.result.status)
-      span='status array'
+      span(class='status status-group')
+        figure(class='chart chart-doughnut')
+          svg(viewBox='0 0 63.662 63.662')
+            circle(class="circle-base" cx="31.831" cy="31.831" r="15.9155" fill="none" stroke-width="31.831")
+            circle(class="circle-passed" cx="31.831" cy="31.831" r="15.9155" fill="none" stroke-width="31.831" stroke-dasharray="33.33 100" stroke-dashoffset="0")
+            circle(class="circle-failed" cx="31.831" cy="31.831" r="15.9155" fill="none" stroke-width="31.831" stroke-dasharray="33.33 100" stroke-dashoffset="-33.3333")
+            circle(class="circle-undefined" cx="31.831" cy="31.831" r="15.9155" fill="none" stroke-width="31.831" stroke-dasharray="33.33 100" stroke-dashoffset="-66.6667")
+            circle(cx="31.831" cy="31.831" r="15.9155" fill="white" stroke-width="0")
+        span=item.title || item.name
     else
       span(class='status status-'+ item.result.status)=item.title || item.name
 
