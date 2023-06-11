@@ -50,6 +50,19 @@ details.step table {
     top: .35rem;
 }
 
+.status-group .chart-doughnut {
+    display: flex;
+    height: var(--space-sm);
+    width: var(--space-sm);
+    position: absolute;
+    left: 0;
+    top: .35rem;
+}
+
+.status-group::before {
+    content: none;
+}
+
 .status-bg {
     display: block;
     border-radius: var(--radius-base);
@@ -201,10 +214,6 @@ details.step table {
     margin: 0;
 }
 
-.chart-doughnut svg {
-    vertical-align: middle;
-}
-
 .chart-doughnut figcaption {
     align-items: center;
     font-size: var(--heading-1-size);
@@ -220,39 +229,39 @@ details.step table {
 
 .chart-doughnut .text {
     font-family: var(--font-family-heading);
-    font-size: .5em;
+    font-size: 1em;
     text-anchor: middle;
 }
 
-.chart-doughnut .circle {
-    stroke: var(--background-color-base);
-    fill: none;
-    /*stroke-linecap: round;*/
+.chart-doughnut circle {
+    animation: stroke-progress 1s ease-out;
+    stroke: var(--color-black-a20);
+    transform: rotate(-90deg);
+    transform-origin: 50%;
+}
+
+.chart-doughnut .circle-base {
+    animation: none;
 }
 
 .chart-doughnut .circle-passed {
     stroke: var(--color-success);
-    animation: stroke-progress 1s ease-out;
 }
 
 .chart-doughnut .circle-failed {
     stroke: var(--color-error);
-    animation: stroke-progress 1s ease-out;
 }
 
 .chart-doughnut .circle-skipped {
     stroke: var(--color-info);
-    animation: stroke-progress 1s ease-out;
 }
 
 .chart-doughnut .circle-undefined {
     stroke: var(--color-warning);
-    animation: stroke-progress 1s ease-out;
 }
 
 .chart-doughnut .circle-pending {
     stroke: var(--color-black-a30);
-    animation: stroke-progress 1s ease-out;
 }
 
 @keyframes stroke-progress {
