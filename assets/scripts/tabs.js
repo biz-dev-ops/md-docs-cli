@@ -11,7 +11,9 @@
                 anchor.setAttribute('aria-expanded', 'true');
             
                 panels.forEach(sibling => sibling.setAttribute('hidden', 'true'));
+
                 panels[index].removeAttribute('hidden');
+                panels[index].dispatchEvent(new Event('visible'));
             };
         })
     })
