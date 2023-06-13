@@ -1,6 +1,5 @@
 (() => {
     document.querySelectorAll('div.bpmn').forEach(container => {
-
         const viewer = new BpmnJS({
             container: container
         });
@@ -83,20 +82,34 @@
         });
     
         fullscreenContainer.addEventListener('openfullscreen', () => {
-            viewer.get('canvas').zoom('fit-viewport', 'auto');
-            setTimeout(() => {
-                viewer.get('canvas').zoom('fit-viewport', 'auto');
-            }, 1);
-            viewer.get('zoomScroll').toggle();
+            resizeAndToggle(viewer);
             
         });
             
         fullscreenContainer.addEventListener('closefullscreen', () => {
+            resizeAndToggle(viewer);
+        });
+        
+        window.addEventListener('resize', () => {
+            resize(viewer);
+        }); 
+
+        container
+            .closest('.header-container.h3')
+            ?.addEventListener('visible', () => {
+                resize(viewer);
+            });  
+    });  
+
+    const resize = (viewer) => {
+        viewer.get('canvas').zoom('fit-viewport', 'auto');
+        setTimeout(() => {
             viewer.get('canvas').zoom('fit-viewport', 'auto');
-            setTimeout(() => {
-                viewer.get('canvas').zoom('fit-viewport', 'auto');
-            }, 1);
-            viewer.get('zoomScroll').toggle();
-        });    
-    });
+        }, 1);
+    }
+
+    const resizeAndToggle = (viewer) => {
+        resize(viewer);
+        viewer.get('zoomScroll').toggle();
+    }
 })();
