@@ -35,6 +35,7 @@
     "@apidevtools/json-schema-ref-parser": "^10.0.0",
     "@asyncapi/html-template": "^0.28.0",
     "@cucumber/gherkin-streams": "^5.0.0",
+    "@synion/model-viewer": "^0.0.2",
     "awilix": "^8.0.0",
     "bpmn-js": "^13.0.4",
     "colors": "^1.4.0",

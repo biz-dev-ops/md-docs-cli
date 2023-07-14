@@ -1,14 +1,5 @@
-mixin header(item, key)
-  p=item.title || key 
-  if(item.description)
-    p=item.description
+script.
+  window.modelViewer = window.modelViewer || {};
+  window.modelViewer['todoMakeUId'] = !{JSON.stringify(json, null, 2)}
 
-  section
-    button(class='json-toggle') show json
-    pre(hidden='true')=JSON.stringify(item, null, 2)
-
-mixin render(item, key)
-  include components/component.pug
-
-section(class='model-component')
-  +render(json, 'todo: model name')
+<model-viewer id="todoMakeUId"></model-viewer>

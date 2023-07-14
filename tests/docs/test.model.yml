@@ -1,0 +1,1351 @@
+---
+oneOf:
+- required:
+  - object_type
+  - trainset_id
+  - type
+  - registration_date
+  - engines
+  title: freight trainset
+  description: "A freight trainset, cargo trainset, or goods trainset is a group of
+    freight cars (US) or goods wagons (International Union of Railways) hauled by
+    one or more locomotives on a railway, transporting cargo all or some of the way
+    between the shipper and the intended destination as part of the logistics chain.\n\n
+    \ \n"
+  properties:
+    object_type:
+      title: object type
+      description: Object type is used the distinguish between different types of
+        trainsets.
+      type: string
+    trainset_id:
+      type: integer
+      minimum: 0
+      description: A unique id identifing the trainset.
+      example: 4051
+    type:
+      required:
+      - type_id
+      - name
+      properties:
+        type_id:
+          type: string
+          format: uuid
+          description: A unique id identifing the trainset type.
+          example: f3bb9b86-698e-46ad-9b0f-95a6b906dd57
+        name:
+          type: string
+          description: The name of the trainset type.
+          example: ICM-2
+    registration_date:
+      type: string
+      format: date
+      description: The registration date of the trainset.
+      example: '1981-01-05'
+    wheels:
+      title: wheels
+      type: array
+      description: Lorem ipsum etc.
+      items:
+        title: wheel
+        type: string
+    engines:
+      title: engines
+      type: array
+      description: Lorem ipsum etc.
+      items:
+        title: engine
+        oneOf:
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: electric engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: diesel engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: hydrogen engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        discriminator:
+          propertyName: object_type
+    carriages:
+      title: carriages
+      type: array
+      items:
+        title: carriage
+        oneOf:
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: passenger carriage
+          description: A passenger railroad car or passenger car (American English),
+            also called a passenger carriage, passenger coach (British English and
+            International Union of Railways), or passenger bogie (Indian English)[1]
+            is a railroad car that is designed to carry passengers. The term passenger
+            car can also be associated with a sleeping car, a baggage car, a dining
+            car, railway post office and prisoner transport cars.
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              properties:
+                seated:
+                  title: seated
+                  type: integer
+                  minimum: 0
+                standing:
+                  title: standing
+                  type: integer
+                  minimum: 0
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: container freight carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number of container which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 2
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: liquid freight carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number liters which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 4000
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: autorack carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number of cars which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 36
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: boxcar
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The tonnage which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 5500
+        discriminator:
+          propertyName: object_type
+- required:
+  - object_type
+  - trainset_id
+  - type
+  - registration_date
+  title: passenger trainset
+  description: 'A passenger trainset is a trainset used to transport people along
+    a railroad line. These trainsets may consist of unpowered passenger railroad cars
+    (also known as coaches or carriages) hauled by one or more locomotives, or may
+    be self-propelled; self propelled passenger trainsets are known as multiple units
+    or railcars.
+
+    '
+  properties:
+    object_type:
+      title: object type
+      description: Object type is used the distinguish between different types of
+        trainsets.
+      type: string
+    trainset_id:
+      type: integer
+      minimum: 0
+      description: A unique id identifing the trainset.
+      example: 4051
+    type:
+      required:
+      - type_id
+      - name
+      properties:
+        type_id:
+          type: string
+          format: uuid
+          description: A unique id identifing the trainset type.
+          example: f3bb9b86-698e-46ad-9b0f-95a6b906dd57
+        name:
+          type: string
+          description: The name of the trainset type.
+          example: ICM-2
+    registration_date:
+      type: string
+      format: date
+      description: The registration date of the trainset.
+      example: '1981-01-05'
+    engines:
+      title: engines
+      description: Lorem ipsum etc.
+      type: array
+      items:
+        title: engine
+        oneOf:
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: electric engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: diesel engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: hydrogen engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        discriminator:
+          propertyName: object_type
+    carriages:
+      title: carriages
+      type: array
+      items:
+        title: carriage
+        oneOf:
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: passenger carriage
+          description: A passenger railroad car or passenger car (American English),
+            also called a passenger carriage, passenger coach (British English and
+            International Union of Railways), or passenger bogie (Indian English)[1]
+            is a railroad car that is designed to carry passengers. The term passenger
+            car can also be associated with a sleeping car, a baggage car, a dining
+            car, railway post office and prisoner transport cars.
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              properties:
+                seated:
+                  title: seated
+                  type: integer
+                  minimum: 0
+                standing:
+                  title: standing
+                  type: integer
+                  minimum: 0
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: container freight carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number of container which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 2
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: liquid freight carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number liters which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 4000
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: autorack carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number of cars which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 36
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: boxcar
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The tonnage which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 5500
+        discriminator:
+          propertyName: object_type
+- required:
+  - object_type
+  - trainset_id
+  - type
+  - registration_date
+  title: work trainset
+  description: 'A work trainset or departmental trainset (engineering trainset in
+    the UK) is one or more rail cars intended for internal non-revenue use by the
+    railroad''s operator. Work trainsets serve functions such as track maintenance,
+    maintenance of way, revenue collection, system cleanup and waste removal, heavy
+    duty hauling, and crew member transport.
+
+    '
+  properties:
+    object_type:
+      title: object type
+      description: Object type is used the distinguish between different types of
+        trainsets.
+      type: string
+    trainset_id:
+      type: integer
+      minimum: 0
+      description: A unique id identifing the trainset.
+      example: 4051
+    type:
+      required:
+      - type_id
+      - name
+      properties:
+        type_id:
+          type: string
+          format: uuid
+          description: A unique id identifing the trainset type.
+          example: f3bb9b86-698e-46ad-9b0f-95a6b906dd57
+        name:
+          type: string
+          description: The name of the trainset type.
+          example: ICM-2
+    registration_date:
+      type: string
+      format: date
+      description: The registration date of the trainset.
+      example: '1981-01-05'
+    engines:
+      title: engines
+      description: Lorem ipsum etc.
+      type: array
+      items:
+        title: engine
+        oneOf:
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: electric engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: diesel engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        - required:
+          - object_type
+          - engine_id
+          - horsepower
+          - type
+          - registration_date
+          title: hydrogen engine
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of engines.
+              type: string
+            engine_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the engine.
+              example: 9865
+            horsepower:
+              type: integer
+              minimum: 0
+              description: The engines horsepower.
+              example: 2500
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the engine type.
+                  example: f7269ba2-124d-4de7-9497-f6ef01515d88
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: Bombardier TRAXX
+                name:
+                  type: string
+                  description: The name of the engine type.
+                  example: F140 MS2
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the engine.
+              example: '1981-01-05'
+        discriminator:
+          propertyName: object_type
+    carriages:
+      title: carriages
+      type: array
+      items:
+        title: carriage
+        oneOf:
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: passenger carriage
+          description: A passenger railroad car or passenger car (American English),
+            also called a passenger carriage, passenger coach (British English and
+            International Union of Railways), or passenger bogie (Indian English)[1]
+            is a railroad car that is designed to carry passengers. The term passenger
+            car can also be associated with a sleeping car, a baggage car, a dining
+            car, railway post office and prisoner transport cars.
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              properties:
+                seated:
+                  title: seated
+                  type: integer
+                  minimum: 0
+                standing:
+                  title: standing
+                  type: integer
+                  minimum: 0
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: container freight carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number of container which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 2
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: liquid freight carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number liters which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 4000
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: autorack carriage
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The number of cars which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 36
+        - required:
+          - object_type
+          - carriage_id
+          - type
+          - registration_date
+          title: boxcar
+          properties:
+            object_type:
+              title: object type
+              description: Object type is used the distinguish between different types
+                of carriages.
+              type: string
+            carriage_id:
+              type: integer
+              minimum: 0
+              description: A unique id identifing the carriage.
+              example: 8765
+            type:
+              required:
+              - type_id
+              - manufacturer
+              - name
+              properties:
+                type_id:
+                  type: string
+                  format: uuid
+                  description: A unique id identifing the carriage type.
+                  example: 6a88f3f2-7377-4bca-b5ad-62a2c634320b
+                manufacturer:
+                  type: string
+                  description: The name of the manufacturing company.
+                  example: United Wagon Europe GmbH
+                name:
+                  type: string
+                  description: The name of the carriage type.
+                  example: 19-9549
+            registration_date:
+              type: string
+              format: date
+              description: The registration date of the carriage.
+              example: '1981-01-05'
+            capacity:
+              title: capacity
+              description: The tonnage which can be loaded onto the carriage.
+              type: integer
+              minimum: 0
+              example: 5500
+        discriminator:
+          propertyName: object_type
+discriminator:
+  propertyName: object_type

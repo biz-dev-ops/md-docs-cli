@@ -1,7 +1,7 @@
 :root {
     /* Colors */
-    --no-brand-rgb-purple: 129, 76, 180;
-    --no-brand-rgb-purple-dark: 102, 51, 153;
+    --no-brand-rgb-purple: 129 76 180;
+    --no-brand-rgb-purple-dark: 102 51 153;
 
     /* Theming */
     --rgb-brand: var(--no-brand-rgb-purple);

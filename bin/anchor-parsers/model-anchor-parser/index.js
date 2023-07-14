@@ -14,7 +14,7 @@ module.exports = class ModelAnchorParser extends AnchorParser {
     this.definitionParser = definitionParser;
   }
 
-  _canParse(anchor) { return anchor.href.endsWith('.yml') || anchor.href.endsWith('.yaml'); }
+  _canParse(anchor) { return anchor.href.endsWith('.model.yml') || anchor.href.endsWith('.model.yaml'); }
 
   async _parse(anchor, file) {
     console.info(colors.green(`\t\t\t\t* parsing yaml`));
