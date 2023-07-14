@@ -1,6 +1,16 @@
 mixin summary(item)
   summary
-    span(class='status status-'+ item.result.status)=item.title || item.name
+    if Array.isArray(item.result.status)
+      span(class='status status-group')
+        figure(class='chart chart-doughnut')
+          svg(viewBox='0 0 63.662 63.662')
+            circle(class="circle-base" cx="31.831" cy="31.831" r="15.9155" fill="none" stroke-width="31.831")
+            each status, index in item.result.status
+              circle(class="circle-" + status cx="31.831" cy="31.831" r="15.9155" fill="none" stroke-width="31.831" stroke-dasharray=100 / item.result.status.length + " 100" stroke-dashoffset=0 - ((100 / item.result.status.length) * index))
+            circle(cx="31.831" cy="31.831" r="15.9155" fill="white" stroke-width="0")
+        span=item.title || item.name
+    else
+      span(class='status status-'+ item.result.status)=item.title || item.name
 
 mixin step(step)
   li(class='step ' + step.type)

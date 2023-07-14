@@ -1,9 +1,6 @@
 :root {
-    /* Colors */
-    --no-brand-rgb-purple: 129 76 180;
-    --no-brand-rgb-purple-dark: 102 51 153;
-
-    /* Theming */
-    --rgb-brand: var(--no-brand-rgb-purple);
-    --text-color-heading: rgb(var(--no-brand-rgb-purple-dark));
+    --rgb-brand: 129 76 180;
+    --rgb-heading: 102 51 153;
 }
+    
+    

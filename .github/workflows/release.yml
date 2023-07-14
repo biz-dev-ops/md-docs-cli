@@ -6,14 +6,18 @@ on:
     types: [closed]
     branches: [main]
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   
   release:
-  
+
     runs-on: ubuntu-latest
     environment: production
     if: github.event.pull_request.merged
-    timeout-minutes: 5
+    timeout-minutes: 10
   
     steps:
   
@@ -41,7 +45,6 @@ jobs:
         run: |
           echo 'tag version: ${{ steps.tag_version.outputs.tag }}'
 
-
       - name: push tag
         if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
         run: |
@@ -50,23 +53,6 @@ jobs:
 
           git tag -a "${{ steps.version.outputs.value}}" -m "${{ steps.version.outputs.value }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}"
           git push origin "${{ steps.version.outputs.value}}"
-
-      - name: build release notes
-        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
-        id: release_notes
-        uses: mikepenz/release-changelog-builder-action@v3.6.0
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          
-      - name: create release
-        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          tag_name: ${{ steps.version.outputs.value}}
-          title: '${{ steps.version.outputs.value}}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
-          body: ${{steps.release_notes.outputs.changelog}}
       
       - name: setup node.js
         if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
@@ -82,3 +68,45 @@ jobs:
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}
+
+      - name: build release notes
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
+        id: release_notes
+        uses: mikepenz/release-changelog-builder-action@v3.6.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          
+      - name: create release
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ steps.version.outputs.value }}
+          title: '${{ steps.version.outputs.value }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
+          body: ${{steps.release_notes.outputs.changelog}}
+
+      - name: Log in to the Container registry
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.value }}
+          labels: ${{ steps.meta.outputs.labels }}
+          

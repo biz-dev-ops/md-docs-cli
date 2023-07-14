@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const process = require('process');
 const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
@@ -26,6 +27,7 @@ module.exports = class MarkdownFileParser {
         console.info(colors.yellow(`parsing ${path.relative(this.options.dst, file)}`));
 
         const htmlFile = `${file.slice(0, -3)}.html`;
+
         console.info(colors.green(`\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
         const html = await this.#render(file);

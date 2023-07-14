@@ -4,7 +4,7 @@ const exec = util.promisify(require('child_process').exec);
 const { asClass, asValue } = require('awilix');
 const fs = require('fs').promises;
 const path = require('path');
-const { chdir, cwd } = require('process');
+const process = require('process');
 const colors = require('colors');
 
 const git = require('../utils/git');
@@ -100,14 +100,6 @@ module.exports = class App {
             return;
         }
 
-        const hosting = this.container.resolve('hosting');
-        await hosting.apply();
-
-        await this.#parse(options);
-        
-        console.info(colors.green('\nrenaming directories:'));
-        await this.#rename(options.dst);
-
         if(await files.exists(path.resolve(options.basePath, 'index.html'))) {
             console.info(colors.green('\nindex.html already exists'));
         } 
@@ -120,6 +112,14 @@ module.exports = class App {
                 </head>
             </html>`);
         }
+
+        const hosting = this.container.resolve('hosting');
+        await hosting.apply();
+
+        await this.#parse(options);
+        
+        console.info(colors.green('\nrenaming directories:'));
+        await this.#rename(options.dst);
         
         if(options.args.release) {
             console.info(colors.green('\ncreating release:'));
@@ -183,34 +183,45 @@ module.exports = class App {
         const fileParser = this.container.resolve('fileParser');
 
         await files.each(options.dst, async (file) => {
-            console.info();
-            console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
+            try {
+                console.info();
+                console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-            const dir = cwd();
+                const dir = process.cwd();
 
-            //Set current working directory to file path
-            chdir(path.dirname(file));
+                //Set current working directory to file path
+                process.chdir(path.dirname(file));
 
-            await fileParser.parse(file);
+                await fileParser.parse(file);
 
-            //Reset current working directory
-            chdir(dir);
+                //Reset current working directory
+                process.chdir(dir);
+            }
+            catch(error) {
+                await this.#onError(file, error);
+            }
         });
-
-        const markdownFileParser =  this.container.resolve('markdownFileParser');
 
         await files.each(options.dst, async (file) => {
-            const dir = cwd();
+            try {
+                const markdownFileParser =  this.container.resolve('markdownFileParser');
 
-            //Set current working directory to file path
-            chdir(path.dirname(file));
+                const dir = process.cwd();
 
-            await markdownFileParser.parse(file);
+                //Set current working directory to file path
+                process.chdir(path.dirname(file));
+                
+                await markdownFileParser.parse(file);
 
-            //Reset current working directory
-            chdir(dir);
+                //Reset current working directory
+                process.chdir(dir);
+            }
+            catch(error) {
+                await this.#onError(file, error);
+            }
         });
     }
+    
 
     async #rename(dir) {
         const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -251,6 +262,43 @@ module.exports = class App {
 
             await files.copy(src, dst);
         }
+    }
+    
+    async #onError(file, error) {
+        const options = this.container.resolve('options');
+        if (process.env.NODE_ENV === 'development') {
+            console.error(`Error in file ${file}.`);
+            console.trace();
+            throw error;
+        }
+
+        const markdownFileParser =  this.container.resolve('markdownFileParser');
+        const gitInfo = this.container.resolve('gitInfo');
+
+        console.info(colors.red(error.message));
+        console.trace();
+
+        console.log(Error.captureStackTrace(error));
+    
+        process.chdir(options.dst);
+       
+        const errorFile = path.join(options.dst, 'index.md');
+        const relativeFile = path.relative(options.dst, file);
+        const gitFile = path.join(gitInfo.branch.url, relativeFile);
+            
+        const content = `# Error
+    
+There was an error while processing [${relativeFile}](${gitFile}).
+
+Please review the error and fix the problem. A new version will be automaticly build when you commit a fix.
+
+<pre class="error">
+    ${error.stack}
+</pre>`
+    
+        await fs.writeFile(errorFile, content);
+    
+        await markdownFileParser.parse(errorFile);
     }
 
     //Protected
@@ -465,7 +513,7 @@ async function copyFiles(fileTransfers) {
     console.info();
     console.info(colors.yellow(`copying files:`));
     for (const fileTransfer of fileTransfers) {
-        console.info(colors.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(cwd(), fileTransfer.dst)}`));
+        console.info(colors.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(process.cwd(), fileTransfer.dst)}`));
         await files.copy(fileTransfer.src, fileTransfer.dst);
     }
 }

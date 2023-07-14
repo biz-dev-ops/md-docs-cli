@@ -55,7 +55,7 @@ h4, .heading-size-4 {
 
 abbr[title] {
     border: 0;
-    color: var(--link-text-color, currentColor);
+    color: var(--link-text-color, currentcolor);
     outline: 0;
 }
 
@@ -81,7 +81,7 @@ a > abbr {
 }
 
 a {
-    color: var(--link-text-color, currentColor);
+    color: var(--link-text-color, currentcolor);
     text-underline-offset: .25ex;
 }
 
@@ -155,6 +155,10 @@ pre {
     padding: var(--space-md);
 }
 
+pre.error {
+    border: solid var(--color-error)
+}
+
 table tr * {
     border-block-end: var(--line-base) solid var(--background-color-base);
     padding: var(--space-xs) var(--space-sm);
@@ -167,28 +171,6 @@ table tr *:first-child{
 
 table tr *:last-child {
     padding-inline-end: 0;
-}
-
-
-input:not([type="checkbox"], [type="radio"]),
-textarea,
-select {
-    display: block;
-    font-family: inherit;
-    font-size: inherit;
-    inline-size: 100%;
-    padding: var(--space-xxs);
-}
-
-fieldset {
-    border-color: var(--color-grey-100);
-    padding: var(--space-sm) var(--space-md);
-}
-
-legend {
-    font-size: var(--heading-4-size);
-    font-weight: 600;
-    padding-inline: var(--space-sm);
 }
 
 dt {
