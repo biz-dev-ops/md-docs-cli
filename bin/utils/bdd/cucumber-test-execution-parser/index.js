@@ -12,7 +12,7 @@ module.exports = class CucumberTestExecutionParser {
             .filter(e => Array.isArray(e))
             .flatMap(e => e)
             .find(f => f.name.includes(feature.hash));
-
+        
         return new CucumberTestExecutionFeatureResult(result);
     }
 
@@ -47,20 +47,21 @@ class CucumberTestExecutionFeatureResult {
     }
 
     #getScenarioResult(scenario) {
-        let scenarioResults = this.result.elements.filter(e => e.type === 'scenario' && e.name === scenario.name);
- 
         return this.result.elements
             .filter(e => e.type === 'scenario' && e.name === scenario.name)
             .find(scenarioResult => {
-                if (scenario.steps.length != scenarioResult.steps.length)
+                if (scenario.steps.length != scenarioResult.steps.length) {
                     return false;
+                }
 
                 for (var i = 0, len = scenario.steps.length; i < len; i++) {
-                    if (scenario.steps[i].keyword.trim() != scenarioResult.steps[i].keyword.trim())
+                    if (scenario.steps[i].keyword.trim() != scenarioResult.steps[i].keyword.trim()) {
                         return false;
+                    }
 
-                    if (scenario.steps[i].text != scenarioResult.steps[i].name)
+                    if (scenario.steps[i].text != scenarioResult.steps[i].name) {
                         return false;
+                    }
                 }
                 return true;
             }) || { steps: [] };
