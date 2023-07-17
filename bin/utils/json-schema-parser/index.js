@@ -45,5 +45,6 @@ mergeAllOfInSchema = (object) => {
             object[key] = mergeAllOfInSchema(object[key])
         }
     }
+
     return object;
   }
