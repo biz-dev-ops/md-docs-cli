@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
 const { env } = require('process');
 const colors = require('colors');
+const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
 const jsonSchemaParser = require('../../utils/json-schema-parser');
@@ -25,9 +26,16 @@ module.exports = class ModelAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.json`, JSON.stringify(json));
 
     const id = `model-container-${uuidv4()}`;
+    const title = json.title || path.basename(file);
 
     console.info(colors.green(`\t\t\t\t* rendering`));
-    const html = this.component.render({ id, json });
+    const html = this.component.render({ 
+      id, 
+      title, 
+      json: JSON.stringify(json)
+        .replace(/(\r\n|\n|\r)/gm, "")
+        .replace(/'/g, "&apos")
+    });
 
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.html`, html);
@@ -37,6 +45,7 @@ module.exports = class ModelAnchorParser extends AnchorParser {
 
   async #getJson(file) {
     const json = await jsonSchemaParser.parse(file);
-    return JSON.parse((await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n"));
+    return json;
+    //return JSON.parse((await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n"));
   }
 };

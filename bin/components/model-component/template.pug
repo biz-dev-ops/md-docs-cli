@@ -1,5 +1,8 @@
 script.
   window.modelViewer = window.modelViewer || {};
-  window.modelViewer['#{id}'] = !{JSON.stringify(json, null, 2)}
+  window.modelViewer['#{id}'] = !{json}
 
-model-viewer(id=id)
+model-viewer(id=id, title=title model=json)
+
+script.
+  document.getElementById('#{id}').model = !{json}
