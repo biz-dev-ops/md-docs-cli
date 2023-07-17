@@ -6,11 +6,13 @@
 
         h3.addEventListener("click", function () {
             container.classList.toggle('active');
+            container.dispatchEvent(new Event('visible'));
         });
 
         h3.addEventListener("keydown", function () {
             if (event.key === "Enter") {
                 container.classList.toggle('active');
+                container.dispatchEvent(new Event('visible'));
             }
         });
     };
