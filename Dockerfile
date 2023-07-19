@@ -1,6 +1,9 @@
-FROM timbru31/java-node:17-jdk
+FROM node:latest
 
 RUN apt-get update
+
+# Installing JDK
+RUN apt-get install -y openjdk-17-jdk openjdk-17-jre
 
 # Install md-docs dependencies
 RUN apt-get install -y graphviz libxkbcommon-x11-0 libgbm-dev
@@ -14,4 +17,11 @@ RUN apt-get install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libc
     libxtst6 ca-certificates fonts-liberation libappindicator3-1 libnss3 \
     lsb-release xdg-utils wget
 
-RUN npm i @synion/md-docs -g
+# Disable NPM SSL check
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+
+# Upgrading NPM to latest version
+RUN npm install -g npm
+
+# Installing md-docs version 1.0.93
+RUN npm i -g @synion/md-docs
