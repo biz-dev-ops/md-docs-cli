@@ -33,6 +33,7 @@ class DashboardAnchorParser
 class FeatureAnchorParser
 class IFrameAnchorParser
 class MarkdownAnchorParser
+class ModelAnchorParser
 class OpenapiAnchorParser
 class UmlAnchorParser
 class UserTaskAnchorParser
@@ -64,6 +65,7 @@ AnchorParser <|.. DashboardAnchorParser
 AnchorParser <|.. FeatureAnchorParser
 AnchorParser <|.. IFrameAnchorParser
 AnchorParser <|.. MarkdownAnchorParser
+AnchorParser <|.. ModelAnchorParser
 AnchorParser <|.. OpenapiAnchorParser
 AnchorParser <|.. UserTaskAnchorParser
 AnchorParser <|.. UrlRewriteAnchorParser
