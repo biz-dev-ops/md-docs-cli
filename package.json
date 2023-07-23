@@ -1,6 +1,6 @@
 {
   "name": "@synion/md-docs",
-  "version": "1.0.94",
+  "version": "1.0.96",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -35,6 +35,7 @@
     "@apidevtools/json-schema-ref-parser": "^10.1.0",
     "@asyncapi/html-template": "^0.28.3",
     "@cucumber/gherkin-streams": "^5.0.1",
+    "@synion/model-viewer": "^0.1.0",
     "awilix": "^8.0.1",
     "bpmn-js": "^13.2.2",
     "colors": "^1.4.0",
