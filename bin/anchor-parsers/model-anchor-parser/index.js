@@ -34,7 +34,7 @@ module.exports = class ModelAnchorParser extends AnchorParser {
       title, 
       json: JSON.stringify(json)
         .replace(/(\r\n|\n|\r)/gm, "")
-        .replace(/'/g, "&apos")
+        .replace(/"/g, "&quot;")
     });
 
     if (env.NODE_ENV === 'development')
