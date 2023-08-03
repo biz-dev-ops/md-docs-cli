@@ -60,7 +60,7 @@
     "pdf-merger-js": "^4.3.0",
     "prismjs": "^1.29.0",
     "pug": "^3.0.2",
-    "puppeteer": "^20.8.2",
+    "puppeteer": "^21.0.0",
     "svg-pan-zoom": "^3.6.1",
     "swagger-ui-dist": "^5.1.1",
     "uuid": "^9.0.0",
