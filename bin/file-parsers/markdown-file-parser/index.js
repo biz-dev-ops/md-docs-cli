@@ -1,5 +1,4 @@
 const fs = require('fs').promises;
-const process = require('process');
 const { env } = require('process');
 const path = require('path');
 const colors = require('colors');

@@ -79,6 +79,8 @@ const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
 const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
 
+const logger = createLogger();
+
 module.exports = class App {
     #options = null;
 
@@ -90,6 +92,10 @@ module.exports = class App {
     }
 
     async run() {
+        if (process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'debug') {
+            disbableLog();
+        }
+
         await this.#init(this.#options);
 
         const options = this.container.resolve('options');
@@ -167,22 +173,37 @@ module.exports = class App {
     async #parse(options) {
         console.info();
         console.info(colors.yellow(`parsing uml files`));
+
+        process.stdout.write("\nparsing puml files:\n");
+
         let promise = exec(`java -jar ${__dirname}/../plantuml.1.2023.4.jar "${options.dst}/**.puml" -tsvg -enablestats -realtimestats -progress`);
-        
+        let current = 0;
+
         promise.child.stdout.on('data', function(data) {
-            console.info(colors.green(`${data.replace(/(\r\n|\n|\r)/gm, "")}`));
+            current = (data.match(/#/g)||[]).length;
+            logger.progress(30, current);
+            process.stdout.write(data);
         });
         
         promise.child.stderr.on('data', function(data) {
-            console.info(colors.green(`${data.replace(/(\r\n|\n|\r)/gm, "")}`));
+            process.stdout.write(data);
         });
 
         await promise;
+        if(current < 30) {
+            logger.progress(30, 30);
+        }
+        
         console.info(colors.green(`uml files parsed`));
 
         const fileParser = this.container.resolve('fileParser');
 
+        let totalFiles = await files.count(options.dst);
+        current = 0;
+        process.stdout.write("\nparsing files:\n");
+
         await files.each(options.dst, async (file) => {
+            current += 1;
             try {
                 console.info();
                 console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
@@ -200,9 +221,17 @@ module.exports = class App {
             catch(error) {
                 await this.#onError(file, error);
             }
+
+            logger.progress(totalFiles, current);
         });
 
+        totalFiles = await files.count(options.dst);
+        current = 0;
+        process.stdout.write("\nparsing mardkdown files:\n");
+
         await files.each(options.dst, async (file) => {
+            current += 1;
+            
             try {
                 const markdownFileParser =  this.container.resolve('markdownFileParser');
 
@@ -219,6 +248,8 @@ module.exports = class App {
             catch(error) {
                 await this.#onError(file, error);
             }
+            
+            logger.progress(totalFiles, current);
         });
     }
     
@@ -331,7 +362,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             
             { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') },
 
-            { src: path.resolve(options.nodeModules, '@synion/model-viewer/dist/model-viewer.js'), dst: path.resolve(options.dst, 'assets/model-viewer') },
+            { src: path.resolve(options.nodeModules, '@biz-dev-ops/model-viewer/dist/model-viewer.js'), dst: path.resolve(options.dst, 'assets/model-viewer') },
 
             { src: options.src, dst: options.dst }
         ];
@@ -363,6 +394,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'locale': asClass(Locale).singleton(),
             'relative': asClass(Relative).singleton(),
             'tocParser': asClass(TocParser).singleton(),
+            'progress': asValue(logger.progress),
 
             //BDD
             'gherkinParser': asClass(GherkinParser).singleton(),
@@ -539,4 +571,44 @@ function parseResolver(resolver) {
         return resolver;
     
     return resolver.disposer?.(async service => await service.dispose?.());
+}
+
+function createLogger() {
+    const logger = {
+
+        progress: function(total, current) {
+            const size = 50;
+
+            if(current > total) {
+                current = total;
+            }
+
+            const one = (size / total);
+            const done = Math.round(one * current);
+            const dots = ".".repeat(done);
+            const empty = " ".repeat((size - done));
+            const percentage = Math.floor((current / total) * 100);
+
+            process.stdout.write(`\r[${dots}${empty}] ${percentage}%`)
+
+            if(total === current) {
+                process.stdout.write("\n");
+            }
+        }
+    };
+    const methods = ["log", "debug", "info", "warn", "error"];
+    for(let i=0;i<methods.length;i++){
+        logger[methods[i]] = console[methods[i]];
+    }
+
+    return logger;
+}
+
+function disbableLog() {
+    const methods = ["log", "debug", "info"];
+    for(let i=0;i<methods.length;i++){
+        console[methods[i]] = function(){};
+    }
+
+    process.stdout.write("\nLogging is disabled. To enable logging set NODE_ENV to development or debug: export NODE_ENV=debug\n\n");
 }

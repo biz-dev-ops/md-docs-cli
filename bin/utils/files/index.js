@@ -42,6 +42,23 @@ exports.copy = async (src, dst) => {
     }
 }
 
+exports.count = async(src) => {
+    let x = 0;
+    await fs.access(src);
+    const entries = await fs.readdir(src, { withFileTypes: true });
+
+    for (let entry of entries) {
+        if (entry.isDirectory()) {
+            x += await this.count(path.resolve(src, entry.name))
+        }
+        else {
+           x += 1;
+        }
+    }
+
+    return x;
+}
+
 exports.each = async (src, callback) => {
     await fs.access(src);
     const entries = await fs.readdir(src, { withFileTypes: true });

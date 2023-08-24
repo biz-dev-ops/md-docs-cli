@@ -27,9 +27,9 @@
         }
     };
 
-    window.onscroll = () => scrollspy();
-    window.onload = () => scrollspy();
-    window.onresize = () => scrollspy();
+    window.addEventListener('scroll', scrollspy);
+    window.addEventListener('load', scrollspy);
+    window.addEventListener('resize', scrollspy);
 
     scrollspy();
 })();
