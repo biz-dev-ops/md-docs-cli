@@ -1,6 +1,6 @@
 const awilix = require('awilix');
 const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const execFile = util.promisify(require('child_process').execFile);
 const { asClass, asValue } = require('awilix');
 const fs = require('fs').promises;
 const path = require('path');
@@ -176,7 +176,19 @@ module.exports = class App {
 
         process.stdout.write("\nparsing puml files:\n");
 
-        let promise = exec(`java -jar ${__dirname}/../plantuml.1.2023.4.jar "${options.dst}/**.puml" -tsvg -enablestats -realtimestats -progress`);
+        const cmd = "java",
+            args = [
+                "-jar", 
+                `${__dirname}/../plantuml.1.2023.4.jar`,
+                `${options.dst}/**.puml`,
+                "-tsvg",
+                "-enablestats",
+                "-realtimestats",
+                "-progress"
+            ];
+
+        // let promise = exec(`java -jar ${__dirname}/../plantuml.1.2023.4.jar "${options.dst}/**.puml" -tsvg -enablestats -realtimestats -progress`);
+        let promise = execFile(cmd, args);
         let current = 0;
 
         promise.child.stdout.on('data', function(data) {
