@@ -362,7 +362,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             
             { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') },
 
-            { src: path.resolve(options.nodeModules, '@synion/model-viewer/dist/model-viewer.js'), dst: path.resolve(options.dst, 'assets/model-viewer') },
+            { src: path.resolve(options.nodeModules, '@biz-dev-ops/model-viewer/dist/model-viewer.js'), dst: path.resolve(options.dst, 'assets/model-viewer') },
 
             { src: options.src, dst: options.dst }
         ];

@@ -24,4 +24,4 @@ ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 RUN npm install -g npm
 
 # Installing latest md-docs version
-RUN npm i -g @synion/md-docs
+RUN npm i -g @biz-dev-ops/md-docs
