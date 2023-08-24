@@ -97,7 +97,7 @@ module.exports = class MyApp extends App {
 ## To get started
 
 ```
-npm install @synion/md-docs -g
+npm install @biz-dev-ops/md-docs -g
 mkdir ../documentation
 cd documentation
 mkdir docs
