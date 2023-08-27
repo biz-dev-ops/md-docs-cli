@@ -4,7 +4,6 @@
 [![release](https://github.com/synionnl/md-docs-cli/actions/workflows/release.yml/badge.svg)](https://github.com/synionnl/md-docs-cli/actions/workflows/release.yml)
 [![npm](https://img.shields.io/npm/v/@biz-dev-ops/md-docs.svg)](https://npmjs.org/package/@biz-dev-ops/md-docs)
 [![npm](https://img.shields.io/npm/dm/@biz-dev-ops/md-docs.svg)](https://npmjs.org/package/@biz-dev-ops/md-docs)
-[![alerts](https://img.shields.io/lgtm/alerts/g/synionnl/md-docs-cli.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/synionnl/md-docs-cli/alerts/)
 
 ## Product
 
