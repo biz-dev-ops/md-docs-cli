@@ -187,7 +187,6 @@ module.exports = class App {
                 "-progress"
             ];
 
-        // let promise = exec(`java -jar ${__dirname}/../plantuml.1.2023.4.jar "${options.dst}/**.puml" -tsvg -enablestats -realtimestats -progress`);
         let promise = execFile(cmd, args);
         let current = 0;
 
