@@ -33,7 +33,7 @@
                     page = menu.querySelector(`a[href$="/${id}/index.html"], a[href="${id}/index.html"]`);
 
                     if(anchor || page) {
-                    e.gfx.style.cursor = 'pointer';
+                        e.gfx.style.cursor = 'pointer';
                     }
                 });
 

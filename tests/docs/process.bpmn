@@ -13,10 +13,10 @@
       <bpmn:incoming>Flow_0endjlp</bpmn:incoming>
       <bpmn:outgoing>Flow_0vpd6mz</bpmn:outgoing>
     </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0endjlp" sourceRef="StartEvent_1" targetRef="Activity_03o50yg" />
     <bpmn:endEvent id="Event_18axk8q">
       <bpmn:incoming>Flow_0vpd6mz</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0endjlp" sourceRef="StartEvent_1" targetRef="Activity_03o50yg" />
     <bpmn:sequenceFlow id="Flow_0vpd6mz" sourceRef="Activity_03o50yg" targetRef="Event_18axk8q" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
