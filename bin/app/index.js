@@ -317,9 +317,6 @@ module.exports = class App {
         const markdownFileParser =  this.container.resolve('markdownFileParser');
         const gitInfo = this.container.resolve('gitInfo');
 
-        //console.trace();
-        //process.stdout.write(Error.captureStackTrace(error));
-    
         process.chdir(options.dst);
        
         const errorFile = path.join(options.dst, 'index.md');
@@ -330,6 +327,8 @@ module.exports = class App {
         process.stdout.write("\n");
         process.stdout.write(colors.red(error.message));
         process.stdout.write("\n");
+        console.trace();
+        process.stdout.write(Error.captureStackTrace(error));
 
         const gitFile = path.join(gitInfo.branch.url, relativeFile);
             
