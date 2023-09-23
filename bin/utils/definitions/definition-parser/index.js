@@ -19,7 +19,7 @@ module.exports = class DefinitionParser {
     async render(template) {
         const definitions = await this.definitionStore.get();
         for (const definition of definitions) {
-            const regex = new RegExp(`(?![^<]*>)({{${definition.name}}})`, 'img');
+            const regex = new RegExp(`(?![^<]*>)({{\\s*${definition.name}\\s*}})`, 'img');
 
             template = template.replace(regex, definition.text);
         }

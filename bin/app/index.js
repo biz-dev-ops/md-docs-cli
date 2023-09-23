@@ -317,15 +317,20 @@ module.exports = class App {
         const markdownFileParser =  this.container.resolve('markdownFileParser');
         const gitInfo = this.container.resolve('gitInfo');
 
-        console.info(colors.red(error.message));
-        console.trace();
-
-        console.log(Error.captureStackTrace(error));
+        //console.trace();
+        //process.stdout.write(Error.captureStackTrace(error));
     
         process.chdir(options.dst);
        
         const errorFile = path.join(options.dst, 'index.md');
         const relativeFile = path.relative(options.dst, file);
+
+        process.stdout.write("\n");
+        process.stderr.write(colors.red(`There was an error while processing ${relativeFile}:`));
+        process.stdout.write("\n");
+        process.stdout.write(colors.red(error.message));
+        process.stdout.write("\n");
+
         const gitFile = path.join(gitInfo.branch.url, relativeFile);
             
         const content = `# Error
