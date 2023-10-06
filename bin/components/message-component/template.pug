@@ -5,16 +5,6 @@ html
     title=data.title
 
     link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/message/style.css')
-
-    script.
-      window.PagedConfig = {
-        auto: false,
-        after: (flow) => { 
-          document.body.classList.add('pagedjs_previewed');
-        }
-      };
-
-    script(src='https://unpkg.com/pagedjs/dist/paged.polyfill.js')
     
     if(data.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
@@ -58,6 +48,22 @@ html
               each attachment in data.attachments
                 li=attachment.name
 
+
+    
+    
+    script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
+
+
+    script.
+      window.PagedConfig = {
+        auto: false,
+        after: (flow) => { 
+          document.body.classList.add('pagedjs_previewed');
+        }
+      };
+
+    script(src=data.root + 'assets/pagedjs/paged.polyfill.min.js')
+
     script.
       (() => {
         const calculateHeight = () => {
@@ -71,25 +77,28 @@ html
             html.offsetHeight);
         };
 
-        if(calculateHeight() === 0) {
-          document.body.style.visibility = "hidden";
-          
+        try {
           const interval = setInterval(() => {
-            if(calculateHeight() > 0) {
-              window.clearInterval(interval);
+            if(calculateHeight() === 0) {
+              document.body.style.visibility = "hidden";
+              
+              if(calculateHeight() > 0) {
+                window.PagedPolyfill.preview();
+                document.body.style.visibility = "visible";
+                window.clearInterval(interval);
+              }
+            }
+            else {
               window.PagedPolyfill.preview();
-              document.body.style.visibility = "visible";
             }
           }, 500);
-        }
-        else {
-          window.PagedPolyfill.preview();
-        }
+        }   
+        catch (ex) {
+          console.warn(ex);
+        }  
 
         //Polyfill disturbes the iframe resizer, calculate height manually.      
         window.iFrameResizer = {
           heightCalculationMethod: () => { return calculateHeight(); }
         };
       })();
-    
-    script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
