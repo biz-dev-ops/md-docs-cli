@@ -47,12 +47,8 @@ html
             ul
               each attachment in data.attachments
                 li=attachment.name
-
-
-    
     
     script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.min.js' charset='UTF-8')
-
 
     script.
       window.PagedConfig = {
@@ -77,25 +73,21 @@ html
             html.offsetHeight);
         };
 
-        try {
-          const interval = setInterval(() => {
+        const interval = setInterval(() => {
+          try {
             if(calculateHeight() === 0) {
               document.body.style.visibility = "hidden";
-              
-              if(calculateHeight() > 0) {
-                window.PagedPolyfill.preview();
-                document.body.style.visibility = "visible";
-                window.clearInterval(interval);
-              }
             }
             else {
+              window.clearInterval(interval);
+              document.body.style.visibility = "visible";
               window.PagedPolyfill.preview();
             }
-          }, 500);
-        }   
-        catch (ex) {
-          console.warn(ex);
-        }  
+          }   
+          catch (ex) {
+            console.warn(ex);
+          }  
+        }, 500);
 
         //Polyfill disturbes the iframe resizer, calculate height manually.      
         window.iFrameResizer = {
