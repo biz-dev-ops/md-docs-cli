@@ -36,7 +36,7 @@
     "@asyncapi/html-template": "^0.28.3",
     "@biz-dev-ops/model-viewer": "^0.1.2",
     "@cucumber/gherkin-streams": "^5.0.1",
-    "awilix": "^8.0.1",
+    "awilix": "^9.0.0",
     "bpmn-js": "^14.0.0",
     "colors": "^1.4.0",
     "copyfiles": "^2.4.1",
