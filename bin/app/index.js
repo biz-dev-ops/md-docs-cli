@@ -38,6 +38,7 @@ const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
+const SvgFileParser = require('../file-parsers/svg-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BpmnComponent = require('../components/bpmn-component');
@@ -435,6 +436,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
+            'svgFileParser': asClass(SvgFileParser).singleton(),
 
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
@@ -487,7 +489,8 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'drawIOFileParser',
                 'featureFileParser',
                 'markdownEmailFileParser',
-                'markdownMessageFileParser'
+                'markdownMessageFileParser',
+                'svgFileParser'
             ],
 
             //Html parsers, order is important!

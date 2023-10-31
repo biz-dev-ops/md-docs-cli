@@ -3,9 +3,10 @@ const path = require('path');
 const colors = require('colors');
 
 module.exports = class DrawIOFileParser {
-    constructor({ options, drawIORenderer }) {
+    constructor({ options, drawIORenderer, svgFileParser }) {
         this.options = options;
         this.drawIORenderer = drawIORenderer;
+        this.svgFileParser = svgFileParser;
     }
 
     async parse(file) {
@@ -18,5 +19,7 @@ module.exports = class DrawIOFileParser {
         const svg = await this.drawIORenderer.render(file);
 
         await fs.writeFile(svgFile, svg);
+
+        await this.svgFileParser.parse(svgFile);
     }
 }

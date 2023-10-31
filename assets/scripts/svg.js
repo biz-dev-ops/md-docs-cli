@@ -1,8 +1,8 @@
 (() => {
     const menu = document.getElementById('menu-main');
     const processSVG = function(svg) {
-        svg.querySelectorAll('div').forEach(div => {
-            const id = div.innerText
+        svg.querySelectorAll('div,text').forEach(el => {
+            const id = el.textContent
                 .trim()
                 .toLowerCase()
                 .replaceAll(' ', '-')
@@ -12,15 +12,15 @@
             const page = menu.querySelector(`a[href$="/${id}/index.html"], a[href="${id}/index.html"]`);
 
             if(anchor || page) {
-                div.style.textDecoration = "underline";
+                el.style.textDecoration = "underline";
 
-                div.onmouseenter = (e) => {
+                el.onmouseenter = (e) => {
                     e.target.style.cursor = 'pointer';
                 }
-                div.onmouseleave = (e) => {
+                el.onmouseleave = (e) => {
                     e.target.style.cursor = 'auto';
                 }
-                div.onclick = (e) => {
+                el.onclick = (e) => {
                     e.preventDefault()
                     if(anchor) {
                         anchor.click();
