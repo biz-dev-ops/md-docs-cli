@@ -14,6 +14,7 @@ module.exports = class DrawIORenderer {
     }
 
     async render(file) {
+
         const xml = await files.readFileAsString(file);
         const data = Object.assign({ xml }, this.options);
         return await this.#renderSVG(this.url, data);
