@@ -1,0 +1,36 @@
+keyPartnerships:
+  - key partnership 1
+  - key partnership 2
+  - key partnership 3
+keyActivities:
+  - key activity 1
+  - key activity 2
+  - key activity 3
+keyResources:
+  - key resource 1
+  - key resource 2
+  - key resource 3
+valuePropositions:
+  - value propposition 1
+  - value propposition 2
+  - value propposition 3
+customerRelationships:
+  - customer relationship 1
+  - customer relationship 2
+  - customer relationship 3
+channels:
+  - channels 1
+  - channels 2
+  - channels 3
+customerSegments:
+  - customer segments 1
+  - customer segments 2
+  - customer segments 3
+costStructure:
+  - cost structure 1
+  - cost structure 2
+  - cost structure 3
+revenueStreams:
+  - revenue stream 1
+  - revenue stream 2
+  - revenue stream 3

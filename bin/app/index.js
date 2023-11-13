@@ -42,6 +42,7 @@ const SvgFileParser = require('../file-parsers/svg-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BpmnComponent = require('../components/bpmn-component');
+const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
 const EmailComponent = require('../components/email-component');
 const DashboardComponent = require('../components/dashboard-component');
 const FeatureComponent = require('../components/feature-component');
@@ -66,6 +67,7 @@ const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
 
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
+const BusinessModelCanvasAnchorParser = require('../anchor-parsers/business-model-canvas-anchor-parser');
 const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
@@ -378,7 +380,8 @@ Please review the error and fix the problem. A new version will be automaticly b
             
             { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') },
 
-            { src: path.resolve(options.nodeModules, '@biz-dev-ops/model-viewer/dist/model-viewer.js'), dst: path.resolve(options.dst, 'assets/model-viewer') },
+            { src: path.resolve(options.nodeModules, '@biz-dev-ops/business-model-canvas-component/dist/business-model-canvas.js'), dst: path.resolve(options.dst, 'assets/business-model-canvas-component') },
+            { src: path.resolve(options.nodeModules, '@biz-dev-ops/model-viewer-component/dist/model-viewer.js'), dst: path.resolve(options.dst, 'assets/model-viewer-component') },
 
             { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.dst, 'assets/pagedjs') },
 
@@ -450,6 +453,7 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //Anchor parser
             'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
+            'businessModelCanvasAnchorParser': asClass(BusinessModelCanvasAnchorParser).singleton(),
             'bpmnAnchorParser': asClass(BPMNAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
@@ -467,6 +471,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Component
             'asyncapiComponent': asClass(AsyncapiComponent).singleton().inject(container => allowUnregistered(container, 'asyncapiComponentRenderFn')),
             'bpmnComponent': asClass(BpmnComponent).singleton().inject(container => allowUnregistered(container, 'bpmnComponentRenderFn')),
+            'businessModelCanvasComponent': asClass(BusinessModelCanvasComponent).singleton().inject(container => allowUnregistered(container, 'businessModelCanvasComponentRenderFn')),
             'dashboardComponent': asClass(DashboardComponent).singleton().inject(container => allowUnregistered(container, 'dashboardComponentRenderFn')),
             'emailComponent': asClass(EmailComponent).singleton().inject(container => allowUnregistered(container, 'emailComponentRenderFn')),
             'featureComponent': asClass(FeatureComponent).singleton().inject(container => allowUnregistered(container, 'featureComponentRenderFn')),
@@ -509,6 +514,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'anchorParsers': [
                 'urlRewriteAnchorParser',
                 'asyncapiAnchorParser',
+                'businessModelCanvasAnchorParser',
                 'bpmnAnchorParser',
                 'codeAnchorParser',
                 'dashboardAnchorParser',
