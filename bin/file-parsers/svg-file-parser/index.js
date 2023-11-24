@@ -4,9 +4,8 @@ const colors = require('colors');
 const files = require('../../utils/files');
 
 module.exports = class SvgFileParser {
-    constructor({ options, drawIORenderer }) {
+    constructor({ options }) {
         this.options = options;
-        this.drawIORenderer = drawIORenderer;
     }
 
     async parse(file) {

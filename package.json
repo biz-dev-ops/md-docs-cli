@@ -39,7 +39,6 @@
     "@cucumber/gherkin-streams": "^5.0.1",
     "awilix": "^9.0.0",
     "bpmn-js": "^15.0.0",
-    "bpmn-to-image": "^0.6.0",
     "colors": "^1.4.0",
     "copyfiles": "^2.4.1",
     "figlet": "^1.6.0",

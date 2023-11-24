@@ -3,7 +3,7 @@ const path = require('path');
 const colors = require('colors');
 const files = require('../../utils/files');
 
-module.exports = class DrawIOFileParser {
+module.exports = class BPMNFileParser {
     constructor({ options, headlessBrowser, svgFileParser }) {
         this.options = options;
         this.headlessBrowser = headlessBrowser;
@@ -11,7 +11,7 @@ module.exports = class DrawIOFileParser {
     }
 
     async parse(file) {
-        if (!(file.endsWith('.drawio')))
+        if (!(file.endsWith('.bpmn')))
             return;
 
         const svgFile = `${file}.svg`;
@@ -39,7 +39,7 @@ module.exports = class DrawIOFileParser {
             return this.page;
         }
 
-        const script = await files.readFileAsString(`${__dirname}/viewer.min.js`);
+        const script = await files.readFileAsString(require.resolve('bpmn-js/dist/bpmn-viewer.production.min.js'));
 
         this.page = await this.headlessBrowser.newPage({
             url: `file://${__dirname}/viewer.html`
