@@ -20,6 +20,7 @@
                 el.onmouseleave = (e) => {
                     e.target.style.cursor = 'auto';
                 }
+                
                 el.onclick = (e) => {
                     e.preventDefault()
                     if(anchor) {
