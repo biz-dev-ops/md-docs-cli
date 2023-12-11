@@ -380,9 +380,8 @@ Please review the error and fix the problem. A new version will be automaticly b
             
             { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') },
 
-            { src: path.resolve(options.nodeModules, '@biz-dev-ops/business-model-canvas-component/dist/business-model-canvas.js'), dst: path.resolve(options.dst, 'assets/business-model-canvas-component') },
-            { src: path.resolve(options.nodeModules, '@biz-dev-ops/model-viewer-component/dist/model-viewer.js'), dst: path.resolve(options.dst, 'assets/model-viewer-component') },
-
+            { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.dst, 'assets/web-components') },
+            
             { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.dst, 'assets/pagedjs') },
 
             { src: options.src, dst: options.dst }
