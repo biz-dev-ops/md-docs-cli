@@ -33,6 +33,7 @@ function rewrite(href, name, rule) {
 }
 
 const rules = [
+  ['.bpmn', '.bpmn.svg'],
   ['.drawio', '.drawio.svg'],
   ['.puml', '.svg'],
 ];
