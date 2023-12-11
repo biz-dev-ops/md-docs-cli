@@ -28,6 +28,7 @@ module.exports = class DrawIOFileParser {
         const xml = await files.readFileAsString(file);
         const page = await this.#getPage();
         const svg = page.evaluate(async (xml) => {
+            //In context of page
             return await convertToSVG(xml);
         }, xml);
 

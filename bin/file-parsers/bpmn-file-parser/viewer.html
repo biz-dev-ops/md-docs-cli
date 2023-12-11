@@ -47,10 +47,7 @@
       async function convertToSVG(bpmnXML) {
         const bpmnViewer = getViewer();
         await bpmnViewer.importXML(bpmnXML);
-        const {
-          svg
-        } = await bpmnViewer.saveSVG();
-
+        const { svg } = await bpmnViewer.saveSVG();
         return svg;
       }
 
