@@ -19,9 +19,9 @@ hosting:
     401: /main/signin
     403: /main/signedin
 page:
-  googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap'
+  googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&amp;display=swap'
 email:  
-  googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap'
+  googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&amp;display=swap'
   from:
     name: The Organisation
     email: info@organisation.com
@@ -41,7 +41,7 @@ email:
         VAT: 00000000000000
     </p>
 message:
-  googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap'
+  googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&amp;display=swap'
   to: |
     John Doe<br>
     The Street 2<br>
