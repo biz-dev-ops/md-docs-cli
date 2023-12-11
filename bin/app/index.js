@@ -28,11 +28,12 @@ const AzureStaticWebApp = require('../hosting/azure-static-web-app');
 const DefinitionParser = require('../utils/definitions/definition-parser');
 const DefinitionStore = require('../utils/definitions/definition-store');
 
-const DrawIORenderer = require('../utils/draw-io-renderer');
+const HeadlessBrowser = require('../utils/headless-browser');
 
 const GherkinParser = require('../utils/bdd/gherkin-parser');
 
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
+const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
@@ -41,13 +42,11 @@ const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-par
 const SvgFileParser = require('../file-parsers/svg-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
-const BpmnComponent = require('../components/bpmn-component');
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
 const EmailComponent = require('../components/email-component');
 const DashboardComponent = require('../components/dashboard-component');
 const FeatureComponent = require('../components/feature-component');
 const FullscreenComponent = require('../components/fullscreen-component');
-const GraphViewerComponent = require('../components/graph-viewer-component');
 const IFrameComponent = require('../components/iframe-component');
 const ImageComponent = require('../components/image-component');
 const MessageComponent = require('../components/message-component');
@@ -68,7 +67,6 @@ const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parse
 
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BusinessModelCanvasAnchorParser = require('../anchor-parsers/business-model-canvas-anchor-parser');
-const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
@@ -364,8 +362,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
             { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
 
-            { src: path.resolve(options.nodeModules, 'bpmn-js/dist/bpmn-navigated-viewer.production.min.js'), dst: path.resolve(options.dst, 'assets/bpmn-js-dist') },
-
             { src: path.resolve(options.nodeModules, 'svg-pan-zoom/dist/svg-pan-zoom.min.js'), dst: path.resolve(options.dst, 'assets/svg-pan-zoom-dist') },
 
             { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
@@ -400,6 +396,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'options': asValue(options),
 
             //Utils
+            'headlessBrowser': asClass(HeadlessBrowser).singleton(),
             'testExecutionParser': asClass(TestExecutionParser).singleton(),
             'cucumberTestExecutionParser': asClass(CucumberTestExecutionParser).singleton(),
             'specflowTestExecutionParser': asClass(SpecflowTestExecutionParser).singleton(),
@@ -418,11 +415,6 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //BDD
             'gherkinParser': asClass(GherkinParser).singleton(),
-            
-            //DrawIO
-            'graphViewerComponent': asClass(GraphViewerComponent).singleton(),
-            'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
-            'drawIORenderer': asClass(DrawIORenderer).singleton(),
 
             //Hosting services
             'hosting': asClass(CompositeHostingService).singleton(),
@@ -434,6 +426,8 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
+            'bpmnFileParser': asClass(BPMNFileParser).singleton(),
+            'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
             'featureFileParser': asClass(FeatureFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
@@ -453,7 +447,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Anchor parser
             'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
             'businessModelCanvasAnchorParser': asClass(BusinessModelCanvasAnchorParser).singleton(),
-            'bpmnAnchorParser': asClass(BPMNAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
@@ -469,7 +462,6 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //Component
             'asyncapiComponent': asClass(AsyncapiComponent).singleton().inject(container => allowUnregistered(container, 'asyncapiComponentRenderFn')),
-            'bpmnComponent': asClass(BpmnComponent).singleton().inject(container => allowUnregistered(container, 'bpmnComponentRenderFn')),
             'businessModelCanvasComponent': asClass(BusinessModelCanvasComponent).singleton().inject(container => allowUnregistered(container, 'businessModelCanvasComponentRenderFn')),
             'dashboardComponent': asClass(DashboardComponent).singleton().inject(container => allowUnregistered(container, 'dashboardComponentRenderFn')),
             'emailComponent': asClass(EmailComponent).singleton().inject(container => allowUnregistered(container, 'emailComponentRenderFn')),
@@ -490,6 +482,7 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //File parsers: order can be important!
             'fileParsers': [
+                'bpmnFileParser',
                 'drawIOFileParser',
                 'featureFileParser',
                 'markdownEmailFileParser',
@@ -514,7 +507,6 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'urlRewriteAnchorParser',
                 'asyncapiAnchorParser',
                 'businessModelCanvasAnchorParser',
-                'bpmnAnchorParser',
                 'codeAnchorParser',
                 'dashboardAnchorParser',
                 'featureAnchorParser',
