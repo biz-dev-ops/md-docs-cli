@@ -1,12 +1,9 @@
 const fs = require('fs').promises;
-const path = require('path');
-const colors = require('colors');
 const files = require('../../utils/files');
 
 module.exports = class SvgFileParser {
-    constructor({ options, drawIORenderer }) {
+    constructor({ options }) {
         this.options = options;
-        this.drawIORenderer = drawIORenderer;
     }
 
     async parse(file) {
@@ -15,14 +12,19 @@ module.exports = class SvgFileParser {
 
         let svg = await files.readFileAsString(file);
 
-        if(this.options.page?.googleFont) {
-            svg = svg.replace('</svg>', `
+        svg = this.#addFont(svg);
+
+        await fs.writeFile(file, svg);
+    }
+
+    #addFont(svg) {
+        if(!this.options.page?.googleFont)
+            return svg;
+        
+        return svg.replace('</svg>', `
             <defs>
                 <style type="text/css">@import url(${this.options.page?.googleFont});</style>
             </defs>
             </svg>`);
-        }
-
-        await fs.writeFile(file, svg);
     }
 }

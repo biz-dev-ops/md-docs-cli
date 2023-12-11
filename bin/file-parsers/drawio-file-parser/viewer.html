@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+    <div id="container" class="mxgraph"></div>
+
+    <script>
+        const container = document.getElementById("container");
+
+        async function convertToSVG(xml) {
+            return new Promise((resolve, reject) => {
+                var xmlDoc = mxUtils.parseXml(xml);
+			    var viewer = new GraphViewer(container, xmlDoc.documentElement, {
+                    highlight: "none",
+                    target: "self",
+                    lightbox: false,
+                    nav: true
+                });
+
+                const svg = viewer.graph.getSvg();
+                resolve(svg.outerHTML);
+            });
+        }
+
+    </script>
+</body>
+</html>
