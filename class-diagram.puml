@@ -7,9 +7,9 @@ interface FileParser {
 }
 class CompositeFileParser
 class DrawIOFileParser
-Class MarkdownFileParser
-Class MarkdownEmailFileParser
-Class MarkdownMessageFileParser
+class MarkdownFileParser
+class MarkdownEmailFileParser
+class MarkdownMessageFileParser
 class UMLFileParser
 
 interface HtmlParser {
