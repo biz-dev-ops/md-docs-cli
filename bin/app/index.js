@@ -43,6 +43,7 @@ const SvgFileParser = require('../file-parsers/svg-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
+const BusinessReferenceArchitectureComponent = require('../components/business-reference-architecture-component');
 const EmailComponent = require('../components/email-component');
 const DashboardComponent = require('../components/dashboard-component');
 const FeatureComponent = require('../components/feature-component');
@@ -67,6 +68,7 @@ const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parse
 
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BusinessModelCanvasAnchorParser = require('../anchor-parsers/business-model-canvas-anchor-parser');
+const BusinessReferenceArchitectureAnchorParser = require('../anchor-parsers/business-reference-architecture-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
@@ -447,6 +449,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Anchor parser
             'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
             'businessModelCanvasAnchorParser': asClass(BusinessModelCanvasAnchorParser).singleton(),
+            'businessReferenceArchitectureAnchorParser': asClass(BusinessReferenceArchitectureAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
@@ -463,6 +466,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Component
             'asyncapiComponent': asClass(AsyncapiComponent).singleton().inject(container => allowUnregistered(container, 'asyncapiComponentRenderFn')),
             'businessModelCanvasComponent': asClass(BusinessModelCanvasComponent).singleton().inject(container => allowUnregistered(container, 'businessModelCanvasComponentRenderFn')),
+            'businessReferenceArchitectureComponent': asClass(BusinessReferenceArchitectureComponent).singleton().inject(container => allowUnregistered(container, 'businessReferenceArchitectureComponentRenderFn')),
             'dashboardComponent': asClass(DashboardComponent).singleton().inject(container => allowUnregistered(container, 'dashboardComponentRenderFn')),
             'emailComponent': asClass(EmailComponent).singleton().inject(container => allowUnregistered(container, 'emailComponentRenderFn')),
             'featureComponent': asClass(FeatureComponent).singleton().inject(container => allowUnregistered(container, 'featureComponentRenderFn')),
@@ -507,6 +511,7 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'urlRewriteAnchorParser',
                 'asyncapiAnchorParser',
                 'businessModelCanvasAnchorParser',
+                'businessReferenceArchitectureAnchorParser',
                 'codeAnchorParser',
                 'dashboardAnchorParser',
                 'featureAnchorParser',
