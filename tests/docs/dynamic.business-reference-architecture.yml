@@ -1,0 +1,22 @@
+endUsers:
+  buttons: "."
+channels:
+  - title: channel group 1
+    buttons: "../.."
+  - title: channel group 2
+    buttons:
+      - icon: icon
+        title: channel 3
+        link: ./index.html
+      - title: channel 4
+valueStreams:
+  - title: stream 1
+    link: ./index.html
+  - title: stream 2
+businessCapabilities:
+  title: business domains
+  groups: ".."
+principles:
+  - title: principle 1
+    link: ./index.html
+  - title: principle 2
