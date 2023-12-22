@@ -16,6 +16,7 @@ const TocParser = require('../utils/toc-parser');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
+const Sitemap = require('../utils/sitemap');
 const CucumberTestExecutionParser = require('../utils/bdd//cucumber-test-execution-parser');
 const SpecflowTestExecutionParser = require('../utils/bdd/specflow-test-execution-parser');
 const TestExecutionParser = require('../utils/bdd/test-execution-parser');
@@ -168,7 +169,7 @@ module.exports = class App {
 
         await this.container.resolve('definitionStore').init();
         await this.container.resolve('locale').init();        
-        await this.container.resolve('menu').init();
+        await this.container.resolve('sitemap').init();
 
         this.#options = null;
     }
@@ -409,6 +410,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'testExecutionStore': asClass(TestExecutionStore).singleton(),
             'userTaskParser':  asClass(UserTaskParser).singleton(),
             'menu': asClass(Menu).singleton(),
+            'sitemap': asClass(Sitemap).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
             'locale': asClass(Locale).singleton(),
             'relative': asClass(Relative).singleton(),

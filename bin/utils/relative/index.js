@@ -8,22 +8,20 @@ module.exports = class Relative {
 
     get() {
         return {
-            basePath: getRelativeBasePath(this.options),
-            root: getRelativeRoot(this.options)
+            basePath: relativeTo(cwd(), this.options.basePath),
+            root: relativeTo(cwd(), this.options.root)
+        }
+    }
+    relative(from) {
+        return {
+            basePath: relativeTo(from, this.options.basePath),
+            root: relativeTo(from, this.options.root, path)
         }
     }
 }
 
-function getRelativeBasePath(options) {
-    const root = path.relative(cwd(), options.basePath);
-    if (root === '')
-        return root;
-
-    return `${root}/`;
-}
-
-function getRelativeRoot(options) {
-    const root = path.relative(cwd(), options.dst);
+function relativeTo(from, to) {
+    const root = path.relative(from, to);
     if (root === '')
         return root;
 
