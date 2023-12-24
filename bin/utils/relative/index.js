@@ -9,13 +9,7 @@ module.exports = class Relative {
     get() {
         return {
             basePath: relativeTo(cwd(), this.options.basePath),
-            root: relativeTo(cwd(), this.options.root)
-        }
-    }
-    relative(from) {
-        return {
-            basePath: relativeTo(from, this.options.basePath),
-            root: relativeTo(from, this.options.root, path)
+            root: relativeTo(cwd(), this.options.dst)
         }
     }
 }

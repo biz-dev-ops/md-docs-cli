@@ -2,39 +2,54 @@ const fs = require('fs').promises;
 const colors = require('colors');
 const path = require('path');
 const { env, cwd } = require('process');
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const markdown_it_anchor = require('markdown-it-anchor');
+const slugify = function(name) {
+    return name
+        .trim()
+        .toLowerCase()
+        .replaceAll(' ', '-')
+        .replaceAll('\n', '-');
+}
+
 const files = require('../files');
 
 function SitemapArray() {
-    this.find = function(path) {
-        let found = null;
+    this.find = function(slug) {
+        const hits = [];
 
-        this.every(element => {
-            if(element.path === path) {
-                found = element;
+        this.forEach(element => {
+            if(element.slug === slug) {
+                hits.push({ name: element.name, url: element.url });
             }
             else {
-                found = element.items.find(path);
+                hits.push(...element.items.find(slug));
             }
-
-            if(found)
-                return false;
-
-            return true;
         });
 
-        return found;
+        return hits;
     }
 }
 
 SitemapArray.prototype = [];
 
 module.exports = class Sitemap {
+    static slugify(name) {
+        return  name
+            .trim()
+            .toLowerCase()
+            .replaceAll(' ', '-')
+            .replaceAll('\n', '-');
+    }
+
     #data = null;
     #regex = /(\d+[_])/ig;
+    #regexHeader = /(?<flag>#{1,6})\s+(?<content>.+)/g
 
-    constructor({ options, relative }) {
+    constructor({ options, gitInfo }) {
         this.root = options.dst;
-        this.relative = relative;
+        this.git = gitInfo;
     }
 
     async init() {
@@ -46,6 +61,53 @@ module.exports = class Sitemap {
             this.#data = await this.#getData();
 
         return this.#data;
+    }
+
+    async link(xhtml, querySelector, nameParser, replacer) {
+        const sitemap = await this.items();
+        const dom = new JSDOM(xhtml);
+
+        dom.window.document.body.children[0].querySelectorAll(querySelector).forEach(el => {
+            let name;
+            if(nameParser) {
+                name = nameParser(el);
+            }
+            else {
+                if(el.children.length === 0) {
+                    name = el.textContent;
+                }
+                else {
+                    name = Array.from(el.children)
+                        .map(c => c.textContent.trim())
+                        .join(" ")
+                }
+            }
+
+            if(!name || name.trim().length === 0) 
+                return;
+
+            const slug = slugify(name);
+
+            const hits = sitemap.find(slug);
+            if(hits.length === 0) {
+                return;
+            }
+
+            if(replacer) {
+                replacer(el, hits);
+            }
+            else {
+                if(el.children.length === 0) {
+                    el.innerHTML = `<a href="${hits[0].url}" target="_top" style="text-decoration:underline;">${el.textContent}</a>`;
+                }
+                else {
+                    Array.from(el.children).forEach(c => c.innerHTML = `<a href="${hits[0].url}" target="_top" style="text-decoration:underline;">${c.textContent}</a>`);
+                }
+            }
+        });
+        return dom.window.document.body.innerHTML
+            .replaceAll("<br>", "<br />")
+            .replaceAll("&nbsp;", "&#160;");
     }
 
     async #getData() {
@@ -74,23 +136,39 @@ module.exports = class Sitemap {
     async #getMenuItem(src) {
         await fs.access(src);
         const entries = await fs.readdir(src, { withFileTypes: true });
+        const name = this.#format(src);
 
         const item = {
-            name: this.#format(src),
+            name: name,
+            slug: slugify(name),
             path: path.relative(this.root, src),
             items: new SitemapArray()
         };
 
+        if(item.path === "assets") {
+            return;
+        }
+
         for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+            const entryPath = path.resolve(src, entry.name);
+
             if (entry.isDirectory()) {
-                const sub = await this.#getMenuItem(path.resolve(src, entry.name));
+               
+                const sub = await this.#getMenuItem(entryPath);
                 if (sub != undefined)
                     item.items.push(sub);
             }
             else if (entry.name === 'index.md') {
-                const file = path.relative(this.root, path.resolve(src, entry.name));
+                const file = path.relative(this.root, entryPath);
                 console.info(colors.green(`\t* adding menu item ${file}`));
                 item.url = this.#rewriteUrl(`${file.slice(0, -3)}.html`);
+                item.url = `/${this.git.branch.name}/${item.url}`;
+
+                item.useCases = (await this.#getHeadingsFrom(entryPath))
+                    .map(h => ({
+                        name: h.content,
+                        url: `${item.url}#${markdown_it_anchor.defaults.slugify(h.content)}`
+                    }));
             }
         }
 
@@ -120,5 +198,14 @@ module.exports = class Sitemap {
         console.info(colors.green(`\t* rewrite url ${url} => ${rewrite}`));
         return rewrite;
     }
-
+    
+    async #getHeadingsFrom(markdownFile) {
+        const markdown = await files.readFileAsString(markdownFile);
+        
+        return Array.from(markdown.matchAll(this.#regexHeader))
+            .map(({ groups: { flag, content } }) => ({
+                heading: `h${ flag.length }`,
+                content
+            }));
+    }
 }

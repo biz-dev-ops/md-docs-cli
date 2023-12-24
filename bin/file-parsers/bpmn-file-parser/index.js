@@ -1,13 +1,14 @@
 const fs = require('fs').promises;
 const path = require('path');
 const colors = require('colors');
+const { env } = require('process');
 const files = require('../../utils/files');
 
 module.exports = class BPMNFileParser {
-    constructor({ options, headlessBrowser, svgFileParser }) {
+    constructor({ options, headlessBrowser, sitemap }) {
         this.options = options;
         this.headlessBrowser = headlessBrowser;
-        this.svgFileParser = svgFileParser;
+        this.sitemap = sitemap;
     }
 
     async parse(file) {
@@ -17,20 +18,25 @@ module.exports = class BPMNFileParser {
         const svgFile = `${file}.svg`;
         console.info(colors.green(`\t* creating ${path.relative(this.options.dst, svgFile)}`));
 
-        const svg = await this.#createSvg(file);
+        let svg = await this.#createSvg(file);
+        svg = await this.sitemap.link(
+            svg,
+            "text"
+        );
 
         await fs.writeFile(svgFile, svg);
-
-        await this.svgFileParser.parse(svgFile);
     }
 
     async #createSvg(file) {
         const xml = await files.readFileAsString(file);
         const page = await this.#getPage();
-        const svg = page.evaluate(async (xml) => {
+        const svg = await page.evaluate(async (xml) => {
             //In context of page
             return await convertToSVG(xml);
         }, xml);
+
+        if (env.NODE_ENV === 'development')
+            await fs.writeFile(`${file}.raw.svg`, svg);
 
         return svg;
     }

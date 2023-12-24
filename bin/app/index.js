@@ -219,22 +219,25 @@ module.exports = class App {
 
         await files.each(options.dst, async (file) => {
             current += 1;
-            try {
-                console.info();
-                console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-                const dir = process.cwd();
+            if(!path.relative(options.dst, file).startsWith("assets/")) {
+                try {
+                    console.info();
+                    console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-                //Set current working directory to file path
-                process.chdir(path.dirname(file));
+                    const dir = process.cwd();
 
-                await fileParser.parse(file);
+                    //Set current working directory to file path
+                    process.chdir(path.dirname(file));
 
-                //Reset current working directory
-                process.chdir(dir);
-            }
-            catch(error) {
-                await this.#onError(file, error);
+                    await fileParser.parse(file);
+
+                    //Reset current working directory
+                    process.chdir(dir);
+                }
+                catch(error) {
+                    await this.#onError(file, error);
+                }
             }
 
             logger.progress(totalFiles, current);

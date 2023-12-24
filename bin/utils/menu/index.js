@@ -1,6 +1,4 @@
-const fs = require('fs').promises;
-const path = require('path');
-const { env } = require('process');
+require('process');
 
 module.exports = class Menu {
     constructor({ sitemap }) {
@@ -8,22 +6,18 @@ module.exports = class Menu {
     }
 
     async items(currentUrl) {
-        const urls = this.#rewriteUrls(this.sitemap.items(), currentUrl);
-
-        if (env.NODE_ENV === 'development')
-            await fs.writeFile(path.resolve(this.root, `menu.json`), JSON.stringify(items));
-
+        const urls = this.#createMenuItems(await this.sitemap.items(), currentUrl);
         return urls;
     }
 
-    #rewriteUrls(items, currentUrl) {
+    #createMenuItems(items, currentUrl) {
         return items
             .filter(i => i.url || i.items?.length > 0)
             .map(i => {
                 const item = {
                     name: i.name,
                     classes: [],
-                    items: this.#rewriteUrls(i.items, currentUrl)
+                    items: this.#createMenuItems(i.items, currentUrl)
                 }
 
                 if (i.url === currentUrl) {
