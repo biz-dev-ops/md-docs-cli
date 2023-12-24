@@ -26,6 +26,12 @@ function SitemapArray() {
             else {
                 hits.push(...element.items.find(comparer));
             }
+
+            element.useCases?.forEach(useCase => {
+                if(comparer(useCase)) {
+                    hits.push({ name: useCase.name, url: useCase.url });
+                }
+            });
         });
 
         return hits;
@@ -138,6 +144,7 @@ module.exports = class Sitemap {
         const name = this.#format(src);
 
         const item = {
+            type: "page",
             name: name,
             slug: slugify(name),
             path: path.relative(this.root, src),
@@ -164,7 +171,11 @@ module.exports = class Sitemap {
 
                 item.useCases = (await this.#getHeadingsFrom(entryPath))
                     .map(h => ({
+                        type: "use-case",
                         name: h.content,
+                        slug: markdown_it_anchor.defaults.slugify(h.content),
+                        path: path.relative(this.root, src),
+                        items: [],
                         url: `${item.url}#${markdown_it_anchor.defaults.slugify(h.content)}`
                     }));
             }

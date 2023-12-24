@@ -26,13 +26,8 @@
     fullscreenContainer.setAttribute('data-fullscreen-zoom', true);
 
     panZoomElement.addEventListener('load', function() {
-      panZoom = svgPanZoom(panZoomElement, {
-        controlIconsEnabled: false
-        , zoomEnabled: false
-        , panEnabled: false
-        , fit: 1
-        , center: 1
-      });
+      panZoom = svgPanZoom(panZoomElement);
+      fullscreenContainer.dispatchEvent(new Event('closefullscreen'));
     });
 
     window.addEventListener('resize', () => {
@@ -51,16 +46,22 @@
         panZoom.center();
         panZoom.enablePan(); 
         panZoom.enableZoom();
+        panZoom.enableDblClickZoom();
+        panZoom.enableMouseWheelZoom();
       }
     });
 
     fullscreenContainer.addEventListener('closefullscreen', () => {
+      console.log('neeeeeeee')
       if (panZoom) {
+        console.log('jaaaaaaaa')
         panZoom.resize();
         panZoom.fit();
         panZoom.center();
         panZoom.disablePan();
         panZoom.disableZoom();
+        panZoom.disableDblClickZoom();
+        panZoom.disableMouseWheelZoom();
       }
     });
 

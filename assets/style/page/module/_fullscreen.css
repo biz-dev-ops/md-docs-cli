@@ -153,13 +153,6 @@ body[data-fullscreen-active="true"] {
     padding: 0;
 }
 
-[data-fullscreen="true"] figure svg,
-[data-fullscreen="true"] figure embed,
-[data-fullscreen="true"] figure svg *,
-[data-fullscreen="true"] figure embed * {
-    cursor: move;
-}
-
 [data-fullscreen="true"] iframe.openapi,
 [data-fullscreen="true"] iframe.asyncapi {
     min-height: 100vh;
