@@ -6,7 +6,7 @@ const files = require('../../utils/files');
 const orderPrefixRegex = /(\d+[_])/ig;
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, relative, tocParser, locale, htmlParsers }) {
+    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, relative, locale, htmlParsers }) {
         this.options = options;
         this.gitInfo = gitInfo;
         this.hosting = hosting;
@@ -14,7 +14,6 @@ module.exports = class MarkdownFileParser {
         this.component = pageComponent;
         this.menu = menu;
         this.relative = relative;
-        this.tocParser = tocParser;
         this.locale = locale;
         this.parsers = htmlParsers;
     }
@@ -74,20 +73,21 @@ module.exports = class MarkdownFileParser {
             git: this.gitInfo,
             options: this.options.page || {},
             menu: menuItems,
-            toc: this.tocParser.parse(element),
             locale: await this.locale.get()
         });
     }
 
+    #absoluteLocation() {
+        const loc = path.relative(this.options.dst, cwd());
+        if(loc.length === 0)
+            return loc;
+
+        return loc + '/';``
+    }
+
     #relativeUrlToAbsoluteUrl(element) {
         const aboutBlank = "about:blank";
-         const absoluteLocation = (() => {
-            const loc = path.relative(this.options.dst, cwd());
-            if(loc.length === 0)
-                return loc;
-
-            return loc + '/';
-         })();
+         const absoluteLocation = this.#absoluteLocation();
 
         const isRelativeUrl = function(url) {
             if(!url)
@@ -99,6 +99,9 @@ module.exports = class MarkdownFileParser {
             if(url.startsWith(aboutBlank))
                 return true;
 
+            if(url.startsWith("#"))
+                return true;
+
             return false;
         }
 
@@ -108,7 +111,14 @@ module.exports = class MarkdownFileParser {
                 return;
             }
 
-            el.href ? el.href : el.src = absoluteLocation + (el.href || el.src).replace(aboutBlank, "");
+            const url =  absoluteLocation + (el.href || el.src).replace(aboutBlank, "");
+
+            if(el.href) {
+                el.href = url;
+            }
+            else if(el.src) {
+                el.src = url;
+            }
         });
     }
     

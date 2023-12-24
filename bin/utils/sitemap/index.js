@@ -215,6 +215,7 @@ module.exports = class Sitemap {
             .map(({ groups: { flag, content } }) => ({
                 heading: `h${ flag.length }`,
                 content
-            }));
+            }))
+            .filter(i => i.heading === "h3");
     }
 }

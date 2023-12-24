@@ -92,12 +92,7 @@ html
 
         h1(class='title')=title
 
-        if toc && toc.length > 0
-          nav(class='table-of-content')
-            ul
-              each item in toc
-                li
-                  a(href='#' + item.id)= item.name
+        nav(id='table-of-content' class='table-of-content')
 
       | !{content}
     script.
@@ -115,6 +110,7 @@ html
 
     script(src='assets/scripts/fullscreen.js' charset='UTF-8')
     script(src='assets/scripts/git.js' charset='UTF-8')
+    script(src='assets/scripts/toc.js' charset='UTF-8')
     script(src='assets/scripts/h3.js' charset='UTF-8')
     script(src='assets/scripts/header.js' charset='UTF-8')
     script(src='assets/scripts/iframe.js' charset='UTF-8')

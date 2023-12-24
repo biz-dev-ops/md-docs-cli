@@ -12,7 +12,6 @@ const files = require('../utils/files');
 
 const Locale = require('../locale');
 const Relative = require('../utils/relative');
-const TocParser = require('../utils/toc-parser');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
@@ -417,7 +416,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
             'locale': asClass(Locale).singleton(),
             'relative': asClass(Relative).singleton(),
-            'tocParser': asClass(TocParser).singleton(),
             'progress': asValue(logger.progress),
 
             //BDD
