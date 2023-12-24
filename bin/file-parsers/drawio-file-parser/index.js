@@ -25,7 +25,6 @@ module.exports = class DrawIOFileParser {
             "div,font,text,tspan",
             el => {
                 const name = el.children?.length === 0 ? el.textContent : null;
-                console.log(name);
                 return name;
             }
         );

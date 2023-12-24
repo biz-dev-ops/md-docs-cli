@@ -16,15 +16,15 @@ const slugify = function(name) {
 const files = require('../files');
 
 function SitemapArray() {
-    this.find = function(slug) {
+    this.find = function(comparer) {
         const hits = [];
 
         this.forEach(element => {
-            if(element.slug === slug) {
+            if(comparer(element)) {
                 hits.push({ name: element.name, url: element.url });
             }
             else {
-                hits.push(...element.items.find(slug));
+                hits.push(...element.items.find(comparer));
             }
         });
 
@@ -47,9 +47,8 @@ module.exports = class Sitemap {
     #regex = /(\d+[_])/ig;
     #regexHeader = /(?<flag>#{1,6})\s+(?<content>.+)/g
 
-    constructor({ options, gitInfo }) {
+    constructor({ options }) {
         this.root = options.dst;
-        this.git = gitInfo;
     }
 
     async init() {
@@ -87,8 +86,8 @@ module.exports = class Sitemap {
                 return;
 
             const slug = slugify(name);
+            const hits = sitemap.find((el) => el.slug === slug);
 
-            const hits = sitemap.find(slug);
             if(hits.length === 0) {
                 return;
             }
@@ -162,7 +161,6 @@ module.exports = class Sitemap {
                 const file = path.relative(this.root, entryPath);
                 console.info(colors.green(`\t* adding menu item ${file}`));
                 item.url = this.#rewriteUrl(`${file.slice(0, -3)}.html`);
-                item.url = `/${this.git.branch.name}/${item.url}`;
 
                 item.useCases = (await this.#getHeadingsFrom(entryPath))
                     .map(h => ({

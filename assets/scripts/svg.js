@@ -1,6 +1,9 @@
 (() => {
     const menu = document.getElementById('menu-main');
     const processSVG = function(svg) {
+
+        console.log(svg);
+
         return;
         
         svg.querySelectorAll('div,text').forEach(el => {
