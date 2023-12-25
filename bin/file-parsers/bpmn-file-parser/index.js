@@ -31,7 +31,7 @@ module.exports = class BPMNFileParser {
         const xml = await files.readFileAsString(file);
         const page = await this.#getPage();
         const svg = await page.evaluate(async (xml) => {
-            //In context of page
+            //Executes in context of the page, see viewer.html
             return await convertToSVG(xml);
         }, xml);
 

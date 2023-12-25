@@ -22,19 +22,6 @@ module.exports = class SvgFileParser {
             "text"
         );
 
-        svg = this.#addFont(svg);
-
         await fs.writeFile(file, svg);
-    }
-
-    #addFont(svg) {
-        if(!this.options.page?.googleFont)
-            return svg;
-        
-        return svg.replace('</svg>', `
-            <defs>
-                <style type="text/css">@import url(${this.options.page?.googleFont});</style>
-            </defs>
-            </svg>`);
     }
 }

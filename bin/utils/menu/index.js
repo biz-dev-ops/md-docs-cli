@@ -12,7 +12,6 @@ module.exports = class Menu {
 
     #createMenuItems(items, currentUrl) {
         return items
-            .filter(i => i.url || i.items?.length > 0)
             .map(i => {
                 const item = {
                     name: i.name,
@@ -38,6 +37,7 @@ module.exports = class Menu {
                 return item;
 
             })
+            .filter(i => i.url || i.items?.length > 0)
             .map((item, index, items) => {
                 if (item.classes.some(c => c.startsWith('active')))
                     return item;
