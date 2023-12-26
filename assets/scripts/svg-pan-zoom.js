@@ -52,9 +52,7 @@
     });
 
     fullscreenContainer.addEventListener('closefullscreen', () => {
-      console.log('neeeeeeee')
       if (panZoom) {
-        console.log('jaaaaaaaa')
         panZoom.resize();
         panZoom.fit();
         panZoom.center();

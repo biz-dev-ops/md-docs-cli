@@ -95,11 +95,11 @@ html
         nav(id='table-of-content' class='table-of-content')
 
       | !{content}
+      
     script.
-      window.x_md_docs_cli_basePath = '!{relative.basePath}';
       window.x_md_docs_cli_branch = '!{git.branch.name}'
 
-    script(src=relative.basePath + 'branches.js' charset='UTF-8')
+    script(src='../branches.js' charset='UTF-8')
 
     script(src='assets/iframe-resizer-dist/iframeResizer.js' charset='UTF-8')
     script(src='assets/svg-pan-zoom-dist/svg-pan-zoom.min.js' charset='UTF-8')

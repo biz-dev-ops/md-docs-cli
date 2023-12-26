@@ -9,7 +9,7 @@
             li.classList.add("active");
 
         const a = document.createElement("a");
-        a.href = window.x_md_docs_cli_basePath + branch.path;
+        a.href =  `../${branch.path}`;
         a.setAttribute("data-branch-url", a.href);
         a.setAttribute("title", branch.name);
 
