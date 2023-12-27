@@ -58,7 +58,7 @@
     "md5": "^2.3.0",
     "mustache": "^4.2.0",
     "pagedjs": "^0.4.3",
-    "pdf-merger-js": "^4.3.0",
+    "pdf-merger-js": "^5.0.0",
     "prismjs": "^1.29.0",
     "pug": "^3.0.2",
     "puppeteer": "^21.0.0",
