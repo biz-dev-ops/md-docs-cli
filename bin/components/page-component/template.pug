@@ -23,10 +23,10 @@ mixin breadcrumbItems(items)
 doctype html
 html 
   head
+    base(href=relative.root target='_top')
     meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
     meta(name='viewport' content='width=device-width,initial-scale=1.0')
-    meta(name='robots' content='noindex, nofollow')
-    base(href=relative.root target='_top')
+    meta(name='robots' content='noindex,nofollow')
     
     title=title 
     link(rel='stylesheet' type='text/css' href='assets/style/page/style.css')
@@ -95,18 +95,18 @@ html
         nav(id='table-of-content' class='table-of-content')
 
       | !{content}
-      
-    script.
-      window.x_md_docs_cli_branch = '!{git.branch.name}'
 
-    script(src='../branches.js' charset='UTF-8')
+    script.
+      window.x_md_docs_cli_branch = '!{git.branch.name}';
+
+    script(src=relative.basePath + 'branches.js' charset='UTF-8')
 
     script(src='assets/iframe-resizer-dist/iframeResizer.js' charset='UTF-8')
     script(src='assets/svg-pan-zoom-dist/svg-pan-zoom.min.js' charset='UTF-8')
-
     script(src='assets/prismjs/components/prism-core.min.js' charset='UTF-8')
     script(src='assets/prismjs/prism-autoloader.min.js' charset='UTF-8')
     script(src='assets/prismjs/prism-line-numbers.min.js' charset='UTF-8')
+    script(src='assets/web-components/web-components.js' charset='UTF-8')
 
     script(src='assets/scripts/fullscreen.js' charset='UTF-8')
     script(src='assets/scripts/git.js' charset='UTF-8')
@@ -119,5 +119,3 @@ html
     script(src='assets/scripts/svg-pan-zoom.js' charset='UTF-8')
     script(src='assets/scripts/tabs.js' charset='UTF-8')
     script(src='assets/scripts/user-task.js' charset='UTF-8')
-
-    script(src='assets/web-components/web-components.js' charset='UTF-8')

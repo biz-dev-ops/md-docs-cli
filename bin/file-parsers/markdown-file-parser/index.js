@@ -58,6 +58,7 @@ module.exports = class MarkdownFileParser {
 
         const url = this.#getRelativeUrl(this.options, file);
         const relative = this.relative.get();
+
         if (this.hosting.rewrite(url)) {
             relative.root = `/${this.gitInfo.branch.path}`;
         }

@@ -182,7 +182,7 @@ module.exports = class App {
         const cmd = "java",
             args = [
                 "-jar", 
-                `${__dirname}/../plantuml.1.2023.4.jar`,
+                `${__dirname}/../plantuml-1.2023.13.jar`,
                 `${options.dst}/**.puml`,
                 "-tsvg",
                 "-enablestats",

@@ -10,7 +10,6 @@
 
         const a = document.createElement("a");
         a.href =  `../${branch.path}`;
-        a.setAttribute("data-branch-url", a.href);
         a.setAttribute("title", branch.name);
 
         branch.name.split("/").forEach((slug, idx, array) => {
