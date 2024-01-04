@@ -12,10 +12,10 @@ const files = require('../utils/files');
 
 const Locale = require('../locale');
 const Relative = require('../utils/relative');
-const TocParser = require('../utils/toc-parser');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
+const Sitemap = require('../utils/sitemap');
 const CucumberTestExecutionParser = require('../utils/bdd//cucumber-test-execution-parser');
 const SpecflowTestExecutionParser = require('../utils/bdd/specflow-test-execution-parser');
 const TestExecutionParser = require('../utils/bdd/test-execution-parser');
@@ -43,6 +43,7 @@ const SvgFileParser = require('../file-parsers/svg-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
+const BusinessReferenceArchitectureComponent = require('../components/business-reference-architecture-component');
 const EmailComponent = require('../components/email-component');
 const DashboardComponent = require('../components/dashboard-component');
 const FeatureComponent = require('../components/feature-component');
@@ -67,6 +68,7 @@ const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parse
 
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BusinessModelCanvasAnchorParser = require('../anchor-parsers/business-model-canvas-anchor-parser');
+const BusinessReferenceArchitectureAnchorParser = require('../anchor-parsers/business-reference-architecture-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
@@ -166,7 +168,7 @@ module.exports = class App {
 
         await this.container.resolve('definitionStore').init();
         await this.container.resolve('locale').init();        
-        await this.container.resolve('menu').init();
+        await this.container.resolve('sitemap').init();
 
         this.#options = null;
     }
@@ -180,7 +182,7 @@ module.exports = class App {
         const cmd = "java",
             args = [
                 "-jar", 
-                `${__dirname}/../plantuml.1.2023.4.jar`,
+                `${__dirname}/../plantuml-1.2023.13.jar`,
                 `${options.dst}/**.puml`,
                 "-tsvg",
                 "-enablestats",
@@ -216,22 +218,25 @@ module.exports = class App {
 
         await files.each(options.dst, async (file) => {
             current += 1;
-            try {
-                console.info();
-                console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-                const dir = process.cwd();
+            if(!path.relative(options.dst, file).startsWith("assets/")) {
+                try {
+                    console.info();
+                    console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-                //Set current working directory to file path
-                process.chdir(path.dirname(file));
+                    const dir = process.cwd();
 
-                await fileParser.parse(file);
+                    //Set current working directory to file path
+                    process.chdir(path.dirname(file));
 
-                //Reset current working directory
-                process.chdir(dir);
-            }
-            catch(error) {
-                await this.#onError(file, error);
+                    await fileParser.parse(file);
+
+                    //Reset current working directory
+                    process.chdir(dir);
+                }
+                catch(error) {
+                    await this.#onError(file, error);
+                }
             }
 
             logger.progress(totalFiles, current);
@@ -407,10 +412,10 @@ Please review the error and fix the problem. A new version will be automaticly b
             'testExecutionStore': asClass(TestExecutionStore).singleton(),
             'userTaskParser':  asClass(UserTaskParser).singleton(),
             'menu': asClass(Menu).singleton(),
+            'sitemap': asClass(Sitemap).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
             'locale': asClass(Locale).singleton(),
             'relative': asClass(Relative).singleton(),
-            'tocParser': asClass(TocParser).singleton(),
             'progress': asValue(logger.progress),
 
             //BDD
@@ -447,6 +452,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Anchor parser
             'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
             'businessModelCanvasAnchorParser': asClass(BusinessModelCanvasAnchorParser).singleton(),
+            'businessReferenceArchitectureAnchorParser': asClass(BusinessReferenceArchitectureAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
@@ -463,6 +469,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Component
             'asyncapiComponent': asClass(AsyncapiComponent).singleton().inject(container => allowUnregistered(container, 'asyncapiComponentRenderFn')),
             'businessModelCanvasComponent': asClass(BusinessModelCanvasComponent).singleton().inject(container => allowUnregistered(container, 'businessModelCanvasComponentRenderFn')),
+            'businessReferenceArchitectureComponent': asClass(BusinessReferenceArchitectureComponent).singleton().inject(container => allowUnregistered(container, 'businessReferenceArchitectureComponentRenderFn')),
             'dashboardComponent': asClass(DashboardComponent).singleton().inject(container => allowUnregistered(container, 'dashboardComponentRenderFn')),
             'emailComponent': asClass(EmailComponent).singleton().inject(container => allowUnregistered(container, 'emailComponentRenderFn')),
             'featureComponent': asClass(FeatureComponent).singleton().inject(container => allowUnregistered(container, 'featureComponentRenderFn')),
@@ -507,6 +514,7 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'urlRewriteAnchorParser',
                 'asyncapiAnchorParser',
                 'businessModelCanvasAnchorParser',
+                'businessReferenceArchitectureAnchorParser',
                 'codeAnchorParser',
                 'dashboardAnchorParser',
                 'featureAnchorParser',

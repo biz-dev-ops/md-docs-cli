@@ -85,9 +85,13 @@ a {
     text-underline-offset: .25ex;
 }
 
+svg a {
+    color: inherit;
+}
+
 a:hover,
 a:focus {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 :focus-visible {

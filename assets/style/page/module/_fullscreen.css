@@ -148,25 +148,14 @@ body[data-fullscreen-active="true"] {
 [data-fullscreen="true"] figure,
 [data-fullscreen="true"] figure svg,
 [data-fullscreen="true"] figure embed {
-    height: 100%;
-    width: 100%;
-    padding: 0;
-}
-
-[data-fullscreen="true"] figure svg,
-[data-fullscreen="true"] figure embed,
-[data-fullscreen="true"] figure svg *,
-[data-fullscreen="true"] figure embed * {
-    cursor: move;
+    height: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
 }
 
 [data-fullscreen="true"] iframe.openapi,
 [data-fullscreen="true"] iframe.asyncapi {
     min-height: 100vh;
-}
-
-[data-fullscreen="true"] .bpmn > .bjs-container {
-    height: 100vh !important;
 }
 
 [data-fullscreen="true"] [data-toggle="fullscreen"] {

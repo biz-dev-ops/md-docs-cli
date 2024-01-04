@@ -14,7 +14,7 @@ module.exports = class ImageAnchorParser extends AnchorParser {
 
   async _parse(anchor, file) {
     console.info(colors.green(`\t\t\t\t* creating svg tag ${path.relative(this.root, file)}`));
-    
+
     return `<embed type="image/svg+xml" src='${anchor.href}' alt='${anchor.text}' />`;
   } 
 };

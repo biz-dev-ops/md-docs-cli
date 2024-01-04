@@ -8,7 +8,7 @@ const jsonSchemaParser = require('../../utils/json-schema-parser');
 
 const AnchorParser = require('../anchor-parser');
 
-module.exports = class ModelAnchorParser extends AnchorParser {
+module.exports = class businessModelCanvasAnchorParser extends AnchorParser {
   constructor({ businessModelCanvasComponent }) {
     super();
 

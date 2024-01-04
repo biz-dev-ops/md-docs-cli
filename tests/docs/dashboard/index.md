@@ -1,6 +1,6 @@
 # Dashboard
 
-Test page to render al elements.
+Test page to render all elements.
 
 ## Dashboard
 

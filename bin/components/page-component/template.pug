@@ -4,7 +4,7 @@ mixin menuItems(items, hidden, id)
       each item in items 
         li(class=item.classes.join(' '))
           if item.url
-            a(href=relative.root + '' + item.url aria-expanded=item.classes.some(i => i === 'active' || i === 'active-child') ? 'true' : 'false')= item.name
+            a(href='' + item.url aria-expanded=item.classes.some(i => i === 'active' || i === 'active-child') ? 'true' : 'false')= item.name
           else
             span(class='menu-toggle' aria-controls='next-sibling' aria-expanded=item.classes.some(i => i === 'active' || i === 'active-child') ? 'true' : 'false')=item.name
           +menuItems(item.items, !item.classes.some(i => i === 'active' || i === 'active-child'))
@@ -15,7 +15,7 @@ mixin breadcrumbItems(items)
       if item.classes.some(i => i === 'active' || i === 'active-child')
         li
           if item.url && item.classes.some(i => i === 'active-child')
-            a(href=relative.root + '' + item.url)= item.name
+            a(href='' + item.url)= item.name
           else
             span(class='menu-toggle' aria-controls='next-sibling')= item.name
           +breadcrumbItems(item.items)
@@ -23,30 +23,32 @@ mixin breadcrumbItems(items)
 doctype html
 html 
   head
+    base(href=relative.root target='_top')
     meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
     meta(name='viewport' content='width=device-width,initial-scale=1.0')
-    meta(name='robots' content='noindex, nofollow')
+    meta(name='robots' content='noindex,nofollow')
+    
     title=title 
-    link(rel='stylesheet' type='text/css' href=relative.root + 'assets/style/page/style.css')
+    link(rel='stylesheet' type='text/css' href='assets/style/page/style.css')
     
     if(options.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
       link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
       link(href=options.googleFont rel='stylesheet')
 
-    link(href=relative.root + 'assets/prismjs/prism-coy.min.css' rel='stylesheet')
-    link(href=relative.root + 'assets/prismjs/prism-line-numbers.min.css' rel='stylesheet')
+    link(href='assets/prismjs/prism-coy.min.css' rel='stylesheet')
+    link(href='assets/prismjs/prism-line-numbers.min.css' rel='stylesheet')
 
-    link(rel='icon' href=relative.root + 'assets/images/page/favicon-32w.ico' sizes='any')
-    link(rel='icon' href=relative.root + 'assets/images/page/favicon.svg' type='image/svg+xml')
-    link(rel='apple-touch-icon' type='image/png' href=relative.root + 'assets/images/page/favicon-180w.png')
+    link(rel='icon' href='assets/images/page/favicon-32w.ico' sizes='any')
+    link(rel='icon' href='assets/images/page/favicon.svg' type='image/svg+xml')
+    link(rel='apple-touch-icon' type='image/png' href='assets/images/page/favicon-180w.png')
 
   body(class='line-numbers' class={feature: !git.branch.mainBranch})
 
     nav(class='menu')
       div(class='menu-logo')
-        a(href=relative.root + 'index.html' title='Home')
-          img(src=relative.root + 'assets/images/page/logo.svg' alt=title)
+        a(href='index.html' title='Home')
+          img(src='assets/images/page/logo.svg' alt=title)
 
       if(showNav)
         div(class='menu-branch')
@@ -90,37 +92,30 @@ html
 
         h1(class='title')=title
 
-        if toc && toc.length > 0
-          nav(class='table-of-content')
-            ul
-              each item in toc
-                li
-                  a(href='#' + item.id)= item.name
+        nav(id='table-of-content' class='table-of-content')
 
       | !{content}
+
     script.
-      window.x_md_docs_cli_basePath = '!{relative.basePath}';
-      window.x_md_docs_cli_branch = '!{git.branch.name}'
+      window.x_md_docs_cli_branch = '!{git.branch.name}';
 
     script(src=relative.basePath + 'branches.js' charset='UTF-8')
 
-    script(src=relative.root + 'assets/iframe-resizer-dist/iframeResizer.js' charset='UTF-8')
-    script(src=relative.root + 'assets/svg-pan-zoom-dist/svg-pan-zoom.min.js' charset='UTF-8')
+    script(src='assets/iframe-resizer-dist/iframeResizer.js' charset='UTF-8')
+    script(src='assets/svg-pan-zoom-dist/svg-pan-zoom.min.js' charset='UTF-8')
+    script(src='assets/prismjs/components/prism-core.min.js' charset='UTF-8')
+    script(src='assets/prismjs/prism-autoloader.min.js' charset='UTF-8')
+    script(src='assets/prismjs/prism-line-numbers.min.js' charset='UTF-8')
+    script(src='assets/web-components/web-components.js' charset='UTF-8')
 
-    script(src=relative.root + 'assets/prismjs/components/prism-core.min.js' charset='UTF-8')
-    script(src=relative.root + 'assets/prismjs/prism-autoloader.min.js' charset='UTF-8')
-    script(src=relative.root + 'assets/prismjs/prism-line-numbers.min.js' charset='UTF-8')
-
-    script(src=relative.root + 'assets/scripts/fullscreen.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/git.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/h3.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/header.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/iframe.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/menu.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/scroll-spy.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/svg.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/svg-pan-zoom.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/tabs.js' charset='UTF-8')
-    script(src=relative.root + 'assets/scripts/user-task.js' charset='UTF-8')
-
-    script(src=relative.root + 'assets/web-components/web-components.js' charset='UTF-8')
+    script(src='assets/scripts/fullscreen.js' charset='UTF-8')
+    script(src='assets/scripts/git.js' charset='UTF-8')
+    script(src='assets/scripts/toc.js' charset='UTF-8')
+    script(src='assets/scripts/h3.js' charset='UTF-8')
+    script(src='assets/scripts/header.js' charset='UTF-8')
+    script(src='assets/scripts/iframe.js' charset='UTF-8')
+    script(src='assets/scripts/menu.js' charset='UTF-8')
+    script(src='assets/scripts/scroll-spy.js' charset='UTF-8')
+    script(src='assets/scripts/svg-pan-zoom.js' charset='UTF-8')
+    script(src='assets/scripts/tabs.js' charset='UTF-8')
+    script(src='assets/scripts/user-task.js' charset='UTF-8')
