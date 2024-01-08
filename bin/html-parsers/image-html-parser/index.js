@@ -18,7 +18,7 @@ module.exports = class ImageHtmlParser extends HtmlParser {
     }
 
     async parseImgAndSvg(element) {
-        const elements = Array.from(element.querySelectorAll('img:not(.replaced),svg[data-generator=markdown]:not(.replaced)'));
+        const elements = Array.from(element.querySelectorAll('img:not(.replaced),svg[data-generator="markdown"]:not(.replaced)'));
 
         if (elements.length === 0) {
             console.info(colors.green(`\t* html contains no image or svg elements`));
@@ -52,7 +52,7 @@ module.exports = class ImageHtmlParser extends HtmlParser {
     }
 
     async parseEmbed(element) {
-        const elements = Array.from(element.querySelectorAll('embed[type=image\\/svg\\+xml]:not(.replaced)'));
+        const elements = Array.from(element.querySelectorAll('embed[type="image/svg+xml"]:not(.replaced)'));
 
         if (elements.length === 0) {
             console.info(colors.green(`\t* html contains no embed elements`));
