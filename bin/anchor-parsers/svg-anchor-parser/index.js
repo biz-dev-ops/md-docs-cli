@@ -1,5 +1,6 @@
 const path = require('path');
 const colors = require('colors');
+const files = require('../../utils/files');
 
 const AnchorParser = require('../anchor-parser');
 
