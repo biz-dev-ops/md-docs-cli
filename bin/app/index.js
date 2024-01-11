@@ -34,6 +34,7 @@ const GherkinParser = require('../utils/bdd/gherkin-parser');
 
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
+const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
@@ -432,6 +433,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
+            'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
             'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
             'featureFileParser': asClass(FeatureFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
@@ -490,6 +492,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //File parsers: order can be important!
             'fileParsers': [
                 'bpmnFileParser',
+                'businessReferenceArchitectureFileParser',
                 'drawIOFileParser',
                 'featureFileParser',
                 'markdownEmailFileParser',

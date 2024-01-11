@@ -5,6 +5,7 @@ const { env, cwd } = require('process');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const markdown_it_anchor = require('markdown-it-anchor');
+const yaml = require('js-yaml');
 const slugify = function(name) {
     return name
         .trim()
@@ -12,7 +13,6 @@ const slugify = function(name) {
         .replaceAll(' ', '-')
         .replaceAll('\n', '-');
 }
-
 const files = require('../files');
 
 function SitemapArray() {
@@ -21,20 +21,39 @@ function SitemapArray() {
 
         this.forEach(element => {
             if(comparer(element)) {
-                hits.push({ name: element.name, url: element.url });
+                hits.push(element);
             }
-            else {
-                hits.push(...element.items.find(comparer));
-            }
+            
+            if(element.useCases)
+                hits.push(...element.useCases.find(comparer));
 
-            element.useCases?.forEach(useCase => {
-                if(comparer(useCase)) {
-                    hits.push({ name: useCase.name, url: useCase.url });
-                }
-            });
+            if(element.items)
+                hits.push(...element.items.find(comparer));
         });
 
         return hits;
+    }
+
+    this.findFirst = function(comparer) {
+        let hit = null;
+
+        this.every(element => {
+            if(comparer(element)) {
+                hit = element;
+                return false;
+            }
+            else {
+                hit = element.items?.findFirst(comparer) || element.useCases?.findFirst(comparer);
+                if(hit) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+        
+
+        return hit;
     }
 }
 
@@ -148,6 +167,7 @@ module.exports = class Sitemap {
             name: name,
             slug: slugify(name),
             path: path.relative(this.root, src),
+            url: null,
             items: new SitemapArray()
         };
 
@@ -169,19 +189,29 @@ module.exports = class Sitemap {
                 console.info(colors.green(`\t* adding menu item ${file}`));
                 item.url = this.#rewriteUrl(`${file.slice(0, -3)}.html`);
 
-                item.useCases = (await this.#getHeadingsFrom(entryPath))
-                    .map(h => ({
-                        type: "use-case",
-                        name: h.content,
-                        slug: markdown_it_anchor.defaults.slugify(h.content),
-                        path: path.relative(this.root, src),
-                        items: [],
-                        url: `${item.url}#${markdown_it_anchor.defaults.slugify(h.content)}`
-                    }));
+                item.useCases = new SitemapArray();
+                item.useCases.push(
+                    ...(await this.#getHeadingsFrom(entryPath))
+                        .map(h => ({
+                            type: "use-case",
+                            name: h.content,
+                            slug: markdown_it_anchor.defaults.slugify(h.content),
+                            path: path.relative(this.root, src),
+                            url: `${item.url}#${markdown_it_anchor.defaults.slugify(h.content)}`
+                        }))
+                );
+            }
+            else if(entry.name === 'index.md.yml' || entry.name === 'index.md.yaml') {
+                item.meta = await this.#getMetaInformation(entryPath);
             }
         }
 
         return item;
+    }
+
+    async #getMetaInformation(src) {
+        const content = await files.readFileAsString(src);
+        return yaml.load(content);
     }
 
     #format(src) {
