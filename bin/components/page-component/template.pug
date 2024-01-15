@@ -97,6 +97,7 @@ html
       | !{content}
 
     script.
+      window.x_md_docs_cli_root = '!{baseHref}!{root}'
       window.x_md_docs_cli_branch = '!{git.branch.name}';
 
     script(src=root + 'branches.js' charset='UTF-8')
