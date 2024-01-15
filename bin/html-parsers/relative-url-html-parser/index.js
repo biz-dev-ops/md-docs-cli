@@ -41,6 +41,4 @@ module.exports = class RelativeUrlHtmlParser {
             }
         });
     }
-
-    #insideS
 }

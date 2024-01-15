@@ -7,13 +7,5 @@ module.exports = class CompositeHostingService {
         for (const hosting of this.hostingServices) {
             await hosting.apply();
         }
-    }    
-
-    // rewrite(url) {
-    //     for (const hosting of this.hostingServices) {
-    //         if (hosting.rewrite(url))
-    //             return true;
-    //     }
-    //     return false;
-    // } 
+    }
 }
