@@ -130,14 +130,14 @@ module.exports = class AzureStaticWebApp {
         await fs.writeFile(path.resolve(this.options.basePath, 'staticwebapp.config.json'), JSON.stringify(config));
     }
 
-    rewrite(url) {
-        const hosting = this.options.hosting;
-        if (!hosting || hosting.type !== 'azure-static-web-app')
-            return;
+    // rewrite(url) {
+    //     const hosting = this.options.hosting;
+    //     if (!hosting || hosting.type !== 'azure-static-web-app')
+    //         return;
         
-        if (url === '404.md' || url === '404.html')
-            return true;
+    //     if (url === '404.md' || url === '404.html')
+    //         return true;
         
-        return false;
-    }
+    //     return false;
+    // }
 }

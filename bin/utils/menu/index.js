@@ -1,28 +1,31 @@
-require('process');
+const path = require('path');
 
 module.exports = class Menu {
-    constructor({ sitemap }) {
+    constructor({ sitemap, relative, options }) {
         this.sitemap = sitemap;
+        this.relative = relative;
+        this.options = options;
     }
 
     async items(currentUrl) {
-        const urls = this.#createMenuItems(await this.sitemap.items(), currentUrl);
+        const currentPath = path.relative(this.options.dst, path.dirname(currentUrl));
+        const urls = this.#createMenuItems(await this.sitemap.items(), currentPath);
         return urls;
     }
 
-    #createMenuItems(items, currentUrl) {
+    #createMenuItems(items, currentPath) {
         return items
             .map(i => {
                 const item = {
                     name: i.name,
                     classes: [],
-                    items: this.#createMenuItems(i.items, currentUrl)
+                    items: this.#createMenuItems(i.items, currentPath)
                 }
 
-                if (i.url === currentUrl) {
+                if (i.path === currentPath) {
                     item.classes.push("active");
                 }
-                else if (currentUrl.startsWith(i.path)) {
+                else if (currentPath.startsWith(i.path)) {
                     item.classes.push("active-child");
                 }
 
@@ -38,7 +41,7 @@ module.exports = class Menu {
 
             })
             .filter(i => i.url || i.items?.length > 0)
-            .map((item, index, items) => {
+            .map((item, _, items) => {
                 if (item.classes.some(c => c.startsWith('active')))
                     return item;
                 

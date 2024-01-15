@@ -15,6 +15,7 @@ const Relative = require('../utils/relative');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
+const PageUtil = require('../utils/page-util');
 const Sitemap = require('../utils/sitemap');
 const CucumberTestExecutionParser = require('../utils/bdd//cucumber-test-execution-parser');
 const SpecflowTestExecutionParser = require('../utils/bdd/specflow-test-execution-parser');
@@ -63,6 +64,8 @@ const CleanUpHtmlParser = require('../html-parsers/clean-up-html-parser');
 const DefinitionHtmlParser = require('../html-parsers/definition-html-parser');
 const ImageHtmlParser = require('../html-parsers/image-html-parser');
 const ImageSVGHtmlParser = require('../html-parsers/image-svg-html-parser');
+const RelativeUrlHtmlParser = require('../html-parsers/relative-url-html-parser');
+const RemoveH1HtmlParser = require('../html-parsers/remove-h1-html-parser');
 const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
@@ -413,6 +416,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'testExecutionStore': asClass(TestExecutionStore).singleton(),
             'userTaskParser':  asClass(UserTaskParser).singleton(),
             'menu': asClass(Menu).singleton(),
+            'pageUtil': asClass(PageUtil).singleton(),
             'sitemap': asClass(Sitemap).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
             'locale': asClass(Locale).singleton(),
@@ -449,6 +453,8 @@ Please review the error and fix the problem. A new version will be automaticly b
             'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
             'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
             'imageSVGHtmlParser': asClass(ImageSVGHtmlParser).singleton(),
+            'relativeUrlHtmlParser': asClass(RelativeUrlHtmlParser).singleton(),
+            'removeH1HtmlParser': asClass(RemoveH1HtmlParser).singleton(),
             'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
@@ -509,7 +515,9 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'unsortedListHtmlParser',
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
-                'cleanUpHtmlParser'
+                'cleanUpHtmlParser',
+                'removeH1HtmlParser',
+                'relativeUrlHtmlParser'
             ],
 
             //Anchor parsers, order can be important!

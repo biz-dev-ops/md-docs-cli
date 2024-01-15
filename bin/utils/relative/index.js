@@ -7,17 +7,18 @@ module.exports = class Relative {
     }
 
     get() {
+        //TODO: deze namen aanpassen kloppen niet, worden gebruikt in page template
         return {
-            basePath: relativeTo(this.options.dst, this.options.basePath),
-            root: relativeTo(cwd(), this.options.dst)
+            basePath: this.#relativeTo(this.options.dst, this.options.basePath),
+            root: this.#relativeTo(cwd(), this.options.dst)
         }
     }
-}
 
-function relativeTo(from, to) {
-    const root = path.relative(from, to);
-    if (root === '')
-        return root;
-
-    return `${root}/`;
+    #relativeTo(from, to) {
+        const root = path.relative(from, to);
+        if (root === '')
+            return root;
+    
+        return `${root}/`;
+    }
 }

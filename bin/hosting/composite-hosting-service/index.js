@@ -9,11 +9,11 @@ module.exports = class CompositeHostingService {
         }
     }    
 
-    rewrite(url) {
-        for (const hosting of this.hostingServices) {
-            if (hosting.rewrite(url))
-                return true;
-        }
-        return false;
-    } 
+    // rewrite(url) {
+    //     for (const hosting of this.hostingServices) {
+    //         if (hosting.rewrite(url))
+    //             return true;
+    //     }
+    //     return false;
+    // } 
 }

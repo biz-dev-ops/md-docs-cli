@@ -2,17 +2,9 @@ const fs = require('fs').promises;
 const colors = require('colors');
 const path = require('path');
 const { env, cwd } = require('process');
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
+const { JSDOM } = require('jsdom');
 const markdown_it_anchor = require('markdown-it-anchor');
 const yaml = require('js-yaml');
-const slugify = function(name) {
-    return name
-        .trim()
-        .toLowerCase()
-        .replaceAll(' ', '-')
-        .replaceAll('\n', '-');
-}
 const files = require('../files');
 
 function SitemapArray() {
@@ -69,11 +61,10 @@ module.exports = class Sitemap {
     }
 
     #data = null;
-    #regex = /(\d+[_])/ig;
-    #regexHeader = /(?<flag>#{1,6})\s+(?<content>.+)/g
-
-    constructor({ options }) {
+   
+    constructor({ options, pageUtil }) {
         this.root = options.dst;
+        this.pageUtil = pageUtil;
     }
 
     async init() {
@@ -110,7 +101,7 @@ module.exports = class Sitemap {
             if(!name || name.trim().length === 0) 
                 return;
 
-            const slug = slugify(name);
+            const slug = Sitemap.slugify(name);
             const hits = sitemap.find((el) => el.slug === slug);
 
             if(hits.length === 0) {
@@ -160,12 +151,12 @@ module.exports = class Sitemap {
     async #getMenuItem(src) {
         await fs.access(src);
         const entries = await fs.readdir(src, { withFileTypes: true });
-        const name = this.#format(src);
+        const name = await this.pageUtil.getTitleFromUrl(src);
 
         const item = {
             type: "page",
             name: name,
-            slug: slugify(name),
+            slug: Sitemap.slugify(name),
             path: path.relative(this.root, src),
             url: null,
             items: new SitemapArray()
@@ -185,20 +176,23 @@ module.exports = class Sitemap {
                     item.items.push(sub);
             }
             else if (entry.name === 'index.md') {
-                const file = path.relative(this.root, entryPath);
-                console.info(colors.green(`\t* adding menu item ${file}`));
-                item.url = this.#rewriteUrl(`${file.slice(0, -3)}.html`);
+                item.url = this.#creatUrl(path.join(item.path, entry.name));
+                console.info(colors.green(`\t* adding menu item ${item.url}`));
 
                 item.useCases = new SitemapArray();
                 item.useCases.push(
-                    ...(await this.#getHeadingsFrom(entryPath))
-                        .map(h => ({
-                            type: "use-case",
-                            name: h.content,
-                            slug: markdown_it_anchor.defaults.slugify(h.content),
-                            path: path.relative(this.root, src),
-                            url: `${item.url}#${markdown_it_anchor.defaults.slugify(h.content)}`
-                        }))
+                    ...(await this.pageUtil.getHeadingsFrom(await files.readFileAsString(entryPath)))
+                        .filter(i => i.heading === "h3")
+                        .map(h => {
+                            const useCaseSlug = markdown_it_anchor.defaults.slugify(h.content)
+                            return {
+                                type: "use-case",
+                                name: h.content,
+                                slug: useCaseSlug,
+                                path: path.relative(this.root, src),
+                                url: `${item.url}#${useCaseSlug}`
+                            };
+                        })
                 );
             }
             else if(entry.name === 'index.md.yml' || entry.name === 'index.md.yaml') {
@@ -214,38 +208,8 @@ module.exports = class Sitemap {
         return yaml.load(content);
     }
 
-    #format(src) {
-        if (this.root === src)
-            return 'Home';
-
-        const name = this.#rewriteName(path.basename(src));
-
-        return name
-            .charAt(0).toUpperCase() + name.slice(1)
-            .replaceAll("-", " ");
-    }
-
-    #rewriteName(name) {
-        return name.replaceAll(this.#regex, '');
-    }
-
-    #rewriteUrl(url) {
-        const rewrite = url.replaceAll(this.#regex, '');
-        if (rewrite === url)
-            return url;
-
-        console.info(colors.green(`\t* rewrite url ${url} => ${rewrite}`));
-        return rewrite;
-    }
-    
-    async #getHeadingsFrom(markdownFile) {
-        const markdown = await files.readFileAsString(markdownFile);
-        
-        return Array.from(markdown.matchAll(this.#regexHeader))
-            .map(({ groups: { flag, content } }) => ({
-                heading: `h${ flag.length }`,
-                content
-            }))
-            .filter(i => i.heading === "h3");
+    #creatUrl(file) {
+        return this.pageUtil.removeOrder(file)
+            .slice(0, -3) + ".html";
     }
 }

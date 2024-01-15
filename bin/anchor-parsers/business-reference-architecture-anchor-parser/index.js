@@ -17,8 +17,6 @@ module.exports = class BusinessReferenceArchitectureParser extends AnchorParser 
   _canParse(anchor) { return anchor.href.endsWith('business-reference-architecture.yml') || anchor.href.endsWith('business-reference-architecture.yaml'); }
 
   async _parse(anchor, file) {
-    console.log('------------------------------------------------>')
-
     console.info(colors.green(`\t\t\t\t* parsing yaml`));
     const json = JSON.parse(await files.readFileAsString(`${file}.json`));
 
