@@ -77,7 +77,7 @@ module.exports = class PageUtil {
     }
 
     relativeRootFromBaseHref() {
-        this.#relativeTo(this.options.dst, this.options.basePath);
+        return this.#relativeTo(this.options.dst, this.options.basePath);
     }
 
     #relativeTo(from, to) {
