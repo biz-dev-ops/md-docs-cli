@@ -11,7 +11,6 @@ const git = require('../utils/git');
 const files = require('../utils/files');
 
 const Locale = require('../locale');
-const Relative = require('../utils/relative');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
@@ -420,7 +419,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'sitemap': asClass(Sitemap).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
             'locale': asClass(Locale).singleton(),
-            'relative': asClass(Relative).singleton(),
             'progress': asValue(logger.progress),
 
             //BDD

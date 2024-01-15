@@ -1,9 +1,8 @@
 const path = require('path');
 
 module.exports = class Menu {
-    constructor({ sitemap, relative, options }) {
+    constructor({ sitemap, options }) {
         this.sitemap = sitemap;
-        this.relative = relative;
         this.options = options;
     }
 

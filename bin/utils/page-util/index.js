@@ -9,8 +9,7 @@ module.exports = class PageUtil {
     #regexHeader = /(?<flag>#{1,6})\s+(?<content>.+)/gm;
     #aboutBlank = "about:blank";
 
-    constructor({ relative, options }) {
-        this.relative = relative;
+    constructor({ options }) {
         this.options = options;
     }
 
@@ -71,6 +70,22 @@ module.exports = class PageUtil {
                 heading: `h${ flag.length }`,
                 content
             }));
+    }
+
+    relativeBaseHref() {
+        return this.#relativeTo(cwd(), this.options.dst);
+    }
+
+    relativeRootFromBaseHref() {
+        this.#relativeTo(this.options.dst, this.options.basePath);
+    }
+
+    #relativeTo(from, to) {
+        const root = path.relative(from, to);
+        if (root === '')
+            return root;
+    
+        return `${root}/`;
     }
 
     #isRelativeUrl(url) {

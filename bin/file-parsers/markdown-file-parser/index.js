@@ -1,19 +1,17 @@
 const fs = require('fs').promises;
-const { env } = require('process');
+const { env, cwd } = require('process');
 const path = require('path');
 const colors = require('colors');
 const files = require('../../utils/files');
-const orderPrefixRegex = /(\d+[_])/ig;
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, relative, locale, htmlParsers, pageUtil }) {
+    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, locale, htmlParsers, pageUtil }) {
         this.options = options;
         this.gitInfo = gitInfo;
         this.hosting = hosting;
         this.renderer = markdownRenderer;
         this.component = pageComponent;
         this.menu = menu;
-        this.relative = relative;
         this.locale = locale;
         this.parsers = htmlParsers;
         this.pageUtil = pageUtil;
@@ -53,7 +51,8 @@ module.exports = class MarkdownFileParser {
         const menuItems = await this.menu.items(file);
 
         return this.component.render({
-            relative: this.relative.get(),
+            baseHref: this.pageUtil.relativeBaseHref(),
+            root: this.pageUtil.relativeRootFromBaseHref(),
             showNav: showNav,
             logout: logout,
             sourceFile: path.relative(this.options.dst, file),
