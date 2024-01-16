@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { env } = require('process');
+const { env, cwd } = require('process');
 const path = require('path');
 const colors = require('colors');
 const yaml = require('js-yaml');
@@ -15,11 +15,11 @@ const mustache = require('mustache');
 const files = require('../../utils/files');
 
 module.exports = class MarkdownEmailFileParser {
-    constructor({ options, emailComponent, locale, relative }) {
+    constructor({ options, emailComponent, locale, pageUtil }) {
         this.options = options;
         this.component = emailComponent;
         this.locale = locale;
-        this.relative = relative;
+        this.pageUtil = pageUtil;
     }
 
     async parse(file) {
@@ -48,8 +48,8 @@ module.exports = class MarkdownEmailFileParser {
     async #createData(file) {
         let data = Object.assign(JSON.parse(JSON.stringify(this.options.email || {})), {
             locale: await this.locale.get(),
-            root: this.relative.get().root,
-            title: formatTitle(path.basename(file))
+            baseHref: this.pageUtil.relativeBaseHref(),
+            title: this.pageUtil.getTitleFromUrl(path.basename(file))
         });
 
         const ymlFile = `${file}.yml`;    
@@ -66,15 +66,4 @@ renderMessage = async function(file, data) {
     let markdown = await files.readFileAsString(file);
     markdown = mustache.render(markdown, data);
     return md.render(markdown);
-}
-
-formatTitle = function (title) {
-    if (title === "dist")
-        title = "Home";
-
-    if (title.indexOf(".") > -1)
-        title = title.substring(0, title.indexOf("."))
-
-    return title.charAt(0).toUpperCase() + title.slice(1)
-        .replace("-", " ");
 }

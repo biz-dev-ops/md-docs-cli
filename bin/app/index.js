@@ -11,10 +11,10 @@ const git = require('../utils/git');
 const files = require('../utils/files');
 
 const Locale = require('../locale');
-const Relative = require('../utils/relative');
 
 const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
+const PageUtil = require('../utils/page-util');
 const Sitemap = require('../utils/sitemap');
 const CucumberTestExecutionParser = require('../utils/bdd//cucumber-test-execution-parser');
 const SpecflowTestExecutionParser = require('../utils/bdd/specflow-test-execution-parser');
@@ -34,6 +34,7 @@ const GherkinParser = require('../utils/bdd/gherkin-parser');
 
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
+const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
@@ -62,6 +63,8 @@ const CleanUpHtmlParser = require('../html-parsers/clean-up-html-parser');
 const DefinitionHtmlParser = require('../html-parsers/definition-html-parser');
 const ImageHtmlParser = require('../html-parsers/image-html-parser');
 const ImageSVGHtmlParser = require('../html-parsers/image-svg-html-parser');
+const RelativeUrlHtmlParser = require('../html-parsers/relative-url-html-parser');
+const RemoveH1HtmlParser = require('../html-parsers/remove-h1-html-parser');
 const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
@@ -412,10 +415,10 @@ Please review the error and fix the problem. A new version will be automaticly b
             'testExecutionStore': asClass(TestExecutionStore).singleton(),
             'userTaskParser':  asClass(UserTaskParser).singleton(),
             'menu': asClass(Menu).singleton(),
+            'pageUtil': asClass(PageUtil).singleton(),
             'sitemap': asClass(Sitemap).singleton(),
             'markdownRenderer': asClass(MarkdownRenderer).singleton(),
             'locale': asClass(Locale).singleton(),
-            'relative': asClass(Relative).singleton(),
             'progress': asValue(logger.progress),
 
             //BDD
@@ -432,6 +435,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
+            'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
             'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
             'featureFileParser': asClass(FeatureFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
@@ -447,6 +451,8 @@ Please review the error and fix the problem. A new version will be automaticly b
             'headingHtmlParser': asClass(HeadingHtmlParser).singleton(),
             'imageHtmlParser': asClass(ImageHtmlParser).singleton(),
             'imageSVGHtmlParser': asClass(ImageSVGHtmlParser).singleton(),
+            'relativeUrlHtmlParser': asClass(RelativeUrlHtmlParser).singleton(),
+            'removeH1HtmlParser': asClass(RemoveH1HtmlParser).singleton(),
             'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
@@ -490,6 +496,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //File parsers: order can be important!
             'fileParsers': [
                 'bpmnFileParser',
+                'businessReferenceArchitectureFileParser',
                 'drawIOFileParser',
                 'featureFileParser',
                 'markdownEmailFileParser',
@@ -506,7 +513,9 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'unsortedListHtmlParser',
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
-                'cleanUpHtmlParser'
+                'cleanUpHtmlParser',
+                'removeH1HtmlParser',
+                'relativeUrlHtmlParser'
             ],
 
             //Anchor parsers, order can be important!

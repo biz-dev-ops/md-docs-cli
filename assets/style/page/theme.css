@@ -1,10 +1,10 @@
 :root {
   /* Brand colors */
-  --color-brand-a80: rgba(var(--rgb-brand) / 80%);
-  --color-brand-a60: rgba(var(--rgb-brand) / 60%);
-  --color-brand-a40: rgba(var(--rgb-brand) / 40%);
-  --color-brand-a20: rgba(var(--rgb-brand) / 20%);
-  --color-brand-a10: rgba(var(--rgb-brand) / 10%);
+  --color-brand-a80: color-mix(in srgb, rgb(var(--rgb-brand)) 80%, white);
+  --color-brand-a60: color-mix(in srgb, rgb(var(--rgb-brand)) 60%, white);
+  --color-brand-a40: color-mix(in srgb, rgb(var(--rgb-brand)) 40%, white);
+  --color-brand-a20: color-mix(in srgb, rgb(var(--rgb-brand)) 20%, white);
+  --color-brand-a10: color-mix(in srgb, rgb(var(--rgb-brand)) 10%, white);
 
   /* Colors */
   --color-white-rgb: 255 255 255;
@@ -13,6 +13,7 @@
   --color-white-a20: rgba(var(--color-white-rgb) / 20%);
   --color-white-a50: rgba(var(--color-white-rgb) / 50%);
   --color-white-a90: rgba(var(--color-white-rgb) / 90%);
+  
   --color-black-rgb: 0 0 0;
   --color-black: rgb(var(--color-black-rgb));
   --color-black-a05: rgba(var(--color-black-rgb) / 5%);

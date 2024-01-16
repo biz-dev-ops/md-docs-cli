@@ -1,10 +1,11 @@
 doctype html
 html
   head
+    base(href=data.baseHref target='_top')
     meta(charset='UTF-8')
     title=data.title
     
-    link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/email/style.css')
+    link(rel='stylesheet' type='text/css' href='assets/style/email/style.css')
 
     if(data.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
@@ -26,7 +27,7 @@ html
       article
         header
           figure
-            img(src=data.root + 'assets/images/message/logo.svg')
+            img(src='assets/images/message/logo.svg')
 
         main
           | !{data.message}
@@ -61,4 +62,4 @@ html
         };
       })();
     
-    script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.js' charset='UTF-8')
+    script(src='assets/iframe-resizer-dist/iframeResizer.contentWindow.js' charset='UTF-8')

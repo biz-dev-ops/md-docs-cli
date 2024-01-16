@@ -1,16 +1,14 @@
 module.exports = class DefinitionParser {
-    constructor({ definitionStore, relative }) {
+    constructor({ definitionStore }) {
         this.definitionStore = definitionStore;
-        this.relative = relative;
     }
 
     async parse(html) {
         const definitions = await this.definitionStore.get();
-        const root = this.relative.get().root;
 
         for (const definition of definitions) {
             const regex = new RegExp(`(?!<a|abbr[^>]*>)(${createAlias(definition)})(?![^<]*<\/a|abbr>)`, 'img');
-            html = html.replace(regex, createReplacement(definition, root));
+            html = html.replace(regex, createReplacement(definition));
         }
 
         return html;
@@ -27,7 +25,7 @@ module.exports = class DefinitionParser {
     }
 }
 
-function createReplacement(definition, root) {
+function createReplacement(definition) {
     let replacement = '$1';
             
     if (definition.text)
@@ -36,9 +34,6 @@ function createReplacement(definition, root) {
     if(definition.link)
     {
         let url = definition.link;
-        if (!url.startsWith('http'))
-            url = root + url;
-        
         replacement = `<a href="${url}">${replacement}</a>`
     }
     

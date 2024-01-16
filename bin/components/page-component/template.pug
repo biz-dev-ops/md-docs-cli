@@ -23,7 +23,7 @@ mixin breadcrumbItems(items)
 doctype html
 html 
   head
-    base(href=relative.root target='_top')
+    base(href=baseHref target='_top')
     meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
     meta(name='viewport' content='width=device-width,initial-scale=1.0')
     meta(name='robots' content='noindex,nofollow')
@@ -97,9 +97,10 @@ html
       | !{content}
 
     script.
+      window.x_md_docs_cli_root = '!{baseHref}!{root}'
       window.x_md_docs_cli_branch = '!{git.branch.name}';
 
-    script(src=relative.basePath + 'branches.js' charset='UTF-8')
+    script(src=root + 'branches.js' charset='UTF-8')
 
     script(src='assets/iframe-resizer-dist/iframeResizer.js' charset='UTF-8')
     script(src='assets/svg-pan-zoom-dist/svg-pan-zoom.min.js' charset='UTF-8')

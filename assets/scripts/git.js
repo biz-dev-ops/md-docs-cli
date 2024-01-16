@@ -9,7 +9,7 @@
             li.classList.add("active");
 
         const a = document.createElement("a");
-        a.href =  `../${branch.path}`;
+        a.href =  `${x_md_docs_cli_root}${branch.path}`;
         a.setAttribute("title", branch.name);
 
         branch.name.split("/").forEach((slug, idx, array) => {
