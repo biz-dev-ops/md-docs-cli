@@ -1,8 +1,11 @@
 :root {
     --rgb-brand: 0 102 255;
+    --rgb-brand-secondary: var(--rgb-brand);
     --rgb-text: 26 26 26;
     --rgb-heading: 0 51 102;
+    
     --color-brand-base: rgb(var(--rgb-brand));
+    --color-brand-secondary: rgb(var(--rgb-brand-secondary));
     --text-color-base: rgba(var(--rgb-text) / 90%);
     --text-color-heading: rgb(var(--rgb-heading));
 } 
