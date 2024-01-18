@@ -16,6 +16,7 @@ const MarkdownRenderer = require('../utils/markdown');
 const Menu = require('../utils/menu');
 const PageUtil = require('../utils/page-util');
 const Sitemap = require('../utils/sitemap');
+const CompositeFeatureParser = require("../utils/bdd/composite-feature-parser");
 const CucumberTestExecutionParser = require('../utils/bdd//cucumber-test-execution-parser');
 const SpecflowTestExecutionParser = require('../utils/bdd/specflow-test-execution-parser');
 const TestExecutionParser = require('../utils/bdd/test-execution-parser');
@@ -35,6 +36,7 @@ const GherkinParser = require('../utils/bdd/gherkin-parser');
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
+const DashboardFileParser = require("../file-parsers/dashboard-file-parser");
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
@@ -239,6 +241,10 @@ module.exports = class App {
                 }
                 catch(error) {
                     await this.#onError(file, error);
+
+                    if (process.env.NODE_ENV === 'development') {
+                        throw(error);
+                    }
                 }
             }
 
@@ -267,6 +273,10 @@ module.exports = class App {
             }
             catch(error) {
                 await this.#onError(file, error);
+                
+                if (process.env.NODE_ENV === 'development') {
+                    throw(error);
+                }
             }
             
             logger.progress(totalFiles, current);
@@ -317,12 +327,6 @@ module.exports = class App {
     
     async #onError(file, error) {
         const options = this.container.resolve('options');
-        if (process.env.NODE_ENV === 'development') {
-            console.error(`Error in file ${file}.`);
-            console.trace();
-            throw error;
-        }
-
         const markdownFileParser =  this.container.resolve('markdownFileParser');
         const gitInfo = this.container.resolve('gitInfo');
 
@@ -331,13 +335,12 @@ module.exports = class App {
         const errorFile = path.join(options.dst, 'index.md');
         const relativeFile = path.relative(options.dst, file);
 
+        console.error(`Error in file ${file}.`);
+        
         process.stdout.write("\n");
         process.stderr.write(colors.red(`There was an error while processing ${relativeFile}:`));
         process.stdout.write("\n");
         process.stdout.write(colors.red(error.message));
-        process.stdout.write("\n");
-        console.trace();
-        process.stdout.write(Error.captureStackTrace(error));
 
         const gitFile = path.join(gitInfo.branch.url, relativeFile);
             
@@ -406,6 +409,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Utils
             'headlessBrowser': asClass(HeadlessBrowser).singleton(),
             'testExecutionParser': asClass(TestExecutionParser).singleton(),
+            'compositeFeatureParser': asClass(CompositeFeatureParser).singleton(),
             'cucumberTestExecutionParser': asClass(CucumberTestExecutionParser).singleton(),
             'specflowTestExecutionParser': asClass(SpecflowTestExecutionParser).singleton(),
             'testExecutionParsers': [
@@ -436,6 +440,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
             'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
+            'dashboardFileParser': asClass(DashboardFileParser).singleton(),
             'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
             'featureFileParser': asClass(FeatureFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
@@ -497,6 +502,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'fileParsers': [
                 'bpmnFileParser',
                 'businessReferenceArchitectureFileParser',
+                'dashboardFileParser',
                 'drawIOFileParser',
                 'featureFileParser',
                 'markdownEmailFileParser',
