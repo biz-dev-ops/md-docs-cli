@@ -41,15 +41,15 @@ module.exports = class BusinessReferenceArchitectureFileParser {
                 else {
                     const page = await this.#findPage(value);
 
-                    if(!el.icon) {
+                    if(!el.hasOwnProperty("icon")) {
                         el.icon = page.meta?.icon;
                     }
 
-                    if(!el.title) {
+                    if(!el.hasOwnProperty("title")) {
                         el.title = page.name;
                     }
 
-                    if(!el.link) {
+                    if(!el.hasOwnProperty("link")) {
                         el.link = page.url;
                     }
 

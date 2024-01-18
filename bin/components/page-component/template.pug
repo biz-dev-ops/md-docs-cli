@@ -28,7 +28,7 @@ html
     meta(name='viewport' content='width=device-width,initial-scale=1.0')
     meta(name='robots' content='noindex,nofollow')
     
-    title=title 
+    title !{title}
     link(rel='stylesheet' type='text/css' href='assets/style/page/style.css')
     
     if(options.googleFont)
@@ -90,7 +90,7 @@ html
         ul(class='breadcrumb')
           +breadcrumbItems(menu)
 
-        h1(class='title')=title
+        h1(class='title') !{title}
 
         nav(id='table-of-content' class='table-of-content')
 

@@ -169,7 +169,10 @@ module.exports = class Sitemap {
         for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
             const entryPath = path.resolve(src, entry.name);
 
-            if (entry.isDirectory()) {
+            if(entry.name.startsWith("_")) {
+                continue;
+            }
+            else if (entry.isDirectory()) {
                
                 const sub = await this.#getMenuItem(entryPath);
                 if (sub != undefined)

@@ -17,12 +17,7 @@ module.exports = class PageUtil {
         const markdown = await files.readFileAsString(markdownFile);
         const headings = this.getHeadingsFrom(markdown);
         const title = headings.find(item => item.heading === "h1")?.content;
-       
-        if(title) {
-            return title;
-        }
-
-        return this.getTitleFromUrl(markdownFile);
+        return title;
     }
 
     getTitleFromUrl(url) {
