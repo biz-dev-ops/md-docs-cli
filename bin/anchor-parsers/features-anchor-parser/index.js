@@ -4,15 +4,14 @@ const colors = require('colors');
 
 const AnchorParser = require('../anchor-parser');
 
-const compositeParser = require('../../utils/bdd/composite-feature-parser');
-
 module.exports = class FeaturesAnchorParser extends AnchorParser {
-  constructor({ featureComponent, definitionParser, gherkinParser }) {
+  constructor({ featureComponent, definitionParser, gherkinParser, compositeFeatureParser }) {
     super();
 
     this.component = featureComponent;
     this.definitionParser = definitionParser;
     this.gherkinParser = gherkinParser;
+    this.compositeFeatureParser = compositeFeatureParser;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.features.yml') || anchor.href.endsWith('.features.yaml'); }
@@ -20,7 +19,7 @@ module.exports = class FeaturesAnchorParser extends AnchorParser {
   async _parse(anchor, file) {
     console.info(colors.green(`\t\t\t\t* parsing file`));
     
-    const files = await compositeParser.parse(file);
+    const files = await this.compositeFeatureParser.parse(file);
 
     if (env.NODE_ENV === 'development')
       await fs.writeFile(`${file}.files.json`, JSON.stringify(files));

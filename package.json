@@ -1,6 +1,6 @@
 {
   "name": "@biz-dev-ops/md-docs",
-  "version": "1.0.109",
+  "version": "1.0.110",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -41,6 +41,7 @@
     "colors": "^1.4.0",
     "copyfiles": "^2.4.1",
     "figlet": "^1.6.0",
+    "glob-promise": "^6.0.5",
     "iframe-resizer": "^4.3.6",
     "import-resolve": "^0.5.1",
     "js-yaml": "^4.1.0",
