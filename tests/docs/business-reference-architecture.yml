@@ -1,41 +1,22 @@
-endUsers:
-  - icon: icon
-    title: end user 1
-    link: ./index.html
-  - title: end user 2
-channels:
-  - title: channel group 1
-    buttons:
-      - icon: icon
-        title: channel 1
-        link: ./index.html
-      - title: channel 2
-  - title: channel group 2
-    buttons:
-      - icon: icon
-        title: channel 3
-        link: ./index.html
-      - title: channel 4
-valueStreams:
-  - title: stream 1
-    link: ./index.html
-  - title: stream 2
-businessCapabilities:
-  title: business domains
-  groups:
-    - title: business domain 1
-      buttons:
-        - icon: icon
-          title: business service 1
-          link: ./index.html
-        - title: business service 2
-    - title: business domain 1
-      buttons:
-        - icon: icon
-          title: business service 3
-          link: ./index.html
-        - title: business service 4
-principles:
-  - title: principle 1
-    link: ./index.html
-  - title: principle 2
+- title: Test title
+  arrow: down
+  buttonType: brand
+  buttons:
+    - title: test 1
+      icon: ph-chart-bar
+    - title: test 2
+      icon: mat-done
+- title: Test title
+- buttonType: stream
+  sectionType: streams
+  buttons:
+    - title: test 1
+    - title: test 2
+- title: Test title
+  arrow: up
+  buttonType: default
+  buttons:
+    - title: test 1
+      icon: fa-chart-pie
+    - title: test 2
+      icon: assets/images/page/favicon.svg

@@ -514,6 +514,7 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //Html parsers, order is important!
             'htmlParsers': [
+                'removeH1HtmlParser',
                 'imageSVGHtmlParser',
                 'headingHtmlParser',
                 'definitionHtmlParser',
@@ -522,7 +523,6 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
                 'cleanUpHtmlParser',
-                'removeH1HtmlParser',
                 'relativeUrlHtmlParser'
             ],
 
