@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const { env, cwd } = require('process');
 const path = require('path');
 const colors = require('colors');
+const mustache = require('mustache');
 const files = require('../../utils/files');
 
 module.exports = class MarkdownFileParser {
@@ -32,8 +33,17 @@ module.exports = class MarkdownFileParser {
         await fs.writeFile(htmlFile, html);
     }
 
+    async #getTitle(file) {
+        const urlTitle = this.pageUtil.getTitleFromUrl(file);
+        const markdownTitle = await await this.pageUtil.getTitleFromMarkdown(file);
+        if(!markdownTitle) {
+            return urlTitle;
+        }
+        return  mustache.render(markdownTitle, { title: urlTitle });
+    }
+
     async #render(file) {
-        const title = await this.pageUtil.getTitleFromMarkdown(file, true);
+        const title = await this.#getTitle(file);
         const element = await this.renderer.render(await files.readFileAsString(file));
        
         if (env.NODE_ENV === 'development')

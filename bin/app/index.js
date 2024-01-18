@@ -1,6 +1,7 @@
 const awilix = require('awilix');
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
+const glob = util.promisify(require('glob-promise'));
 const { asClass, asValue } = require('awilix');
 const fs = require('fs').promises;
 const path = require('path');
@@ -163,7 +164,7 @@ module.exports = class App {
         await createDestination(options);
         await createRelease(options);
         await createBranches(opts, gitInfo);
-        await copyFiles(this._getFileTransfers(options));
+        await copyFiles(await this._getFileTransfers(options));
 
         registerServices(this.container, this._getServices(options));
 
@@ -360,7 +361,7 @@ Please review the error and fix the problem. A new version will be automaticly b
     }
 
     //Protected
-    _getFileTransfers(options) {
+    async _getFileTransfers(options) {
         const fileTransfers = [
             { src: options.assets, dst: path.resolve(options.dst, 'assets') },
             
@@ -388,6 +389,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') },
 
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.dst, 'assets/web-components') },
+            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2')))[0], dst: path.resolve(options.dst, 'assets/web-components') },
             
             { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.dst, 'assets/pagedjs') },
 
@@ -512,6 +514,7 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //Html parsers, order is important!
             'htmlParsers': [
+                'removeH1HtmlParser',
                 'imageSVGHtmlParser',
                 'headingHtmlParser',
                 'definitionHtmlParser',
@@ -520,7 +523,6 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
                 'cleanUpHtmlParser',
-                'removeH1HtmlParser',
                 'relativeUrlHtmlParser'
             ],
 
