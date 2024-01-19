@@ -37,7 +37,6 @@ const GherkinParser = require('../utils/bdd/gherkin-parser');
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
-const DashboardFileParser = require("../file-parsers/dashboard-file-parser");
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
@@ -442,7 +441,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
             'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
-            'dashboardFileParser': asClass(DashboardFileParser).singleton(),
             'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
             'featureFileParser': asClass(FeatureFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
@@ -504,9 +502,8 @@ Please review the error and fix the problem. A new version will be automaticly b
             'fileParsers': [
                 'bpmnFileParser',
                 'businessReferenceArchitectureFileParser',
-                'dashboardFileParser',
-                'drawIOFileParser',
                 'featureFileParser',
+                'drawIOFileParser',
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',
                 'svgFileParser'
@@ -533,9 +530,9 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'businessModelCanvasAnchorParser',
                 'businessReferenceArchitectureAnchorParser',
                 'codeAnchorParser',
-                'dashboardAnchorParser',
                 'featureAnchorParser',
                 'featuresAnchorParser',
+                'dashboardAnchorParser',
                 'markdownAnchorParser',
                 'iframeAnchorParser',
                 'openapiAnchorParser',

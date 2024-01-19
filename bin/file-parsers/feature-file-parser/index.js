@@ -19,10 +19,10 @@ module.exports = class FeatureFileParser {
         console.info(colors.green(`\t* creating release feature ${path.relative(this.options.dst, file)}`));
 
         let feature = await this.#parseTemplate(file);
-        await fs.writeFile(file, feature);
-
         feature = this.#addHash(feature, md5(path.relative(this.options.dst, file)));
-        await fs.writeFile(file.replace('.feature', '.release.feature'), feature);
+        
+        await fs.writeFile(file, feature);
+        
     }
 
     async #parseTemplate(file) {
