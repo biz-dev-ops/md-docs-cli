@@ -62,6 +62,8 @@
   --heading-3-size: calc(var(--heading-4-size) * var(--type-scale));
   --heading-2-size: calc(var(--heading-3-size) * var(--type-scale));
   --heading-1-size: calc(var(--heading-2-size) * var(--type-scale));
+
+  --font-size-xs: .5rem;
   --font-size-sm: .875rem;
   --font-size-base: 1rem;
   --font-size-md: 1.125rem;
@@ -76,7 +78,7 @@
   --link-text-color: var(--color-brand-base, var(--text-color-base));
 
   /* Button */
-  --button-text-color: var(--text-color-heading, var(--color-black));
+  --button-text-color: var(--text-color-base, var(--color-black));
   --button-text-color-active: var(--button-text-color);
   --button-background-base: var(--color-brand-a20);
   --button-background-active: var(--color-brand-a40);
