@@ -25,7 +25,7 @@ module.exports = class PageUtil {
             return "Home";
         }
 
-        let title = this.removeOrder(path.basename(url, ".md"));
+        let title = path.basename(url, ".md");
 
         if(url.endsWith("index.md")) {
             const dirname = path.dirname(url);
@@ -33,14 +33,17 @@ module.exports = class PageUtil {
                 return "Home";
             }
             else {
-                title = this.removeOrder(path.basename(dirname));
+                title = path.basename(dirname);
             }
         }
         
-        return title
-            .charAt(0).toUpperCase() + title.slice(1)
-            .replaceAll("-", " ")
-            .replace();
+        return this.createTitle(title);
+    }
+
+    createTitle(title) {
+        title = this.removeOrder(title);
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+        return title.replaceAll("-", " ");
     }
 
     createAbsoluteUrl(url) {

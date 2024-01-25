@@ -43,11 +43,14 @@ const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
 const SvgFileParser = require('../file-parsers/svg-file-parser');
+const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
 
 const AsyncapiComponent = require('../components/asyncapi-component');
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
 const BusinessReferenceArchitectureComponent = require('../components/business-reference-architecture-component');
+const CommandUseCaseComponent = require('../components/command-use-case-component');
 const EmailComponent = require('../components/email-component');
+const EventUseCaseComponent = require('../components/event-use-case-component');
 const DashboardComponent = require('../components/dashboard-component');
 const FeatureComponent = require('../components/feature-component');
 const FullscreenComponent = require('../components/fullscreen-component');
@@ -57,7 +60,9 @@ const MessageComponent = require('../components/message-component');
 const ModelComponent = require('../components/model-component');
 const OpenapiComponent = require('../components/openapi-component');
 const PageComponent = require('../components/page-component');
+const QueryUseCaseComponent = require('../components/query-use-case-component');
 const TabsComponent = require('../components/tabs-component');
+const TaskUseCaseComponent = require('../components/task-use-case-component');
 const UserTaskComponent = require('../components/user-task-component');
 
 const AnchorHtmlParser = require('../html-parsers/anchor-html-parser');
@@ -74,8 +79,10 @@ const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parse
 const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BusinessModelCanvasAnchorParser = require('../anchor-parsers/business-model-canvas-anchor-parser');
 const BusinessReferenceArchitectureAnchorParser = require('../anchor-parsers/business-reference-architecture-anchor-parser');
+const CommandUseCaseAnchorParser = require('../anchor-parsers/command-use-case-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
+const EventUseCaseAnchorParser = require('../anchor-parsers/event-use-case-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
 const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
@@ -83,7 +90,9 @@ const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const ModelAnchorParser = require('../anchor-parsers/model-anchor-parser');
 const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
+const QueryUseCaseAnchorParser = require('../anchor-parsers/query-use-case-anchor-parser');
 const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
+const TaskUseCaseAnchorParser = require('../anchor-parsers/task-use-case-anchor-parser');
 const UrlRewriteAnchorParser = require('../anchor-parsers/url-rewrite-anchor-parser');
 const UserTaskAnchorParser = require('../anchor-parsers/user-task-anchor-parser');
 
@@ -447,6 +456,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
             'svgFileParser': asClass(SvgFileParser).singleton(),
+            'useCaseFileParser': asClass(UseCaseFileParser).singleton(),
 
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
@@ -465,7 +475,9 @@ Please review the error and fix the problem. A new version will be automaticly b
             'businessModelCanvasAnchorParser': asClass(BusinessModelCanvasAnchorParser).singleton(),
             'businessReferenceArchitectureAnchorParser': asClass(BusinessReferenceArchitectureAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
+            'commandUseCaseAnchorParser': asClass(CommandUseCaseAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
+            'eventUseCaseAnchorParser': asClass(EventUseCaseAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
             'imageAnchorParser': asClass(ImageAnchorParser).singleton(),
@@ -473,7 +485,9 @@ Please review the error and fix the problem. A new version will be automaticly b
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'modelAnchorParser': asClass(ModelAnchorParser).singleton(),
             'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
+            'queryUseCaseAnchorParser': asClass(QueryUseCaseAnchorParser).singleton(),
             'svgAnchorParser': asClass(SvgAnchorParser).singleton(),
+            'taskUseCaseAnchorParser': asClass(TaskUseCaseAnchorParser).singleton(),
             'urlRewriteAnchorParser': asClass(UrlRewriteAnchorParser).singleton(),
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
 
@@ -481,8 +495,10 @@ Please review the error and fix the problem. A new version will be automaticly b
             'asyncapiComponent': asClass(AsyncapiComponent).singleton().inject(container => allowUnregistered(container, 'asyncapiComponentRenderFn')),
             'businessModelCanvasComponent': asClass(BusinessModelCanvasComponent).singleton().inject(container => allowUnregistered(container, 'businessModelCanvasComponentRenderFn')),
             'businessReferenceArchitectureComponent': asClass(BusinessReferenceArchitectureComponent).singleton().inject(container => allowUnregistered(container, 'businessReferenceArchitectureComponentRenderFn')),
+            'commandUseCaseComponent': asClass(CommandUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'commandUseCaseComponentRenderFn')),
             'dashboardComponent': asClass(DashboardComponent).singleton().inject(container => allowUnregistered(container, 'dashboardComponentRenderFn')),
             'emailComponent': asClass(EmailComponent).singleton().inject(container => allowUnregistered(container, 'emailComponentRenderFn')),
+            'eventUseCaseComponent': asClass(EventUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'eventUseCaseComponentRenderFn')),
             'featureComponent': asClass(FeatureComponent).singleton().inject(container => allowUnregistered(container, 'featureComponentRenderFn')),
             'fullscreenComponent': asClass(FullscreenComponent).singleton().inject(container => allowUnregistered(container, 'fullscreenComponentRenderFn')),
             'iFrameComponent': asClass(IFrameComponent).singleton().inject(container => allowUnregistered(container, 'iFrameComponentRenderFn')),
@@ -491,7 +507,9 @@ Please review the error and fix the problem. A new version will be automaticly b
             'modelComponent': asClass(ModelComponent).singleton().inject(container => allowUnregistered(container, 'modelComponentRenderFn')),
             'openapiComponent': asClass(OpenapiComponent).singleton().inject(container => allowUnregistered(container, 'openapiComponentRenderFn')),
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
+            'queryUseCaseComponent': asClass(QueryUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'queryUseCaseComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
+            'taskUseCaseComponent': asClass(TaskUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'taskUseCaseComponentRenderFn')),
             'userTaskComponent': asClass(UserTaskComponent).singleton().inject(container => allowUnregistered(container, 'userTaskComponentRenderFn')),
             
             'hostingServices': [
@@ -506,7 +524,8 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'drawIOFileParser',
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',
-                'svgFileParser'
+                'svgFileParser',
+                'useCaseFileParser'
             ],
 
             //Html parsers, order is important!
@@ -539,7 +558,11 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'userTaskAnchorParser',
                 'imageAnchorParser',
                 'svgAnchorParser',
-                'modelAnchorParser'
+                'modelAnchorParser',
+                'commandUseCaseAnchorParser',
+                'eventUseCaseAnchorParser',
+                'queryUseCaseAnchorParser',
+                'taskUseCaseAnchorParser'
             ]
         };
     }
