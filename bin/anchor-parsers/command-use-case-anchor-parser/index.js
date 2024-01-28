@@ -7,7 +7,7 @@ const files = require('../../utils/files');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class CommandUseCaseAnchorParser extends AnchorParser {
-  _extensions = [ "command.yml", "command.yaml"];
+  _extensions = [ ".command.yml", ".command.yaml"];
 
   constructor({ commandUseCaseComponent }) {
     super();

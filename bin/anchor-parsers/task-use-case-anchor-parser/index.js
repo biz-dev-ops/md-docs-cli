@@ -7,7 +7,7 @@ const files = require('../../utils/files');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class TaskUseCaseAnchorParser extends AnchorParser {
-  _extensions = [ "task.yml", "task.yaml"];
+  _extensions = [ ".task.yml", ".task.yaml"];
 
   constructor({ taskUseCaseComponent }) {
     super();

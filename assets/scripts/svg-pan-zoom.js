@@ -1,70 +1,42 @@
 (() => {
-  document.querySelectorAll('div[data-fullscreen] figure svg, div[data-fullscreen] figure embed').forEach(panZoomElement => {
-    const fullscreenContainer = panZoomElement.closest('[data-fullscreen]');
-    const zoomButtons = fullscreenContainer.querySelectorAll('[data-figure-zoom]');
-    let panZoom;
+  let panZoom = null;
 
-    const handleZoom = event => {
-      if (!panZoom) {
-        return;
-      }
+  function onOpenFullscreen(e) {
+    const container = e.currentTarget;
+    panZoom = svgPanZoom(container.querySelector('svg'));
 
-      switch (event.currentTarget.dataset.figureZoom) {
-        case 'in':
-          panZoom.zoomIn();
-          break;
+    container.addEventListener('closefullscreen', onCloseFullscreen);
+    container.querySelectorAll('[data-figure-zoom]').forEach(button => button.addEventListener('click', onZoomButtonClick));
+    container.setAttribute('data-fullscreen-zoom', true);
+  };
 
-        case 'out':
-          panZoom.zoomOut();
-          break;
+  function onCloseFullscreen(e) {
+    const container = e.currentTarget;
+    panZoom.resize();
+    panZoom.fit();
+    panZoom.center();
+    panZoom.destroy();
+    panZoom = null;
 
-        default:
-          panZoom.reset();
-      }
+    container.removeAttribute('data-fullscreen-zoom');
+    container.removeEventListener('closefullscreen', onCloseFullscreen);
+    container.querySelectorAll('[data-figure-zoom]').forEach(button => button.removeEventListener('click', onZoomButtonClick));
+  }
+
+  function onZoomButtonClick() {
+    switch (event.currentTarget.dataset.figureZoom) {
+      case 'in':
+        panZoom.zoomIn();
+        break;
+
+      case 'out':
+        panZoom.zoomOut();
+        break;
+
+      default:
+        panZoom.reset();
     }
+  }
 
-    fullscreenContainer.setAttribute('data-fullscreen-zoom', true);
-
-    panZoomElement.addEventListener('load', function() {
-      panZoom = svgPanZoom(panZoomElement);
-      fullscreenContainer.dispatchEvent(new Event('closefullscreen'));
-    });
-
-    window.addEventListener('resize', () => {
-      if (panZoom) {
-        panZoom.resize();
-        panZoom.fit();
-        panZoom.center();
-      }
-    });
-
-    fullscreenContainer.addEventListener('openfullscreen', () => {
-      if (panZoom) {
-        panZoomElement.style.removeProperty('pointer-events');
-        panZoom.resize();
-        panZoom.fit();
-        panZoom.center();
-        panZoom.enablePan(); 
-        panZoom.enableZoom();
-        panZoom.enableDblClickZoom();
-        panZoom.enableMouseWheelZoom();
-      }
-    });
-
-    fullscreenContainer.addEventListener('closefullscreen', () => {
-      if (panZoom) {
-        panZoom.resize();
-        panZoom.fit();
-        panZoom.center();
-        panZoom.disablePan();
-        panZoom.disableZoom();
-        panZoom.disableDblClickZoom();
-        panZoom.disableMouseWheelZoom();
-      }
-    });
-
-    zoomButtons.forEach(button => {
-      button.addEventListener('click', handleZoom);
-    });
-  });
+  document.querySelectorAll(':is(div[data-fullscreen]):has(figure svg)').forEach(element => element.addEventListener('openfullscreen', onOpenFullscreen));
 })();
