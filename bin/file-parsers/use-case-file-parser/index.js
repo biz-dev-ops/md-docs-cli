@@ -5,7 +5,7 @@ const yaml = require('js-yaml');
 const files = require('../../utils/files');
 
 module.exports = class UseCaseFileParser {
-    _extensions = [ "command.yml", "query.yml", "event.yml", "task.yml", "command.yaml", "query.yaml", "event.yaml", "task.yaml"];
+    _extensions = [ ".command.yml", ".query.yml", ".event.yml", ".task.yml", ".command.yaml", ".query.yaml", ".event.yaml", ".task.yaml"];
 
     constructor({ options, pageUtil }) {
         this.options = options;

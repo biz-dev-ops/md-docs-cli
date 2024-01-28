@@ -7,7 +7,7 @@ const files = require('../../utils/files');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class QueryUseCaseAnchorParser extends AnchorParser {
-  _extensions = [ "query.yml", "query.yaml"];
+  _extensions = [ ".query.yml", ".query.yaml"];
 
   constructor({ queryUseCaseComponent }) {
     super();

@@ -7,7 +7,7 @@ const files = require('../../utils/files');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class EventUseCaseAnchorParser extends AnchorParser {
-  _extensions = [ "event.yml", "event.yaml"];
+  _extensions = [ ".event.yml", ".event.yaml"];
 
   constructor({ eventUseCaseComponent }) {
     super();

@@ -104,6 +104,10 @@ body[data-fullscreen-active="true"] {
     z-index: var(--z-fullscreen);
 }
 
+[data-fullscreen-margin] {
+    padding: var(--space-md) !important;
+}
+
 [data-fullscreen="true"] header,
 [data-fullscreen="true"] footer {
     position: fixed;
@@ -120,37 +124,23 @@ body[data-fullscreen-active="true"] {
     transform: rotate(180deg);
 }
 
-[data-fullscreen="true"] figure {
-    float: none;
-    margin: var(--space-md);
-    padding: 0;
-    text-align: center;
-}
-
-[data-fullscreen="false"] figure svg,
-[data-fullscreen="false"] figure embed {
-    height: auto !important;
-}
-
-[data-fullscreen="true"] svg,
-[data-fullscreen="true"] embed {
-    max-width: none;
-}
-
-[data-fullscreen="true"] iframe:where(.openapi, .asyncapi, .message, .email),
 [data-fullscreen="true"] figure,
-[data-fullscreen="true"] .bpmn {
-    box-shadow: none;
-    margin: 0;
-    padding: 0;
-}
-
-[data-fullscreen="true"] figure,
-[data-fullscreen="true"] figure svg,
-[data-fullscreen="true"] figure embed {
+[data-fullscreen="true"] figure svg {
     height: 100% !important;
     width: 100% !important;
     padding: 0 !important;
+}
+
+[data-fullscreen="false"] figure svg {
+    height: auto !important;
+}
+
+[data-fullscreen="true"] svg {
+    max-width: none;
+}
+
+[data-fullscreen="true"] iframe {
+    box-shadow: none !important;
 }
 
 [data-fullscreen="true"] iframe.openapi,
