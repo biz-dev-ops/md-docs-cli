@@ -172,7 +172,7 @@ module.exports = class App {
         await createDestination(options);
         await createRelease(options);
         await createBranches(opts, gitInfo);
-        await copyFiles(await this._getFileTransfers(options));
+        await copyFiles(await this._getFileTransfers(options), options);
 
         registerServices(this.container, this._getServices(options));
 
@@ -233,27 +233,25 @@ module.exports = class App {
         await files.each(options.dst, async (file) => {
             current += 1;
 
-            if(!path.relative(options.dst, file).startsWith("assets/")) {
-                try {
-                    console.info();
-                    console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
+            try {
+                console.info();
+                console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-                    const dir = process.cwd();
+                const dir = process.cwd();
 
-                    //Set current working directory to file path
-                    process.chdir(path.dirname(file));
+                //Set current working directory to file path
+                process.chdir(path.dirname(file));
 
-                    await fileParser.parse(file);
+                await fileParser.parse(file);
 
-                    //Reset current working directory
-                    process.chdir(dir);
-                }
-                catch(error) {
-                    await this.#onError(file, error);
+                //Reset current working directory
+                process.chdir(dir);
+            }
+            catch(error) {
+                await this.#onError(file, error);
 
-                    if (process.env.NODE_ENV === 'development') {
-                        throw(error);
-                    }
+                if (process.env.NODE_ENV === 'development') {
+                    throw(error);
                 }
             }
 
@@ -371,41 +369,42 @@ Please review the error and fix the problem. A new version will be automaticly b
     //Protected
     async _getFileTransfers(options) {
         const fileTransfers = [
-            { src: options.assets, dst: path.resolve(options.dst, 'assets') },
+            { src: options.assets, dst: path.resolve(options.basePath, 'assets') },
+            { src: path.resolve(options.src, "assets"), dst: path.resolve(options.basePath, 'assets') },
             
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-16x16.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-32x32.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-16x16.png'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-32x32.png'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css.map'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js.map'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js.map'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
 
-            { src: path.resolve(options.nodeModules, 'svg-pan-zoom/dist/svg-pan-zoom.min.js'), dst: path.resolve(options.dst, 'assets/svg-pan-zoom-dist') },
+            { src: path.resolve(options.nodeModules, 'svg-pan-zoom/dist/svg-pan-zoom.min.js'), dst: path.resolve(options.basePath, 'assets/svg-pan-zoom-dist') },
 
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/js/asyncapi-ui.min.js'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/js/asyncapi-ui.min.js'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
             
-            { src: path.resolve(options.nodeModules, 'prismjs/components'), dst: path.resolve(options.dst, 'assets/prismjs/components') },
-            { src: path.resolve(options.nodeModules, 'prismjs/plugins/autoloader/prism-autoloader.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(options.nodeModules, 'prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/components'), dst: path.resolve(options.basePath, 'assets/prismjs/components') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/autoloader/prism-autoloader.min.js'), dst: path.resolve(options.basePath, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.js'), dst: path.resolve(options.basePath, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.basePath, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.basePath, 'assets/prismjs') },
             
-            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') },
+            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer-dist') },
 
-            { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.dst, 'assets/web-components') },
-            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2')))[0], dst: path.resolve(options.dst, 'assets/web-components') },
+            { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
+            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2')))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
             
-            { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.dst, 'assets/pagedjs') },
+            { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.basePath, 'assets/pagedjs') },
 
             { src: options.src, dst: options.dst }
         ];
 
         if (options.theme) {
-            fileTransfers.push({ src: options.theme, dst: path.resolve(options.dst, 'assets/style/custom-theme.css') });
+            fileTransfers.push({ src: options.theme, dst: path.resolve(options.basePath, 'assets/style/custom-theme.css') });
         }
 
         return fileTransfers;
@@ -586,6 +585,7 @@ async function createDestination(options) {
     console.info(colors.yellow(`reading from source ${options.src}`));
     console.info(colors.yellow(`writing to destination: ${options.dst}`));
 
+    await fs.rm(path.resolve(options.basePath, "assets"), { recursive: true, force: true });
     await fs.rm(options.dst, { recursive: true, force: true });
     await fs.mkdir(options.dst, { recursive: true });
 }
@@ -603,13 +603,14 @@ async function createBranches(options, gitInfo) {
     await fs.writeFile(`${options.dst}/branches.js`, `window.x_md_docs_cli_branches = ${JSON.stringify(gitInfo.branches)};`);
 }
 
-async function copyFiles(fileTransfers) {
+async function copyFiles(fileTransfers, options) {
     console.info();
     console.info(colors.yellow(`copying files:`));
     for (const fileTransfer of fileTransfers) {
         console.info(colors.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(process.cwd(), fileTransfer.dst)}`));
         await files.copy(fileTransfer.src, fileTransfer.dst);
     }
+    await fs.rm(path.resolve(options.dst, "assets"), { recursive: true, force: true });
 }
 
 function registerServices(container, services) {
