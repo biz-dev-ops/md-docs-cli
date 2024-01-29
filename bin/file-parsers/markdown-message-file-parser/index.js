@@ -49,6 +49,7 @@ module.exports = class MarkdownMessageFileParser {
         let data = Object.assign(JSON.parse(JSON.stringify(this.options.message || {})), {
             locale: await this.locale.get(),
             baseHref: this.pageUtil.relativeBaseHref(),
+            root: this.pageUtil.relativeRootFromBaseHref(),
             title: this.pageUtil.getTitleFromUrl(path.basename(file))
         });
 
