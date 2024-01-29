@@ -1,12 +1,12 @@
 doctype html
 html 
   head
-    base(href=data.baseHref target='_top')
+    base(href=baseHref target='_top')
     meta(charset='UTF-8')
     title='Swagger UI'
-    link(rel='stylesheet' type='text/css' href=data.root + 'assets/swagger-ui-dist/swagger-ui.css')
-    link(rel='icon' type='image/png' href=data.root + 'assets/swagger-ui-dist/favicon-32x32.png' sizes='32x32')
-    link(rel='icon' type='image/png' href=data.root + 'assets/swagger-ui-dist/favicon-16x16.png' sizes='16x16')
+    link(rel='stylesheet' type='text/css' href=root + 'assets/swagger-ui-dist/swagger-ui.css')
+    link(rel='icon' type='image/png' href=root + 'assets/swagger-ui-dist/favicon-32x32.png' sizes='32x32')
+    link(rel='icon' type='image/png' href=root + 'assets/swagger-ui-dist/favicon-16x16.png' sizes='16x16')
     style.
       html
       {
@@ -49,14 +49,14 @@ html
 body
   div(id='root')
 
-  script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.js' charset='UTF-8')
-  script(src=data.root + 'assets/swagger-ui-dist/swagger-ui-bundle.js' charset='UTF-8')
-  script(src=data.root + 'assets/swagger-ui-dist/swagger-ui-standalone-preset.js' charset='UTF-8')
+  script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.js' charset='UTF-8')
+  script(src=root + 'assets/swagger-ui-dist/swagger-ui-bundle.js' charset='UTF-8')
+  script(src=root + 'assets/swagger-ui-dist/swagger-ui-standalone-preset.js' charset='UTF-8')
   script.
     window.addEventListener('load', function() {
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
-        spec: !{spec},
+        spec: !{schema},
         dom_id: '#root',
         deepLinking: true,
         presets: [

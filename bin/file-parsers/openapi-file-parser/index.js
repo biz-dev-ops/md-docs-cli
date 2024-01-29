@@ -2,22 +2,20 @@ const fs = require('fs').promises;
 const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
-const { Parser } = require('@asyncapi/parser');
 
-const jsonSchemaParser = require('../../utils/json-schema-parser');
 const files = require('../../utils/files');
+const jsonSchemaParser = require('../../utils/json-schema-parser');
 
-module.exports = class AsyncapiFileParser {
-    constructor({ options, asyncapiComponent, definitionParser, pageUtil }) {
+module.exports = class OpenapiFileParser {
+    constructor({ options, openapiComponent, definitionParser, pageUtil }) {
         this.options = options;
-        this.component = asyncapiComponent;
+        this.component = openapiComponent;
         this.definitionParser = definitionParser;
         this.pageUtil = pageUtil;
-        this.parser = new Parser();
     }
 
     async parse(file) {
-        if (!(file.endsWith('.asyncapi.yml') || file.endsWith('.asyncapi.yaml')))
+        if (!(file.endsWith('.openapi.yml') || file.endsWith('.openapi.yaml')))
             return;
 
         await this.#render(file);
@@ -46,23 +44,7 @@ module.exports = class AsyncapiFileParser {
         };
 
         json.schema = await jsonSchemaParser.parse(file);
-        json.schema = JSON.parse(await this.definitionParser.render(JSON.stringify(json.schema)));
-
-        console.log(json.schema);
-        try {
-            // Does not work without parsed json.
-            json.schema = (await this.parser.parse(json.schema))['_json'];
-
-            console.log("##########################################################");
-            console.log(json.schema);
-            console.log("##########################################################");
-
-            json.schema = JSON.stringify(json.schema);
-        }
-        catch (ex) {
-            console.info(colors.brightRed(`\t\t\t\t* error parsing json`));
-            throw new Error(ex);
-        }
+        json.schema = await this.definitionParser.render(JSON.stringify(json.schema));
 
         return json;
     }

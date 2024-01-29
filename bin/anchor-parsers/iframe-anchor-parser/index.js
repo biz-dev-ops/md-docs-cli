@@ -15,8 +15,8 @@ module.exports = class IFrameAnchorParser extends AnchorParser {
 
   _canParse(anchor) { 
     const name = path.basename(anchor.href);
-    for (const rule of rules) {
-      if (name.endsWith(rule))
+    for (const extension of extensions) {
+      if (name.endsWith(extension))
         return true;
     }      
     return false;
@@ -35,12 +35,11 @@ module.exports = class IFrameAnchorParser extends AnchorParser {
   }
 };
 
-const rules = [
+const extensions = [
   '.email.md',
-  '.message.md'
-
-  // '.asyncapi.yml',
-  // '.asyncapi.yaml',
-  // '.openapi.yml',
-  // '.openapi.yaml'
+  '.message.md',
+  '.asyncapi.yml',
+  '.asyncapi.yaml',
+  '.openapi.yml',
+  '.openapi.yaml'
 ]

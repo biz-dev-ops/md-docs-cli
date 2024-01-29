@@ -34,6 +34,7 @@ const HeadlessBrowser = require('../utils/headless-browser');
 
 const GherkinParser = require('../utils/bdd/gherkin-parser');
 
+const AsyncapiFileParser = require('../file-parsers/asyncapi-file-parser');
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
@@ -42,6 +43,7 @@ const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
+const OpenapiFileParser = require('../file-parsers/openapi-file-parser');
 const SvgFileParser = require('../file-parsers/svg-file-parser');
 const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
 
@@ -76,7 +78,6 @@ const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
 
-const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BusinessModelCanvasAnchorParser = require('../anchor-parsers/business-model-canvas-anchor-parser');
 const BusinessReferenceArchitectureAnchorParser = require('../anchor-parsers/business-reference-architecture-anchor-parser');
 const CommandUseCaseAnchorParser = require('../anchor-parsers/command-use-case-anchor-parser');
@@ -89,7 +90,6 @@ const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
 const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const ModelAnchorParser = require('../anchor-parsers/model-anchor-parser');
-const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const QueryUseCaseAnchorParser = require('../anchor-parsers/query-use-case-anchor-parser');
 const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
 const TaskUseCaseAnchorParser = require('../anchor-parsers/task-use-case-anchor-parser');
@@ -446,6 +446,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'definitionStore': asClass(DefinitionStore).singleton(),
 
             //File parser
+            'asyncapiFileParser': asClass(AsyncapiFileParser).singleton(),
             'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
             'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
@@ -454,6 +455,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
+            'openapiFileParser': asClass(OpenapiFileParser).singleton(),
             'svgFileParser': asClass(SvgFileParser).singleton(),
             'useCaseFileParser': asClass(UseCaseFileParser).singleton(),
 
@@ -470,7 +472,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
-            'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
             'businessModelCanvasAnchorParser': asClass(BusinessModelCanvasAnchorParser).singleton(),
             'businessReferenceArchitectureAnchorParser': asClass(BusinessReferenceArchitectureAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
@@ -483,7 +484,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'modelAnchorParser': asClass(ModelAnchorParser).singleton(),
-            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
             'queryUseCaseAnchorParser': asClass(QueryUseCaseAnchorParser).singleton(),
             'svgAnchorParser': asClass(SvgAnchorParser).singleton(),
             'taskUseCaseAnchorParser': asClass(TaskUseCaseAnchorParser).singleton(),
@@ -517,12 +517,14 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //File parsers: order can be important!
             'fileParsers': [
+                'asyncapiFileParser',
                 'bpmnFileParser',
                 'businessReferenceArchitectureFileParser',
                 'featureFileParser',
                 'drawIOFileParser',
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',
+                'openapiFileParser',
                 'svgFileParser',
                 'useCaseFileParser'
             ],
@@ -544,7 +546,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Anchor parsers, order can be important!
             'anchorParsers': [
                 'urlRewriteAnchorParser',
-                'asyncapiAnchorParser',
                 'businessModelCanvasAnchorParser',
                 'businessReferenceArchitectureAnchorParser',
                 'codeAnchorParser',
@@ -553,7 +554,6 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'dashboardAnchorParser',
                 'markdownAnchorParser',
                 'iframeAnchorParser',
-                'openapiAnchorParser',
                 'userTaskAnchorParser',
                 'imageAnchorParser',
                 'svgAnchorParser',
