@@ -1,7 +1,7 @@
 (() => {
     const nav = document.getElementById("table-of-content");
     let ul;
-    Array.from(document.querySelectorAll("h2")).forEach(h2 => {
+    Array.from(document.querySelectorAll(".header h2")).forEach(h2 => {
         if(!ul) {
             ul = document.createElement("ul");
             nav.appendChild(ul);

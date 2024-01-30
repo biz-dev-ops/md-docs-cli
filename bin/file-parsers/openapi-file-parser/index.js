@@ -44,7 +44,7 @@ module.exports = class OpenapiFileParser {
         };
 
         json.schema = await jsonSchemaParser.parse(file);
-        json.schema = await this.definitionParser.render(JSON.stringify(json.schema));
+        json.schema = (await this.definitionParser.render(JSON.stringify(json.schema))).replace(/\n/g, "\\n");
 
         return json;
     }
