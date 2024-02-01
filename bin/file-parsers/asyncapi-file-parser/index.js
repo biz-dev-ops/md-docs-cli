@@ -48,12 +48,9 @@ module.exports = class AsyncapiFileParser {
         json.schema = await jsonSchemaParser.parse(file);
         json.schema = (await this.definitionParser.render(JSON.stringify(json.schema))).replace(/\n/g, "\\n");
 
-        console.log(json.schema);
         try {
             // Does not work without parsed json.
             json.schema = (await this.parser.parse(json.schema))['_json'];
-            console.log(json.schema);
-
             json.schema = JSON.stringify(json.schema);
         }
         catch (ex) {

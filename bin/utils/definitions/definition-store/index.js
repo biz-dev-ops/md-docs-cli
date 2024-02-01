@@ -68,10 +68,6 @@ module.exports = class DefinitionStore {
                 }
             }
 
-            if(definition.link) {
-                console.log(definition);
-            }
-
             return definition;
         }));
     }

@@ -534,11 +534,11 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'removeH1HtmlParser',
                 'imageSVGHtmlParser',
                 'headingHtmlParser',
-                'definitionHtmlParser',
                 'anchorHtmlParser',
                 'unsortedListHtmlParser',
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
+                'definitionHtmlParser',
                 'cleanUpHtmlParser',
                 'relativeUrlHtmlParser'
             ],

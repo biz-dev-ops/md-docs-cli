@@ -33,7 +33,6 @@ function createReplacement(definition) {
     
     if(definition.link)
     {
-        console.log(definition.link);
         replacement = `<a href="${definition.link}">${replacement}</a>`
     }
     
