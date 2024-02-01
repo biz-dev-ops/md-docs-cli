@@ -104,10 +104,6 @@ body[data-fullscreen-active="true"] {
     z-index: var(--z-fullscreen);
 }
 
-[data-fullscreen-margin] {
-    padding: var(--space-md) !important;
-}
-
 [data-fullscreen="true"] header,
 [data-fullscreen="true"] footer {
     position: fixed;
