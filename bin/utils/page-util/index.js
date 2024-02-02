@@ -5,7 +5,6 @@ const { cwd } = require("process");
 
 module.exports = class PageUtil {
     #orderPrefixRegex = /(\d+[_])/ig;
-    #isRelativeUrlRegex = /^(?!www\.|(?:http|ftp)s?:\/\/|[A-Za-z]:\\|\/\/).*/gm;
     #regexHeader = /(?<flag>#{1,6})\s+(?<content>.+)/gm;
     #aboutBlank = "about:blank";
 
@@ -87,6 +86,6 @@ module.exports = class PageUtil {
     }
 
     #isRelativeUrl(url) {
-        return url.match(this.#isRelativeUrlRegex) !== null;
+        return url.startsWith(".") || url.startsWith("#");
     }
 }

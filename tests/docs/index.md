@@ -56,11 +56,11 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 ## SVG (inline)
 
-[Logo](assets/images/page/logo.svg)
+[Logo](logo.svg)
 
 ## SVG (img)
 
-![Logo](assets/images/page/logo.svg)
+![Logo](logo.svg)
 
 ## Uml
 

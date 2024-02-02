@@ -34,6 +34,7 @@ const HeadlessBrowser = require('../utils/headless-browser');
 
 const GherkinParser = require('../utils/bdd/gherkin-parser');
 
+const AsyncapiFileParser = require('../file-parsers/asyncapi-file-parser');
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
@@ -42,6 +43,7 @@ const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
+const OpenapiFileParser = require('../file-parsers/openapi-file-parser');
 const SvgFileParser = require('../file-parsers/svg-file-parser');
 const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
 
@@ -76,7 +78,6 @@ const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
 
-const AsyncapiAnchorParser = require('../anchor-parsers/asyncapi-anchor-parser');
 const BusinessModelCanvasAnchorParser = require('../anchor-parsers/business-model-canvas-anchor-parser');
 const BusinessReferenceArchitectureAnchorParser = require('../anchor-parsers/business-reference-architecture-anchor-parser');
 const CommandUseCaseAnchorParser = require('../anchor-parsers/command-use-case-anchor-parser');
@@ -89,7 +90,6 @@ const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
 const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const ModelAnchorParser = require('../anchor-parsers/model-anchor-parser');
-const OpenapiAnchorParser = require('../anchor-parsers/openapi-anchor-parser');
 const QueryUseCaseAnchorParser = require('../anchor-parsers/query-use-case-anchor-parser');
 const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
 const TaskUseCaseAnchorParser = require('../anchor-parsers/task-use-case-anchor-parser');
@@ -172,7 +172,7 @@ module.exports = class App {
         await createDestination(options);
         await createRelease(options);
         await createBranches(opts, gitInfo);
-        await copyFiles(await this._getFileTransfers(options));
+        await copyFiles(await this._getFileTransfers(options), options);
 
         registerServices(this.container, this._getServices(options));
 
@@ -233,27 +233,25 @@ module.exports = class App {
         await files.each(options.dst, async (file) => {
             current += 1;
 
-            if(!path.relative(options.dst, file).startsWith("assets/")) {
-                try {
-                    console.info();
-                    console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
+            try {
+                console.info();
+                console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
 
-                    const dir = process.cwd();
+                const dir = process.cwd();
 
-                    //Set current working directory to file path
-                    process.chdir(path.dirname(file));
+                //Set current working directory to file path
+                process.chdir(path.dirname(file));
 
-                    await fileParser.parse(file);
+                await fileParser.parse(file);
 
-                    //Reset current working directory
-                    process.chdir(dir);
-                }
-                catch(error) {
-                    await this.#onError(file, error);
+                //Reset current working directory
+                process.chdir(dir);
+            }
+            catch(error) {
+                await this.#onError(file, error);
 
-                    if (process.env.NODE_ENV === 'development') {
-                        throw(error);
-                    }
+                if (process.env.NODE_ENV === 'development') {
+                    throw(error);
                 }
             }
 
@@ -371,41 +369,42 @@ Please review the error and fix the problem. A new version will be automaticly b
     //Protected
     async _getFileTransfers(options) {
         const fileTransfers = [
-            { src: options.assets, dst: path.resolve(options.dst, 'assets') },
+            { src: options.assets, dst: path.resolve(options.basePath, 'assets') },
+            { src: path.resolve(options.src, "assets"), dst: path.resolve(options.basePath, 'assets') },
             
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-16x16.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-32x32.png'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
-            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js.map'), dst: path.resolve(options.dst, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-16x16.png'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/favicon-32x32.png'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui.css.map'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-bundle.js.map'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
+            { src: path.resolve(options.nodeModules, 'swagger-ui-dist/swagger-ui-standalone-preset.js.map'), dst: path.resolve(options.basePath, 'assets/swagger-ui-dist') },
 
-            { src: path.resolve(options.nodeModules, 'svg-pan-zoom/dist/svg-pan-zoom.min.js'), dst: path.resolve(options.dst, 'assets/svg-pan-zoom-dist') },
+            { src: path.resolve(options.nodeModules, 'svg-pan-zoom/dist/svg-pan-zoom.min.js'), dst: path.resolve(options.basePath, 'assets/svg-pan-zoom-dist') },
 
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/js/asyncapi-ui.min.js'), dst: path.resolve(options.dst, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
+            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/js/asyncapi-ui.min.js'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
             
-            { src: path.resolve(options.nodeModules, 'prismjs/components'), dst: path.resolve(options.dst, 'assets/prismjs/components') },
-            { src: path.resolve(options.nodeModules, 'prismjs/plugins/autoloader/prism-autoloader.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.js'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
-            { src: path.resolve(options.nodeModules, 'prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.dst, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/components'), dst: path.resolve(options.basePath, 'assets/prismjs/components') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/autoloader/prism-autoloader.min.js'), dst: path.resolve(options.basePath, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.js'), dst: path.resolve(options.basePath, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.basePath, 'assets/prismjs') },
+            { src: path.resolve(options.nodeModules, 'prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.basePath, 'assets/prismjs') },
             
-            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.dst, 'assets/iframe-resizer-dist') },
+            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer-dist') },
 
-            { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.dst, 'assets/web-components') },
-            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2')))[0], dst: path.resolve(options.dst, 'assets/web-components') },
+            { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
+            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2')))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
             
-            { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.dst, 'assets/pagedjs') },
+            { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.basePath, 'assets/pagedjs') },
 
             { src: options.src, dst: options.dst }
         ];
 
         if (options.theme) {
-            fileTransfers.push({ src: options.theme, dst: path.resolve(options.dst, 'assets/style/custom-theme.css') });
+            fileTransfers.push({ src: options.theme, dst: path.resolve(options.basePath, 'assets/style/custom-theme.css') });
         }
 
         return fileTransfers;
@@ -447,6 +446,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'definitionStore': asClass(DefinitionStore).singleton(),
 
             //File parser
+            'asyncapiFileParser': asClass(AsyncapiFileParser).singleton(),
             'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
             'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
@@ -455,6 +455,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
+            'openapiFileParser': asClass(OpenapiFileParser).singleton(),
             'svgFileParser': asClass(SvgFileParser).singleton(),
             'useCaseFileParser': asClass(UseCaseFileParser).singleton(),
 
@@ -471,7 +472,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
-            'asyncapiAnchorParser': asClass(AsyncapiAnchorParser).singleton(),
             'businessModelCanvasAnchorParser': asClass(BusinessModelCanvasAnchorParser).singleton(),
             'businessReferenceArchitectureAnchorParser': asClass(BusinessReferenceArchitectureAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
@@ -484,7 +484,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'modelAnchorParser': asClass(ModelAnchorParser).singleton(),
-            'openapiAnchorParser': asClass(OpenapiAnchorParser).singleton(),
             'queryUseCaseAnchorParser': asClass(QueryUseCaseAnchorParser).singleton(),
             'svgAnchorParser': asClass(SvgAnchorParser).singleton(),
             'taskUseCaseAnchorParser': asClass(TaskUseCaseAnchorParser).singleton(),
@@ -518,12 +517,14 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //File parsers: order can be important!
             'fileParsers': [
+                'asyncapiFileParser',
                 'bpmnFileParser',
                 'businessReferenceArchitectureFileParser',
                 'featureFileParser',
                 'drawIOFileParser',
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',
+                'openapiFileParser',
                 'svgFileParser',
                 'useCaseFileParser'
             ],
@@ -533,11 +534,11 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'removeH1HtmlParser',
                 'imageSVGHtmlParser',
                 'headingHtmlParser',
-                'definitionHtmlParser',
                 'anchorHtmlParser',
                 'unsortedListHtmlParser',
                 'imageHtmlParser',
                 'fullscreenHtmlParser',
+                'definitionHtmlParser',
                 'cleanUpHtmlParser',
                 'relativeUrlHtmlParser'
             ],
@@ -545,7 +546,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             //Anchor parsers, order can be important!
             'anchorParsers': [
                 'urlRewriteAnchorParser',
-                'asyncapiAnchorParser',
                 'businessModelCanvasAnchorParser',
                 'businessReferenceArchitectureAnchorParser',
                 'codeAnchorParser',
@@ -554,7 +554,6 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'dashboardAnchorParser',
                 'markdownAnchorParser',
                 'iframeAnchorParser',
-                'openapiAnchorParser',
                 'userTaskAnchorParser',
                 'imageAnchorParser',
                 'svgAnchorParser',
@@ -586,6 +585,7 @@ async function createDestination(options) {
     console.info(colors.yellow(`reading from source ${options.src}`));
     console.info(colors.yellow(`writing to destination: ${options.dst}`));
 
+    await fs.rm(path.resolve(options.basePath, "assets"), { recursive: true, force: true });
     await fs.rm(options.dst, { recursive: true, force: true });
     await fs.mkdir(options.dst, { recursive: true });
 }
@@ -603,13 +603,14 @@ async function createBranches(options, gitInfo) {
     await fs.writeFile(`${options.dst}/branches.js`, `window.x_md_docs_cli_branches = ${JSON.stringify(gitInfo.branches)};`);
 }
 
-async function copyFiles(fileTransfers) {
+async function copyFiles(fileTransfers, options) {
     console.info();
     console.info(colors.yellow(`copying files:`));
     for (const fileTransfer of fileTransfers) {
         console.info(colors.yellow(`\t* copying files from ${fileTransfer.src} to ${path.relative(process.cwd(), fileTransfer.dst)}`));
         await files.copy(fileTransfer.src, fileTransfer.dst);
     }
+    await fs.rm(path.resolve(options.dst, "assets"), { recursive: true, force: true });
 }
 
 function registerServices(container, services) {

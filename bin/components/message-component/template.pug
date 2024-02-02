@@ -5,7 +5,7 @@ html
     meta(charset='UTF-8')
     title=data.title
 
-    link(rel='stylesheet' type='text/css' href='assets/style/message/style.css')
+    link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/message/style.css')
     
     if(data.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
@@ -17,7 +17,7 @@ html
       header
         div(class='logo')
           figure
-            img(src='assets/images/message/logo.svg')
+            img(src=data.root + 'assets/images/message/logo.svg')
         
       footer
         div(class='contact')
@@ -49,7 +49,7 @@ html
               each attachment in data.attachments
                 li=attachment.name
     
-    script(src='assets/iframe-resizer-dist/iframeResizer.contentWindow.js' charset='UTF-8')
+    script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.js' charset='UTF-8')
 
     script.
       window.PagedConfig = {
@@ -59,7 +59,7 @@ html
         }
       };
 
-    script(src='assets/pagedjs/paged.polyfill.min.js')
+    script(src=data.root + 'assets/pagedjs/paged.polyfill.min.js')
 
     script.
       (() => {

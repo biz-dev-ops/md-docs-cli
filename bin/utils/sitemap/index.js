@@ -7,53 +7,9 @@ const markdown_it_anchor = require('markdown-it-anchor');
 const yaml = require('js-yaml');
 const files = require('../files');
 
-function SitemapArray() {
-    this.find = function(comparer) {
-        const hits = [];
-
-        this.forEach(element => {
-            if(comparer(element)) {
-                hits.push(element);
-            }
-            
-            if(element.useCases)
-                hits.push(...element.useCases.find(comparer));
-
-            if(element.items)
-                hits.push(...element.items.find(comparer));
-        });
-
-        return hits;
-    }
-
-    this.findFirst = function(comparer) {
-        let hit = null;
-
-        this.every(element => {
-            if(comparer(element)) {
-                hit = element;
-                return false;
-            }
-            else {
-                hit = element.items?.findFirst(comparer) || element.useCases?.findFirst(comparer);
-                if(hit) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-        
-
-        return hit;
-    }
-}
-
-SitemapArray.prototype = [];
-
-module.exports = class Sitemap {
+class Sitemap {
     static slugify(name) {
-        return  name
+        return name
             .trim()
             .toLowerCase()
             .replaceAll(' ', '-')
@@ -102,7 +58,9 @@ module.exports = class Sitemap {
                 return;
 
             const slug = Sitemap.slugify(name);
-            const hits = sitemap.find((el) => el.slug === slug);
+            const hits = sitemap
+                .find((el) => el.slug === slug)
+                .filter(item => item.url);
 
             if(hits.length === 0) {
                 return;
@@ -216,3 +174,54 @@ module.exports = class Sitemap {
             .slice(0, -3) + ".html";
     }
 }
+
+module.exports = Sitemap;
+
+function SitemapArray() {
+    this.find = function(comparer) {
+        const hits = [];
+
+        this.forEach(element => {
+            if(comparer(element)) {
+                hits.push(element);
+            }
+            
+            if(element.useCases)
+                hits.push(...element.useCases.find(comparer));
+
+            if(element.items)
+                hits.push(...element.items.find(comparer));
+        });
+
+        return hits;
+    }
+
+    this.findFirst = function(comparer) {
+        if(typeof comparer === "string") {
+            const name = comparer;
+            comparer = (page) => page.slug === Sitemap.slugify(name);
+        }
+
+        let hit = null;
+
+        this.every(element => {
+            if(comparer(element)) {
+                hit = element;
+                return false;
+            }
+            else {
+                hit = element.items?.findFirst(comparer) || element.useCases?.findFirst(comparer);
+                if(hit) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+        
+
+        return hit;
+    }
+}
+
+SitemapArray.prototype = [];
