@@ -8,8 +8,9 @@ const yaml = require('js-yaml');
 const files = require('../../utils/files');
 
 module.exports = class FeatureFileParser {
-    constructor({ options }) {
+    constructor({ options, pageUtil }) {
         this.options = options;
+        this.pageUtil = pageUtil;
     }
 
     async parse(file) {
@@ -19,6 +20,7 @@ module.exports = class FeatureFileParser {
         console.info(colors.green(`\t* creating release feature ${path.relative(this.options.dst, file)}`));
 
         let feature = await this.#parseTemplate(file);
+
         feature = this.#addHash(feature, md5(path.relative(this.options.dst, file)));
         
         await fs.writeFile(file, feature);
@@ -26,17 +28,25 @@ module.exports = class FeatureFileParser {
     }
 
     async #parseTemplate(file) {
-        let feature = await files.readFileAsString(file);
-        const ymlFile = `${file}.yml`;
-        if (!await files.exists(ymlFile))
-          return feature;
-    
-        const content = await files.readFileAsString(ymlFile);
-        const json = yaml.load(content);
-        const temmplate = feature.replaceAll('#{{', '{{');
+        const feature = await files.readFileAsString(file);
+        const template = feature.replaceAll('#{{', '{{');
+        const json = await this.#getJson(`${file}.yml`);
+        return mustache.render(template, json);
+    }
 
-        feature = mustache.render(temmplate, json);
-        return feature;
+    async #getJson(file) {
+        const json = {
+            parent:  {
+                name: this.pageUtil.getTitleFromUrl(path.join(path.dirname(file), "index.md"))
+            }
+        }
+
+        if (!await files.exists(file)) {
+          return json;
+        }
+
+        const content = await files.readFileAsString(file);
+        return Object.assign(json, yaml.load(content));
     }
 
     #addHash(feature, hash) {
