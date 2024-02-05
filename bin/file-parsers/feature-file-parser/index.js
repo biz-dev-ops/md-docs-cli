@@ -36,7 +36,7 @@ module.exports = class FeatureFileParser {
 
     async #getJson(file) {
         const json = {
-            parent:  {
+            folder:  {
                 name: this.pageUtil.getTitleFromUrl(path.join(path.dirname(file), "index.md"))
             }
         }
