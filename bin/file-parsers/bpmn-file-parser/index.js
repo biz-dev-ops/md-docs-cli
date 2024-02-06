@@ -2,9 +2,12 @@ const fs = require('fs').promises;
 const path = require('path');
 const colors = require('colors');
 const { env } = require('process');
+const { v4: uuidv4 } = require('uuid');
 const files = require('../../utils/files');
 
 module.exports = class BPMNFileParser {
+    #urlsRegex = /url\('#([^')]*)/gm;
+
     constructor({ options, headlessBrowser, sitemap }) {
         this.options = options;
         this.headlessBrowser = headlessBrowser;
@@ -30,14 +33,24 @@ module.exports = class BPMNFileParser {
     async #createSvg(file) {
         const xml = await files.readFileAsString(file);
         const page = await this.#getPage();
-        const svg = await page.evaluate(async (xml) => {
+        let svg = await page.evaluate(async (xml) => {
             //Executes in context of the page, see viewer.html
             return await convertToSVG(xml);
         }, xml);
 
+        svg = this.#fixReferenceToHiddenElementBug(svg);
+
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.raw.svg`, svg);
 
+        return svg;
+    }
+
+    #fixReferenceToHiddenElementBug(svg) {
+        Array.from(svg.matchAll(this.#urlsRegex)).forEach((match) => {
+            const url = match[1];
+            svg = svg.replaceAll(url, `${url}-${uuidv4()}`);
+        });
         return svg;
     }
 
