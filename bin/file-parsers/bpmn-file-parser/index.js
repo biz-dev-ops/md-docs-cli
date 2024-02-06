@@ -38,14 +38,19 @@ module.exports = class BPMNFileParser {
             return await convertToSVG(xml);
         }, xml);
 
-        Array.from(svg.matchAll(this.#urlsRegex)).forEach((match) => {
-            const url = match[1];
-            svg = svg.replaceAll(url, `${url}-${uuidv4()}`);
-        });
+        svg = this.#fixReferenceToHiddenElementBug(svg);
 
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.raw.svg`, svg);
 
+        return svg;
+    }
+
+    #fixReferenceToHiddenElementBug(svg) {
+        Array.from(svg.matchAll(this.#urlsRegex)).forEach((match) => {
+            const url = match[1];
+            svg = svg.replaceAll(url, `${url}-${uuidv4()}`);
+        });
         return svg;
     }
 
