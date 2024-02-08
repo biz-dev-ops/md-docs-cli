@@ -49,6 +49,7 @@ module.exports = class MarkdownEmailFileParser {
         let data = Object.assign(JSON.parse(JSON.stringify(this.options.email || {})), {
             locale: await this.locale.get(),
             baseHref: this.pageUtil.relativeBaseHref(),
+            root: this.pageUtil.relativeRootFromBaseHref(),
             title: this.pageUtil.getTitleFromUrl(path.basename(file))
         });
 
