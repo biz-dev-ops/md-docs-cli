@@ -34,7 +34,7 @@
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
     "@asyncapi/html-template": "^2.0.0",
-    "@biz-dev-ops/web-components": "^0.0.17",
+    "@biz-dev-ops/web-components": "^0.0.18",
     "@cucumber/gherkin-streams": "^5.0.1",
     "awilix": "^10.0.0",
     "bpmn-js": "^16.0.0",
