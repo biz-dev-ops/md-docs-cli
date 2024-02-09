@@ -5,10 +5,15 @@ module.exports = class DefinitionParser {
 
     async parse(html) {
         const definitions = await this.definitionStore.get();
-
+        
         for (const definition of definitions) {
-            const regex = new RegExp(`(?!<a|abbr[^>]*>)(${createAlias(definition)})(?![^<]*<\/a|abbr>)`, 'img');
-            html = html.replace(regex, createReplacement(definition));
+            const regex = new RegExp(`(<a.*?<\/a>)|(<abbr.*?<\/abbr>)|(${createAlias(definition)})`, 'imgs');
+            html = html.replaceAll(regex, (match) => {
+                if(match.startsWith("<")) {
+                    return match;
+                }
+                return createReplacement(definition, match);
+            });
         }
 
         return html;
@@ -25,11 +30,12 @@ module.exports = class DefinitionParser {
     }
 }
 
-function createReplacement(definition) {
-    let replacement = '$1';
+function createReplacement(definition, match) {
+    let replacement = match;
             
-    if (definition.text)
+    if (definition.text) {
         replacement = `<abbr title="${definition.text}">${replacement}</abbr>`;
+    }
     
     if(definition.link)
     {

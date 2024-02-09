@@ -24,9 +24,9 @@ module.exports = class PageUtil {
             return "Home";
         }
 
-        let title = path.basename(url, ".md");
-
-        if(url.endsWith("index.md")) {
+        let title = path.basename(url).split(".")[0];
+        
+        if(title === "index") {
             const dirname = path.dirname(url);
             if (this.options.dst === dirname) {
                 return "Home";
