@@ -30,7 +30,7 @@ module.exports = class FeatureFileParser {
     async #parseTemplate(file) {
         const feature = await files.readFileAsString(file);
         const template = feature.replaceAll('#{{', '{{');
-        const json = await this.#getJson(`${file}.yml`);
+        const json = await this.#getJson(file);
         return mustache.render(template, json);
     }
 
@@ -38,14 +38,19 @@ module.exports = class FeatureFileParser {
         const json = {
             folder:  {
                 name: this.pageUtil.getTitleFromUrl(path.join(path.dirname(file), "index.md"))
+            },
+            file: {
+                name: this.pageUtil.getTitleFromUrl(file)
             }
         }
 
-        if (!await files.exists(file)) {
+        const yml = `${file}.yml`;
+
+        if (!await files.exists(yml)) {
           return json;
         }
 
-        const content = await files.readFileAsString(file);
+        const content = await files.readFileAsString(yml);
         return Object.assign(json, yaml.load(content));
     }
 

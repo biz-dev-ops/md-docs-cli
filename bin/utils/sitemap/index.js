@@ -145,13 +145,12 @@ class Sitemap {
                     ...(await this.pageUtil.getHeadingsFrom(await files.readFileAsString(entryPath)))
                         .filter(i => i.heading === "h3")
                         .map(h => {
-                            const useCaseSlug = markdown_it_anchor.defaults.slugify(h.content)
                             return {
                                 type: "use-case",
                                 name: h.content,
-                                slug: useCaseSlug,
+                                slug: Sitemap.slugify(h.content),
                                 path: path.relative(this.root, src),
-                                url: `${item.url}#${useCaseSlug}`
+                                url: `${item.url}#${markdown_it_anchor.defaults.slugify(h.content)}`
                             };
                         })
                 );
@@ -170,8 +169,14 @@ class Sitemap {
     }
 
     #creatUrl(file) {
-        return this.pageUtil.removeOrder(file)
+        const url = this.pageUtil.removeOrder(file)
             .slice(0, -3) + ".html";
+
+        if(!url.endsWith("/index.html")) {
+            return url;
+        }
+
+        return url.slice(0, -10);
     }
 }
 
