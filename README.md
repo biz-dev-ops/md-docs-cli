@@ -21,21 +21,20 @@ This script copies every file and directory from the **docs** directory into the
 6. Every `*.model.yml` anchor is automatically [converted](https://github.com/synionnl/model-viewer) into a model viewer;
 7. Every `*.bpmn` anchor is automatically [converted](https://bpmn.io/toolkit/bpmn-js/) into a BPMN.io viewer;
 8. Every `*openapi.yaml` anchor is automatically [converted](https://github.com/OpenAPITools/openapi-generator) into a HTML documentation page;
-9.  Every `*asyncapi.yaml` anchor is automatically [converted](https://github.com/asyncapi/generator) into a HTML documentation page;
-10. Every `*.feature` anchor is automatically converted into a feature details list;
-11. Every `*.dashboard.yaml` anchor is automatically converted into a BDD dashboard;
-12. Every `*.user-task.yaml` anchor is automatically converted into a user-interface;
-13. Every `*.puml` filer is automatically [converted](https://plantuml.com/) into an SVG image file;
-14. Every `*.drawio` file is automatically into an SVG image file;
-15. Every `*.java`, `*.cs`, `*.ts`, `*.js`, `*.json`, `*.py`, `*.yml`, `*.yml` anchor is automatically converted in a code block; 
-16. Every markdown anchor is automatically converted into an HTML link;
-17. Every markdown anchor which starts with a `_` is automatically added to the markdown file; 
-18. Every git branch is added to the git menu;
-19. Test executions are automatically parsed in feature files;
-20. Unsorted list with items which reference the files above are automatically converted in tab panels;
-21. Images are wrapped in figures;
-22. Images can be aligned by adding align=center or align=left or align=right to the URL;
-23. Markdown is transformed into HTML using [markdow-it](https://www.npmjs.com/package/markdown-it), the following plugins are installed:
+9.  Every `*.feature` anchor is automatically converted into a feature details list;
+10. Every `*.dashboard.yaml` anchor is automatically converted into a BDD dashboard;
+11. Every `*.user-task.yaml` anchor is automatically converted into a user-interface;
+12. Every `*.puml` filer is automatically [converted](https://plantuml.com/) into an SVG image file;
+13. Every `*.drawio` file is automatically into an SVG image file;
+14. Every `*.java`, `*.cs`, `*.ts`, `*.js`, `*.json`, `*.py`, `*.yml`, `*.yml` anchor is automatically converted in a code block; 
+15. Every markdown anchor is automatically converted into an HTML link;
+16. Every markdown anchor which starts with a `_` is automatically added to the markdown file; 
+17. Every git branch is added to the git menu;
+18. Test executions are automatically parsed in feature files;
+19. Unsorted list with items which reference the files above are automatically converted in tab panels;
+20. Images are wrapped in figures;
+21. Images can be aligned by adding align=center or align=left or align=right to the URL;
+22. Markdown is transformed into HTML using [markdow-it](https://www.npmjs.com/package/markdown-it), the following plugins are installed:
     * [markdown-it-multimd-table](https://www.npmjs.com/package/markdown-it-multimd-table) => additional table options;
     * [markdown-it-container](https://www.npmjs.com/package/markdown-it-container) => info, warning and error containers;
     * [markdown-it-plantuml-ex](https://www.npmjs.com/package/markdown-it-plantuml-ex) => UML is automatically converted into a SVG;

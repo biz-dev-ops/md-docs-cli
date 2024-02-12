@@ -24,14 +24,14 @@
   "author": "Arjan Geertsema",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/arjangeertsema/living-documentation/issues"
+    "url": "https://github.com/biz-dev-ops/md-docs-cli/issues"
   },
-  "homepage": "https://github.com/synionnl/md-docs-cli/blob/main/README.md",
+  "homepage": "https://github.com/biz-dev-ops/md-docs-cli/blob/main/README.md",
   "files": [
     "assets/",
     "bin/"
   ],
-  "devDependencies": {
+  "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
     "@biz-dev-ops/web-components": "^0.0.19",
     "@cucumber/gherkin-streams": "^5.0.1",
@@ -61,13 +61,15 @@
     "prismjs": "^1.29.0",
     "pug": "^3.0.2",
     "puppeteer": "^20.3.0",
-    "stylelint": "^15.10.1",
-    "stylelint-config-standard-scss": "^11.0.0",
-    "stylelint-order": "^6.0.3",
     "svg-pan-zoom": "^3.6.1",
     "swagger-ui-dist": "^5.1.1",
     "uuid": "^9.0.0",
     "yaml": "^2.3.1",
     "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "stylelint": "^15.10.1",
+    "stylelint-config-standard-scss": "^11.0.0",
+    "stylelint-order": "^6.0.3"
   }
 }
