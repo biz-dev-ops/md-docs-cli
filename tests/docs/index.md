@@ -17,10 +17,6 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 [model](test.model.yml)
 
-## AsyncAPI
-
-[asyncapi](test.asyncapi.yml)
-
 ## Dashboard
 
 [dashboard](test.dashboard.yml)
@@ -72,7 +68,6 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 ## UL
 
-* [asyncapi](test.asyncapi.yml)
 * [dashboard](test.dashboard.yml)
 * [drawio](test.drawio)
 * [email](test.email.md)

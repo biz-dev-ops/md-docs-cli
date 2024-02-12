@@ -22,10 +22,6 @@ Test page to render all elements.
 
 [openapi](../test.openapi.yml)
 
-## AsyncAPI
-
-[asyncapi](../test.asyncapi.yml)
-
 ## UL
 
 * [uml](../test.puml)
