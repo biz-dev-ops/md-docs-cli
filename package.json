@@ -1,6 +1,6 @@
 {
   "name": "@biz-dev-ops/md-docs",
-  "version": "1.1.4",
+  "version": "1.1.2",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -24,16 +24,17 @@
   "author": "Arjan Geertsema",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/biz-dev-ops/md-docs-cli/issues"
+    "url": "https://github.com/arjangeertsema/living-documentation/issues"
   },
-  "homepage": "https://github.com/biz-dev-ops/md-docs-cli/blob/main/README.md",
+  "homepage": "https://github.com/synionnl/md-docs-cli/blob/main/README.md",
   "files": [
     "assets/",
     "bin/"
   ],
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
-    "@biz-dev-ops/web-components": "^0.0.19",
+    "@asyncapi/html-template": "^2.0.0",
+    "@biz-dev-ops/web-components": "^0.0.18",
     "@cucumber/gherkin-streams": "^5.0.1",
     "awilix": "^10.0.0",
     "bpmn-js": "^17.0.0",
