@@ -34,7 +34,6 @@ const HeadlessBrowser = require('../utils/headless-browser');
 
 const GherkinParser = require('../utils/bdd/gherkin-parser');
 
-const AsyncapiFileParser = require('../file-parsers/asyncapi-file-parser');
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
@@ -47,7 +46,6 @@ const OpenapiFileParser = require('../file-parsers/openapi-file-parser');
 const SvgFileParser = require('../file-parsers/svg-file-parser');
 const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
 
-const AsyncapiComponent = require('../components/asyncapi-component');
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
 const BusinessReferenceArchitectureComponent = require('../components/business-reference-architecture-component');
 const CommandUseCaseComponent = require('../components/command-use-case-component');
@@ -383,10 +381,6 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             { src: path.resolve(options.nodeModules, 'svg-pan-zoom/dist/svg-pan-zoom.min.js'), dst: path.resolve(options.basePath, 'assets/svg-pan-zoom-dist') },
 
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/global.min.css'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/css/asyncapi.min.css'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
-            { src: path.resolve(options.nodeModules, '@asyncapi/html-template/template/js/asyncapi-ui.min.js'), dst: path.resolve(options.basePath, 'assets/asyncapi/html-template') },
-            
             { src: path.resolve(options.nodeModules, 'prismjs/components'), dst: path.resolve(options.basePath, 'assets/prismjs/components') },
             { src: path.resolve(options.nodeModules, 'prismjs/plugins/autoloader/prism-autoloader.min.js'), dst: path.resolve(options.basePath, 'assets/prismjs') },
             { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.js'), dst: path.resolve(options.basePath, 'assets/prismjs') },
@@ -446,7 +440,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'definitionStore': asClass(DefinitionStore).singleton(),
 
             //File parser
-            'asyncapiFileParser': asClass(AsyncapiFileParser).singleton(),
             'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
             'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
@@ -491,7 +484,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
 
             //Component
-            'asyncapiComponent': asClass(AsyncapiComponent).singleton().inject(container => allowUnregistered(container, 'asyncapiComponentRenderFn')),
             'businessModelCanvasComponent': asClass(BusinessModelCanvasComponent).singleton().inject(container => allowUnregistered(container, 'businessModelCanvasComponentRenderFn')),
             'businessReferenceArchitectureComponent': asClass(BusinessReferenceArchitectureComponent).singleton().inject(container => allowUnregistered(container, 'businessReferenceArchitectureComponentRenderFn')),
             'commandUseCaseComponent': asClass(CommandUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'commandUseCaseComponentRenderFn')),
@@ -517,7 +509,6 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //File parsers: order can be important!
             'fileParsers': [
-                'asyncapiFileParser',
                 'bpmnFileParser',
                 'businessReferenceArchitectureFileParser',
                 'featureFileParser',
