@@ -1,4 +1,8 @@
+const mustache = require('mustache');
+
 module.exports = class DefinitionParser {
+    #definitions = null;
+
     constructor({ definitionStore }) {
         this.definitionStore = definitionStore;
     }
@@ -7,7 +11,9 @@ module.exports = class DefinitionParser {
         const definitions = await this.definitionStore.get();
         
         for (const definition of definitions) {
-            const regex = new RegExp(`(<a.*?<\/a>)|(<abbr.*?<\/abbr>)|(${createAlias(definition)})`, 'imgs');
+            const name = definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+            const regex = new RegExp(`(<a.*?<\/a>)|(<abbr.*?<\/abbr>)|(${name})`, 'imgs');
             html = html.replaceAll(regex, (match) => {
                 if(match.startsWith("<")) {
                     return match;
@@ -20,13 +26,15 @@ module.exports = class DefinitionParser {
     }
 
     async render(template) {
-        const definitions = await this.definitionStore.get();
-        for (const definition of definitions) {
-            const regex = new RegExp(`(?![^<]*>)({{\\s*${definition.name}\\s*}})`, 'img');
-
-            template = template.replace(regex, definition.text);
+        if(!this.#definitions) {
+            this.#definitions = (await this.definitionStore.get())
+                .reduce((result, definition) => { 
+                    result[definition.name.replaceAll(" ", "_")] = definition.text;
+                    return result;
+                }, {});
         }
-        return template;
+        
+        return mustache.render(template, this.#definitions);
     }
 }
 
@@ -45,14 +53,16 @@ function createReplacement(definition, match) {
     return replacement;
 }
 
-function createAlias(definition) {
-    const aliasses = [ definition.name ];
-    if (definition.alias)
-        aliasses.push(...definition.alias);
+// function createAlias(definition) {
+//     const aliasses = [ definition.name ];
+//     if (definition.alias)
+//         aliasses.push(...definition.alias);
     
-    const alias = aliasses
-        .map(a => a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-        .join('|');
+//     const alias = aliasses
+//         .sort()
+//         .reverse()
+//         .map(a => a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+//         .join('|');
     
-    return alias;
-}
+//     return alias;
+// }
