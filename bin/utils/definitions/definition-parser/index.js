@@ -7,7 +7,7 @@ module.exports = class DefinitionParser {
         const definitions = await this.definitionStore.get();
         
         for (const definition of definitions) {
-            const regex = new RegExp(`(<a.*?<\/a>)|(<abbr.*?<\/abbr>)|(${createAlias(definition)})`, 'imgs');
+            const regex = new RegExp(`(<a.*?<\/a>)|(<abbr.*?<\/abbr>)|(${definition.name})`, 'imgs');
             html = html.replaceAll(regex, (match) => {
                 if(match.startsWith("<")) {
                     return match;
@@ -22,9 +22,9 @@ module.exports = class DefinitionParser {
     async render(template) {
         const definitions = await this.definitionStore.get();
         for (const definition of definitions) {
-            const regex = new RegExp(`(?![^<]*>)({{\\s*${definition.name}\\s*}})`, 'img');
+            const regex = new RegExp(`({{\\s*(${definition.name})\\s*}})`, 'img');
 
-            template = template.replace(regex, definition.text);
+            template = template.replace(regex, definition.html);
         }
         return template;
     }
@@ -45,14 +45,16 @@ function createReplacement(definition, match) {
     return replacement;
 }
 
-function createAlias(definition) {
-    const aliasses = [ definition.name ];
-    if (definition.alias)
-        aliasses.push(...definition.alias);
+// function createAlias(definition) {
+//     const aliasses = [ definition.name ];
+//     if (definition.alias)
+//         aliasses.push(...definition.alias);
     
-    const alias = aliasses
-        .map(a => a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-        .join('|');
+//     const alias = aliasses
+//         .sort()
+//         .reverse()
+//         .map(a => a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+//         .join('|');
     
-    return alias;
-}
+//     return alias;
+// }
