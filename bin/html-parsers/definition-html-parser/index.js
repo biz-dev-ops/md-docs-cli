@@ -9,8 +9,6 @@ module.exports = class DefinitionHtmlParser extends HtmlParser {
     }
 
     async parse(element) {
-        element.innerHTML = await this.definitionParser.render(element.innerHTML);
-
         const elements = element
             .querySelectorAll('p:not(svg *),li:not(svg *),td:not(svg *),th:not(svg *),span:not(svg *)');
 

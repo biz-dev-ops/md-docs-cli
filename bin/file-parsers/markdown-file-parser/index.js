@@ -6,7 +6,9 @@ const mustache = require('mustache');
 const files = require('../../utils/files');
 
 module.exports = class MarkdownFileParser {
-    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, locale, htmlParsers, pageUtil }) {
+    #definitions = null;
+
+    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, locale, htmlParsers, pageUtil, definitionStore }) {
         this.options = options;
         this.gitInfo = gitInfo;
         this.hosting = hosting;
@@ -16,6 +18,7 @@ module.exports = class MarkdownFileParser {
         this.locale = locale;
         this.parsers = htmlParsers;
         this.pageUtil = pageUtil;
+        this.definitionStore = definitionStore;
     }
 
     async parse(file) {
@@ -33,18 +36,10 @@ module.exports = class MarkdownFileParser {
         await fs.writeFile(htmlFile, html);
     }
 
-    async #getTitle(file) {
-        const urlTitle = this.pageUtil.getTitleFromUrl(file);
-        const markdownTitle = await await this.pageUtil.getTitleFromMarkdown(file);
-        if(!markdownTitle) {
-            return urlTitle;
-        }
-        return  mustache.render(markdownTitle, { title: urlTitle });
-    }
-
     async #render(file) {
-        const title = await this.#getTitle(file);
-        const element = await this.renderer.render(await files.readFileAsString(file));
+        const data = await this.#getData(file);
+        const markdown = await files.readFileAsString(file);
+        const element = await this.renderer.render(mustache.render(markdown, data));
        
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.html`, element.outerHTML);
@@ -67,12 +62,35 @@ module.exports = class MarkdownFileParser {
             logout: logout,
             sourceFile: path.relative(this.options.dst, file),
             content: element.innerHTML,
-            title: title,        
+            title: data.title,        
             git: this.gitInfo,
             options: this.options.page || {},
             menu: menuItems,
             locale: await this.locale.get()
         });
+    }
+
+    async #getData(file) {
+        if(!this.#definitions) {
+            this.#definitions = (await this.definitionStore.get())
+                .reduce((result, definition) => { 
+                    result[definition.name.replaceAll(" ", "_")] = definition.text;
+                    return result;
+                }, {});
+        }
+        return {
+            title: await this.#getTitle(file),
+            definitions: this.#definitions
+        }
+    }
+
+    async #getTitle(file) {
+        const urlTitle = this.pageUtil.getTitleFromUrl(file);
+        const markdownTitle = await this.pageUtil.getTitleFromMarkdown(file);
+        if(!markdownTitle) {
+            return urlTitle;
+        }
+        return mustache.render(markdownTitle, { title: urlTitle });
     }
 
     #getShowNavInfo(options, file) {
