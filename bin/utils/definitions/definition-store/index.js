@@ -2,14 +2,15 @@ const path = require('path');
 const yaml = require('js-yaml');
 const colors = require('colors');
 const files = require('../../files');
-
+const { defaultArgs } = require('puppeteer');
 
 module.exports = class DefinitionStore {
     #data = null;
 
-    constructor({ options, sitemap }) {
+    constructor({ options, sitemap, markdownRenderer }) {
         this.options = options;
         this.sitemap = sitemap;
+        this.markdownRenderer = markdownRenderer;
     }
 
     async init() {
@@ -48,27 +49,44 @@ module.exports = class DefinitionStore {
                     target[index] = item;
                 
                 return target;
-            }, []);
+            }, [])
+            .flatMap(definition => {
+                const aliasses = [ definition.name ];
+                
+                if (definition.alias) {
+                    aliasses.push(...definition.alias);
+                }
+
+                return aliasses.map(alias => { 
+                    const newDef = Object.assign({}, definition, {name: alias});
+                    delete newDef.alias;
+                    return newDef;
+                });
+            })
+            .map(definition => this.#linkToPage(definition, pages))
+            .sort((a, b) => b.name.length - a.name.length || a.name.localeCompare(b.name));
     }
 
-    async #parse(file, pages) {
+    async #parse(file) {
         const content = await files.readFileAsString(file);
         const definitions = yaml.load(content) || [];
 
         return await Promise.all(definitions.map(async definition => {
-            if(definition.link) {
-                return definition;
-            }
-
-            for(const name of [definition.name, ...(definition.alias || [])]) {
-                const link = pages.findFirst(name)?.url;
-                if(link) {
-                    definition.link = link;
-                    break;
-                }
-            }
-
+            definition.html = (await this.markdownRenderer.render(definition.text)).innerHTML;
             return definition;
         }));
+    }
+
+    #linkToPage(definition, pages) {
+        if(definition.link) {
+            return definition;
+        }
+        
+        const link = pages.findFirst(definition.name)?.url;
+        if(link) {
+            definition.link = link;
+        }
+
+        return definition;
     }
 }

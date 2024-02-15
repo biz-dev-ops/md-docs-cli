@@ -1,6 +1,6 @@
 {
   "name": "@biz-dev-ops/md-docs",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
-    "@biz-dev-ops/web-components": "^0.0.18",
+    "@biz-dev-ops/web-components": "^0.0.19",
     "@cucumber/gherkin-streams": "^5.0.1",
     "awilix": "^10.0.0",
     "bpmn-js": "^17.0.0",
