@@ -68,11 +68,13 @@ module.exports = class DefinitionStore {
     }
 
     async #parse(file) {
+        console.info(colors.yellow(`\t\t * parsing ${file}`));
+
         const content = await files.readFileAsString(file);
         const definitions = yaml.load(content) || [];
 
         return await Promise.all(definitions.map(async definition => {
-            definition.html = (await this.markdownRenderer.render(definition.text)).innerHTML;
+            definition.html = definition.text ? (await this.markdownRenderer.render(definition.text)).innerHTML : "";
             return definition;
         }));
     }
