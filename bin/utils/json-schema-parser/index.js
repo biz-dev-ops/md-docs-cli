@@ -32,7 +32,6 @@ exports.bundle = async function (file) {
 }
 
 mergeAllOfInSchema = (object) => {
-    console.log(object);
     if(!!object["allOf"]){
         object = mergeAllOf(object, {
             resolvers: {
