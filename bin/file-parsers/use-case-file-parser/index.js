@@ -2,14 +2,17 @@ const fs = require('fs').promises;
 const path = require('path');
 const colors = require('colors');
 const yaml = require('js-yaml');
+const jsonSchemaParser = require('../../utils/json-schema-parser'); 
 const files = require('../../utils/files');
+
 
 module.exports = class UseCaseFileParser {
     _extensions = [ ".command.yml", ".query.yml", ".event.yml", ".task.yml", ".command.yaml", ".query.yaml", ".event.yaml", ".task.yaml"];
 
-    constructor({ options, pageUtil }) {
+    constructor({ options, pageUtil, definitionParser }) {
         this.options = options;
         this.pageUtil = pageUtil;
+        this.definitionParser = definitionParser;
     }
     
     async parse(file) {
@@ -35,8 +38,8 @@ module.exports = class UseCaseFileParser {
     }
 
     async #getJson(file) {
-        const content = await files.readFileAsString(file);
-        const json = yaml.load(content);
-        return json;
+        let json = await jsonSchemaParser.parse(file);
+        json = (await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n");
+        return JSON.parse(json);
     }
 }

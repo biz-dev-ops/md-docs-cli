@@ -3,7 +3,6 @@ const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
 
-const files = require('../../utils/files');
 const jsonSchemaParser = require('../../utils/json-schema-parser');
 
 module.exports = class OpenapiFileParser {
