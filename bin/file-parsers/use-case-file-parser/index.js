@@ -1,10 +1,8 @@
 const fs = require('fs').promises;
 const path = require('path');
 const colors = require('colors');
-const yaml = require('js-yaml');
-const jsonSchemaParser = require('../../utils/json-schema-parser'); 
-const files = require('../../utils/files');
 
+const jsonSchemaParser = require('../../utils/json-schema-parser'); 
 
 module.exports = class UseCaseFileParser {
     _extensions = [ ".command.yml", ".query.yml", ".event.yml", ".task.yml", ".command.yaml", ".query.yaml", ".event.yaml", ".task.yaml"];
