@@ -46,7 +46,7 @@ module.exports = class PageUtil {
     }
 
     createAbsoluteUrl(url) {
-        url = url.replace(this.#aboutBlank, "");
+        url = url.replace(this.#aboutBlank, "./index.html");
 
         if(!this.#isRelativeUrl(url))
             return null;
