@@ -114,25 +114,21 @@ module.exports = class App {
         await this.#init(this.#options);
 
         const options = this.container.resolve('options');
+        const gitInfo = this.container.resolve('gitInfo');
 
         if (options.args.branches) {
             console.info();
             console.info(colors.brightGreen('ready, shutting down.....'));
             return;
         }
-
-        if(await files.exists(path.resolve(options.basePath, 'index.html'))) {
-            console.info(colors.green('\nindex.html already exists'));
-        } 
-        else {
-            console.info(colors.green('\ncreating index.html'));
-            await fs.writeFile(path.resolve(options.basePath, 'index.html'), `<!DOCTYPE html>
-            <html> 
-                <head>
-                    <meta http-equiv="Refresh" content="0; URL=./main/" />
-                </head>
-            </html>`);
-        }
+        
+        console.info(colors.green('\ncreating index.html'));
+        await fs.writeFile(path.resolve(options.basePath, 'index.html'), `<!DOCTYPE html>
+        <html> 
+            <head>
+                <meta http-equiv="Refresh" content="0; URL=./${gitInfo.branches.find(b => b.mainBranch).path}index.html" />
+            </head>
+        </html>`);
 
         const hosting = this.container.resolve('hosting');
         await hosting.apply();

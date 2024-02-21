@@ -131,13 +131,13 @@ class Sitemap {
                 continue;
             }
             else if (entry.isDirectory()) {
-               
                 const sub = await this.#getMenuItem(entryPath);
-                if (sub != undefined)
+                if (sub != undefined) {
                     item.items.push(sub);
+                }
             }
             else if (entry.name === 'index.md') {
-                item.url = this.#creatUrl(path.join(item.path, entry.name));
+                item.url = this.#createUrl(path.join(item.path, entry.name));
                 console.info(colors.green(`\t* adding menu item ${item.url}`));
 
                 item.useCases = new SitemapArray();
@@ -168,15 +168,9 @@ class Sitemap {
         return yaml.load(content);
     }
 
-    #creatUrl(file) {
-        const url = this.pageUtil.removeOrder(file)
+    #createUrl(file) {
+        return this.pageUtil.removeOrder(file)
             .slice(0, -3) + ".html";
-
-        if(!url.endsWith("/index.html")) {
-            return url;
-        }
-
-        return url.slice(0, -10);
     }
 }
 
@@ -199,6 +193,11 @@ function SitemapArray() {
         });
 
         return hits;
+    }
+
+    this.findById = function(id) {
+        const hit = this.findFirst(page => page.meta?.id === id);
+        return hit;
     }
 
     this.findFirst = function(comparer) {

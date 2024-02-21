@@ -36,7 +36,6 @@ module.exports = class DefinitionStore {
             console.info(colors.yellow(`\t\t * ${definitions.length} definitions found, merging.`));
 
             this.#data = this.#data.concat(definitions);
-
         });
 
         this.#data = this.#data
@@ -81,7 +80,14 @@ module.exports = class DefinitionStore {
 
     #linkToPage(definition, pages) {
         if(definition.link) {
-            return definition;
+            if(!this.#isUUID(definition.link)) {
+                return definition;
+            }
+
+            definition.link = pages.findById(definition.link)?.url;
+            if(definition.link) {
+                return definition;
+            }
         }
         
         const link = pages.findFirst(definition.name)?.url;
@@ -90,5 +96,9 @@ module.exports = class DefinitionStore {
         }
 
         return definition;
+    }
+
+    #isUUID(value) {
+        return /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(value);
     }
 }
