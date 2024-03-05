@@ -24,7 +24,7 @@ module.exports = class HeadingHtmlParser {
 function addToHeadingContainer(locale, element, container, level) {
     while (element) {
         let next = element.nextSibling;
-        if (element.localName && element.localName.match(/^h[1-3]$/)) {
+        if (element.localName && element.localName.match(/^h[1-4]$/)) {
             const newLevel = Number.parseInt(element.localName.substring((1)));
 
             if (newLevel > level) {

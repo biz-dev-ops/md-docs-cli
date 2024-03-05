@@ -1,15 +1,15 @@
 (() => {
-    for (const container of Array.from(document.querySelectorAll(".header-container.h3"))) {
-        const h3 = container.querySelector("h3");
-        h3.setAttribute("tabindex", "0");
-        h3.setAttribute("role", "button");
+    for (const header of Array.from(document.querySelectorAll(".header-container h3, .header-container h4"))) {
+        const container = header.closest(".header-container");
+        header.setAttribute("tabindex", "0");
+        header.setAttribute("role", "button");
 
-        h3.addEventListener("click", function () {
+        header.addEventListener("click", function () {
             container.classList.toggle("active");
             onChange(container);
         });
 
-        h3.addEventListener("show", function () {
+        header.addEventListener("show", function () {
             container.classList.add("active");
             onChange(container);
         });
