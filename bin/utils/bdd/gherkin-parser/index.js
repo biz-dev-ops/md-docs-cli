@@ -82,7 +82,7 @@ module.exports = class GherkinParser {
                             }
                             else {
                                 return {
-                                    name: scenario.name,
+                                    name: `${scenario.name} (${pickles.length})`,
                                     arguments: getArguments(scenario),
                                     scenarios: pickles
                                         .map((pickle, index) => ({

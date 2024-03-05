@@ -52,7 +52,8 @@
 }
 
 /* Module: Header container - level 3 */
-.header-container.h3 {
+.header-container.h3,
+.header-container.h4 {
     border-inline: var(--line-base) solid var(--color-brand-a20);
     gap: var(--space-sm);
     padding-inline: var(--space-sm);
@@ -60,23 +61,27 @@
     padding-block-end: 0;
 }
 
-.header-container.h3:first-of-type {
+.header-container.h3:first-of-type,
+.header-container.h4:first-of-type {
     border-block-start: var(--line-base) solid var(--color-brand-a20);
     border-radius: var(--radius-base) var(--radius-base) 0 0;
     padding-block-start: var(--space-sm);
 }
 
-.header-container.h3:last-of-type {
+.header-container.h3:last-of-type,
+.header-container.h4:last-of-type {
     border-block-end: var(--line-base) solid var(--color-brand-a20);
     border-radius: 0 0 var(--radius-base) var(--radius-base);
     padding-block-end: var(--space-sm);
 }
 
-.header-container.h3:first-of-type:last-of-type {
+.header-container.h3:first-of-type:last-of-type,
+.header-container.h4:first-of-type:last-of-type {
     border-radius: var(--radius-base);
 }
 
-.header-container.h3 h3 {
+.header-container.h3 h3,
+.header-container.h4 h4 {
     background-color: var(--color-brand-a10);
     border-radius: var(--radius-half);
     color: var(--link-text-color);
@@ -86,11 +91,13 @@
     position: relative;
 }
 
-.header-container.h3 h3:hover {
+.header-container.h3 h3:hover,
+.header-container.h4 h4:hover {
     cursor: pointer;
 }
 
-.header-container.h3 h3::after {
+.header-container.h3 h3::after,
+.header-container.h4 h4::after {
     border-color: var(--text-color-base);
     border-style: solid;
     border-width: var(--line-base) var(--line-base) 0 0;
@@ -106,15 +113,24 @@
     width: var(--space-xs);
 }
 
-.header-container.h3.active h3::after {
+.header-container.h3.active h3::after,
+.header-container.h4.active h4::after {
     transform: rotate(-45deg);
 }
 
-.header-container.h3.active > .container {
+.header-container.h3.active > .container,
+.header-container.h4.active > .container {
     display: block;
     margin-block-end: var(--space-md);
 }
 
-.header-container.h3 > .container {
+.header-container.h3 > .container,
+.header-container.h4 > .container {
     display: none;
+}
+
+/* Module: Header container - level 4 */
+.header-container.h4 {
+    padding-inline: var(--space-xs) !important;
+    margin-inline: 0 !important;   
 }
