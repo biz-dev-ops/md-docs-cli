@@ -163,17 +163,17 @@ pre.error {
     border: solid var(--color-error)
 }
 
-table tr * {
+table tr > * {
     border-block-end: var(--line-base) solid var(--background-color-base);
     padding: var(--space-xs) var(--space-sm);
     text-align: left;
 }
 
-table tr *:first-child{
+table tr > *:first-child{
     padding-inline-start: 0;
 }
 
-table tr *:last-child {
+table tr > *:last-child {
     padding-inline-end: 0;
 }
 

@@ -5,6 +5,7 @@
   --color-brand-a40: color-mix(in srgb, rgb(var(--rgb-brand)) 40%, white);
   --color-brand-a20: color-mix(in srgb, rgb(var(--rgb-brand)) 20%, white);
   --color-brand-a10: color-mix(in srgb, rgb(var(--rgb-brand)) 10%, white);
+  --color-brand-a05: color-mix(in srgb, rgb(var(--rgb-brand)) 5%, white);
 
   /* Colors */
   --color-white-rgb: 255 255 255;
