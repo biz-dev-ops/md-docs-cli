@@ -6,13 +6,19 @@ const md = require('markdown-it')
         linkify: true,
         typographer: true
     })
-    .use(markdown_it_anchor, {  
+    .use(markdown_it_anchor, {
         level: [1, 2, 3],
         permalink: markdown_it_anchor.permalink.linkInsideHeader({
-            symbol: "¶"            
+            symbol: "¶"
         })
     })
-    .use(require("markdown-it-multimd-table"))
+    .use(require("markdown-it-multimd-table"), {
+        multiline: true,
+        rowspan: true,
+        headerless: true,
+        multibody: true,
+        aotolabel: true
+    })
     .use(require("markdown-it-container"), "info")
     .use(require("markdown-it-container"), "warning")
     .use(require("markdown-it-container"), "error")
@@ -28,14 +34,14 @@ module.exports = class MarkdownRenderer {
 
     async render(markdown) {
         const html = md.render(markdown);
-        
+
         const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
         element.innerHTML = html;
 
         Array.from(element.querySelectorAll('svg')).forEach(svg => {
             svg.setAttribute('data-generator', 'markdown');
         });
-        
+
         return element;
     }
 }
