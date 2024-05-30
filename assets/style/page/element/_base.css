@@ -59,23 +59,6 @@ abbr[title] {
     outline: 0;
 }
 
-abbr::after {
-    background-color: var(--link-text-color);
-    block-size: 1.5em;
-    border-radius: var(--radius-circle);
-    color: var(--color-white);
-    content: 'i';
-    cursor: text;
-    display: inline-block;
-    font-size: .5em;
-    inline-size: 1.5em;
-    inset-block-start: -.25em;
-    line-height: 1.5em;
-    margin-left: .5em;
-    position: relative;
-    text-align: center;
-}
-
 a > abbr {
     text-decoration: none;
 }
