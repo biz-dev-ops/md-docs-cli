@@ -39,6 +39,7 @@
     "bpmn-js": "^17.0.0",
     "colors": "^1.4.0",
     "copyfiles": "^2.4.1",
+    "dmn-js": "^16.4.0",
     "figlet": "^1.6.0",
     "glob-promise": "^6.0.5",
     "iframe-resizer": "^4.3.6",
