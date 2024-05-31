@@ -37,6 +37,7 @@ const GherkinParser = require('../utils/bdd/gherkin-parser');
 const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
+const DMNFileParser = require('../file-parsers/dmn-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
@@ -49,6 +50,7 @@ const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
 const BusinessReferenceArchitectureComponent = require('../components/business-reference-architecture-component');
 const CommandUseCaseComponent = require('../components/command-use-case-component');
+const DMNComponent = require('../components/dmn-component');
 const EmailComponent = require('../components/email-component');
 const EventUseCaseComponent = require('../components/event-use-case-component');
 const DashboardComponent = require('../components/dashboard-component');
@@ -81,6 +83,7 @@ const BusinessReferenceArchitectureAnchorParser = require('../anchor-parsers/bus
 const CommandUseCaseAnchorParser = require('../anchor-parsers/command-use-case-anchor-parser');
 const CodeAnchorParser = require('../anchor-parsers/code-anchor-parser');
 const DashboardAnchorParser = require('../anchor-parsers/dashboard-anchor-parser');
+const DMNAnchorParser = require('../anchor-parsers/dmn-anchor-parser');
 const EventUseCaseAnchorParser = require('../anchor-parsers/event-use-case-anchor-parser');
 const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
@@ -438,6 +441,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             //File parser
             'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
+            'dmnFileParser': asClass(DMNFileParser).singleton(),
             'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
             'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
             'featureFileParser': asClass(FeatureFileParser).singleton(),
@@ -466,6 +470,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
             'commandUseCaseAnchorParser': asClass(CommandUseCaseAnchorParser).singleton(),
             'dashboardAnchorParser': asClass(DashboardAnchorParser).singleton(),
+            'dmnAnchorParser': asClass(DMNAnchorParser).singleton(),
             'eventUseCaseAnchorParser': asClass(EventUseCaseAnchorParser).singleton(),
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
@@ -484,6 +489,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'businessReferenceArchitectureComponent': asClass(BusinessReferenceArchitectureComponent).singleton().inject(container => allowUnregistered(container, 'businessReferenceArchitectureComponentRenderFn')),
             'commandUseCaseComponent': asClass(CommandUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'commandUseCaseComponentRenderFn')),
             'dashboardComponent': asClass(DashboardComponent).singleton().inject(container => allowUnregistered(container, 'dashboardComponentRenderFn')),
+            'dmnComponent': asClass(DMNComponent).singleton().inject(container => allowUnregistered(container, 'dmnComponentRenderFn')),
             'emailComponent': asClass(EmailComponent).singleton().inject(container => allowUnregistered(container, 'emailComponentRenderFn')),
             'eventUseCaseComponent': asClass(EventUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'eventUseCaseComponentRenderFn')),
             'featureComponent': asClass(FeatureComponent).singleton().inject(container => allowUnregistered(container, 'featureComponentRenderFn')),
@@ -507,6 +513,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'fileParsers': [
                 'bpmnFileParser',
                 'businessReferenceArchitectureFileParser',
+                'dmnFileParser',
                 'featureFileParser',
                 'drawIOFileParser',
                 'markdownEmailFileParser',
@@ -536,6 +543,7 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'businessModelCanvasAnchorParser',
                 'businessReferenceArchitectureAnchorParser',
                 'codeAnchorParser',
+                // 'dmnAnchorParser',
                 'featureAnchorParser',
                 'featuresAnchorParser',
                 'dashboardAnchorParser',

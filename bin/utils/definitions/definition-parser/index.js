@@ -52,17 +52,3 @@ function createReplacement(definition, match) {
     
     return replacement;
 }
-
-// function createAlias(definition) {
-//     const aliasses = [ definition.name ];
-//     if (definition.alias)
-//         aliasses.push(...definition.alias);
-    
-//     const alias = aliasses
-//         .sort()
-//         .reverse()
-//         .map(a => a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-//         .join('|');
-    
-//     return alias;
-// }
