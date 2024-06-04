@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Diagram Viewer</title>
+
+    <!-- archimate-js script is injected via loadScript -->
+
+    <style>
+      html, body, #canvas {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas"></div>
+
+    <script>
+      let viewer;
+
+      function getViewer() {
+
+        if (viewer) {
+          return viewer;
+        }
+
+        viewer = new Modeler({
+          container: '#canvas'
+        });
+
+        viewer.on('import.done', function(event) {
+          const error = event.error;
+          const warnings = event.warnings;
+
+          if (error) {
+            return console.error('could not import archimate diagram', error);
+          }
+
+          viewer.get('canvas').zoom('fit-viewport');
+        });
+
+        return viewer;
+      }
+
+      async function convertToSVG(xml) {
+        const viewer = getViewer();
+        await viewer.importXML(xml)
+        await viewer.openView();
+        const { svg } = await viewer.saveSVG();
+        return svg;
+      }
+
+      convertToSVG(`
+      <?xml version="1.0" encoding="UTF-8"?>
+<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.opengroup.org/xsd/archimate/3.0/" id="id-15lda1pb2qtvhlvx81fbwebmc"
+    xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd">
+    <archimate:name>Sample model</archimate:name>
+    <archimate:documentation>This is a sample of an ArchiMate model powered by ArchiModel.net ! This
+        model is in read-only mode and cannot be deleted. You can edit the view but changes will not
+        be saved.</archimate:documentation>
+    <archimate:elements>
+        <archimate:baseElement id="id-9jfudhpxsval3jcp5xexvlq1q" type="BusinessActor">
+            <archimate:name>Client</archimate:name>
+        </archimate:baseElement>
+        <archimate:baseElement id="id-5pq0l6jgl7t6w98zn0a0z4qnx" type="BusinessInterface">
+            <archimate:name>Mobile</archimate:name>
+        </archimate:baseElement>
+        <archimate:baseElement id="id-adjaucerrf34pt4hbdxwo4s2r" type="BusinessProcess">
+            <archimate:name>Get sold account</archimate:name>
+        </archimate:baseElement>
+        <archimate:baseElement id="id-54bnvcq88aea595b3m2jbhpgr" type="Device">
+            <archimate:name>iOS or Androïd</archimate:name>
+        </archimate:baseElement>
+        <archimate:baseElement id="id-93dqu3kq8gxke5bn4ydru17r9" type="ApplicationFunction">
+            <archimate:name>Sold account</archimate:name>
+        </archimate:baseElement>
+        <archimate:baseElement id="id-1f5hmbgqqt1phdcjttaz6qbba" type="ApplicationComponent">
+            <archimate:name>Banking Mobile App</archimate:name>
+        </archimate:baseElement>
+        <archimate:baseElement id="id-34gfvrj2mz8byvq0njrnlioq5" type="ApplicationService">
+            <archimate:name>Application Service</archimate:name>
+        </archimate:baseElement>
+    </archimate:elements>
+    <archimate:views>
+        <archimate:diagrams>
+            <archimate:view id="id-br75fsdrckpvlma6e4iq37c9p">
+                <archimate:name>Default View</archimate:name>
+                <archimate:documentation></archimate:documentation>
+                <archimate:node id="id-b2ixujbpz218ls2jhs9bmcfjp" type="Element"
+                    elementRef="id-9jfudhpxsval3jcp5xexvlq1q" x="195" y="263" w="120" h="55">
+                    <archimate:style textAlign="center-middle">
+                        <archimate:font />
+                        <archimate:fillColor r="255" g="255" b="181" a="100" />
+                        <archimate:lineColor r="0" g="0" b="0" a="40" />
+                    </archimate:style>
+                </archimate:node>
+                <archimate:node id="id-28bmh97yjy7ezy6fc8uv8sqr0" type="Element"
+                    elementRef="id-5pq0l6jgl7t6w98zn0a0z4qnx" x="409" y="264" w="120" h="55">
+                    <archimate:style textAlign="center-middle">
+                        <archimate:font />
+                        <archimate:fillColor r="255" g="255" b="181" a="100" />
+                        <archimate:lineColor r="0" g="0" b="0" a="40" />
+                    </archimate:style>
+                </archimate:node>
+                <archimate:node id="id-5rufzl57pdxn4ef7u5w9wswh2" type="Element"
+                    elementRef="id-adjaucerrf34pt4hbdxwo4s2r" x="619" y="264" w="120" h="55">
+                    <archimate:style textAlign="center-middle">
+                        <archimate:font />
+                        <archimate:fillColor r="255" g="255" b="181" a="100" />
+                        <archimate:lineColor r="0" g="0" b="0" a="40" />
+                    </archimate:style>
+                </archimate:node>
+                <archimate:node id="id-dsinsvu0x9xur6peo4c9jbesk" type="Element"
+                    elementRef="id-54bnvcq88aea595b3m2jbhpgr" x="409" y="406" w="120" h="55">
+                    <archimate:style textAlign="center-middle">
+                        <archimate:font />
+                        <archimate:fillColor r="201" g="231" b="183" a="100" />
+                        <archimate:lineColor r="0" g="0" b="0" a="40" />
+                    </archimate:style>
+                </archimate:node>
+                <archimate:connection id="id-c5upgon69v3mrblnoxqqb5vah" type="Relationship"
+                    relationshipRef="id-csram56odoehqejn03fr987au"
+                    source="id-b2ixujbpz218ls2jhs9bmcfjp" target="id-28bmh97yjy7ezy6fc8uv8sqr0">
+                    <archimate:style lineWidth="1">
+                        <archimate:font />
+                        <archimate:lineColor r="0" g="0" b="0" a="100" />
+                    </archimate:style>
+                    <archimate:waypoints>
+                        <archimate:waypoint x="315" y="292" />
+                        <archimate:waypoint x="409" y="292" />
+                    </archimate:waypoints>
+                </archimate:connection>
+                <archimate:connection id="id-djqk2zc6iuwft3993bsjse1o5" type="Relationship"
+                    relationshipRef="id-a0ndvkrwt4jpgng2lcj00sped"
+                    source="id-28bmh97yjy7ezy6fc8uv8sqr0" target="id-5rufzl57pdxn4ef7u5w9wswh2">
+                    <archimate:style lineWidth="1">
+                        <archimate:font />
+                        <archimate:lineColor r="0" g="0" b="0" a="100" />
+                    </archimate:style>
+                    <archimate:waypoints>
+                        <archimate:waypoint x="529" y="292" />
+                        <archimate:waypoint x="619" y="292" />
+                    </archimate:waypoints>
+                </archimate:connection>
+                <archimate:connection id="id-cqj53rmcpcws9edlg2xc5lybt" type="Relationship"
+                    relationshipRef="id-a2yyr14xdijlmd8829vzog0o9"
+                    source="id-dsinsvu0x9xur6peo4c9jbesk" target="id-28bmh97yjy7ezy6fc8uv8sqr0">
+                    <archimate:style lineWidth="1">
+                        <archimate:font />
+                        <archimate:lineColor r="0" g="0" b="0" a="100" />
+                    </archimate:style>
+                    <archimate:waypoints>
+                        <archimate:waypoint x="468" y="406" />
+                        <archimate:waypoint x="467" y="319" />
+                    </archimate:waypoints>
+                </archimate:connection>
+                <archimate:connection id="id-3jlx7lgplyv4fry3ou4okq98b" type="Relationship"
+                    relationshipRef="id-5ztgmy9oac1h5k4ej26she865"
+                    source="id-esrjojtng93witph9kimzslyi" target="id-4qczk6fl3q2uhqubj43zr07xz">
+                    <archimate:style lineWidth="1">
+                        <archimate:font />
+                        <archimate:lineColor r="0" g="0" b="0" a="100" />
+                    </archimate:style>
+                    <archimate:waypoints>
+                        <archimate:waypoint x="679" y="527" />
+                        <archimate:waypoint x="679" y="454" />
+                    </archimate:waypoints>
+                </archimate:connection>
+                <archimate:node id="id-esrjojtng93witph9kimzslyi" type="Element"
+                    elementRef="id-1f5hmbgqqt1phdcjttaz6qbba" x="596" y="527" w="166" h="72">
+                    <archimate:style textAlign="center-top">
+                        <archimate:font />
+                        <archimate:fillColor r="181" g="255" b="255" a="100" />
+                        <archimate:lineColor r="0" g="0" b="0" a="40" />
+                    </archimate:style>
+                </archimate:node>
+                <archimate:node id="id-1p6dejujq1y7i1vzbb1hbdh1r" type="Label" x="301" y="505.5"
+                    w="120" h="55">
+                    <archimate:style textAlign="left-top">
+                        <archimate:font />
+                        <archimate:fillColor r="255" g="255" b="255" a="100" />
+                        <archimate:lineColor r="0" g="0" b="0" a="40" />
+                    </archimate:style>
+                    <archimate:label>min. iOS 12 or Androïd 11</archimate:label>
+                </archimate:node>
+                <archimate:connection id="id-bvqidac0trdgc0nwo69cz1gro" type="Line"
+                    source="id-dsinsvu0x9xur6peo4c9jbesk" target="id-1p6dejujq1y7i1vzbb1hbdh1r">
+                    <archimate:style lineWidth="1">
+                        <archimate:font />
+                        <archimate:lineColor r="0" g="0" b="0" a="40" />
+                    </archimate:style>
+                    <archimate:waypoints>
+                        <archimate:waypoint x="440" y="461" />
+                        <archimate:waypoint x="391" y="506" />
+                    </archimate:waypoints>
+                </archimate:connection>
+                <archimate:node id="id-4qczk6fl3q2uhqubj43zr07xz" type="Element"
+                    elementRef="id-34gfvrj2mz8byvq0njrnlioq5" x="619" y="399" w="120" h="55">
+                    <archimate:style textAlign="center-middle">
+                        <archimate:font />
+                        <archimate:fillColor r="181" g="255" b="255" a="100" />
+                        <archimate:lineColor r="0" g="0" b="0" a="40" />
+                    </archimate:style>
+                </archimate:node>
+                <archimate:connection id="id-7gdtbdw96sgpkik9lhqeclp62" type="Relationship"
+                    relationshipRef="id-b127t9meze3pp42bl129jgw1w"
+                    source="id-4qczk6fl3q2uhqubj43zr07xz" target="id-5rufzl57pdxn4ef7u5w9wswh2">
+                    <archimate:style lineWidth="1">
+                        <archimate:font />
+                        <archimate:lineColor r="0" g="0" b="0" a="100" />
+                    </archimate:style>
+                    <archimate:waypoints>
+                        <archimate:waypoint x="679" y="399" />
+                        <archimate:waypoint x="679" y="319" />
+                    </archimate:waypoints>
+                </archimate:connection>
+            </archimate:view>
+        </archimate:diagrams>
+    </archimate:views>
+    <archimate:relationships>
+        <archimate:relationship id="id-csram56odoehqejn03fr987au" type="Assignment"
+            source="id-9jfudhpxsval3jcp5xexvlq1q" target="id-5pq0l6jgl7t6w98zn0a0z4qnx">
+            <archimate:name></archimate:name>
+        </archimate:relationship>
+        <archimate:relationship id="id-a0ndvkrwt4jpgng2lcj00sped" type="Triggering"
+            source="id-5pq0l6jgl7t6w98zn0a0z4qnx" target="id-adjaucerrf34pt4hbdxwo4s2r">
+            <archimate:name></archimate:name>
+        </archimate:relationship>
+        <archimate:relationship id="id-a2yyr14xdijlmd8829vzog0o9" type="Realization"
+            source="id-54bnvcq88aea595b3m2jbhpgr" target="id-5pq0l6jgl7t6w98zn0a0z4qnx">
+            <archimate:name></archimate:name>
+        </archimate:relationship>
+        <archimate:relationship id="id-5ztgmy9oac1h5k4ej26she865" type="Realization"
+            source="id-1f5hmbgqqt1phdcjttaz6qbba" target="id-34gfvrj2mz8byvq0njrnlioq5">
+            <archimate:name></archimate:name>
+        </archimate:relationship>
+        <archimate:relationship id="id-b127t9meze3pp42bl129jgw1w" type="Serving"
+            source="id-34gfvrj2mz8byvq0njrnlioq5" target="id-adjaucerrf34pt4hbdxwo4s2r">
+            <archimate:name></archimate:name>
+        </archimate:relationship>
+    </archimate:relationships>
+</archimate:model>
+      `);
+
+    </script>
+  </body>
+</html>

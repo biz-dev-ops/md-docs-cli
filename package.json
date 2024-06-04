@@ -35,6 +35,7 @@
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
     "@biz-dev-ops/web-components": "^0.0.23",
     "@cucumber/gherkin-streams": "^5.0.1",
+    "archimate-js": "^0.0.4",
     "awilix": "^10.0.0",
     "bpmn-js": "^17.0.0",
     "colors": "^1.4.0",
