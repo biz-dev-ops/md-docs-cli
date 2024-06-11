@@ -9,46 +9,45 @@ module.exports = class DefinitionParser {
 
     async parse(html) {
         const definitions = await this.definitionStore.get();
-        
-        for (const definition of definitions) {
-            const name = definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const words = definitions.map(definition => definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        const wordsRegEx = new RegExp("\\b(" + words.join("|") + ")\\b", "imgs");
+        const innerHTMLRegEx = new RegExp("(?<=<.+.>)(.*?)(?=<.*\/.+.?>)", "imgs");
 
-            const regex = new RegExp(`(<a.*?<\/a>)|(<abbr.*?<\/abbr>)|(${name})`, 'imgs');
-            html = html.replaceAll(regex, (match) => {
-                if(match.startsWith("<")) {
-                    return match;
+        return html.replaceAll(innerHTMLRegEx, (innerHTML) => {
+            return innerHTML.replaceAll(wordsRegEx, (word) => {
+                const definition = definitions.find(d => d.name.toLowerCase() === word.toLowerCase());
+                if (definition) {
+                    return createReplacement(definition, word);
                 }
-                return createReplacement(definition, match);
-            });
-        }
-
-        return html;
+    
+                return word;
+            })
+        });
     }
 
     async render(template) {
-        if(!this.#definitions) {
+        if (!this.#definitions) {
             this.#definitions = (await this.definitionStore.get())
-                .reduce((result, definition) => { 
+                .reduce((result, definition) => {
                     result[definition.name.replaceAll(" ", "_")] = definition.text;
                     return result;
                 }, {});
         }
-        
+
         return mustache.render(template, this.#definitions);
     }
 }
 
 function createReplacement(definition, match) {
     let replacement = match;
-            
+
     if (definition.text) {
         replacement = `<abbr title="${definition.text}">${replacement}</abbr>`;
     }
-    
-    if(definition.link)
-    {
+
+    if (definition.link) {
         replacement = `<a href="${definition.link}">${replacement}</a>`
     }
-    
+
     return replacement;
 }
