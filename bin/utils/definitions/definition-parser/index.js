@@ -1,28 +1,37 @@
+const jsdom = require('jsdom');
 const mustache = require('mustache');
 
 module.exports = class DefinitionParser {
     #definitions = null;
+    #regEx = null;
 
     constructor({ definitionStore }) {
         this.definitionStore = definitionStore;
     }
 
-    async parse(html) {
-        const definitions = await this.definitionStore.get();
-        const words = definitions.map(definition => definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-        const wordsRegEx = new RegExp("\\b(" + words.join("|") + ")\\b", "imgs");
-        const innerHTMLRegEx = new RegExp("(?<=<.+.>)(.*?)(?=<.*\/.+.?>)", "imgs");
+    async parse(text) {
+        if (!this.#definitions) {
+            this.#definitions = await this.definitionStore.get();
+            const words = this.#definitions.map(definition => definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            this.#regEx = new RegExp(`\b${words.join("|")}\b(?![^<]*>)`, "gmi")
+        }
 
-        return html.replaceAll(innerHTMLRegEx, (innerHTML) => {
-            return innerHTML.replaceAll(wordsRegEx, (word) => {
-                const definition = definitions.find(d => d.name.toLowerCase() === word.toLowerCase());
+        const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
+        element.innerHTML = text;
+
+        replaceText(element, (t) => {
+            return t.replaceAll(this.#regEx, (match) => {
+                const definition = this.#definitions.find(d => d.name.toLowerCase() === match.toLowerCase());
+
                 if (definition) {
-                    return createReplacement(definition, word);
+                    return createReplacement(definition, match);
                 }
-    
-                return word;
-            })
+
+                return match;
+            });
         });
+
+        return element.innerHTML;
     }
 
     async render(template) {
@@ -50,4 +59,21 @@ function createReplacement(definition, match) {
     }
 
     return replacement;
+}
+
+function replaceText(element, replaceFunction) {
+    if (element.nodeType === 3) {
+        const replaced = replaceFunction(element.textContent);
+        if(replaced === element.textContent) {
+            return;
+        }
+        const span = jsdom.JSDOM.fragment('<span></span>').firstElementChild
+        span.innerHTML = replaced;
+        element.replaceWith(span);
+    }
+    else if (element.hasChildNodes()) {
+        for (const child of element.childNodes) {
+            replaceText(child, replaceFunction);
+        }
+    }
 }

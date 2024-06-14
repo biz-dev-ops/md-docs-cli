@@ -7,12 +7,11 @@ const jsonSchemaParser = require('../../utils/json-schema-parser');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class UserTaskAnchorParser extends AnchorParser {
-  constructor({ userTaskParser, userTaskComponent, definitionParser }) {
+  constructor({ userTaskParser, userTaskComponent }) {
     super();
 
     this.userTaskParser = userTaskParser;
     this.component = userTaskComponent;
-    this.definitionParser = definitionParser;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.user-task.yml') || anchor.href.endsWith('.user-task.yaml'); }
@@ -41,6 +40,6 @@ module.exports = class UserTaskAnchorParser extends AnchorParser {
 
   async #getJson(file) {
     const json = await jsonSchemaParser.parse(file);
-    return JSON.parse((await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n"));
+    return json;
   }
 };
