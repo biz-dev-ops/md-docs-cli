@@ -5,14 +5,12 @@ const { env } = require('process');
 const summarizer = require('../../utils/bdd/features-summarizer');
 
 const AnchorParser = require('../anchor-parser');
-const { checkPrimeSync } = require('crypto');
 
 module.exports = class DasboardAnchorParser extends AnchorParser {
-    constructor({ dashboardComponent, definitionParser, gherkinParser, compositeFeatureParser }) {
+    constructor({ dashboardComponent, gherkinParser, compositeFeatureParser }) {
         super();
 
         this.component = dashboardComponent;
-        this.definitionParser = definitionParser;
         this.gherkinParser = gherkinParser;
         this.compositeFeatureParser = compositeFeatureParser;
     }
@@ -54,6 +52,6 @@ module.exports = class DasboardAnchorParser extends AnchorParser {
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.html`, html);
 
-        return await this.definitionParser.parse(html);
+        return html;
     }
 }

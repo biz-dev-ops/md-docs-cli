@@ -9,11 +9,10 @@ const jsonSchemaParser = require('../../utils/json-schema-parser');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class ModelAnchorParser extends AnchorParser {
-  constructor({ modelComponent, definitionParser }) {
+  constructor({ modelComponent }) {
     super();
 
     this.component = modelComponent;
-    this.definitionParser = definitionParser;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.model.yml') || anchor.href.endsWith('.model.yaml'); }

@@ -6,12 +6,11 @@ const colors = require('colors');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class FeatureAnchorParser extends AnchorParser {
-  constructor({ options, featureComponent, definitionParser, gherkinParser }) {
+  constructor({ options, featureComponent, gherkinParser }) {
     super();
 
     this.options = options;
     this.component = featureComponent;
-    this.definitionParser = definitionParser;
     this.gherkinParser = gherkinParser;
   }
 
@@ -27,7 +26,6 @@ module.exports = class FeatureAnchorParser extends AnchorParser {
 
     console.info(colors.green(`\t\t\t\t* rendering`));
     const html = this.component.render({ features });
-
-    return await this.definitionParser.parse(html);
+    return html;
   }
 };

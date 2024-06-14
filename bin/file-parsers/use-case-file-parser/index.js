@@ -7,10 +7,9 @@ const jsonSchemaParser = require('../../utils/json-schema-parser');
 module.exports = class UseCaseFileParser {
     _extensions = [ ".command.yml", ".query.yml", ".event.yml", ".task.yml", ".command.yaml", ".query.yaml", ".event.yaml", ".task.yaml"];
 
-    constructor({ options, pageUtil, definitionParser }) {
+    constructor({ options, pageUtil }) {
         this.options = options;
         this.pageUtil = pageUtil;
-        this.definitionParser = definitionParser;
     }
     
     async parse(file) {
@@ -37,7 +36,7 @@ module.exports = class UseCaseFileParser {
 
     async #getJson(file) {
         let json = await jsonSchemaParser.parse(file);
-        json = (await this.definitionParser.render(JSON.stringify(json))).replace(/\n/g, "\\n");
-        return JSON.parse(json);
+       
+        return json;
     }
 }

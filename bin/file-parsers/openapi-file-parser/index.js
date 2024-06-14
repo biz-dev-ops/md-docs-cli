@@ -6,10 +6,9 @@ const colors = require('colors');
 const jsonSchemaParser = require('../../utils/json-schema-parser');
 
 module.exports = class OpenapiFileParser {
-    constructor({ options, openapiComponent, definitionParser, pageUtil }) {
+    constructor({ options, openapiComponent, pageUtil }) {
         this.options = options;
         this.component = openapiComponent;
-        this.definitionParser = definitionParser;
         this.pageUtil = pageUtil;
     }
 
@@ -43,7 +42,6 @@ module.exports = class OpenapiFileParser {
         };
 
         json.schema = await jsonSchemaParser.parse(file);
-        json.schema = (await this.definitionParser.render(JSON.stringify(json.schema))).replace(/\n/g, "\\n");
 
         return json;
     }

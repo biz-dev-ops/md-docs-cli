@@ -5,11 +5,10 @@ const colors = require('colors');
 const AnchorParser = require('../anchor-parser');
 
 module.exports = class FeaturesAnchorParser extends AnchorParser {
-  constructor({ featureComponent, definitionParser, gherkinParser, compositeFeatureParser }) {
+  constructor({ featureComponent, gherkinParser, compositeFeatureParser }) {
     super();
 
     this.component = featureComponent;
-    this.definitionParser = definitionParser;
     this.gherkinParser = gherkinParser;
     this.compositeFeatureParser = compositeFeatureParser;
   }
@@ -36,6 +35,6 @@ module.exports = class FeaturesAnchorParser extends AnchorParser {
       await fs.writeFile(`${file}.grouped.json`, JSON.stringify(grouped));
 
     console.info(colors.green(`\t\t\t\t* rendering`));
-    return await this.definitionParser.parse(this.component.render({ features: grouped }));
+    return this.component.render({ features: grouped });
   }
 };
