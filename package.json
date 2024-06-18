@@ -61,7 +61,7 @@
     "pagedjs": "^0.4.3",
     "prismjs": "^1.29.0",
     "pug": "^3.0.2",
-    "puppeteer": "^22.0.0",
+    "puppeteer": "^18.1.0",
     "svg-pan-zoom": "^3.6.1",
     "swagger-ui-dist": "^5.1.1",
     "uuid": "^10.0.0",
