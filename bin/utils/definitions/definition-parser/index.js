@@ -38,7 +38,7 @@ module.exports = class DefinitionParser {
         if (!this.#definitions) {
             this.#definitions = (await this.definitionStore.get())
                 .reduce((result, definition) => {
-                    result[definition.name.replaceAll(" ", "_")] = definition.text;
+                    result[definition.name.replaceAll(" ", "-")] = definition.text;
                     return result;
                 }, {});
         }

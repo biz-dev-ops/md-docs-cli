@@ -2,7 +2,6 @@ const path = require('path');
 const yaml = require('js-yaml');
 const colors = require('colors');
 const files = require('../../files');
-const { defaultArgs } = require('puppeteer');
 
 module.exports = class DefinitionStore {
     #data = null;
@@ -32,7 +31,7 @@ module.exports = class DefinitionStore {
                 return;
 
             console.info(colors.yellow(`\t* reading ${path.relative(this.options.dst, file)}`));
-            const definitions = await this.#parse(file, pages);
+            const definitions = await this.#parse(file);
             console.info(colors.yellow(`\t\t * ${definitions.length} definitions found, merging.`));
 
             this.#data = this.#data.concat(definitions);
@@ -49,6 +48,17 @@ module.exports = class DefinitionStore {
                 
                 return target;
             }, [])
+
+            .concat(
+                pages
+                    .find(page => page.type === "page" && page.meta?.description)
+                    .map(page => ({
+                        name: page.name,
+                        text: page.meta.description,
+                        alias: page.alias,
+                        link: page.url
+                    }))
+            )
             .flatMap(definition => {
                 const aliasses = [ definition.name ];
                 
@@ -90,11 +100,10 @@ module.exports = class DefinitionStore {
             }
         }
         
-        const link = pages.findFirst(definition.name)?.url;
-        if(link) {
-            definition.link = link;
+        definition.link = pages.findFirst(definition.name)?.url;
+        if(!definition.link) {
+            delete definition.link;
         }
-
         return definition;
     }
 
