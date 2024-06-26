@@ -58,7 +58,7 @@
 
   window.addEventListener("ariaExpanded", (event) => {
     const container = event.detail.target;
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector('div[data-fullscreen] svg');
     if(!svg) {
       return;
     }
