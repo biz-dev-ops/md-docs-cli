@@ -53,7 +53,7 @@ module.exports = class DefinitionStore {
                 pages
                     .find(page => page.type === "page" && page.meta?.description)
                     .map(page => ({
-                        name: page.name,
+                        name: page.name.toLowerCase(),
                         text: page.meta.description,
                         alias: page.alias,
                         link: page.url

@@ -13,7 +13,7 @@ module.exports = class DefinitionParser {
         if (!this.#definitions) {
             this.#definitions = await this.definitionStore.get();
             const words = this.#definitions.map(definition => definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-            this.#regEx = new RegExp(`\b${words.join("|")}\b(?![^<]*>)`, "gmi")
+            this.#regEx = new RegExp(`\b${words.join("|")}(?![^<]*>)`, "gmi")
         }
 
         const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;

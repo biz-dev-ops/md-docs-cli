@@ -75,7 +75,7 @@ module.exports = class MarkdownFileParser {
         if(!this.#definitions) {
             this.#definitions = (await this.definitionStore.get())
                 .reduce((result, definition) => { 
-                    result[definition.name.replaceAll(" ", "_")] = definition.text;
+                    result[definition.name.replaceAll(" ", "_").toLowerCase()] = definition.text;
                     return result;
                 }, {});
         }
