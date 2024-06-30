@@ -44,6 +44,7 @@ const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
 const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
 const OpenapiFileParser = require('../file-parsers/openapi-file-parser');
+const PumlFileParser = require('../file-parsers/puml-file-parser');
 const SvgFileParser = require('../file-parsers/svg-file-parser');
 const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
 
@@ -185,14 +186,88 @@ module.exports = class App {
     }
 
     async #parse(options) {
-        console.info();
-        console.info(colors.yellow(`parsing uml files`));
+        await parseFiles.bind(this)();
+        await parseUml.bind(this)();
+        await parseMarkdown.bind(this)();
 
-        process.stdout.write("\nparsing puml files:\n");
+        async function parseMarkdown() {
+            const totalFiles = await files.count(options.dst);
+            let current = 0;
+            process.stdout.write("\nparsing mardkdown files:\n");
 
-        const cmd = "java",
-            args = [
-                "-jar", 
+            await files.each(options.dst, async (file) => {
+                current += 1;
+
+                try {
+                    const markdownFileParser = this.container.resolve('markdownFileParser');
+
+                    const dir = process.cwd();
+
+                    //Set current working directory to file path
+                    process.chdir(path.dirname(file));
+
+                    await markdownFileParser.parse(file);
+
+                    //Reset current working directory
+                    process.chdir(dir);
+                }
+                catch (error) {
+                    await this.#onError(file, error);
+
+                    if (process.env.NODE_ENV === 'development') {
+                        throw (error);
+                    }
+                }
+
+                logger.progress(totalFiles, current);
+            });
+        }
+
+        async function parseFiles() {
+            const fileParser = this.container.resolve('fileParser');
+            const totalFiles = await files.count(options.dst);
+            let current = 0;
+            
+            process.stdout.write("\nparsing files:\n");
+
+            await files.each(options.dst, async (file) => {
+                current += 1;
+
+                try {
+                    console.info();
+                    console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
+
+                    const dir = process.cwd();
+
+                    //Set current working directory to file path
+                    process.chdir(path.dirname(file));
+
+                    await fileParser.parse(file);
+
+                    //Reset current working directory
+                    process.chdir(dir);
+                }
+                catch (error) {
+                    await this.#onError(file, error);
+
+                    if (process.env.NODE_ENV === 'development') {
+                        throw (error);
+                    }
+                }
+
+                logger.progress(totalFiles, current);
+            });
+            return { totalFiles, current };
+        }
+
+        async function parseUml() {
+            console.info();
+            console.info(colors.yellow(`parsing uml files`));
+
+            process.stdout.write("\nparsing puml files:\n");
+
+            const cmd = "java", args = [
+                "-jar",
                 `${__dirname}/../plantuml-1.2023.13.jar`,
                 `${options.dst}/**.puml`,
                 "-tsvg",
@@ -201,90 +276,26 @@ module.exports = class App {
                 "-progress"
             ];
 
-        let promise = execFile(cmd, args);
-        let current = 0;
+            const promise = execFile(cmd, args);
+            let current = 0;
 
-        promise.child.stdout.on('data', function(data) {
-            current = (data.match(/#/g)||[]).length;
-            logger.progress(30, current);
-            process.stdout.write(data);
-        });
-        
-        promise.child.stderr.on('data', function(data) {
-            process.stdout.write(data);
-        });
+            promise.child.stdout.on('data', function (data) {
+                current = (data.match(/#/g) || []).length;
+                logger.progress(30, current);
+                process.stdout.write(data);
+            });
 
-        await promise;
-        if(current < 30) {
-            logger.progress(30, 30);
+            promise.child.stderr.on('data', function (data) {
+                process.stdout.write(data);
+            });
+
+            await promise;
+            if (current < 30) {
+                logger.progress(30, 30);
+            }
+
+            console.info(colors.green(`uml files parsed`));
         }
-        
-        console.info(colors.green(`uml files parsed`));
-
-        const fileParser = this.container.resolve('fileParser');
-
-        let totalFiles = await files.count(options.dst);
-        current = 0;
-        process.stdout.write("\nparsing files:\n");
-
-        await files.each(options.dst, async (file) => {
-            current += 1;
-
-            try {
-                console.info();
-                console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
-
-                const dir = process.cwd();
-
-                //Set current working directory to file path
-                process.chdir(path.dirname(file));
-
-                await fileParser.parse(file);
-
-                //Reset current working directory
-                process.chdir(dir);
-            }
-            catch(error) {
-                await this.#onError(file, error);
-
-                if (process.env.NODE_ENV === 'development') {
-                    throw(error);
-                }
-            }
-
-            logger.progress(totalFiles, current);
-        });
-
-        totalFiles = await files.count(options.dst);
-        current = 0;
-        process.stdout.write("\nparsing mardkdown files:\n");
-
-        await files.each(options.dst, async (file) => {
-            current += 1;
-            
-            try {
-                const markdownFileParser =  this.container.resolve('markdownFileParser');
-
-                const dir = process.cwd();
-
-                //Set current working directory to file path
-                process.chdir(path.dirname(file));
-                
-                await markdownFileParser.parse(file);
-
-                //Reset current working directory
-                process.chdir(dir);
-            }
-            catch(error) {
-                await this.#onError(file, error);
-                
-                if (process.env.NODE_ENV === 'development') {
-                    throw(error);
-                }
-            }
-            
-            logger.progress(totalFiles, current);
-        });
     }
     
 
@@ -449,6 +460,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
             'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
             'openapiFileParser': asClass(OpenapiFileParser).singleton(),
+            'pumlFileParser': asClass(PumlFileParser).singleton(),
             'svgFileParser': asClass(SvgFileParser).singleton(),
             'useCaseFileParser': asClass(UseCaseFileParser).singleton(),
 
@@ -519,6 +531,7 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',
                 'openapiFileParser',
+                'pumlFileParser',
                 'svgFileParser',
                 'useCaseFileParser'
             ],

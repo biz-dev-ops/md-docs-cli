@@ -1,9 +1,10 @@
 const fs = require('fs').promises;
-const { env, cwd } = require('process');
+const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
 const mustache = require('mustache');
 const files = require('../../utils/files');
+const yaml = require('js-yaml');
 
 module.exports = class MarkdownFileParser {
     #definitions = null;
@@ -74,14 +75,22 @@ module.exports = class MarkdownFileParser {
         if(!this.#definitions) {
             this.#definitions = (await this.definitionStore.get())
                 .reduce((result, definition) => { 
-                    result[definition.name.replaceAll(" ", "_")] = definition.text;
+                    result[definition.name.replaceAll(" ", "_").toLowerCase()] = definition.text;
                     return result;
                 }, {});
         }
-        return {
+
+        let data = {
             title: await this.#getTitle(file),
             definitions: this.#definitions
+        };
+
+        const ymlFile = `${file}.yml`;    
+        if (await files.exists(ymlFile)) {
+            data = Object.assign(data, yaml.load(await files.readFileAsString(ymlFile)));
         }
+
+        return data;
     }
 
     async #getTitle(file) {

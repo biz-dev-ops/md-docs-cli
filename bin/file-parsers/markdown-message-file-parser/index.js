@@ -57,10 +57,12 @@ module.exports = class MarkdownMessageFileParser {
         if (await files.exists(ymlFile)) {
             const d = yaml.load(await files.readFileAsString(ymlFile)) || {};
 
+            //TODO: check this
             for (const reference of data.references) {
                 const found = d.references?.find(r => r.name === reference.name);
-                if (found)
+                if (found) {
                     reference.value = found.value;
+                }
             }
 
             delete d.references;

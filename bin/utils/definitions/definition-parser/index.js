@@ -13,7 +13,7 @@ module.exports = class DefinitionParser {
         if (!this.#definitions) {
             this.#definitions = await this.definitionStore.get();
             const words = this.#definitions.map(definition => definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-            this.#regEx = new RegExp(`\b${words.join("|")}\b(?![^<]*>)`, "gmi")
+            this.#regEx = new RegExp(`${words.map(word => `\\b${word}\\b`).join("|")}(?![^<]*>)`, "gmi");
         }
 
         const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
@@ -38,7 +38,7 @@ module.exports = class DefinitionParser {
         if (!this.#definitions) {
             this.#definitions = (await this.definitionStore.get())
                 .reduce((result, definition) => {
-                    result[definition.name.replaceAll(" ", "_")] = definition.text;
+                    result[definition.name.replaceAll(" ", "-")] = definition.text;
                     return result;
                 }, {});
         }

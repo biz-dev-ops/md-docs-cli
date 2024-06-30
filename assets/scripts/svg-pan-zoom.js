@@ -3,7 +3,7 @@
 
   function onOpenFullscreen(e) {
     const container = e.currentTarget;
-    panZoom = svgPanZoom(container.querySelector('svg'));
+    makeItFit(container.querySelector('svg'));
 
     container.addEventListener('closefullscreen', onCloseFullscreen);
     container.querySelectorAll('[data-figure-zoom]').forEach(button => button.addEventListener('click', onZoomButtonClick));
@@ -12,18 +12,15 @@
 
   function onCloseFullscreen(e) {
     const container = e.currentTarget;
-    panZoom.resize();
-    panZoom.fit();
-    panZoom.center();
-    panZoom.destroy();
-    panZoom = null;
+    
+    makeItFit(container.querySelector('svg'));
 
     container.removeAttribute('data-fullscreen-zoom');
     container.removeEventListener('closefullscreen', onCloseFullscreen);
     container.querySelectorAll('[data-figure-zoom]').forEach(button => button.removeEventListener('click', onZoomButtonClick));
   }
 
-  function onZoomButtonClick() {
+  function onZoomButtonClick(event) {
     switch (event.currentTarget.dataset.figureZoom) {
       case 'in':
         panZoom.zoomIn();
@@ -38,5 +35,36 @@
     }
   }
 
-  document.querySelectorAll(':is(div[data-fullscreen]):has(figure svg)').forEach(element => element.addEventListener('openfullscreen', onOpenFullscreen));
+  function makeItFit(svg) {
+    if(!panZoom) {
+      panZoom = svgPanZoom(svg);
+    }
+    panZoom.resize();
+    panZoom.fit();
+    panZoom.center();
+  }
+
+  document.querySelectorAll(':is(div[data-fullscreen]):has(figure svg)').forEach(container => {
+    container.addEventListener('openfullscreen', onOpenFullscreen);
+    
+    if(!container.offsetParent) {
+      return;
+    }
+
+    makeItFit(container.querySelector('svg'));
+    panZoom.destroy();
+    panZoom = null;
+  });
+
+  window.addEventListener("ariaExpanded", (event) => {
+    const container = event.detail.target;
+    const svg = container.querySelector('div[data-fullscreen] svg');
+    if(!svg) {
+      return;
+    }
+
+    makeItFit(svg);
+    panZoom.destroy();
+    panZoom = null;
+  });
 })();
