@@ -125,6 +125,9 @@ module.exports = class App {
             console.info(colors.brightGreen('ready, shutting down.....'));
             return;
         }
+
+        console.dir(gitInfo);
+
         
         console.info(colors.green('\ncreating index.html'));
         await fs.writeFile(path.resolve(options.basePath, 'index.html'), `<!DOCTYPE html>
@@ -133,6 +136,8 @@ module.exports = class App {
                 <meta http-equiv="Refresh" content="0; URL=./${gitInfo.branches.find(b => b.mainBranch).path}index.html" />
             </head>
         </html>`);
+        
+        throw Error("");
 
         const hosting = this.container.resolve('hosting');
         await hosting.apply();
