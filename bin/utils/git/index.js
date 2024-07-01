@@ -60,7 +60,7 @@ exports.info = async function (options) {
             name: 'main',
             repository: 'undefined',
             url: mustache.render(options.git.urlTemplate, { repository: 'undefined', branch: 'undefined' }),
-            path: 'main',
+            path: 'main/',
             mainBranch: true
         };
 
