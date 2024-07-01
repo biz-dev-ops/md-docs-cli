@@ -1,7 +1,7 @@
 const yaml = require('js-yaml');
 const path = require('path');
 const util = require('util');
-const glob = util.promisify(require('glob-promise'));
+const { glob } = require('glob');
 const files = require('../../files');
 
 module.exports = class CompositeFeatureParser {
