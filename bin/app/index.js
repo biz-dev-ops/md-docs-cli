@@ -1,5 +1,6 @@
 const awilix = require('awilix');
 const util = require('util');
+const mustache = require('mustache');
 const execFile = util.promisify(require('child_process').execFile);
 const { glob } = require('glob');
 const { asClass, asValue } = require('awilix');
@@ -357,7 +358,7 @@ module.exports = class App {
         process.stdout.write("\n");
         process.stdout.write(colors.red(error.message));
 
-        const gitFile = gitInfo.branch.url.replace("{{{file}}}", relativeFile);
+        const gitFile =  mustache.render(options.git.urlTemplate, { repository: gitInfo.branch.repository, branch: gitInfo.branch.name });
             
         const content = `# Error
     

@@ -56,7 +56,7 @@ module.exports = class MarkdownFileParser {
         const showNav = this.#getShowNavInfo(this.options, file);
         const menuItems = await this.menu.items(file);
 
-        return this.component.render({
+        const pageData = {
             baseHref: this.pageUtil.relativeBaseHref(),
             root: this.pageUtil.relativeRootFromBaseHref(),
             showNav: showNav,
@@ -64,11 +64,13 @@ module.exports = class MarkdownFileParser {
             content: element.innerHTML,
             title: data.title,        
             git: this.gitInfo,
-            gitSourceFile: mustache.render(this.gitInfo.branch.url, { file: path.relative(this.options.dst, file) }),
+            gitSourceFile: mustache.render(this.options.git.urlTemplate, { repository: this.gitInfo.branch.repository, branch: this.gitInfo.branch.name, file: path.relative(this.options.dst, file) }),
             options: this.options.page || {},
             menu: menuItems,
             locale: await this.locale.get()
-        });
+        };
+
+        return this.component.render(pageData);
     }
 
     async #getData(file) {
