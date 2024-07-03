@@ -357,7 +357,7 @@ module.exports = class App {
         process.stdout.write("\n");
         process.stdout.write(colors.red(error.message));
 
-        const gitFile = path.join(gitInfo.branch.url, relativeFile);
+        const gitFile = gitInfo.branch.url.replace("{{{file}}}", relativeFile);
             
         const content = `# Error
     

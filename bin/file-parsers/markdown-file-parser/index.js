@@ -61,10 +61,10 @@ module.exports = class MarkdownFileParser {
             root: this.pageUtil.relativeRootFromBaseHref(),
             showNav: showNav,
             logout: logout,
-            sourceFile: path.relative(this.options.dst, file),
             content: element.innerHTML,
             title: data.title,        
             git: this.gitInfo,
+            gitSourceFile: mustache.render(this.gitInfo.branch.url, { file: path.relative(this.options.dst, file) }),
             options: this.options.page || {},
             menu: menuItems,
             locale: await this.locale.get()
