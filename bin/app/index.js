@@ -1,7 +1,7 @@
 const awilix = require('awilix');
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
-const glob = util.promisify(require('glob-promise'));
+const { glob } = require('glob');
 const { asClass, asValue } = require('awilix');
 const fs = require('fs').promises;
 const path = require('path');
