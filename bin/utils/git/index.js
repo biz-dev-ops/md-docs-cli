@@ -1,7 +1,6 @@
 const colors = require('colors');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-const mustache = require('mustache');
 require('../string')
 
 exports.info = async function (options) {
@@ -32,7 +31,6 @@ exports.info = async function (options) {
             .map(b => ({
                 name: b,
                 repository: repository,
-                url: mustache.render(options.git.urlTemplate, { repository, branch: b }),
                 mainBranch: remote.mainBranch === b,
             }))
             .map(b => Object.assign(b, {
@@ -59,7 +57,6 @@ exports.info = async function (options) {
         const branch = {
             name: 'main',
             repository: 'undefined',
-            url: mustache.render(options.git.urlTemplate, { repository: 'undefined', branch: 'undefined' }),
             path: 'main/',
             mainBranch: true
         };

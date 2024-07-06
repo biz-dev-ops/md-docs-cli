@@ -104,6 +104,17 @@ md-docs
 google-chrome dist/index.html
 ```
 
+### Pupteer
+
+Pupeteer requires a chromium browser to operate. By default pupeteer will try to install a chromium browser. Create the folowing environment variables if you want to use your own chrome / chromium browser:
+
+* PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+* PUPPETEER_EXECUTABLE_PATH={path to chrome / chromium executable}
+
+### Java
+
+md-docs depends on java to render UML diagrams. Make sure that the java is installed and that the bin folder is added to path environment variable.
+
 ## Options
 
 ### branches only

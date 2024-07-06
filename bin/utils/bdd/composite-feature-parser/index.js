@@ -49,7 +49,7 @@ module.exports = class CompositeFeatureParser {
         }  
         
         if(obj.glob) {
-            let files = await glob(obj.glob);
+            let files = await glob(obj.glob.replace(/\\/g, "/"));
 
             files = files
                 .filter(file => !file.includes("release."))

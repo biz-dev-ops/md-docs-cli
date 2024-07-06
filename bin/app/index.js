@@ -1,5 +1,6 @@
 const awilix = require('awilix');
 const util = require('util');
+const mustache = require('mustache');
 const execFile = util.promisify(require('child_process').execFile);
 const { glob } = require('glob');
 const { asClass, asValue } = require('awilix');
@@ -357,7 +358,7 @@ module.exports = class App {
         process.stdout.write("\n");
         process.stdout.write(colors.red(error.message));
 
-        const gitFile = gitInfo.branch.url.replace("{{{file}}}", relativeFile);
+        const gitFile =  mustache.render(options.git.urlTemplate, { repository: gitInfo.branch.repository, branch: gitInfo.branch.name });
             
         const content = `# Error
     
@@ -400,7 +401,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer-dist') },
 
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
-            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2')))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
+            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
             
             { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.basePath, 'assets/pagedjs') },
 
