@@ -1,70 +1,88 @@
 const fs = require('fs').promises;
-const path = require('path');
-const colors = require('colors');
-const { env } = require('process');
-const { v4: uuidv4 } = require('uuid');
 const files = require('../../utils/files');
+const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
 
 module.exports = class BPMNFileParser {
-    #urlsRegex = /url\('#([^')]*)/gm;
-
-    constructor({ options, headlessBrowser, sitemap }) {
+    constructor({ options, sitemap }) {
         this.options = options;
-        this.headlessBrowser = headlessBrowser;
         this.sitemap = sitemap;
+        
+        const xmlOptions = {
+            ignoreAttributes: false,
+            attributeNamePrefix : "@_",
+            allowBooleanAttributes: true
+        };
+
+        this.parser = new XMLParser(xmlOptions);
+        this.builder =  new XMLBuilder(xmlOptions);
     }
 
     async parse(file) {
         if (!(file.endsWith('.bpmn')))
             return;
 
-        const svgFile = `${file}.svg`;
-        console.info(colors.green(`\t* creating ${path.relative(this.options.dst, svgFile)}`));
+        const xml = await this.#addLinksToBPMN(file);
 
-        let svg = await this.#createSvg(file);
-        svg = await this.sitemap.link(
-            svg,
-            "text"
-        );
-
-        await fs.writeFile(svgFile, svg);
+        await fs.writeFile(file, xml);
     }
 
-    async #createSvg(file) {
+    async #addLinksToBPMN(file) {
         const xml = await files.readFileAsString(file);
-        const page = await this.#getPage();
-        let svg = await page.evaluate(async (xml) => {
-            //Executes in context of the page, see viewer.html
-            return await convertToSVG(xml);
-        }, xml);
 
-        svg = this.#fixReferenceToHiddenElementBug(svg);
+        let xmlObject = this.parser.parse(xml);
+        console.dir(xmlObject);
 
-        if (env.NODE_ENV === 'development')
-            await fs.writeFile(`${file}.raw.svg`, svg);
+        traverseJsonObject(null, xmlObject, this.#checkElement.bind(this));
+        console.dir(this.builder.build(xmlObject));
 
-        return svg;
+        throw Error("");
+
+        return this.builder.build(xmlObject);
     }
 
-    #fixReferenceToHiddenElementBug(svg) {
-        Array.from(svg.matchAll(this.#urlsRegex)).forEach((match) => {
-            const url = match[1];
-            svg = svg.replaceAll(url, `${url}-${uuidv4()}`);
-        });
-        return svg;
-    }
-
-    async #getPage() {
-        if(this.page) {
-            return this.page;
+    #checkElement(elementName, el) {
+        if(!el?.hasOwnProperty("@_name") || elementName === "bizdevops:link") {
+            return;
         }
 
-        const script = await files.readFileAsString(require.resolve('bpmn-js/dist/bpmn-viewer.production.min.js'));
+        const links = this.#findLinks(el["@_name"]);
 
-        this.page = await this.headlessBrowser.newPage({
-            url: `file://${__dirname}/viewer.html`
-        });
-        await this.page.addScriptTag({ content: script});
-        return this.page;
+        if(!links || links.length === 0) {
+            return;
+        }
+
+        el["bizdevops:links"] = {
+            "bizdevops:link": links.map(link => new {
+                "@_link": link.href,
+                "@_name": link.name
+            })
+        };
+
+        console.dir({ elementName, el })
+    }
+
+    #findLinks(name) {
+        return [];
+    }
+}
+
+
+
+function traverseJsonObject(objKey, obj, callback) {
+    // Check if the object is null, undefined, or a primitive value
+    if (obj === null || typeof obj !== 'object') {
+        return;
+    }
+
+    // Iterate through each key-value pair
+    for (const key in obj) {
+        
+        // Call the callback function for the current key-value pair
+        callback(objKey, key, obj[key]);
+
+        // If the value is an object, recursively traverse it
+        if (typeof obj[key] === 'object') {
+            traverseJsonObject(key, obj[key], callback);
+        }
     }
 }
