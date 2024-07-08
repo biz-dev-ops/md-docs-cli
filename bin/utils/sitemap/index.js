@@ -178,6 +178,8 @@ module.exports = Sitemap;
 
 function SitemapArray() {
     this.find = function(comparer) {
+        comparer =  createComparer(comparer);
+
         const hits = [];
 
         this.forEach(element => {
@@ -201,10 +203,7 @@ function SitemapArray() {
     }
 
     this.findFirst = function(comparer) {
-        if(typeof comparer === "string") {
-            const name = comparer;
-            comparer = (page) => page.slug === Sitemap.slugify(name);
-        }
+        comparer =  createComparer(comparer);
 
         let hit = null;
 
@@ -226,6 +225,15 @@ function SitemapArray() {
 
         return hit;
     }
+}
+
+function createComparer(comparer) {
+    if(typeof comparer === "string") {
+        const name = comparer;
+        comparer = (page) => page.slug === Sitemap.slugify(name);
+    }
+
+    return comparer;
 }
 
 SitemapArray.prototype = [];

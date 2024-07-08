@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const files = require('../../utils/files');
-const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
+const { XMLParser, XMLBuilder } = require("fast-xml-parser");
 
 module.exports = class BPMNFileParser {
     constructor({ options, sitemap }) {
@@ -30,59 +30,59 @@ module.exports = class BPMNFileParser {
         const xml = await files.readFileAsString(file);
 
         let xmlObject = this.parser.parse(xml);
-        console.dir(xmlObject);
 
-        traverseJsonObject(null, xmlObject, this.#checkElement.bind(this));
-        console.dir(this.builder.build(xmlObject));
+        xmlObject["bpmn:definitions"]["@_xmlns:bizdevops"] = "https://github.com/biz-dev-ops/web-components/schema/1.0";
 
-        throw Error("");
+        await traverseJsonObject(null, xmlObject, this.#checkElement.bind(this));
 
         return this.builder.build(xmlObject);
     }
 
-    #checkElement(elementName, el) {
-        if(!el?.hasOwnProperty("@_name") || elementName === "bizdevops:link") {
+    async #checkElement(elementName, el) {
+        if(el?.hasOwnProperty("@_name") === false || elementName === "bizdevops:link") {
+            return;
+        }
+        
+        const links = await this.#findLinks(el["@_name"]);
+
+        if(links?.length === 0) {
             return;
         }
 
-        const links = this.#findLinks(el["@_name"]);
-
-        if(!links || links.length === 0) {
-            return;
+        if(!el.hasOwnProperty("bpmn:extensionElements")) {
+            el["bpmn:extensionElements"] = {};
         }
 
-        el["bizdevops:links"] = {
-            "bizdevops:link": links.map(link => new {
-                "@_link": link.href,
-                "@_name": link.name
-            })
+        el["bpmn:extensionElements"]["bizdevops:links"] = {
+            "bizdevops:link": links.map(link => ({
+                    "@_value": link.url,
+                    "@_name": link.name
+            }))
         };
-
-        console.dir({ elementName, el })
     }
 
-    #findLinks(name) {
-        return [];
+    async #findLinks(name) {
+        if(!this.sitemapArray) {
+            this.sitemapArray = await this.sitemap.items();
+        }
+        
+        return this.sitemapArray.find(name).map(m => ({ 
+            name: m.name,
+            url: m.url
+        }));
     }
 }
 
-
-
-function traverseJsonObject(objKey, obj, callback) {
-    // Check if the object is null, undefined, or a primitive value
+async function traverseJsonObject(objKey, obj, callback) {
     if (obj === null || typeof obj !== 'object') {
         return;
     }
 
-    // Iterate through each key-value pair
     for (const key in obj) {
-        
-        // Call the callback function for the current key-value pair
-        callback(objKey, key, obj[key]);
+        await callback(Array.isArray(obj) ? objKey : key, obj[key]);
 
-        // If the value is an object, recursively traverse it
         if (typeof obj[key] === 'object') {
-            traverseJsonObject(key, obj[key], callback);
+            await traverseJsonObject(key, obj[key], callback);
         }
     }
 }
