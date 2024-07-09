@@ -1,16 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0j9fmsl" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.24.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="1.1.0">
+ <?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
+  xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0j9fmsl"
+  targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.24.0"
+  modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.4.0">
   <bpmn:collaboration id="Collaboration_1dgigxx">
     <bpmn:participant id="Participant_0jqpmhz" name="test" processRef="Process_147dvfq" />
     <bpmn:participant id="Participant_0ir0pn1" name="test" />
-    <bpmn:messageFlow id="Flow_00yxw0h" name="dashboard" sourceRef="Activity_16oc5ne" targetRef="Participant_0ir0pn1" />
+    <bpmn:messageFlow id="Flow_00yxw0h" name="dashboard" sourceRef="Activity_16oc5ne"
+      targetRef="Participant_0ir0pn1" />
   </bpmn:collaboration>
   <bpmn:process id="Process_147dvfq" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="test">
       <bpmn:outgoing>Flow_0endjlp</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0endjlp" sourceRef="StartEvent_1" targetRef="Activity_03o50yg" />
-    <bpmn:sequenceFlow id="Flow_0p3axaq" name="test" sourceRef="Activity_03o50yg" targetRef="Activity_0fdm3k3" />
+    <bpmn:sequenceFlow id="Flow_0p3axaq" name="test" sourceRef="Activity_03o50yg"
+      targetRef="Activity_0fdm3k3" />
     <bpmn:sequenceFlow id="Flow_0qw6evh" sourceRef="Activity_0fdm3k3" targetRef="Gateway_1nptrtf" />
     <bpmn:sequenceFlow id="Flow_1tg9m8g" sourceRef="Event_03fgafx" targetRef="Activity_0g9jx39" />
     <bpmn:sequenceFlow id="Flow_1d1sws2" sourceRef="Activity_0g9jx39" targetRef="Activity_16oc5ne" />
@@ -63,7 +72,8 @@
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1dgigxx">
-      <bpmndi:BPMNShape id="Participant_0jqpmhz_di" bpmnElement="Participant_0jqpmhz" isHorizontal="true">
+      <bpmndi:BPMNShape id="Participant_0jqpmhz_di" bpmnElement="Participant_0jqpmhz"
+        isHorizontal="true">
         <dc:Bounds x="129" y="50" width="1131" height="540" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -167,7 +177,8 @@
         <di:waypoint x="655" y="117" />
         <di:waypoint x="712" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Participant_01ip7db_di" bpmnElement="Participant_0ir0pn1" isHorizontal="true">
+      <bpmndi:BPMNShape id="Participant_01ip7db_di" bpmnElement="Participant_0ir0pn1"
+        isHorizontal="true">
         <dc:Bounds x="380" y="690" width="600" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
