@@ -1,7 +1,6 @@
 const colors = require('colors');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-require('../string')
 
 exports.info = async function (options) {
     console.info();

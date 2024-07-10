@@ -11,9 +11,12 @@ const { cwd } = require('process');
 const files = require('./utils/files');
 const App = require('./app');
 
+const mdDocsVersion = require("../package.json").version;
+
 async function run(o) {
-    const logo = await figlet('md-docs-cli');
+    const logo = await figlet(`md-docs-cli`);
     console.info(logo);
+    console.info(`version ${mdDocsVersion}`);
 
     const options = await createOptions(o);
 
