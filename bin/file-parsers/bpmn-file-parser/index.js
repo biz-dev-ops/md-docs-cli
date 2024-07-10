@@ -10,7 +10,9 @@ module.exports = class BPMNFileParser {
         const xmlOptions = {
             ignoreAttributes: false,
             attributeNamePrefix : "@_",
-            allowBooleanAttributes: true
+            indentBy: "  ",
+            format: true,
+            suppressBooleanAttributes: false
         };
 
         this.parser = new XMLParser(xmlOptions);
