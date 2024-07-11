@@ -196,12 +196,9 @@ module.exports = class App {
             const totalFiles = (await files.count(options.dst)) * fileParsers.length;
             let current = 0;
             
-            process.stdout.write(`\nparsing ${name}:\n`);
+            process.stdout.write(`\${name}:\n`);
 
             await files.each.bind(this)(options.dst, async (file) => {
-                console.info();
-                console.info(colors.yellow(`${path.relative(options.dst, file)}`));
-
                 const dir = process.cwd();
 
                 //Set current working directory to file path
@@ -209,6 +206,10 @@ module.exports = class App {
                 
                 for (const fileParser of fileParsers) {
                     current += 1;
+                    
+                    console.info();
+                    console.info(colors.yellow(`nparsing ${path.relative(options.dst, file)} with ${fileParser.constructor.name}`));
+
                     try 
                     {
                         await fileParser.parse(file);
