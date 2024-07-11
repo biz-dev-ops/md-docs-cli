@@ -2,12 +2,13 @@
   function onOpenFullscreen(e) {
     const container = e.currentTarget;
     const bpmnViewer = container.querySelector('bpmn-viewer');
-    bpmnViewer.zoomReset();
+    bpmnViewer.toggleInteraction(true);
 
     container.addEventListener('closefullscreen', onCloseFullscreen);
     container.querySelectorAll('[data-figure-zoom]').forEach(button => button.addEventListener('click', onZoomButtonClick));
     container.setAttribute('data-fullscreen-zoom', true);
 
+    bpmnViewer.zoomReset();
     setTimeout(() => {
       bpmnViewer.zoomReset();
     }, 1);
@@ -16,12 +17,13 @@
   function onCloseFullscreen(e) {
     const container = e.currentTarget;
     const bpmnViewer = container.querySelector('bpmn-viewer');
-    bpmnViewer.zoomReset();
+    bpmnViewer.toggleInteraction(false);
 
     container.removeAttribute('data-fullscreen-zoom');
     container.removeEventListener('closefullscreen', onCloseFullscreen);
     container.querySelectorAll('[data-figure-zoom]').forEach(button => button.removeEventListener('click', onZoomButtonClick));
 
+    bpmnViewer.zoomReset();
     setTimeout(() => {
       bpmnViewer.zoomReset();
     }, 1);
