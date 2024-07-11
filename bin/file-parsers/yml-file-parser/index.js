@@ -6,7 +6,7 @@ const yaml = require('js-yaml');
 const files = require('../../utils/files'); 
 
 module.exports = class UseCaseFileParser {
-    _extensions = [ ".command.yml", ".query.yml", ".event.yml", ".task.yml", ".command.yaml", ".query.yaml", ".event.yaml", ".task.yaml", ".md.yml", ".md.yaml"];
+    _extensions = [ ".command.yml", ".query.yml", ".event.yml", ".task.yml", ".command.yaml", ".query.yaml", ".event.yaml", ".task.yaml", ".md"];
     
     constructor({ options, pageUtil }) {
         this.options = options;
@@ -16,23 +16,37 @@ module.exports = class UseCaseFileParser {
     async parse(file) {
         if (!this._extensions.some(extension => file.endsWith(extension)))
             return;
-
-        const yml = await this.#addNameToYml(file);
         
-        await fs.writeFile(file, yml);
-        console.dir({
-            yml,
-            json: JSON.stringify(yaml.load(yml))
-        });
+        const ymlFile = await this.#determineYmlFile(file);
+        const yml = await this.#addNameToYml(ymlFile);
 
-        await fs.writeFile(`${file}.json`, JSON.stringify(yaml.load(yml)));
+        await fs.writeFile(`${ymlFile}`, yml);
+        await fs.writeFile(`${ymlFile}.json`, JSON.stringify(yaml.load(yml)));
+    }
+
+    async #determineYmlFile(file) {
+        if(!file.endsWith(".md"))
+            return file;
+
+        const ymlFile = `${file}.yml`;
+        const ymlFiles = [ymlFile, `${file}.yaml`];
+        
+        let f;
+        while(f = ymlFiles.pop()) {
+            if(await files.exists(f)) {
+                return f;
+            }
+        }
+        
+        await fs.writeFile(ymlFile, "");
+        return ymlFile;
     }
 
     async #addNameToYml(file) {
         const yml = await files.readFileAsString(file);
 
         console.info(colors.green(`\t\t\t\t* parsing yaml`));
-        const json = yaml.load(yml);
+        const json = yaml.load(yml) || {};
 
         if(!this.#isLiteralObject(json))
             return yml;

@@ -83,7 +83,7 @@ module.exports = class MarkdownFileParser {
         }
 
         let data = {
-            title: await this.#getTitle(file),
+            title: await this.#getMarkdownTitle(file),
             definitions: this.#definitions
         };
 
@@ -92,14 +92,15 @@ module.exports = class MarkdownFileParser {
             data = Object.assign(data, yaml.load(await files.readFileAsString(ymlFile)));
         }
 
+        data.title = data.title || data.name;
+        
         return data;
     }
 
-    async #getTitle(file) {
-        const urlTitle = this.pageUtil.getTitleFromUrl(file);
+    async #getMarkdownTitle(file) {
         const markdownTitle = await this.pageUtil.getTitleFromMarkdown(file);
         if(!markdownTitle) {
-            return urlTitle;
+            return null;
         }
         return mustache.render(markdownTitle, { title: urlTitle });
     }

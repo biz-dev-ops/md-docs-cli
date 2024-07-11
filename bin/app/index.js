@@ -188,9 +188,43 @@ module.exports = class App {
     }
 
     async #parse(options) {
+        await parseYmlFiles.bind(this)();
         await parseFiles.bind(this)();
         await parseUml.bind(this)();
         await parseMarkdown.bind(this)();
+
+        async function parseYmlFiles() {
+            const totalFiles = await files.count(options.dst);
+            let current = 0;
+            process.stdout.write("\nparsing yml files:\n");
+
+            await files.each(options.dst, async (file) => {
+                current += 1;
+
+                try {
+                    const markdownFileParser = this.container.resolve('ymlFileParser');
+
+                    const dir = process.cwd();
+
+                    //Set current working directory to file path
+                    process.chdir(path.dirname(file));
+
+                    await markdownFileParser.parse(file);
+
+                    //Reset current working directory
+                    process.chdir(dir);
+                }
+                catch (error) {
+                    await this.#onError(file, error);
+
+                    if (process.env.NODE_ENV === 'development') {
+                        throw (error);
+                    }
+                }
+
+                logger.progress(totalFiles, current);
+            });
+        }
 
         async function parseMarkdown() {
             const totalFiles = await files.count(options.dst);
@@ -524,6 +558,10 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'azureStaticWebApp'
             ],
 
+            'preFileParsers': [
+                'ymlFileParser'
+            ],
+
             //File parsers: order can be important!
             'fileParsers': [
                 'bpmnFileParser',
@@ -536,8 +574,11 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'openapiFileParser',
                 'pumlFileParser',
                 'svgFileParser',
-                'useCaseFileParser',
-                'ymlFileParser'
+                'useCaseFileParser'
+            ],
+
+            'postFileParsers': [
+                'markdownFileParser'
             ],
 
             //Html parsers, order is important!
