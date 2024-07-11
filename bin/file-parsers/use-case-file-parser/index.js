@@ -1,5 +1,4 @@
 const fs = require('fs').promises;
-const path = require('path');
 const colors = require('colors');
 
 const jsonSchemaParser = require('../../utils/json-schema-parser'); 
@@ -18,20 +17,8 @@ module.exports = class UseCaseFileParser {
 
         console.info(colors.green(`\t\t\t\t* parsing yaml`));
         const json = await this.#getJson(file);
-        if(!json.name) {
-            json.name = this.#getNameFromFile(file);
-        }
         
         await fs.writeFile(`${file}.json`, JSON.stringify(json));
-    }
-
-    #getNameFromFile(file) {
-        const name = path.basename(file).split(".")[0];
-        if(name !== "index") {
-            return this.pageUtil.createTitle(name);
-        }
-
-        return this.pageUtil.createTitle(path.basename(path.dirname(file)));
     }
 
     async #getJson(file) {
