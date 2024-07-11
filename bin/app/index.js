@@ -35,7 +35,6 @@ const HeadlessBrowser = require('../utils/headless-browser');
 
 const GherkinParser = require('../utils/bdd/gherkin-parser');
 
-const CompositeFileParser = require('../file-parsers/composite-file-parser');
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
 const DMNFileParser = require('../file-parsers/dmn-file-parser');
@@ -48,6 +47,7 @@ const OpenapiFileParser = require('../file-parsers/openapi-file-parser');
 const PumlFileParser = require('../file-parsers/puml-file-parser');
 const SvgFileParser = require('../file-parsers/svg-file-parser');
 const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
+const YmlFileParser = require('../file-parsers/yml-file-parser');
 
 const BPMNComponent = require('../components/bpmn-component');
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
@@ -189,78 +189,48 @@ module.exports = class App {
     }
 
     async #parse(options) {
-        await parseFiles.bind(this)();
+        await parseFiles.bind(this)("pre parsing files", this.container.resolve('preFileParsers'));
         await parseUml.bind(this)();
-        await parseMarkdown.bind(this)();
+        await parseFiles.bind(this)("parsing files", this.container.resolve('fileParsers'));
+        await parseFiles.bind(this)("post parsing files", this.container.resolve('postFileParsers'));
 
-        async function parseMarkdown() {
-            const totalFiles = await files.count(options.dst);
-            let current = 0;
-            process.stdout.write("\nparsing mardkdown files:\n");
-
-            await files.each(options.dst, async (file) => {
-                current += 1;
-
-                try {
-                    const markdownFileParser = this.container.resolve('markdownFileParser');
-
-                    const dir = process.cwd();
-
-                    //Set current working directory to file path
-                    process.chdir(path.dirname(file));
-
-                    await markdownFileParser.parse(file);
-
-                    //Reset current working directory
-                    process.chdir(dir);
-                }
-                catch (error) {
-                    await this.#onError(file, error);
-
-                    if (process.env.NODE_ENV === 'development') {
-                        throw (error);
-                    }
-                }
-
-                logger.progress(totalFiles, current);
-            });
-        }
-
-        async function parseFiles() {
-            const fileParser = this.container.resolve('fileParser');
-            const totalFiles = await files.count(options.dst);
+        async function parseFiles(name, fileParsers) {
+            const totalFiles = (await files.count(options.dst)) * fileParsers.length;
             let current = 0;
             
-            process.stdout.write("\nparsing files:\n");
+            process.stdout.write(`\n${name}:\n`);
 
-            await files.each(options.dst, async (file) => {
-                current += 1;
+            await files.each.bind(this)(options.dst, async (file) => {
+                const dir = process.cwd();
 
-                try {
+                //Set current working directory to file path
+                process.chdir(path.dirname(file));
+                
+                for (const fileParser of fileParsers) {
+                    current += 1;
+                    
                     console.info();
-                    console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
+                    console.info(colors.yellow(`parsing ${path.relative(options.dst, file)} with ${fileParser.constructor.name}`));
 
-                    const dir = process.cwd();
-
-                    //Set current working directory to file path
-                    process.chdir(path.dirname(file));
-
-                    await fileParser.parse(file);
-
-                    //Reset current working directory
-                    process.chdir(dir);
-                }
-                catch (error) {
-                    await this.#onError(file, error);
-
-                    if (process.env.NODE_ENV === 'development') {
-                        throw (error);
+                    try 
+                    {
+                        await fileParser.parse(file);
                     }
+                    catch (error) 
+                    {
+                        await this.#onFileParseError(file, fileParser, error);
+
+                        if (process.env.NODE_ENV === 'development') {
+                            throw (error);
+                        }
+                    }
+
+                    logger.progress(totalFiles, current);
                 }
 
-                logger.progress(totalFiles, current);
+                //Reset current working directory
+                process.chdir(dir);
             });
-            return { totalFiles, current };
         }
 
         async function parseUml() {
@@ -343,7 +313,7 @@ module.exports = class App {
         }
     }
     
-    async #onError(file, error) {
+    async #onFileParseError(file, fileParser, error) {
         const options = this.container.resolve('options');
         const markdownFileParser =  this.container.resolve('markdownFileParser');
         const gitInfo = this.container.resolve('gitInfo');
@@ -356,15 +326,15 @@ module.exports = class App {
         console.error(`Error in file ${file}.`);
         
         process.stdout.write("\n");
-        process.stderr.write(colors.red(`There was an error while processing ${relativeFile}:`));
+        process.stderr.write(colors.red(`There was an error while parsing ${relativeFile} with ${fileParser.constructor.name}:`));
         process.stdout.write("\n");
         process.stdout.write(colors.red(error.message));
 
-        const gitFile =  mustache.render(options.git.urlTemplate, { repository: gitInfo.branch.repository, branch: gitInfo.branch.name });
+        const gitFile =  mustache.render(options.git.urlTemplate, { repository: gitInfo.branch.repository, branch: gitInfo.branch.name, file: relativeFile });
             
         const content = `# Error
     
-There was an error while processing [${relativeFile}](${gitFile}).
+There was an error while parsing [${relativeFile}](${gitFile}) with ${fileParser.constructor.name}.
 
 Please review the error and fix the problem. A new version will be automaticly build when you commit a fix.
 
@@ -453,7 +423,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             'definitionStore': asClass(DefinitionStore).singleton(),
 
             //File parser
-            'fileParser': asClass(CompositeFileParser).singleton(),
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
             'dmnFileParser': asClass(DMNFileParser).singleton(),
             'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
@@ -466,6 +435,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'pumlFileParser': asClass(PumlFileParser).singleton(),
             'svgFileParser': asClass(SvgFileParser).singleton(),
             'useCaseFileParser': asClass(UseCaseFileParser).singleton(),
+            'ymlFileParser': asClass(YmlFileParser).singleton(),
 
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
@@ -526,6 +496,11 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'azureStaticWebApp'
             ],
 
+            'preFileParsers': [
+                'ymlFileParser',
+                'pumlFileParser'
+            ],
+
             //File parsers: order can be important!
             'fileParsers': [
                 'bpmnFileParser',
@@ -536,9 +511,12 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'markdownEmailFileParser',
                 'markdownMessageFileParser',
                 'openapiFileParser',
-                'pumlFileParser',
                 'svgFileParser',
                 'useCaseFileParser'
+            ],
+
+            'postFileParsers': [
+                'markdownFileParser'
             ],
 
             //Html parsers, order is important!
