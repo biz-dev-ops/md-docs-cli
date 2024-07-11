@@ -48,6 +48,7 @@ const OpenapiFileParser = require('../file-parsers/openapi-file-parser');
 const PumlFileParser = require('../file-parsers/puml-file-parser');
 const SvgFileParser = require('../file-parsers/svg-file-parser');
 const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
+const YmlFileParser = require('../file-parsers/yml-file-parser');
 
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
 const BusinessReferenceArchitectureComponent = require('../components/business-reference-architecture-component');
@@ -358,7 +359,7 @@ module.exports = class App {
         process.stdout.write("\n");
         process.stdout.write(colors.red(error.message));
 
-        const gitFile =  mustache.render(options.git.urlTemplate, { repository: gitInfo.branch.repository, branch: gitInfo.branch.name });
+        const gitFile =  mustache.render(options.git.urlTemplate, { repository: gitInfo.branch.repository, branch: gitInfo.branch.name, file: relativeFile });
             
         const content = `# Error
     
@@ -464,6 +465,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'pumlFileParser': asClass(PumlFileParser).singleton(),
             'svgFileParser': asClass(SvgFileParser).singleton(),
             'useCaseFileParser': asClass(UseCaseFileParser).singleton(),
+            'ymlFileParser': asClass(YmlFileParser).singleton(),
 
             //HTML parser
             'anchorHtmlParser': asClass(AnchorHtmlParser).singleton(),
@@ -534,7 +536,8 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'openapiFileParser',
                 'pumlFileParser',
                 'svgFileParser',
-                'useCaseFileParser'
+                'useCaseFileParser',
+                'ymlFileParser'
             ],
 
             //Html parsers, order is important!
