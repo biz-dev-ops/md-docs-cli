@@ -3,7 +3,7 @@ const { env } = require('process');
 const files = require('../../utils/files');
 const Sitemap = require('../../utils/sitemap')
 
-module.exports = class SvgFileParser {
+module.exports = class PumlFileParser {
     #sitemapItems;
 
     constructor({ options, sitemap }) {

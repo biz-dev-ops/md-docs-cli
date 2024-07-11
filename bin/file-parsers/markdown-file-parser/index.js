@@ -99,10 +99,7 @@ module.exports = class MarkdownFileParser {
 
     async #getMarkdownTitle(file) {
         const markdownTitle = await this.pageUtil.getTitleFromMarkdown(file);
-        if(!markdownTitle) {
-            return null;
-        }
-        return mustache.render(markdownTitle, { title: urlTitle });
+        return markdownTitle;
     }
 
     #getShowNavInfo(options, file) {
