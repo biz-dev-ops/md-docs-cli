@@ -248,20 +248,3 @@ details:not([open]) > summary:first-of-type::before {
     padding: var(--space-md);
     position: absolute;
 }
-
-/* Module: BPMN */
-.bpmn {
-    block-size: 0;
-    padding-block-start: 75%;
-    position: relative;
-}
-
-.bpmn > .bjs-container {
-    cursor: move;
-    inset-block-start: 0;
-    position: absolute !important;
-}
-
-.bjs-powered-by {
-    display: none;
-}
