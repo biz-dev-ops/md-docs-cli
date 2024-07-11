@@ -200,7 +200,7 @@ module.exports = class App {
 
             await files.each.bind(this)(options.dst, async (file) => {
                 console.info();
-                console.info(colors.yellow(`parsing ${path.relative(options.dst, file)}`));
+                console.info(colors.yellow(`${path.relative(options.dst, file)}`));
 
                 const dir = process.cwd();
 
