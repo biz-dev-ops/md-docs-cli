@@ -288,12 +288,16 @@ module.exports = class App {
     }
 
     async #release(options, dir) {
-        const contracts = ['.bpmn', '.release.feature', '.openapi.yml', '.openapi.yml.json'];
-        dir = dir || options.dst;
-        const entries = await fs.readdir(dir, { withFileTypes: true });
+        const contracts = ['.bpmn', '.dmn', '.feature', '.openapi.yml.json', '.command.yml.json', '.event.yml.json', '.query.yml.json', '.task.yml.json', '.model.json', 'index.md.yml.json'];
+
+        const srcDir = dir || options.dst;
+        const releaseDir = srcDir.replace(options.dst, options.release)
+        const dirName = path.basename(srcDir);
+
+        let entries = await fs.readdir(srcDir, { withFileTypes: true });
 
         for (let entry of entries) {
-            const src = path.resolve(dir, entry.name);
+            const src = path.resolve(srcDir, entry.name);
 
             if (entry.isDirectory()) {
                 await this.#release(options, src);
@@ -305,10 +309,21 @@ module.exports = class App {
             console.info(colors.yellow(`\t* releasing ${path.relative(options.dst, src)}`));
             
             const dst = src.replace(options.dst, options.release)
-                .replace( '.release.feature',  '.feature');
+                .replace('index.md.yml.json', 'manifest.json')
+                .replace('index.',  `${dirName}.`)
+                .replace('.yml.json', '.json');
 
             await files.copy(src, dst);
         }
+
+        try {
+            entries = await fs.readdir(releaseDir, { withFileTypes: true });
+            if(entries.length === 1 && entries[0].name === "manifest.json") {
+                console.info(colors.yellow(`\t* removing empty dir ${path.relative(options.dst, srcDir)}`));
+                await fs.rm(releaseDir, { recursive: true, force: true }) 
+            }
+        }
+        catch { }
     }
     
     async #onFileParseError(file, fileParser, error) {
