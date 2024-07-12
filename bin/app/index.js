@@ -145,7 +145,14 @@ module.exports = class App {
         
         if(options.args.release) {
             console.info(colors.green('\ncreating release:'));
-            await this.#release(options);
+
+            const totalFiles = await files.count(options.dst);
+            
+            process.stdout.write(`\nreleasing files:\n`);
+
+            await this.#release(options, null, totalFiles, 0);
+
+            logger.progress(totalFiles, totalFiles);
         }
 
         console.info(colors.brightGreen('\nready, shutting down.....'));
@@ -287,7 +294,7 @@ module.exports = class App {
         }
     }
 
-    async #release(options, dir) {
+    async #release(options, dir, totalFiles, current) {
         const contracts = ['.bpmn', '.dmn', '.feature', '.openapi.yml.json', '.command.yml.json', '.event.yml.json', '.query.yml.json', '.task.yml.json', '.model.json', 'index.md.yml.json'];
 
         const srcDir = dir || options.dst;
@@ -297,10 +304,13 @@ module.exports = class App {
         let entries = await fs.readdir(srcDir, { withFileTypes: true });
 
         for (let entry of entries) {
+            current += 1;
+            logger.progress(totalFiles, current);
+
             const src = path.resolve(srcDir, entry.name);
 
             if (entry.isDirectory()) {
-                await this.#release(options, src);
+                await this.#release(options, src, totalFiles, current);
             }
 
             if(!contracts.some(c => src.endsWith(c)))
@@ -318,7 +328,7 @@ module.exports = class App {
 
         try {
             entries = await fs.readdir(releaseDir, { withFileTypes: true });
-            if(entries.length === 1 && entries[0].name === "manifest.json") {
+            if(entries.length === 0 || (entries.length === 1 && entries[0].name === "manifest.json")) {
                 console.info(colors.yellow(`\t* removing empty dir ${path.relative(options.dst, srcDir)}`));
                 await fs.rm(releaseDir, { recursive: true, force: true }) 
             }
