@@ -41,10 +41,11 @@ module.exports = class MarkdownMessageFileParser {
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.json`, JSON.stringify(data));
 
-        // const html = this.component.render(data);
+        const html = this.component.render(data);
 
-        await  Prince()
-            .inputs(Buffer.from(`${__dirname}/test.html`, "utf-8"))
+        await Prince()
+            // .inputs(Buffer.from(html`, "utf-8"))
+            .inputs(Buffer.from(`${__dirname}/example.html`, "utf-8"))
             .output(`${file}.pdf`)
             .execute();
     }
