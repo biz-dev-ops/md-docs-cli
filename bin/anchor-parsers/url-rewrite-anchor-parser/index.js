@@ -36,5 +36,5 @@ const rules = [
   ['.bpmn', '.bpmn.svg'],
   ['.dmn', '.dmn.svg'],
   ['.drawio', '.drawio.svg'],
-  ['.puml', '.svg'],
+  ['.puml', '.svg']
 ];

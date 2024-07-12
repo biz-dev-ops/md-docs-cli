@@ -103,7 +103,7 @@ md-docs
 google-chrome dist/index.html
 ```
 
-### Pupteer
+### Pupeteer
 
 Pupeteer requires a chromium browser to operate. By default pupeteer will try to install a chromium browser. Create the folowing environment variables if you want to use your own chrome / chromium browser:
 

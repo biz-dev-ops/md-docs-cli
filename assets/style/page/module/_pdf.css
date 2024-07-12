@@ -1,0 +1,22 @@
+[data-fullscreen="false"] object.message {
+    width: 568px;
+    height: 800px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+} 
+
+[data-fullscreen="true"] object.message {
+    width: 100%;
+    height: 100%;
+}
+
+[data-fullscreen="false"] figure.message {
+    position: relative;
+}
+
+[data-fullscreen="false"] figure.message > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}

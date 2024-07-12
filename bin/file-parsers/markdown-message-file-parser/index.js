@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { env, cwd } = require('process');
+const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
 const yaml = require('js-yaml');
@@ -11,7 +11,8 @@ const md = require('markdown-it')
     })
     .use(require('markdown-it-task-lists'));
 const mustache = require('mustache');
-    
+const Prince = require("prince");
+
 const files = require('../../utils/files');
 
 module.exports = class MarkdownMessageFileParser {
@@ -40,9 +41,12 @@ module.exports = class MarkdownMessageFileParser {
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.json`, JSON.stringify(data));
 
-        const html = this.component.render(data);
+        // const html = this.component.render(data);
 
-        await fs.writeFile(htmlFile, html);
+        await  Prince()
+            .inputs(Buffer.from(`${__dirname}/test.html`, "utf-8"))
+            .output(`${file}.pdf`)
+            .execute();
     }
 
     async #createData(file) {

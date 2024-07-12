@@ -64,6 +64,7 @@ const MessageComponent = require('../components/message-component');
 const ModelComponent = require('../components/model-component');
 const OpenapiComponent = require('../components/openapi-component');
 const PageComponent = require('../components/page-component');
+const PDFComponent = require('../components/pdf-component');
 const QueryUseCaseComponent = require('../components/query-use-case-component');
 const TabsComponent = require('../components/tabs-component');
 const TaskUseCaseComponent = require('../components/task-use-case-component');
@@ -93,6 +94,7 @@ const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
 const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
 const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
 const ModelAnchorParser = require('../anchor-parsers/model-anchor-parser');
+const PDFAnchorParser = require('../anchor-parsers/pdf-anchor-parser');
 const QueryUseCaseAnchorParser = require('../anchor-parsers/query-use-case-anchor-parser');
 const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
 const TaskUseCaseAnchorParser = require('../anchor-parsers/task-use-case-anchor-parser');
@@ -399,8 +401,6 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
             { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
             
-            { src: path.resolve(options.nodeModules, 'pagedjs/dist'), dst: path.resolve(options.basePath, 'assets/pagedjs') },
-
             { src: options.src, dst: options.dst }
         ];
 
@@ -487,6 +487,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
             'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'modelAnchorParser': asClass(ModelAnchorParser).singleton(),
+            'pdfAnchorParser': asClass(PDFAnchorParser).singleton(),
             'queryUseCaseAnchorParser': asClass(QueryUseCaseAnchorParser).singleton(),
             'svgAnchorParser': asClass(SvgAnchorParser).singleton(),
             'taskUseCaseAnchorParser': asClass(TaskUseCaseAnchorParser).singleton(),
@@ -509,6 +510,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'modelComponent': asClass(ModelComponent).singleton().inject(container => allowUnregistered(container, 'modelComponentRenderFn')),
             'openapiComponent': asClass(OpenapiComponent).singleton().inject(container => allowUnregistered(container, 'openapiComponentRenderFn')),
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
+            'pdfComponent': asClass(PDFComponent).singleton().inject(container => allowUnregistered(container, 'pdfComponentRenderFn')),
             'queryUseCaseComponent': asClass(QueryUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'queryUseCaseComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
             'taskUseCaseComponent': asClass(TaskUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'taskUseCaseComponentRenderFn')),
@@ -571,6 +573,7 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'imageAnchorParser',
                 'svgAnchorParser',
                 'modelAnchorParser',
+                'pdfAnchorParser',
                 'commandUseCaseAnchorParser',
                 'eventUseCaseAnchorParser',
                 'queryUseCaseAnchorParser',

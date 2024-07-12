@@ -37,7 +37,6 @@ module.exports = class IFrameAnchorParser extends AnchorParser {
 
 const extensions = [
   '.email.md',
-  '.message.md',
   '.openapi.yml',
   '.openapi.yaml'
 ]
