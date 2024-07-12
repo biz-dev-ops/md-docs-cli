@@ -3,7 +3,7 @@
   buttonType: brand
   buttons:
     - title: test 1
-      icon: ph-chart-bar
+      icon: mat-search
     - title: test 2
       icon: mat-done
 - title: Test title
@@ -17,6 +17,6 @@
   buttonType: default
   buttons:
     - title: test 1
-      icon: fa-chart-pie
+      icon: mat-login
     - title: test 2
-      icon: assets/images/page/favicon.svg
+      icon: logo.svg

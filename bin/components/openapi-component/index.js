@@ -7,6 +7,7 @@ module.exports = class OpenapiComponent {
     }
 
     render(data) {
+        console.dir(data);
         return this.renderFn(data);
     }
 }

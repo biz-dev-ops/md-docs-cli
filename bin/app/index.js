@@ -368,7 +368,8 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.basePath, 'assets/prismjs') },
             { src: path.resolve(options.nodeModules, 'prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.basePath, 'assets/prismjs') },
             
-            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer-dist') },
+            { src: path.resolve(options.nodeModules, '@iframe-resizer/child/index.umd.js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer/child') },
+            { src: path.resolve(options.nodeModules, '@iframe-resizer/parent/index.umd.js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer/parent') },
 
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
             { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))[0], dst: path.resolve(options.basePath, 'assets/web-components') },

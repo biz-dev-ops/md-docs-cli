@@ -49,14 +49,14 @@ html
 body
   div(id='root')
 
-  script(src=root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.js' charset='UTF-8')
+  script(src=root + 'assets/iframe-resizer/child/index.umd.js' charset='UTF-8')
   script(src=root + 'assets/swagger-ui-dist/swagger-ui-bundle.js' charset='UTF-8')
   script(src=root + 'assets/swagger-ui-dist/swagger-ui-standalone-preset.js' charset='UTF-8')
   script.
     window.addEventListener('load', function() {
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
-        spec: !{schema},
+        spec: !{JSON.stringify(schema)},
         dom_id: '#root',
         deepLinking: true,
         presets: [
