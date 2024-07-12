@@ -145,7 +145,14 @@ module.exports = class App {
         
         if(options.args.release) {
             console.info(colors.green('\ncreating release:'));
-            await this.#release(options);
+
+            const totalFiles = await files.count(options.dst);
+            
+            process.stdout.write(`\nreleasing files:\n`);
+
+            await this.#release(options, null, totalFiles, 0);
+
+            logger.progress(totalFiles, totalFiles);
         }
 
         console.info(colors.brightGreen('\nready, shutting down.....'));
@@ -287,16 +294,23 @@ module.exports = class App {
         }
     }
 
-    async #release(options, dir) {
-        const contracts = ['.bpmn', '.release.feature', '.openapi.yml', '.openapi.yml.json'];
-        dir = dir || options.dst;
-        const entries = await fs.readdir(dir, { withFileTypes: true });
+    async #release(options, dir, totalFiles, current) {
+        const contracts = ['.bpmn', '.dmn', '.feature', '.openapi.yml.json', '.command.yml.json', '.event.yml.json', '.query.yml.json', '.task.yml.json', '.model.json', 'index.md.yml.json'];
+
+        const srcDir = dir || options.dst;
+        const releaseDir = srcDir.replace(options.dst, options.release)
+        const dirName = path.basename(srcDir);
+
+        let entries = await fs.readdir(srcDir, { withFileTypes: true });
 
         for (let entry of entries) {
-            const src = path.resolve(dir, entry.name);
+            current += 1;
+            logger.progress(totalFiles, current);
+
+            const src = path.resolve(srcDir, entry.name);
 
             if (entry.isDirectory()) {
-                await this.#release(options, src);
+                await this.#release(options, src, totalFiles, current);
             }
 
             if(!contracts.some(c => src.endsWith(c)))
@@ -305,10 +319,21 @@ module.exports = class App {
             console.info(colors.yellow(`\t* releasing ${path.relative(options.dst, src)}`));
             
             const dst = src.replace(options.dst, options.release)
-                .replace( '.release.feature',  '.feature');
+                .replace('index.md.yml.json', 'manifest.json')
+                .replace('index.',  `${dirName}.`)
+                .replace('.yml.json', '.json');
 
             await files.copy(src, dst);
         }
+
+        try {
+            entries = await fs.readdir(releaseDir, { withFileTypes: true });
+            if(entries.length === 0 || (entries.length === 1 && entries[0].name === "manifest.json")) {
+                console.info(colors.yellow(`\t* removing empty dir ${path.relative(options.dst, srcDir)}`));
+                await fs.rm(releaseDir, { recursive: true, force: true }) 
+            }
+        }
+        catch { }
     }
     
     async #onFileParseError(file, fileParser, error) {
@@ -368,7 +393,8 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, 'prismjs/plugins/line-numbers/prism-line-numbers.min.css'), dst: path.resolve(options.basePath, 'assets/prismjs') },
             { src: path.resolve(options.nodeModules, 'prismjs/themes/prism-coy.min.css'), dst: path.resolve(options.basePath, 'assets/prismjs') },
             
-            { src: path.resolve(options.nodeModules, 'iframe-resizer/js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer-dist') },
+            { src: path.resolve(options.nodeModules, '@iframe-resizer/child/index.umd.js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer/child') },
+            { src: path.resolve(options.nodeModules, '@iframe-resizer/parent/index.umd.js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer/parent') },
 
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
             { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))[0], dst: path.resolve(options.basePath, 'assets/web-components') },

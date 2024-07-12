@@ -1,6 +1,6 @@
 {
   "name": "@biz-dev-ops/md-docs",
-  "version": "1.1.20",
+  "version": "1.1.21",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -35,13 +35,14 @@
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
     "@biz-dev-ops/web-components": "^0.0.23",
     "@cucumber/gherkin-streams": "^5.0.1",
+    "@iframe-resizer/child": "^5.1.5",
+    "@iframe-resizer/parent": "^5.1.5",
     "awilix": "^10.0.0",
     "bpmn-js": "^17.0.0",
     "colors": "^1.4.0",
     "dmn-js": "^16.4.0",
     "figlet": "^1.6.0",
     "glob": "^11.0.0",
-    "iframe-resizer": "^4.3.6",
     "js-yaml": "^4.1.0",
     "jsdom": "^24.0.0",
     "json-schema-merge-allof": "^0.8.1",

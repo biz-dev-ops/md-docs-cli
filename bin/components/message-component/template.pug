@@ -49,7 +49,7 @@ html
               each attachment in data.attachments
                 li=attachment.name
     
-    script(src=data.root + 'assets/iframe-resizer-dist/iframeResizer.contentWindow.js' charset='UTF-8')
+    script(src=data.root + 'assets/iframe-resizer/child/index.umd.js' charset='UTF-8')
 
     script.
       window.PagedConfig = {
@@ -91,7 +91,7 @@ html
         }, 500);
 
         //Polyfill disturbes the iframe resizer, calculate height manually.      
-        window.iFrameResizer = {
-          heightCalculationMethod: () => { return calculateHeight(); }
-        };
+        //- window.iFrameResizer = {
+        //-   heightCalculationMethod: () => { return calculateHeight(); }
+        //- };
       })();
