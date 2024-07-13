@@ -42,6 +42,7 @@ module.exports = class MarkdownMessageFileParser {
             await fs.writeFile(`${file}.json`, JSON.stringify(data));
 
         const html = this.component.render(data);
+        await fs.writeFile(`${file}.html`, html);
 
         await Prince()
             // .inputs(Buffer.from(html`, "utf-8"))
