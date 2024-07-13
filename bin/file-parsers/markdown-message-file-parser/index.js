@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { env } = require('process');
+const { env, cwd } = require('process');
 const path = require('path');
 const colors = require('colors');
 const yaml = require('js-yaml');
@@ -12,6 +12,7 @@ const md = require('markdown-it')
     .use(require('markdown-it-task-lists'));
 const mustache = require('mustache');
 const Prince = require("prince");
+const Inliner = require("web-resource-inliner");
 
 const files = require('../../utils/files');
 
@@ -41,14 +42,43 @@ module.exports = class MarkdownMessageFileParser {
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.json`, JSON.stringify(data));
 
-        const html = this.component.render(data);
-        await fs.writeFile(`${file}.html`, html);
+
+        // const html = this.component.render(data);
+
+        const html = await files
+            .readFileAsString(`${__dirname}/html-template/example.html`, "utf8")
+            .then(html => this.#inlineFiles(html))
+            .then(html => fs.writeFile(`${file}.html`, html))
 
         await Prince()
-            // .inputs(Buffer.from(html`, "utf-8"))
-            .inputs(Buffer.from(`${__dirname}/example.html`, "utf-8"))
+            .inputs(Buffer.from(`${file}.html`, "utf-8"))
             .output(`${file}.pdf`)
             .execute();
+    }
+
+    async #inlineFiles(content) {
+        return new Promise((resolve, reject) => {
+            try {
+                Inliner.html({ 
+                    relativeTo: `${__dirname}/html-template`,
+                    fileContent: content,
+                    images: true,
+                    svgs: true,
+                    scripts: true,
+                    links: true
+                }, (error, result) => {
+                    if(error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(result);
+                    }
+                });
+            }
+            catch(e) {
+                reject(e);
+            }
+        });
     }
 
     async #createData(file) {
