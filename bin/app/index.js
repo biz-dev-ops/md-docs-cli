@@ -560,7 +560,6 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'urlRewriteAnchorParser',
                 'businessModelCanvasAnchorParser',
                 'businessReferenceArchitectureAnchorParser',
-                'codeAnchorParser',
                 // 'dmnAnchorParser',
                 'featureAnchorParser',
                 'featuresAnchorParser',
@@ -574,7 +573,8 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'commandUseCaseAnchorParser',
                 'eventUseCaseAnchorParser',
                 'queryUseCaseAnchorParser',
-                'taskUseCaseAnchorParser'
+                'taskUseCaseAnchorParser',
+                'codeAnchorParser'
             ]
         };
     }
