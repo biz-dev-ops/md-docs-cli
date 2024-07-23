@@ -41,7 +41,7 @@ const DMNFileParser = require('../file-parsers/dmn-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
 const MarkdownFileParser = require('../file-parsers/markdown-file-parser');
-const MarkdownMessageFileParser = require('../file-parsers/markdown-message-file-parser');
+const MarkdownLetterFileParser = require('../file-parsers/markdown-letter-file-parser');
 const MarkdownEmailFileParser = require('../file-parsers/markdown-email-file-parser');
 const OpenapiFileParser = require('../file-parsers/openapi-file-parser');
 const PumlFileParser = require('../file-parsers/puml-file-parser');
@@ -60,11 +60,10 @@ const FeatureComponent = require('../components/feature-component');
 const FullscreenComponent = require('../components/fullscreen-component');
 const IFrameComponent = require('../components/iframe-component');
 const ImageComponent = require('../components/image-component');
-const MessageComponent = require('../components/message-component');
+const LetterComponent = require('../components/letter-component');
 const ModelComponent = require('../components/model-component');
 const OpenapiComponent = require('../components/openapi-component');
 const PageComponent = require('../components/page-component');
-const PDFComponent = require('../components/pdf-component');
 const QueryUseCaseComponent = require('../components/query-use-case-component');
 const TabsComponent = require('../components/tabs-component');
 const TaskUseCaseComponent = require('../components/task-use-case-component');
@@ -92,9 +91,8 @@ const FeatureAnchorParser = require('../anchor-parsers/feature-anchor-parser');
 const FeaturesAnchorParser = require('../anchor-parsers/features-anchor-parser');
 const IFrameAnchorParser = require('../anchor-parsers/iframe-anchor-parser');
 const ImageAnchorParser = require('../anchor-parsers/image-anchor-parser');
-const MarkdownAnchorParser = require('../anchor-parsers/markdown-anchor-parser');
+const LetterAnchorParser = require('../anchor-parsers/letter-anchor-parser');
 const ModelAnchorParser = require('../anchor-parsers/model-anchor-parser');
-const PDFAnchorParser = require('../anchor-parsers/pdf-anchor-parser');
 const QueryUseCaseAnchorParser = require('../anchor-parsers/query-use-case-anchor-parser');
 const SvgAnchorParser = require('../anchor-parsers/svg-anchor-parser');
 const TaskUseCaseAnchorParser = require('../anchor-parsers/task-use-case-anchor-parser');
@@ -454,7 +452,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'featureFileParser': asClass(FeatureFileParser).singleton(),
             'markdownFileParser': asClass(MarkdownFileParser).singleton(),
             'markdownEmailFileParser': asClass(MarkdownEmailFileParser).singleton(),
-            'markdownMessageFileParser': asClass(MarkdownMessageFileParser).singleton(),
+            'markdownLetterFileParser': asClass(MarkdownLetterFileParser).singleton(),
             'openapiFileParser': asClass(OpenapiFileParser).singleton(),
             'pumlFileParser': asClass(PumlFileParser).singleton(),
             'svgFileParser': asClass(SvgFileParser).singleton(),
@@ -484,10 +482,9 @@ Please review the error and fix the problem. A new version will be automaticly b
             'featureAnchorParser': asClass(FeatureAnchorParser).singleton(),
             'featuresAnchorParser': asClass(FeaturesAnchorParser).singleton(),
             'imageAnchorParser': asClass(ImageAnchorParser).singleton(),
+            'letterAnchorParser': asClass(LetterAnchorParser).singleton(),
             'iframeAnchorParser': asClass(IFrameAnchorParser).singleton(),
-            'markdownAnchorParser': asClass(MarkdownAnchorParser).singleton(),
             'modelAnchorParser': asClass(ModelAnchorParser).singleton(),
-            'pdfAnchorParser': asClass(PDFAnchorParser).singleton(),
             'queryUseCaseAnchorParser': asClass(QueryUseCaseAnchorParser).singleton(),
             'svgAnchorParser': asClass(SvgAnchorParser).singleton(),
             'taskUseCaseAnchorParser': asClass(TaskUseCaseAnchorParser).singleton(),
@@ -506,11 +503,10 @@ Please review the error and fix the problem. A new version will be automaticly b
             'fullscreenComponent': asClass(FullscreenComponent).singleton().inject(container => allowUnregistered(container, 'fullscreenComponentRenderFn')),
             'iFrameComponent': asClass(IFrameComponent).singleton().inject(container => allowUnregistered(container, 'iFrameComponentRenderFn')),
             'imageComponent': asClass(ImageComponent).singleton().inject(container => allowUnregistered(container, 'imageComponentRenderFn')),
-            'messageComponent': asClass(MessageComponent).singleton().inject(container => allowUnregistered(container, 'messageComponentRenderFn')),
+            'letterComponent': asClass(LetterComponent).singleton().inject(container => allowUnregistered(container, 'letterComponentRenderFn')),
             'modelComponent': asClass(ModelComponent).singleton().inject(container => allowUnregistered(container, 'modelComponentRenderFn')),
             'openapiComponent': asClass(OpenapiComponent).singleton().inject(container => allowUnregistered(container, 'openapiComponentRenderFn')),
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
-            'pdfComponent': asClass(PDFComponent).singleton().inject(container => allowUnregistered(container, 'pdfComponentRenderFn')),
             'queryUseCaseComponent': asClass(QueryUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'queryUseCaseComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
             'taskUseCaseComponent': asClass(TaskUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'taskUseCaseComponentRenderFn')),
@@ -533,7 +529,7 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'featureFileParser',
                 'drawIOFileParser',
                 'markdownEmailFileParser',
-                'markdownMessageFileParser',
+                'markdownLetterFileParser',
                 'openapiFileParser',
                 'svgFileParser',
                 'useCaseFileParser'
@@ -562,17 +558,15 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'urlRewriteAnchorParser',
                 'businessModelCanvasAnchorParser',
                 'businessReferenceArchitectureAnchorParser',
-                // 'dmnAnchorParser',
                 'featureAnchorParser',
                 'featuresAnchorParser',
                 'dashboardAnchorParser',
-                'markdownAnchorParser',
                 'iframeAnchorParser',
                 'userTaskAnchorParser',
                 'imageAnchorParser',
+                'letterAnchorParser',
                 'svgAnchorParser',
                 'modelAnchorParser',
-                'pdfAnchorParser',
                 'commandUseCaseAnchorParser',
                 'eventUseCaseAnchorParser',
                 'queryUseCaseAnchorParser',

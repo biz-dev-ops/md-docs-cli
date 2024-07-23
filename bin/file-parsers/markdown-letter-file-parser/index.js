@@ -16,16 +16,16 @@ const Inliner = require("web-resource-inliner");
 
 const files = require('../../utils/files');
 
-module.exports = class MarkdownMessageFileParser {
-    constructor({ options, messageComponent, locale, pageUtil }) {
+module.exports = class MarkdownLetterFileParser {
+    constructor({ options, letterComponent, locale, pageUtil }) {
         this.options = options;
-        this.component = messageComponent;
+        this.component = letterComponent;
         this.locale = locale;
         this.pageUtil = pageUtil;
     }
 
     async parse(file) {
-        if (!(file.endsWith('.message.md')))
+        if (!(file.endsWith('.letter.md') || file.endsWith('.message.md')))
             return;
         
         await this.#render(file);
@@ -45,15 +45,26 @@ module.exports = class MarkdownMessageFileParser {
 
         // const html = this.component.render(data);
 
-        const html = await files
+        await files
             .readFileAsString(`${__dirname}/html-template/example.html`, "utf8")
+            .then(html => new Promise((resolve, reject) => {
+                resolve(html
+                    .replace("<html>", `<html>\n<base href="${data.baseHref}" target="_top" />`)
+                    .replace("</html>", `<script src="${data.root}assets/iframe-resizer/child/index.umd.js" charset="UTF-8"></script>\n</html>`)
+                );
+            }))
             .then(html => this.#inlineFiles(html))
             .then(html => fs.writeFile(`${file}.html`, html))
 
-        await Prince()
-            .inputs(Buffer.from(`${file}.html`, "utf-8"))
-            .output(`${file}.pdf`)
-            .execute();
+        try {
+            await Prince()
+                .inputs(Buffer.from(`${file}.html`, "utf-8"))
+                .output(`${file}.pdf`)
+                .execute();
+        }
+        catch(error) {
+            console.error(error);
+        }
     }
 
     async #inlineFiles(content) {
@@ -82,7 +93,7 @@ module.exports = class MarkdownMessageFileParser {
     }
 
     async #createData(file) {
-        let data = Object.assign(JSON.parse(JSON.stringify(this.options.message || {})), {
+        let data = Object.assign(JSON.parse(JSON.stringify(this.options.letter || this.options.message || {})), {
             locale: await this.locale.get(),
             baseHref: this.pageUtil.relativeBaseHref(),
             root: this.pageUtil.relativeRootFromBaseHref(),
@@ -105,7 +116,7 @@ module.exports = class MarkdownMessageFileParser {
             data = Object.assign(data, d);
         }
 
-        data.message = await renderMessage(file, data);
+        data.letter = await renderLetter(file, data);
         return data;
     }
 
@@ -118,7 +129,7 @@ module.exports = class MarkdownMessageFileParser {
     }
 }
 
-renderMessage = async function(file, data) {
+renderLetter = async function(file, data) {
     let markdown = await files.readFileAsString(file);
     markdown = mustache.render(markdown, data);
     return md.render(markdown);

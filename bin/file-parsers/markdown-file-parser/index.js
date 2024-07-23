@@ -23,7 +23,7 @@ module.exports = class MarkdownFileParser {
     }
 
     async parse(file) {
-        if (!(file.endsWith('.md') && !file.endsWith('.message.md') && !file.endsWith('.email.md')))
+        if (!(file.endsWith('.md') && !file.endsWith('.letter.md') && !file.endsWith('.message.md') && !file.endsWith('.email.md')))
             return;
 
         console.info(colors.yellow(`parsing ${path.relative(this.options.dst, file)}`));
