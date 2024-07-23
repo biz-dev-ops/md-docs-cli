@@ -46,7 +46,7 @@ module.exports = class MarkdownLetterFileParser {
         // const html = this.component.render(data);
 
         await files
-            .readFileAsString(`${__dirname}/html-template/example.html`, "utf8")
+            .readFileAsString(`${__dirname}/html-template/template.html`, "utf8")
             .then(html => this.#inlineFiles(html))
             .then(html => fs.writeFile(`${file}.html`, html))
 
