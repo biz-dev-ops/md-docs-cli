@@ -5,6 +5,7 @@
         const app = viewer.iframe?.contentWindow?.PDFViewerApplication;
         
         app.eventBus.dispatch("switchscrollmode", { source: viewer, mode: 0 });
+        app.eventBus.dispatch("scalechanged", { source: viewer, value: "auto" });
 
         toggleClass(viewer);
     }
