@@ -64,6 +64,7 @@ const LetterComponent = require('../components/letter-component');
 const ModelComponent = require('../components/model-component');
 const OpenapiComponent = require('../components/openapi-component');
 const PageComponent = require('../components/page-component');
+const PdfComponent = require('../components/pdf-component');
 const QueryUseCaseComponent = require('../components/query-use-case-component');
 const TabsComponent = require('../components/tabs-component');
 const TaskUseCaseComponent = require('../components/task-use-case-component');
@@ -507,6 +508,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'modelComponent': asClass(ModelComponent).singleton().inject(container => allowUnregistered(container, 'modelComponentRenderFn')),
             'openapiComponent': asClass(OpenapiComponent).singleton().inject(container => allowUnregistered(container, 'openapiComponentRenderFn')),
             'pageComponent': asClass(PageComponent).singleton().inject(container => allowUnregistered(container, 'pageComponentRenderFn')),
+            'pdfComponent': asClass(PdfComponent).singleton().inject(container => allowUnregistered(container, 'pdfComponentRenderFn')),
             'queryUseCaseComponent': asClass(QueryUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'queryUseCaseComponentRenderFn')),
             'tabsComponent': asClass(TabsComponent).singleton().inject(container => allowUnregistered(container, 'tabsComponentRenderFn')),
             'taskUseCaseComponent': asClass(TaskUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'taskUseCaseComponentRenderFn')),

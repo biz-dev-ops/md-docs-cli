@@ -9,7 +9,7 @@ const md = require('markdown-it')
         linkify: true,
         typographer: true
     })
-    .use(require('markdown-it-task-lists'));
+    .use(require("markdown-it-container"), "call-to-action");
 const mustache = require('mustache');
 const Prince = require("prince");
 const Inliner = require("web-resource-inliner");

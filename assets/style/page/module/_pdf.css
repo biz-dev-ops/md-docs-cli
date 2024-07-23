@@ -1,26 +1,11 @@
-[data-fullscreen="false"] object.message {
+[data-fullscreen="false"] embed.letter {
     width: 568px;
-    height: 800px;
+    height: 774px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-} 
-
-[data-fullscreen="false"] figure.message {
-    position: relative;
 }
 
-[data-fullscreen="false"] figure.message > div {
-    position: absolute;
+[data-fullscreen="true"] embed.letter {
     width: 100%;
     height: 100%;
-}
-
-[data-fullscreen="true"] object.message {
-    width: 100%;
-    height: 100%;
-}
-
-[data-fullscreen="true"] figure.message > div {
-    display: none;
+    display: block;
 }

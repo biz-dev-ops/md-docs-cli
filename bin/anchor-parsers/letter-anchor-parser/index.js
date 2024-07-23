@@ -1,34 +1,24 @@
-const colors = require('colors');
 const path = require('path');
 const { cwd } = require('process');
-
-const AnchorParser = require('../anchor-parser');
 const files = require('../../utils/files');
+const AnchorParser = require('../anchor-parser');
 
-module.exports = class LetterAnchorParser extends AnchorParser {
-
-  constructor({ iFrameComponent }) {
+module.exports = class PDFAnchorParser extends AnchorParser {
+  constructor({ options, pdfComponent }) {
     super();
-
-    this.iFrameComponent = iFrameComponent;
+  
+    this.component = pdfComponent;
   }
 
   _canParse(anchor) { return anchor.href.endsWith('.letter.md') || anchor.href.endsWith('.message.md'); }
 
   async _parse(anchor, file) {
-    console.info(colors.green(`\t\t\t\t* rendering iframe`));
-
     const name = path.basename(file).split('.')[1];
     const hash = await files.hash(file);
-    const data = {
-      src: `./${path.relative(cwd(), file)}.html?_v=${hash}`,
-      classes: [name]
-    };
-
-    if(await files.exists(`${file}.pdf`)) {
-      data.classes.push('pdf');
-    }
   
-    return this.iFrameComponent.render(data);
+    return this.component.render({
+      name: name,
+      src: `./${path.relative(cwd(), file)}.pdf?_v=${hash}#view=Fit&toolbar=0&scrollbar=0&navpanes=0`
+    });
   }
 };
