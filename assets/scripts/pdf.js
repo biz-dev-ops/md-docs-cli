@@ -5,6 +5,8 @@
         const app = viewer.iframe?.contentWindow?.PDFViewerApplication;
         
         app.eventBus.dispatch("switchscrollmode", { source: viewer, mode: 0 });
+
+        toggleClass(viewer);
     }
 
     function onCloseFullscreen(e) {
@@ -13,6 +15,14 @@
         const app = viewer.iframe?.contentWindow?.PDFViewerApplication;
         
         app.eventBus.dispatch("switchscrollmode", { source: viewer, mode: 1 });
+        app.eventBus.dispatch("scalechanged", { source: viewer, value: "page-fit" });
+        app.eventBus.dispatch("switchspreadmode", { source: viewer, mode: 0 });
+
+        toggleClass(viewer);
+    }
+
+    function toggleClass(viewer) {
+        viewer.iframe.contentWindow.document.body.classList.toggle("not-fullscreen");
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -26,11 +36,14 @@
                 const viewerApp = await viewer.initialize();
 
                 viewerApp.eventBus.dispatch("switchscrollmode", { source: this, mode: 1 });
+                viewerApp.eventBus.dispatch("scalechanged", { source: this, value: "page-fit" });
+                viewerApp.eventBus.dispatch("switchspreadmode", { source: this, mode: 0 });
 
                 viewerApp.open({ 
                     data: Uint8Array.from(atob(data), (m) => m.codePointAt(0))
                 });
+                toggleClass(viewer, true);
             }
-        })
+        });
     });
 })();

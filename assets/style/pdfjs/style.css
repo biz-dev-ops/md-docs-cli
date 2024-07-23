@@ -1,0 +1,7 @@
+body.not-fullscreen .toolbar {
+    display: none;
+}
+
+body.not-fullscreen #viewerContainer {
+    inset: 0;
+}
