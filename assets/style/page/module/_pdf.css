@@ -1,10 +1,10 @@
-[data-fullscreen="false"] embed.letter {
-    width: 568px;
-    height: 774px;
+[data-fullscreen="false"] pdfjs-viewer-element {
+    width: 100%;
+    height: 400px;
     display: block;
 }
 
-[data-fullscreen="true"] embed.letter {
+[data-fullscreen="true"] pdfjs-viewer-element {
     width: 100%;
     height: 100%;
     display: block;

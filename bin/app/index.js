@@ -397,6 +397,8 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, '@iframe-resizer/child/index.umd.js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer/child') },
             { src: path.resolve(options.nodeModules, '@iframe-resizer/parent/index.umd.js'), dst: path.resolve(options.basePath, 'assets/iframe-resizer/parent') },
 
+            { src: path.resolve(options.nodeModules, 'pdfjs-viewer-element/dist/pdfjs-viewer-element.js'), dst: path.resolve(options.basePath, 'assets/pdfjs-viewer-element') },
+
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
             { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
             

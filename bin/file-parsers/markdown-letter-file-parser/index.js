@@ -47,12 +47,6 @@ module.exports = class MarkdownLetterFileParser {
 
         await files
             .readFileAsString(`${__dirname}/html-template/example.html`, "utf8")
-            .then(html => new Promise((resolve, reject) => {
-                resolve(html
-                    .replace("<html>", `<html>\n<base href="${data.baseHref}" target="_top" />`)
-                    .replace("</html>", `<script src="${data.root}assets/iframe-resizer/child/index.umd.js" charset="UTF-8"></script>\n</html>`)
-                );
-            }))
             .then(html => this.#inlineFiles(html))
             .then(html => fs.writeFile(`${file}.html`, html))
 
