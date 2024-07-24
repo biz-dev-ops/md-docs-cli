@@ -42,13 +42,13 @@ module.exports = class MarkdownLetterFileParser {
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.json`, JSON.stringify(data));
 
+        let html = this.component.render(data);
+        if (env.NODE_ENV === 'development')
+            await fs.writeFile(`${file}.raw.html`, html);
 
-        // const html = this.component.render(data);
-
-        await files
-            .readFileAsString(`${__dirname}/html-template/template.html`, "utf8")
-            .then(html => this.#inlineFiles(html))
-            .then(html => fs.writeFile(`${file}.html`, html))
+        
+        html = await this.#inlineFiles(this.options.dst, html);
+        await fs.writeFile(`${file}.html`, html);
 
         try {
             await Prince()
@@ -59,13 +59,15 @@ module.exports = class MarkdownLetterFileParser {
         catch(error) {
             console.error(error);
         }
+
+        throw error("");
     }
 
-    async #inlineFiles(content) {
+    async #inlineFiles(relativeTo, content) {
         return new Promise((resolve, reject) => {
             try {
                 Inliner.html({ 
-                    relativeTo: `${__dirname}/html-template`,
+                    relativeTo: relativeTo,
                     fileContent: content,
                     images: true,
                     svgs: true,

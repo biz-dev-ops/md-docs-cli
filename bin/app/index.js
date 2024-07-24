@@ -245,33 +245,33 @@ module.exports = class App {
 
             process.stdout.write("\nparsing puml files:\n");
 
-            const cmd = "java", args = [
-                "-jar",
-                `${__dirname}/../plantuml-1.2023.13.jar`,
-                `${options.dst}/**.puml`,
-                "-tsvg",
-                "-enablestats",
-                "-realtimestats",
-                "-progress"
-            ];
+            // const cmd = "java", args = [
+            //     "-jar",
+            //     `${__dirname}/../plantuml-1.2023.13.jar`,
+            //     `${options.dst}/**.puml`,
+            //     "-tsvg",
+            //     "-enablestats",
+            //     "-realtimestats",
+            //     "-progress"
+            // ];
 
-            const promise = execFile(cmd, args);
-            let current = 0;
+            // const promise = execFile(cmd, args);
+            // let current = 0;
 
-            promise.child.stdout.on('data', function (data) {
-                current = (data.match(/#/g) || []).length;
-                logger.progress(30, current);
-                process.stdout.write(data);
-            });
+            // promise.child.stdout.on('data', function (data) {
+            //     current = (data.match(/#/g) || []).length;
+            //     logger.progress(30, current);
+            //     process.stdout.write(data);
+            // });
 
-            promise.child.stderr.on('data', function (data) {
-                process.stdout.write(data);
-            });
+            // promise.child.stderr.on('data', function (data) {
+            //     process.stdout.write(data);
+            // });
 
-            await promise;
-            if (current < 30) {
-                logger.progress(30, 30);
-            }
+            // await promise;
+            // if (current < 30) {
+            //     logger.progress(30, 30);
+            // }
 
             console.info(colors.green(`uml files parsed`));
         }
