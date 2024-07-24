@@ -23,30 +23,15 @@ html
           .brand-logo
             img(src=data.root + 'assets/images/letter/logo.svg' alt=title)
           .intro
-            h1 Herinnering
-            h2 Er staat post voor je klaar
+            h1=data.subject.title
+            h2=data.subject.subtitle
           p.envelope-address
-            | Mevrouw A. Jansen
-            br
-            | Straatnaam 33
-            br
-            | 1234 AB  Utrecht
-            br
-            span.kix 1234AB
+            | !{data.to}
       
       footer.page-footer
         .wrapper
           .contact
-            p
-              | Your company
-              br
-              | Postbus 123
-              br
-              | 1234 AB Amsterdam
-            p
-              | info@yourcompany.nl
-              br
-              | Tel. 020 - 123 45 67
+            | !{data.contact}
           .brand-logo
             img(src=data.root + 'assets/images/letter/logo.svg' alt=title)
       
@@ -56,12 +41,14 @@ html
       .page-attributes
         dl.attribute
           dt Datum
-          dd 4 juni 2024
+          dd=data.date
         dl.attribute
-          dt Je leningnummer
-          dd 1234567
+          dt=data.reference.name
+          dd=data.reference.value
       
       .page-body
+        | !{data.content}
+
         p Beste mevrouw Jansen,
         p
           | Er staat een nieuwe aflosnota voor je klaar op onze website.
@@ -80,16 +67,20 @@ html
                 | www.url.nl/post
               span.barcode
                 img(src=data.root + 'assets/images/letter/qr.svg' alt='www.url.nl/post')
+
         h2 Je post digitaal ontvangen
+        
         p
           | Je ontvangt deze brief omdat we geen e-mailadres van je hebben. Of omdat het e-mailadres dat wij van je hebben niet klopt.
           | Dat is jammer, want hierdoor mis je informatie over je hypotheek. Of je krijgt die informatie later. Geef daarom jouw e-mailadres door.
+        
         ul
           li.list-item--checked
             | Ga naar 
             a(href='https://www.url.nl') www.url.nl
           li.list-item--checked Log in met je identiteit
           li.list-item--checked Vul je e-mailadres in
+        
         .signature
           p
             | Met vriendelijke groet,

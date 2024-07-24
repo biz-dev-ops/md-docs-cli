@@ -9,7 +9,16 @@ const md = require('markdown-it')
         linkify: true,
         typographer: true
     })
-    .use(require("markdown-it-container"), "call-to-action");
+    .use(require("markdown-it-container"), "call-to-action", {
+        render: function (tokens, idx, _options, env, slf) {
+            if (tokens[idx].nesting === 1) {
+                tokens[idx].attrJoin('class', "block block--call-to-action");
+            }
+
+            return slf.renderToken(tokens, idx, _options, env, slf);
+        }
+    });
+
 const mustache = require('mustache');
 const Prince = require("prince");
 const Inliner = require("web-resource-inliner");
@@ -27,13 +36,13 @@ module.exports = class MarkdownLetterFileParser {
     async parse(file) {
         if (!(file.endsWith('.letter.md') || file.endsWith('.message.md')))
             return;
-        
+
         await this.#render(file);
     }
 
     async #render(file) {
         console.info(colors.green(`\t* render html`));
-        
+
         const htmlFile = `${file}.html`;
         console.info(colors.green(`\t\t* creating ${path.relative(this.options.dst, htmlFile)}`));
 
@@ -46,7 +55,7 @@ module.exports = class MarkdownLetterFileParser {
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.raw.html`, html);
 
-        
+
         html = await this.#inlineFiles(this.options.dst, html);
         await fs.writeFile(`${file}.html`, html);
 
@@ -56,15 +65,18 @@ module.exports = class MarkdownLetterFileParser {
                 .output(`${file}.pdf`)
                 .execute();
         }
-        catch(error) {
+        catch (error) {
             console.error(error);
         }
+
+        console.dir(data);
+        throw error("");
     }
 
     async #inlineFiles(relativeTo, content) {
         return new Promise((resolve, reject) => {
             try {
-                Inliner.html({ 
+                Inliner.html({
                     relativeTo: relativeTo,
                     fileContent: content,
                     images: true,
@@ -72,7 +84,7 @@ module.exports = class MarkdownLetterFileParser {
                     scripts: true,
                     links: true
                 }, (error, result) => {
-                    if(error) {
+                    if (error) {
                         reject(error);
                     }
                     else {
@@ -80,7 +92,7 @@ module.exports = class MarkdownLetterFileParser {
                     }
                 });
             }
-            catch(e) {
+            catch (e) {
                 reject(e);
             }
         });
@@ -94,36 +106,35 @@ module.exports = class MarkdownLetterFileParser {
             title: this.pageUtil.getTitleFromUrl(path.basename(file))
         });
 
-        const ymlFile = `${file}.yml`;    
+        const ymlFile = `${file}.yml`;
         if (await files.exists(ymlFile)) {
             const d = yaml.load(await files.readFileAsString(ymlFile)) || {};
 
-            //TODO: check this
-            for (const reference of data.references) {
-                const found = d.references?.find(r => r.name === reference.name);
-                if (found) {
-                    reference.value = found.value;
-                }
-            }
+            // for (const reference of data.references) {
+            //     const found = d.references?.find(r => r.name === reference.name);
+            //     if (found) {
+            //         reference.value = found.value;
+            //     }
+            // }
 
-            delete d.references;
+            // delete d.references;
             data = Object.assign(data, d);
         }
 
-        data.letter = await renderLetter(file, data);
+        data.content = await renderLetter(file, data);
         return data;
     }
 
     async dispose() {
         if (!this.browser)
             return;
-        
-        await this.browser.close();        
-        this.browser = null;        
+
+        await this.browser.close();
+        this.browser = null;
     }
 }
 
-renderLetter = async function(file, data) {
+renderLetter = async function (file, data) {
     let markdown = await files.readFileAsString(file);
     markdown = mustache.render(markdown, data);
     return md.render(markdown);
