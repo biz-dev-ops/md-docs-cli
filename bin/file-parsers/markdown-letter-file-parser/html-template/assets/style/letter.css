@@ -14,8 +14,7 @@
     --color-neutral-black: rgb(0, 0, 0);
     --color-neutral-gray: rgb(102, 102, 102);
     
-    --color-brand-primary-a10: rgba(215, 35, 57, .1);
-    --color-brand-secondary-a10: rgba(77, 36, 1, 0.1);
+    --color-brand-secondary-a10: rgba(255, 136, 32, .1);
     --color-neutral-gray-a10: rgba(102, 102, 102, .1);
 
     --color-text: var(--color-neutral-black);
@@ -184,6 +183,32 @@ a {
     font-family: 'Kix';
     font-size: var(--font-size-kix);
     margin-top: 2mm;
+}
+
+/* Table */
+table {
+    width: 100%;
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-base);
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 6pt;
+    text-align: left;
+    border-bottom: .5pt solid var(--color-brand-secondary);
+}
+
+table thead th, table thead td {
+    border-bottom-width: 1.5pt;
+}
+
+table tr > :first-child {
+    padding-left: 0;
+}
+
+table tr > :last-child {
+    padding-right: 0;
 }
 
 /* Button */
