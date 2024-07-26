@@ -68,9 +68,6 @@ module.exports = class MarkdownLetterFileParser {
         catch (error) {
             console.error(error);
         }
-
-        console.dir(data);
-        throw error("");
     }
 
     async #inlineFiles(relativeTo, content) {
