@@ -49,25 +49,6 @@ html
       .page-body
         | !{data.content}
 
-        p Beste mevrouw Jansen,
-        p
-          | Er staat een nieuwe aflosnota voor je klaar op onze website.
-          br
-          | Lees je post. Dan blijf je op de hoogte van je hypotheek.
-        .block.block--call-to-action
-          h2 Lees je post
-          ul
-            li.list-item--checked Bekijk in jouw eigen postbus al je persoonlijke post.
-            li.list-item--checked Log makkelijk in met jouw identiteit om je post te bekijken.
-          p
-            a.button
-              span.label
-                | Ga naar
-                br
-                | www.url.nl/post
-              span.barcode
-                img(src=data.root + 'assets/images/letter/qr.svg' alt='www.url.nl/post')
-
         h2 Je post digitaal ontvangen
         
         p
@@ -90,7 +71,26 @@ html
             | Johan Johansson
             br
             | Senior Manager Operations
-        
+
+        //- p Beste mevrouw Jansen,
+        //- p
+        //-   | Er staat een nieuwe aflosnota voor je klaar op onze website.
+        //-   br
+        //-   | Lees je post. Dan blijf je op de hoogte van je hypotheek.
+        //- .block.block--call-to-action
+        //-   h2 Lees je post
+        //-   ul
+        //-     li.list-item--checked Bekijk in jouw eigen postbus al je persoonlijke post.
+        //-     li.list-item--checked Log makkelijk in met jouw identiteit om je post te bekijken.
+        //-   p
+        //-     a.button
+        //-       span.label
+        //-         | Ga naar
+        //-         br
+        //-         | www.url.nl/post
+        //-       span.barcode
+        //-         img(src=data.root + 'assets/images/letter/qr.svg' alt='www.url.nl/post')
+
         .page-break--before
         
         p
