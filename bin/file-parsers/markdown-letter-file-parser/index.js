@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { env, cwd } = require('process');
+const { env, cwd, exitCode } = require('process');
 const path = require('path');
 const colors = require('colors');
 const yaml = require('js-yaml');
@@ -98,8 +98,8 @@ module.exports = class MarkdownLetterFileParser {
     async #createData(file) {
         let data = Object.assign(JSON.parse(JSON.stringify(this.options.letter || this.options.message || {})), {
             locale: await this.locale.get(),
-            baseHref: this.pageUtil.relativeBaseHref(),
-            root: this.pageUtil.relativeRootFromBaseHref(),
+            baseHref: this.pageUtil.relativeBaseHref().replace(/\\/g, "/"),
+            root: this.pageUtil.relativeRootFromBaseHref().replace(/\\/g, "/"),
             title: this.pageUtil.getTitleFromUrl(path.basename(file))
         });
 
@@ -107,18 +107,20 @@ module.exports = class MarkdownLetterFileParser {
         if (await files.exists(ymlFile)) {
             const d = yaml.load(await files.readFileAsString(ymlFile)) || {};
 
-            // for (const reference of data.references) {
-            //     const found = d.references?.find(r => r.name === reference.name);
-            //     if (found) {
-            //         reference.value = found.value;
-            //     }
-            // }
+            for (const reference of data.references) {
+                const found = d.references?.find(r => r.name === reference.name);
+                if (found) {
+                    reference.value = found.value;
+                }
+            }
 
-            // delete d.references;
+            delete d.references;
             data = Object.assign(data, d);
         }
 
-        data.content = await renderLetter(file, data);
+        data = renderData(data);
+
+        data.content = await renderMarkdown(file, data);
         return data;
     }
 
@@ -131,7 +133,11 @@ module.exports = class MarkdownLetterFileParser {
     }
 }
 
-renderLetter = async function (file, data) {
+renderData = function (data) {
+    return JSON.parse(mustache.render(JSON.stringify(data), data));;
+}
+
+renderMarkdown = async function (file, data) {
     let markdown = await files.readFileAsString(file);
     markdown = mustache.render(markdown, data);
     return md.render(markdown);
