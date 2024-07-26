@@ -5,3 +5,7 @@ body.not-fullscreen .toolbar {
 body.not-fullscreen #viewerContainer {
     inset: 0;
 }
+
+body {
+    background-color: rgb(242,242,242)!important;
+}
