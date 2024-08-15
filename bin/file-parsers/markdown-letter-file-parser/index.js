@@ -103,6 +103,8 @@ module.exports = class MarkdownLetterFileParser {
             title: this.pageUtil.getTitleFromUrl(path.basename(file))
         });
 
+        data.subject = data.subject ?? {};
+
         const ymlFile = `${file}.yml`;
         if (await files.exists(ymlFile)) {
             const d = yaml.load(await files.readFileAsString(ymlFile)) || {};
