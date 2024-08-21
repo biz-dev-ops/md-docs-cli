@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
-    "@biz-dev-ops/web-components": "^0.0.23",
+    "@biz-dev-ops/web-components": "^0.0.25",
     "@cucumber/gherkin-streams": "^5.0.1",
     "@iframe-resizer/child": "^5.1.5",
     "@iframe-resizer/parent": "^5.1.5",
@@ -60,7 +60,7 @@
     "pagedjs": "^0.5.0-beta.1",
     "prismjs": "^1.29.0",
     "pug": "^3.0.2",
-    "puppeteer": "^22.11.2",
+    "puppeteer": "^23.0.1",
     "svg-pan-zoom": "^3.6.1",
     "swagger-ui-dist": "^5.1.1",
     "uuid": "^10.0.0",
