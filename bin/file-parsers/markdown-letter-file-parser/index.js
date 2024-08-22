@@ -157,7 +157,7 @@ addQRCodeToCallToActionButton = function(html, data) {
         a.innerHTML = `
             <span>${a.innerHTML}</span>
             <span class="barcode">
-                <img src="${data.root}assets/images/letter/qr.svg" alt="${a.innerText}">
+                <img src="${data.root}assets/images/letter/qr.svg" alt="${a.textContent}">
             </span>
         `;
     });
