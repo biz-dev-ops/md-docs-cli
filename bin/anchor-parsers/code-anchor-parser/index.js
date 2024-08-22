@@ -31,8 +31,8 @@ const CODE_LANGUAGES = [
   { name: 'javascript', extension: '.js' },
   { name: 'json', extension: '.json' },
   { name: 'python', extension: '.py' },
-  { name: 'yaml', extension: '.code.yml' },
-  { name: 'yaml', extension: '.code.yaml' },
-  { name: 'yaml', extension: '.data.yml' },
-  { name: 'yaml', extension: '.data.yaml' }
+  { name: 'yaml', extension: '.yml#code' },
+  { name: 'yaml', extension: '.yaml#code' },
+  { name: 'markdown', extension: '.md#code' },
+  { name: 'html', extension: '.html#code' }
 ];
