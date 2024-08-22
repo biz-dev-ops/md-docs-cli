@@ -69,6 +69,6 @@
   "devDependencies": {
     "stylelint": "^15.10.1",
     "stylelint-config-standard-scss": "^11.0.0",
-    "stylelint-order": "^6.0.3"
+    "stylelint-order": "^6.0.4"
   }
 }
