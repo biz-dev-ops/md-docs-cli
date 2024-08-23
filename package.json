@@ -58,7 +58,7 @@
     "md5": "^2.3.0",
     "mustache": "^4.2.0",
     "pdfjs-viewer-element": "^2.6.4",
-    "prince": "^1.11.5",
+    "prince": "^1.11.6",
     "prismjs": "^1.29.0",
     "pug": "^3.0.2",
     "puppeteer": "^23.0.1",
