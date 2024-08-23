@@ -40,34 +40,32 @@ email:
         CoC: 111111111<br>
         VAT: 00000000000000
     </p>
-message:
+letter:
   googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&amp;display=swap'
   to: |
     John Doe<br>
     The Street 2<br>
-    11111 The City
+    1000 AA The City
+    <span class="kix">1000AA</span>
   date: The City, january 1st 2022
-  salutation: Dear reader,
-  signature:
-    The Company,
-    
-    
-    
-    The Boss
-    Managing Director
-  footer: |
-    <address>
-        The Company<br>
-        The Street 1<br>
-        11111 The City
-    </address>
-    <p>
-        CoC: 111111111<br>
-        VAT: 00000000000000
-    </p>
+  subject:
+    title: Warning, no subject specified.
   references:
-    - name: Subject
-      value: No subject defined, please define a subject!
     - name: Your reference
       value: 111111
-    - name: Our reference
+  salutation: Dear reader,
+  signature:
+    The Company<br/>
+    <img src="{{{root}}}assets/images/letter/signature.svg" alt="signature" /><br/>
+    The Boss<br/>
+    Managing Director
+  contact: |
+    <p>
+        The Company<br/>
+        The Street 1<br/>
+        1000 AA The City
+    </p>
+    <p>
+        CoC: 111111111<br/>
+        VAT: 00000000000000
+    </p>

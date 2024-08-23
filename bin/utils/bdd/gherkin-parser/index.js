@@ -56,7 +56,7 @@ module.exports = class GherkinParser {
     
                 return {
                     name: feature.name,
-                    title: feature.name,
+                    title: feature.name.replace(` (${ref.hash})`, ""),
                     group: ref.group,
                     hash: ref.hash,
                     scenarios: feature.children

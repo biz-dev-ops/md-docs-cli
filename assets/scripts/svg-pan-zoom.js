@@ -63,6 +63,11 @@
       return;
     }
 
+    const bbox = svg.getBBox();
+    if(bbox.height === 0 && bbox.width === 0) {
+      return;
+    }
+
     makeItFit(svg);
     panZoom.destroy();
     panZoom = null;

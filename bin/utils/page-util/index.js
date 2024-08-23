@@ -54,7 +54,7 @@ module.exports = class PageUtil {
         url = path.resolve(cwd(), url);
         url = this.removeOrder(url);
         url = path.relative(this.options.dst, url);
-        return url
+        return url.replace(/\\/g, "/");
     }
 
     removeOrder(url) {
@@ -70,15 +70,15 @@ module.exports = class PageUtil {
     }
 
     relativeBaseHref() {
-        return this.#relativeTo(cwd(), this.options.dst);
+        return this.#relativeTo(cwd(), this.options.dst).replace(/\\/g, "/");
     }
 
     relativeRootFromBaseHref() {
-        return this.#relativeTo(this.options.dst, this.options.basePath);
+        return this.#relativeTo(this.options.dst, this.options.basePath).replace(/\\/g, "/");
     }
 
     #relativeTo(from, to) {
-        const root = path.relative(from, to);
+        const root = path.relative(from, to).replace(/\\/g, "/");
         if (root === '')
             return root;
     
