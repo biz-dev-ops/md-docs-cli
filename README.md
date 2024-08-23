@@ -116,7 +116,15 @@ md-docs depends on java to render UML diagrams. Make sure that the java is insta
 
 ## Options
 
-### branches only
+### Create release
+
+All the business contracts are added to the release folder.
+
+```
+md-docs -r
+```
+
+### Branches only
 
 ```
 md-docs -b
