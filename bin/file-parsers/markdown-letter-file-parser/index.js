@@ -22,6 +22,7 @@ const md = require('markdown-it')
 const mustache = require('mustache');
 const Prince = require("prince");
 const Inliner = require("web-resource-inliner");
+const jsdom = require('jsdom');
 
 const files = require('../../utils/files');
 
@@ -54,7 +55,6 @@ module.exports = class MarkdownLetterFileParser {
         let html = this.component.render(data);
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.raw.html`, html);
-
 
         html = await this.#inlineFiles(this.options.dst, html);
         await fs.writeFile(`${file}.html`, html);
@@ -142,5 +142,25 @@ renderData = function (data) {
 renderMarkdown = async function (file, data) {
     let markdown = await files.readFileAsString(file);
     markdown = mustache.render(markdown, data);
-    return md.render(markdown);
+    const html = md.render(markdown);
+
+    return addQRCodeToCallToActionButton(html, data);
+
+}
+
+addQRCodeToCallToActionButton = function(html, data) {
+    //TODO: move to markdown it plugin
+    const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
+    element.innerHTML = html;
+
+    Array.from(element.querySelectorAll('.block.block--call-to-action a')).forEach(a => {
+        a.innerHTML = `
+            <span>${a.innerHTML}</span>
+            <span class="barcode">
+                <img src="${data.root}assets/images/letter/qr.svg" alt="${a.innerText}">
+            </span>
+        `;
+    });
+
+    return element.innerHTML;
 }
