@@ -65,7 +65,7 @@
     "svg-pan-zoom": "^3.6.1",
     "swagger-ui-dist": "^5.1.1",
     "uuid": "^10.0.0",
-    "web-resource-inliner": "^6.0.1",
+    "web-resource-inliner": "^7.0.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
