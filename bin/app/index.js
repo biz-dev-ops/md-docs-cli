@@ -195,10 +195,10 @@ module.exports = class App {
     }
 
     async #parse(options) {
-        await parseFiles.bind(this)("pre parsing files", this.container.resolve('preFileParsers'));
+        //await parseFiles.bind(this)("pre parsing files", this.container.resolve('preFileParsers'));
         await parseUml.bind(this)();
         await parseFiles.bind(this)("parsing files", this.container.resolve('fileParsers'));
-        await parseFiles.bind(this)("post parsing files", this.container.resolve('postFileParsers'));
+        //await parseFiles.bind(this)("post parsing files", this.container.resolve('postFileParsers'));
 
         async function parseFiles(name, fileParsers) {
             const totalFiles = (await files.count(options.dst)) * fileParsers.length;
@@ -247,7 +247,7 @@ module.exports = class App {
 
             const cmd = "java", args = [
                 "-jar",
-                `${__dirname}/../plantuml-1.2023.13.jar`,
+                `${__dirname}/../plantuml-1.2024.6.jar`,
                 `${options.dst}/**/*.puml`,
                 "-tsvg",
                 "-enablestats",

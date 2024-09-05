@@ -6,6 +6,7 @@ const { JSDOM } = require('jsdom');
 const markdown_it_anchor = require('markdown-it-anchor');
 const yaml = require('js-yaml');
 const files = require('../files');
+const { Console } = require('console');
 
 class Sitemap {
     static slugify(name) {
@@ -58,6 +59,14 @@ class Sitemap {
                 return;
 
             const slug = Sitemap.slugify(name);
+
+            console.log("***************************************************");
+            console.dir({
+                name,
+                slug
+            });
+            console.log("***************************************************");
+
             const hits = sitemap
                 .find((el) => el.slug === slug)
                 .filter(item => item.url);
