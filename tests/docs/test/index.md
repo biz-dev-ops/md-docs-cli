@@ -8,11 +8,15 @@ Test page to render all elements.
 
 ## BPMN
 
-[process](../process.bpmn)
+[process](./process.bpmn)
 
 ## Feature
 
 [feature](../test.feature)
+
+### Use-case
+
+Test use case description.
 
 ## Dashboard
 
