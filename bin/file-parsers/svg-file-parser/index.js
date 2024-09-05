@@ -22,10 +22,6 @@ module.exports = class SvgFileParser {
             "text"
         );
 
-        if(file.includes("message-service/context.svg")) {
-            throw Error("");
-        }
-
         await fs.writeFile(file, svg);
     }
 }

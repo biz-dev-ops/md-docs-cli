@@ -1,7 +1,9 @@
 const fs = require('fs').promises;
 const { env } = require('process');
+const { EOL } = require("node:os");  
+const colors = require('colors');
 const files = require('../../utils/files');
-const Sitemap = require('../../utils/sitemap')
+const Sitemap = require('../../utils/sitemap');
 
 module.exports = class PumlFileParser {
     #sitemapItems;
@@ -15,6 +17,8 @@ module.exports = class PumlFileParser {
         if (!(file.endsWith('.puml')))
             return;
 
+        console.info(colors.green(`\t\t\t\t* parsing puml`));
+
         if(!this.#sitemapItems) {
             await this.sitemap.init();
             this.#sitemapItems = await this.sitemap.items();
@@ -25,9 +29,9 @@ module.exports = class PumlFileParser {
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.raw.puml`, puml);
 
-        puml = puml.split("\n")
+        puml = puml.split(/\r?\n/)
             .map(line => this.#addLinkToLine(line))
-            .join("\n");
+            .join(EOL);
 
         await fs.writeFile(file, puml);
     }

@@ -60,13 +60,6 @@ class Sitemap {
 
             const slug = Sitemap.slugify(name);
 
-            console.log("***************************************************");
-            console.dir({
-                name,
-                slug
-            });
-            console.log("***************************************************");
-
             const hits = sitemap
                 .find((el) => el.slug === slug)
                 .filter(item => item.url);
