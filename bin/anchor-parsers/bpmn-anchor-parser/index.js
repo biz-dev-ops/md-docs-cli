@@ -18,10 +18,9 @@ module.exports = class BPMNAnchorParser extends AnchorParser {
 
   async _parse(anchor, file) {
     const xml = (await files.readFileAsString(file))
-      .replace(/(\r\n|\n|\r)/gm, "")
-      .replace(/"/g, '\\"');
+      .replace(/[\r\n]+/gm, "")
+      .replace(/\"/g, '\\"');
       
-
     const showProcess = determinShowProcess(anchor); 
 
     console.info(colors.green(`\t\t\t\t* rendering`));
