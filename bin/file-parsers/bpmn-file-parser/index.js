@@ -41,10 +41,11 @@ module.exports = class BPMNFileParser {
     }
 
     async #checkElement(elementName, el) {
-        if(el?.hasOwnProperty("@_name") === false || elementName === "bizdevops:link") {
+        if(!el?.hasOwnProperty("@_name") || elementName === "bizdevops:link") {
             return;
         }
         
+        console.dir({ el, hasOwnProperty: el?.hasOwnProperty("@_name") });
         const links = await this.#findLinks(el["@_name"]);
 
         if(links?.length === 0) {
