@@ -17,7 +17,7 @@ exports.info = async function (options) {
         const remote = await parseRemoteOrigin();
 
         const localBranches = (await __exec(`git branch -a`))
-            .split(`\n`)
+            .split(/\r?\n/)
             .map(b => b.replace(/\*/g, "").trim());
                 
         const branches = remote.branches
@@ -116,7 +116,7 @@ async function parseRemoteOrigin() {
 }
 
 function parseGitReponse(response) {
-    const lines = response.split(`\n`);
+    const lines = response.split(/\r?\n/);
     const parsed = [];
 
     lines.forEach(line => {

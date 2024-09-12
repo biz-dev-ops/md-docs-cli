@@ -37,6 +37,7 @@ const GherkinParser = require('../utils/bdd/gherkin-parser');
 
 const BPMNFileParser = require('../file-parsers/bpmn-file-parser');
 const BusinessReferenceArchitectureFileParser = require('../file-parsers/business-reference-architecture-file-parser');
+const DefinitionFileParser = require('../file-parsers/definition-file-parser');
 const DMNFileParser = require('../file-parsers/dmn-file-parser');
 const DrawIOFileParser = require('../file-parsers/drawio-file-parser');
 const FeatureFileParser = require('../file-parsers/feature-file-parser');
@@ -249,7 +250,7 @@ module.exports = class App {
 
             const cmd = "java", args = [
                 "-jar",
-                `${__dirname}/../plantuml-1.2023.13.jar`,
+                `${__dirname}/../plantuml-1.2024.6.jar`,
                 `${options.dst}/**/*.puml`,
                 "-tsvg",
                 "-enablestats",
@@ -404,6 +405,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
             { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
             
+            
             { src: options.src, dst: options.dst }
         ];
 
@@ -451,6 +453,7 @@ Please review the error and fix the problem. A new version will be automaticly b
 
             //File parser
             'bpmnFileParser': asClass(BPMNFileParser).singleton(),
+            'definitionFileParser': asClass(DefinitionFileParser).singleton(),
             'dmnFileParser': asClass(DMNFileParser).singleton(),
             'businessReferenceArchitectureFileParser': asClass(BusinessReferenceArchitectureFileParser).singleton(),
             'drawIOFileParser': asClass(DrawIOFileParser).singleton(),
@@ -525,6 +528,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             ],
 
             'preFileParsers': [
+                'definitionFileParser',
                 'ymlFileParser',
                 'pumlFileParser'
             ],

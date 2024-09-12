@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const { EOL } = require("node:os");  
 const path = require('path');
 const md5 = require('md5');
 const colors = require('colors');
@@ -55,9 +56,9 @@ module.exports = class FeatureFileParser {
     }
 
     #addHash(feature, hash) {
-        const lines = feature.split('\n');
+        const lines = feature.split(/\r?\n/);
         const index = lines.findIndex(l => !l.trim().startsWith('#') && l.includes(':'));
         lines[index] = `${lines[index]} (${hash})`;
-        return lines.join('\n');
+        return lines.join(EOL);
     }
 }
