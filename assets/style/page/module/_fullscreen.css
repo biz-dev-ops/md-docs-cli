@@ -139,7 +139,9 @@ body[data-fullscreen-active="true"] {
     max-width: none;
 }
 
-[data-fullscreen="true"] iframe {
+[data-fullscreen="true"] iframe,
+[data-fullscreen="true"] object,
+[data-fullscreen="true"] embed {
     box-shadow: none !important;
 }
 
