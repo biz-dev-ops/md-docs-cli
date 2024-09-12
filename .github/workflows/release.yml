@@ -58,7 +58,7 @@ jobs:
         if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
   
       - name: npm publish

@@ -1,70 +1,90 @@
 const fs = require('fs').promises;
-const path = require('path');
-const colors = require('colors');
-const { env } = require('process');
-const { v4: uuidv4 } = require('uuid');
 const files = require('../../utils/files');
+const { XMLParser, XMLBuilder } = require("fast-xml-parser");
 
 module.exports = class BPMNFileParser {
-    #urlsRegex = /url\('#([^')]*)/gm;
-
-    constructor({ options, headlessBrowser, sitemap }) {
+    constructor({ options, sitemap }) {
         this.options = options;
-        this.headlessBrowser = headlessBrowser;
         this.sitemap = sitemap;
+        
+        const xmlOptions = {
+            ignoreAttributes: false,
+            attributeNamePrefix : "@_",
+            indentBy: "  ",
+            format: true,
+            suppressBooleanAttributes: false
+        };
+
+        this.parser = new XMLParser(xmlOptions);
+        this.builder =  new XMLBuilder(xmlOptions);
     }
 
     async parse(file) {
         if (!(file.endsWith('.bpmn')))
             return;
 
-        const svgFile = `${file}.svg`;
-        console.info(colors.green(`\t* creating ${path.relative(this.options.dst, svgFile)}`));
+        const xml = await this.#addLinksToBPMN(file);
 
-        let svg = await this.#createSvg(file);
-        svg = await this.sitemap.link(
-            svg,
-            "text"
-        );
-
-        await fs.writeFile(svgFile, svg);
+        await fs.writeFile(file, xml);
     }
 
-    async #createSvg(file) {
+    async #addLinksToBPMN(file) {
         const xml = await files.readFileAsString(file);
-        const page = await this.#getPage();
-        let svg = await page.evaluate(async (xml) => {
-            //Executes in context of the page, see viewer.html
-            return await convertToSVG(xml);
-        }, xml);
 
-        svg = this.#fixReferenceToHiddenElementBug(svg);
+        let xmlObject = this.parser.parse(xml);
 
-        if (env.NODE_ENV === 'development')
-            await fs.writeFile(`${file}.raw.svg`, svg);
+        xmlObject["bpmn:definitions"]["@_xmlns:bizdevops"] = "https://github.com/biz-dev-ops/web-components/schema/1.0";
 
-        return svg;
+        await traverseJsonObject(null, xmlObject, this.#checkElement.bind(this));
+
+        return this.builder.build(xmlObject);
     }
 
-    #fixReferenceToHiddenElementBug(svg) {
-        Array.from(svg.matchAll(this.#urlsRegex)).forEach((match) => {
-            const url = match[1];
-            svg = svg.replaceAll(url, `${url}-${uuidv4()}`);
-        });
-        return svg;
-    }
+    async #checkElement(elementName, el) {
+        if(!el?.hasOwnProperty("@_name") || elementName === "bizdevops:link") {
+            return;
+        }
+        
+        const links = await this.#findLinks(el["@_name"]);
 
-    async #getPage() {
-        if(this.page) {
-            return this.page;
+        if(links?.length === 0) {
+            return;
         }
 
-        const script = await files.readFileAsString(require.resolve('bpmn-js/dist/bpmn-viewer.production.min.js'));
+        if(!el.hasOwnProperty("bpmn:extensionElements")) {
+            el["bpmn:extensionElements"] = {};
+        }
 
-        this.page = await this.headlessBrowser.newPage({
-            url: `file://${__dirname}/viewer.html`
-        });
-        await this.page.addScriptTag({ content: script});
-        return this.page;
+        el["bpmn:extensionElements"]["bizdevops:links"] = {
+            "bizdevops:link": links.map(link => ({
+                    "@_value": link.url,
+                    "@_name": link.name
+            }))
+        };
+    }
+
+    async #findLinks(name) {
+        if(!this.sitemapArray) {
+            this.sitemapArray = await this.sitemap.items();
+        }
+        
+        return this.sitemapArray.find(name).map(m => ({ 
+            name: m.name,
+            url: m.url
+        }));
+    }
+}
+
+async function traverseJsonObject(objKey, obj, callback) {
+    if (obj === null || typeof obj !== 'object') {
+        return;
+    }
+
+    for (const key in obj) {
+        await callback(Array.isArray(obj) ? objKey : key, obj[key]);
+
+        if (typeof obj[key] === 'object') {
+            await traverseJsonObject(key, obj[key], callback);
+        }
     }
 }

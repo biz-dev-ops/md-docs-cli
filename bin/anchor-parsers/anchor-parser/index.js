@@ -8,18 +8,19 @@ module.exports = class AnchorParser {
     constructor() { }
 
     async parse(anchor) {
-        if (!this._canParse(anchor))
+        const file = path.resolve(cwd(), `${anchor.href.split('?')[0].split('#')[0]}`);
+
+        if (!this._canParse(anchor, file))
             return;
         
         console.info(colors.green(`\t\t\t* [${this.constructor.name}]:`));
-
-        const file = path.resolve(cwd(), `${anchor.href.split('?')[0].split('#')[0]}`);
+        
         const html = await this._parse(anchor, file);
         if (html != undefined)
             replace(anchor, html);
     }
 
-    _canParse(anchor) { throw new Error('abstract method not implemented') };
+    _canParse(anchor, file) { throw new Error('abstract method not implemented') };
     async _parse(anchor, file) { throw new Error('abstract method not implemented') };
     async _readFileAsString(file, encoding = 'utf8') { return await files.readFileAsString(file, encoding); };
 }

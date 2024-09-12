@@ -50,6 +50,7 @@ const SvgFileParser = require('../file-parsers/svg-file-parser');
 const UseCaseFileParser = require('../file-parsers/use-case-file-parser');
 const YmlFileParser = require('../file-parsers/yml-file-parser');
 
+const BPMNComponent = require('../components/bpmn-component');
 const BusinessModelCanvasComponent = require('../components/business-model-canvas-component');
 const BusinessReferenceArchitectureComponent = require('../components/business-reference-architecture-component');
 const CommandUseCaseComponent = require('../components/command-use-case-component');
@@ -82,6 +83,7 @@ const FullscreenHtmlParser = require('../html-parsers/fullscreen-html-parser');
 const HeadingHtmlParser = require('../html-parsers/heading-html-parser');
 const UnsortedListHtmlParser = require('../html-parsers/unsorted-list-html-parser');
 
+const BPMNAnchorParser = require('../anchor-parsers/bpmn-anchor-parser');
 const BusinessModelCanvasAnchorParser = require('../anchor-parsers/business-model-canvas-anchor-parser');
 const BusinessReferenceArchitectureAnchorParser = require('../anchor-parsers/business-reference-architecture-anchor-parser');
 const CommandUseCaseAnchorParser = require('../anchor-parsers/command-use-case-anchor-parser');
@@ -401,12 +403,11 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, 'pdfjs-viewer-element/dist/pdfjs-viewer-element.js'), dst: path.resolve(options.basePath, 'assets/pdfjs-viewer-element') },
 
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
+            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
+            
             
             { src: options.src, dst: options.dst }
         ];
-
-        (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))
-            .forEach(src => fileTransfers.push({ src, dst: path.resolve(options.basePath, 'assets/web-components') }));
 
         if (options.theme) {
             fileTransfers.push({ src: options.theme, dst: path.resolve(options.basePath, 'assets/style/custom-theme.css') });
@@ -479,6 +480,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'unsortedListHtmlParser': asClass(UnsortedListHtmlParser).singleton(),
 
             //Anchor parser
+            'bpmnAnchorParser': asClass(BPMNAnchorParser).singleton(),
             'businessModelCanvasAnchorParser': asClass(BusinessModelCanvasAnchorParser).singleton(),
             'businessReferenceArchitectureAnchorParser': asClass(BusinessReferenceArchitectureAnchorParser).singleton(),
             'codeAnchorParser': asClass(CodeAnchorParser).singleton(),
@@ -499,6 +501,7 @@ Please review the error and fix the problem. A new version will be automaticly b
             'userTaskAnchorParser': asClass(UserTaskAnchorParser).singleton(),
 
             //Component
+            'bpmnComponent': asClass(BPMNComponent).singleton().inject(container => allowUnregistered(container, 'bpmnComponentRenderFn')),
             'businessModelCanvasComponent': asClass(BusinessModelCanvasComponent).singleton().inject(container => allowUnregistered(container, 'businessModelCanvasComponentRenderFn')),
             'businessReferenceArchitectureComponent': asClass(BusinessReferenceArchitectureComponent).singleton().inject(container => allowUnregistered(container, 'businessReferenceArchitectureComponentRenderFn')),
             'commandUseCaseComponent': asClass(CommandUseCaseComponent).singleton().inject(container => allowUnregistered(container, 'commandUseCaseComponentRenderFn')),
@@ -580,6 +583,7 @@ Please review the error and fix the problem. A new version will be automaticly b
                 'eventUseCaseAnchorParser',
                 'queryUseCaseAnchorParser',
                 'taskUseCaseAnchorParser',
+                'bpmnAnchorParser',
                 'codeAnchorParser'
             ]
         };

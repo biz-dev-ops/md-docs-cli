@@ -7,12 +7,15 @@ oneOf:
       - registration_date
       - engines
     title: freight trainset
-    description:
-      "A freight trainset, cargo trainset, or goods trainset is a group of
+    description: |
+      A freight trainset, cargo trainset, or goods trainset is a group of
       freight cars (US) or goods wagons (International Union of Railways) hauled by
       one or more locomotives on a railway, transporting cargo all or some of the way
-      between the shipper and the intended destination as part of the logistics chain.\n\n
-      \ \n"
+      between the shipper and the intended destination as part of the logistics chain.
+
+      - aaaa
+      - bbbb
+      - ccccs
     properties:
       object_type:
         title: object type
@@ -20,6 +23,10 @@ oneOf:
           Object type is used the distinguish between different types of
           trainsets.
         type: string
+        enum:
+          - freight
+          - passenger
+          - maintenance
       trainset_id:
         type: integer
         minimum: 0

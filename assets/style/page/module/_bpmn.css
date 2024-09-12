@@ -1,5 +1,3 @@
-/* Hack to hide layer over event text to make the anchor clickable. */
-svg .djs-outline, 
-svg .djs-hit-all {
-    display: none;
+bpmn-viewer {
+    height: 700px;
 }
