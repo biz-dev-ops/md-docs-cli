@@ -58,6 +58,7 @@ class Sitemap {
                 return;
 
             const slug = Sitemap.slugify(name);
+
             const hits = sitemap
                 .find((el) => el.slug === slug)
                 .filter(item => item.url);

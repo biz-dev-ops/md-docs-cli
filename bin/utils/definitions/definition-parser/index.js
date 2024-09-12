@@ -3,6 +3,7 @@ const mustache = require('mustache');
 
 module.exports = class DefinitionParser {
     #definitions = null;
+    #definitionsDictionary = null;
     #regEx = null;
 
     constructor({ definitionStore }) {
@@ -11,9 +12,7 @@ module.exports = class DefinitionParser {
 
     async parse(text) {
         if (!this.#definitions) {
-            this.#definitions = await this.definitionStore.get();
-            const words = this.#definitions.map(definition => definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-            this.#regEx = new RegExp(`${words.map(word => `\\b${word}\\b`).join("|")}(?![^<]*>)`, "gmi");
+            this.init();
         }
 
         const element = jsdom.JSDOM.fragment('<div></div>').firstElementChild;
@@ -36,14 +35,21 @@ module.exports = class DefinitionParser {
 
     async render(template) {
         if (!this.#definitions) {
-            this.#definitions = (await this.definitionStore.get())
-                .reduce((result, definition) => {
-                    result[definition.name.replaceAll(" ", "-")] = definition.text;
-                    return result;
-                }, {});
+            this.init();
         }
 
-        return mustache.render(template, this.#definitions);
+        return mustache.render(template, this.#definitionsDictionary);
+    }
+
+    async init() {
+        this.#definitions = await this.definitionStore.get();
+        this.#definitionsDictionary = this.#definitions
+            .reduce((result, definition) => {
+                result[definition.name.replaceAll(" ", "_")] = definition.text;
+                return result;
+            }, {});
+        const words = this.#definitions.map(definition => definition.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        this.#regEx = new RegExp(`${words.map(word => `\\b${word}\\b`).join("|")}(?![^<]*>)`, "gmi");
     }
 }
 
