@@ -16,7 +16,7 @@ module.exports = class DefinitionHtmlParser extends HtmlParser {
             return;
         }
 
-        console.info(colors.green(`\t* parsing ${elements.length} elements:`));
+        console.info(colors.green(`\t* applying definitions on ${elements.length} elements:`));
 
         for (const element of elements) {
             element.innerHTML = await this.definitionParser.parse(element.innerHTML);
