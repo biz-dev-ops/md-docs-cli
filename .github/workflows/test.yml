@@ -28,24 +28,7 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Build branches
+      - name: Build
         working-directory: tests
-        id: branches
         run: |
-          node ../bin/index.js -b
-          BRANCHES=$(cat ./dist/branches.json)
-          echo "::set-output name=value::${BRANCHES//'%'/'%25'}"
-
-      - name: Build websites
-        working-directory: tests
-        shell: bash
-        run: |
-          git fetch
-          for B in $(echo $BRANCHES | jq -r 'sort_by(.path) | .[].name')
-          do
-              git checkout "$B"
-              npm ci
-              node ../bin/index.js
-          done
-        env:
-          BRANCHES: ${{ steps.branches.outputs.value }}
+          node ../bin/index.js
