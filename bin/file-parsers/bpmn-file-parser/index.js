@@ -41,7 +41,7 @@ module.exports = class BPMNFileParser {
     }
 
     async #checkElement(elementName, el) {
-        if(el?.hasOwnProperty("@_name") === false || elementName === "bizdevops:link") {
+        if(!el?.hasOwnProperty("@_name") || elementName === "bizdevops:link") {
             return;
         }
         
