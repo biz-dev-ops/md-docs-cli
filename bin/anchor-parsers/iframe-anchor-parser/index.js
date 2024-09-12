@@ -29,7 +29,7 @@ module.exports = class IFrameAnchorParser extends AnchorParser {
     const hash = await files.hash(file);
   
     return this.iFrameComponent.render({
-      name: name,
+      classes: [name],
       src: `./${path.relative(cwd(), file)}.html?_v=${hash}`
     });
   }
@@ -37,7 +37,6 @@ module.exports = class IFrameAnchorParser extends AnchorParser {
 
 const extensions = [
   '.email.md',
-  '.message.md',
   '.openapi.yml',
   '.openapi.yaml'
 ]

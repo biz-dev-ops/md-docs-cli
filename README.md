@@ -6,7 +6,7 @@
 
 ## Product
 
-md-docs is a cli tool which generates a static website by resolving files recursivly from a source folder.
+md-docs is a cli tool which generates a static website by resolving files recursively from a source folder.
 
 See the [test set](https://github.com/synionnl/md-docs-cli/tree/main/tests) for more information.
 
@@ -103,7 +103,7 @@ md-docs
 google-chrome dist/index.html
 ```
 
-### Pupteer
+### Pupeteer
 
 Pupeteer requires a chromium browser to operate. By default pupeteer will try to install a chromium browser. Create the folowing environment variables if you want to use your own chrome / chromium browser:
 
@@ -114,9 +114,21 @@ Pupeteer requires a chromium browser to operate. By default pupeteer will try to
 
 md-docs depends on java to render UML diagrams. Make sure that the java is installed and that the bin folder is added to path environment variable.
 
+### PrinceXML
+
+PrinceXML is used to transform letter specifications in markdown into PDF files. It uses the latest official build. If you want to use a different PrinceXML version, just install it and make sure that the prince executable path is your PATH environment variable.
+
 ## Options
 
-### branches only
+### Create release
+
+All the business contracts are added to the release folder.
+
+```
+md-docs -r
+```
+
+### Branches only
 
 ```
 md-docs -b
