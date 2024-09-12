@@ -401,10 +401,12 @@ Please review the error and fix the problem. A new version will be automaticly b
             { src: path.resolve(options.nodeModules, 'pdfjs-viewer-element/dist/pdfjs-viewer-element.js'), dst: path.resolve(options.basePath, 'assets/pdfjs-viewer-element') },
 
             { src: path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/web-components.js'), dst: path.resolve(options.basePath, 'assets/web-components') },
-            { src: (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))[0], dst: path.resolve(options.basePath, 'assets/web-components') },
             
             { src: options.src, dst: options.dst }
         ];
+
+        (await glob(path.resolve(options.nodeModules, '@biz-dev-ops/web-components/dist/*.woff2').replace(/\\/g, "/")))
+            .forEach(src => fileTransfers.push({ src, dst: path.resolve(options.basePath, 'assets/web-components') }));
 
         if (options.theme) {
             fileTransfers.push({ src: options.theme, dst: path.resolve(options.basePath, 'assets/style/custom-theme.css') });

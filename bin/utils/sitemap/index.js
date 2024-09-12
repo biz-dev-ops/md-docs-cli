@@ -6,7 +6,6 @@ const { JSDOM } = require('jsdom');
 const markdown_it_anchor = require('markdown-it-anchor');
 const yaml = require('js-yaml');
 const files = require('../files');
-const { Console } = require('console');
 
 class Sitemap {
     static slugify(name) {
