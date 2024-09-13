@@ -10,7 +10,7 @@ module.exports = class DefinitionHtmlParser extends HtmlParser {
 
     async parse(element) {
         const elements = element
-            .querySelectorAll('p:not(svg *),li:not(svg *),td:not(svg *),th:not(svg *),span:not(svg *)');
+            .querySelectorAll('p:not(svg *),td:not(svg *),th:not(svg *),span:not(svg *), .headless-container > ul li, .container > ul li');
 
         if (elements === undefined || elements.length === 0) {
             return;

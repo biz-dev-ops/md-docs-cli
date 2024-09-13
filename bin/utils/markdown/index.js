@@ -27,7 +27,8 @@ const md = require('markdown-it')
     .use(require("markdown-it-abbr"))
     .use(require("markdown-it-codetabs"))
     .use(require("markdown-it-attrs"))
-    .use(require('markdown-it-task-lists'));
+    .use(require('markdown-it-task-lists'))
+    .use(require('markdown-it-footnote'));
 
 module.exports = class MarkdownRenderer {
     constructor() { }
