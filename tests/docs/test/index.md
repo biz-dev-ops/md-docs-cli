@@ -8,7 +8,7 @@ Test page to render all elements.
 
 ## BPMN
 
-[process](./process.bpmn)
+[process](../process.bpmn)
 
 ## Feature
 
