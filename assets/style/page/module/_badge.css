@@ -1,12 +1,11 @@
 .badge {
-    align-items: center;
     background-color: var(--color-brand-a10);
     border-radius: var(--radius-pill);
     color: var(--badge-text-color, var(--text-color-base));
     display: inline;
     font-size: var(--font-size-xs);
-    gap: var(--space-xxs);
-    padding-block: calc(var(--space-xxs) / 2);
+    font-weight: 700;
+    padding-block: var(--space-xxs);
     padding-inline: var(--space-xs);
 }
 
