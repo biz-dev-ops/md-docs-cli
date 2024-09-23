@@ -90,9 +90,10 @@ html
         ul(class='breadcrumb')
           +breadcrumbItems(menu)
 
-        h1(class='title') !{title}
-          if version 
-            version(class="badge")=version
+        if(!heading)
+          h1(class='title') !{title}
+        else
+          | !{heading}
 
         nav(id='table-of-content' class='table-of-content')
 

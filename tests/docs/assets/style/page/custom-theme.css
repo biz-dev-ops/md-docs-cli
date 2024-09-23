@@ -1,3 +1,24 @@
 .header-container.h3 h3.error {
     background-color:var(--color-error);
 }
+
+.badge {
+    background-color: var(--color-brand-a10);
+    border-radius: var(--radius-pill);
+    color: var(--badge-text-color, var(--text-color-base));
+    display: inline;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    padding-block: var(--space-xxs);
+    padding-inline: var(--space-xs);
+}
+
+*:has(> .badge) {
+    position: relative;
+}
+
+* > .badge {
+    position: absolute;
+    top: 0;
+    margin-left: var(--space-xs);
+}
