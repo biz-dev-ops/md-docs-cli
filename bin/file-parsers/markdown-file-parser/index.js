@@ -24,7 +24,7 @@ module.exports = class MarkdownFileParser {
 
         if (!('page' in this.options) ||
             !('headingTemplate' in this.options.page)) {
-            this.headingTemplateRenderer = (data) => `<h1 class="title">${data.title}</h1>`;
+            this.headingTemplateRenderer = () => null;
         }
         else {
             this.headingTemplateRenderer = pug.compile(this.options.page.headingTemplate);
