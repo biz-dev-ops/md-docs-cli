@@ -3,8 +3,9 @@ const { env } = require('process');
 const path = require('path');
 const colors = require('colors');
 const mustache = require('mustache');
-const files = require('../../utils/files');
+const pug = require('pug');
 const yaml = require('js-yaml');
+const files = require('../../utils/files');
 
 module.exports = class MarkdownFileParser {
     #definitions = null;
@@ -20,6 +21,14 @@ module.exports = class MarkdownFileParser {
         this.parsers = htmlParsers;
         this.pageUtil = pageUtil;
         this.definitionStore = definitionStore;
+
+        if (!('page' in this.options) ||
+            !('headingTemplate' in this.options.page)) {
+            this.headingTemplateRenderer = (data) => `<h1 class="title">${data.title}</h1>`;
+        }
+        else {
+            this.headingTemplateRenderer = pug.compile(this.options.page.headingTemplate);
+        }
     }
 
     async parse(file) {
@@ -40,20 +49,21 @@ module.exports = class MarkdownFileParser {
     async #render(file) {
         const data = await this.#getData(file);
         const markdown = await files.readFileAsString(file);
-        const element = await this.renderer.render(mustache.render(markdown, data));
+        const body = await this.renderer.render(mustache.render(markdown, data));
+        const heading = this.headingTemplateRenderer({...data});
        
         if (env.NODE_ENV === 'development')
-            await fs.writeFile(`${file}.html`, element.outerHTML);
+            await fs.writeFile(`${file}.html`, body.outerHTML);
 
         for (const parser of this.parsers) {
-            await parser.parse(element, file);
+            await parser.parse(body, file);
         }
 
         if (env.NODE_ENV === 'development')
-            await fs.writeFile(`${file}.parsed.html`, element.outerHTML);
+            await fs.writeFile(`${file}.parsed.html`, body.outerHTML);
         
-        const logout = this.#getlogoutInfo(this.options, file);
-        const showNav = this.#getShowNavInfo(this.options, file);
+        const logout = this.#getlogoutInfo(file);
+        const showNav = this.#getShowNavInfo(file);
         const menuItems = await this.menu.items(file);
 
         const pageData = {
@@ -61,9 +71,9 @@ module.exports = class MarkdownFileParser {
             root: this.pageUtil.relativeRootFromBaseHref(),
             showNav: showNav,
             logout: logout,
-            content: element.innerHTML,
+            content: body.innerHTML,
             title: data.title,
-            version: data.version,
+            heading: heading,
             git: this.gitInfo,
             gitSourceFile: mustache.render(this.options.git.urlTemplate, { repository: this.gitInfo.branch.repository, branch: this.gitInfo.branch.name, file: path.relative(this.options.dst, file) }),
             options: this.options.page || {},
@@ -103,23 +113,23 @@ module.exports = class MarkdownFileParser {
         return markdownTitle;
     }
 
-    #getShowNavInfo(options, file) {
+    #getShowNavInfo(file) {
         if (file.endsWith('401.md') || file.endsWith('403.md'))
             return false;
         
         return true;
     }
 
-    #getlogoutInfo(options, file) { 
+    #getlogoutInfo(file) { 
         if (file.endsWith('401.md') || file.endsWith('403.md') || file.endsWith('404.md'))
             return null;
 
-        if (!('hosting' in options) ||
-            !('routes' in options.hosting) ||
-            !('logout' in options.hosting.routes)) {
+        if (!('hosting' in this.options) ||
+            !('routes' in this.options.hosting) ||
+            !('logout' in this.options.hosting.routes)) {
             return null;
         }
 
-        return options.hosting.routes.logout;
+        return this.options.hosting.routes.logout;
     }
 }
