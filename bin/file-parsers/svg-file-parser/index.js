@@ -19,7 +19,7 @@ module.exports = class SvgFileParser {
 
         svg = await this.sitemap.link(
             svg,
-            "text"
+            "div"
         );
 
         await fs.writeFile(file, svg);

@@ -71,12 +71,8 @@ class Sitemap {
                 replacer(el, hits);
             }
             else {
-                if(el.children.length === 0) {
-                    el.innerHTML = `<a href="${hits[0].url}" target="_top" style="text-decoration:underline;">${el.textContent}</a>`;
-                }
-                else {
-                    Array.from(el.children).forEach(c => c.innerHTML = `<a href="${hits[0].url}" target="_top" style="text-decoration:underline;">${c.textContent}</a>`);
-                }
+                el.setAttribute("bizdevops:link", hits[0].url);
+                el.innerHTML = `<a href="${hits[0].url}">${el.innerHTML}</a>`;
             }
         });
         return dom.window.document.body.innerHTML

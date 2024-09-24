@@ -5,10 +5,9 @@ const { env } = require('process');
 const files = require('../../utils/files');
 
 module.exports = class DrawIOFileParser {
-    constructor({ options, headlessBrowser, sitemap }) {
+    constructor({ options, headlessBrowser }) {
         this.options = options;
         this.headlessBrowser = headlessBrowser;
-        this.sitemap = sitemap;
     }
 
     async parse(file) {
@@ -18,16 +17,7 @@ module.exports = class DrawIOFileParser {
         const svgFile = `${file}.svg`;
         console.info(colors.green(`\t* creating ${path.relative(this.options.dst, svgFile)}`));
 
-        let svg = await this.#createSvg(file);
-
-        svg = await this.sitemap.link(
-            svg,
-            "div,font,text,tspan",
-            el => {
-                const name = el.children?.length === 0 ? el.textContent : null;
-                return name;
-            }
-        );
+        const svg = await this.#createSvg(file);
 
         await fs.writeFile(svgFile, svg);
     }
