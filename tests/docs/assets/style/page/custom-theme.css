@@ -6,19 +6,13 @@
     background-color: var(--color-brand-a10);
     border-radius: var(--radius-pill);
     color: var(--badge-text-color, var(--text-color-base));
-    display: inline;
     font-size: var(--font-size-xs);
     font-weight: 700;
-    padding-block: var(--space-xxs);
-    padding-inline: var(--space-xs);
+    margin-left: var(--space-xxs);
+    padding: var(--space-xs);
 }
 
 *:has(> .badge) {
-    position: relative;
-}
-
-* > .badge {
-    position: absolute;
-    top: 0;
-    margin-left: var(--space-xs);
+    display: flex;
+    align-items: flex-start;
 }

@@ -19,3 +19,35 @@
   text: |
     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
   link: www.google.com
+
+- name: scope
+  text: |
+    In object-oriented programming, function scope determines the visibility of a function within a class or module. This visibility affects how other parts of the program can access and use the function. There are three primary levels of function scope:
+
+    1. Public
+      Visibility: Accessible from anywhere within the program.
+      Use cases:
+      Functions that are part of the class's public interface and intended for external use.
+      Functions that need to be accessed by other classes or modules.
+    2. Protected
+      Visibility: Accessible only within the class itself and its subclasses.
+      Use cases:
+      Functions that are intended for internal use within the class or its derived classes.
+      Functions that implement the class's behavior but should not be directly exposed to external users.
+    3. Private
+      Visibility: Accessible only within the class itself.
+      Use cases:
+      Functions that are strictly for internal use and should not be accessible from outside the class.
+      Functions that implement low-level details of the class's implementation.
+- name: version
+  text: |
+    Semantic versioning (SemVer) is a simple specification for version numbering that aims to convey the meaning of changes to software.
+    It's designed to provide a clear and consistent way to manage versions, making it easier for developers and users to understand the impact of updates.
+
+    Key principles of SemVer:
+
+    MAJOR version (X): Indicates a significant change that introduces backwards-incompatible changes.
+    This could be a major new feature, a major bug fix, or a significant architectural change.
+    MINOR version (Y): Indicates a new feature that is backwards-compatible.
+    This could be a new feature that doesn't affect existing functionality or a minor bug fix.
+    PATCH version (Z): Indicates a backwards-compatible bug fix. This could be a bug fix that doesn't introduce new features.
