@@ -10,7 +10,7 @@ const files = require('../../utils/files');
 module.exports = class MarkdownFileParser {
     #definitions = null;
 
-    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, locale, htmlParsers, pageUtil, definitionStore }) {
+    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, locale, htmlParsers, pageUtil, definitionStore, definitionParser }) {
         this.options = options;
         this.gitInfo = gitInfo;
         this.hosting = hosting;
@@ -18,9 +18,10 @@ module.exports = class MarkdownFileParser {
         this.component = pageComponent;
         this.menu = menu;
         this.locale = locale;
-        this.parsers = htmlParsers;
+        this.htmlParsers = htmlParsers;
         this.pageUtil = pageUtil;
         this.definitionStore = definitionStore;
+        this.definitionParser = definitionParser;
 
         if (!('page' in this.options) ||
             !('headingTemplate' in this.options.page)) {
@@ -50,13 +51,13 @@ module.exports = class MarkdownFileParser {
         const data = await this.#getData(file);
         const markdown = await files.readFileAsString(file);
         const body = await this.renderer.render(mustache.render(markdown, data));
-        const heading = this.headingTemplateRenderer({...data});
+        const heading = await this.definitionParser.parse(this.headingTemplateRenderer({...data}));
        
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.html`, body.outerHTML);
 
-        for (const parser of this.parsers) {
-            await parser.parse(body, file);
+        for (const htmlParser of this.htmlParsers) {
+            await htmlParser.parse(body, file);
         }
 
         if (env.NODE_ENV === 'development')
