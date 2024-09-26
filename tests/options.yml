@@ -22,10 +22,14 @@ page:
   googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&amp;display=swap'
   headingTemplate: |
     h1(class='title') !{title}
-      if version 
-        span(class="badge") version: #{version}
-      if scope 
-        span(class="badge") scope: #{scope}
+      if version
+        span(class="badge")
+          span(class="definition") version
+          : #{version}
+      if scope
+        span(class="badge")
+          span(class="definition") scope
+          : #{scope}
 email:  
   googleFont: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&amp;display=swap'
   from:
