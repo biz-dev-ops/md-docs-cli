@@ -1,6 +1,6 @@
 {
   "name": "@biz-dev-ops/md-docs",
-  "version": "1.1.33",
+  "version": "1.1.34",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
