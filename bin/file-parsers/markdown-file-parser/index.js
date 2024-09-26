@@ -10,7 +10,7 @@ const files = require('../../utils/files');
 module.exports = class MarkdownFileParser {
     #definitions = null;
 
-    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, locale, htmlParsers, pageUtil, definitionStore, definitionParser }) {
+    constructor({ options, gitInfo, hosting, markdownRenderer, pageComponent, menu, locale, htmlParsers, pageUtil, definitionStore }) {
         this.options = options;
         this.gitInfo = gitInfo;
         this.hosting = hosting;
@@ -21,7 +21,6 @@ module.exports = class MarkdownFileParser {
         this.htmlParsers = htmlParsers;
         this.pageUtil = pageUtil;
         this.definitionStore = definitionStore;
-        this.definitionParser = definitionParser;
 
         if (!('page' in this.options) ||
             !('headingTemplate' in this.options.page)) {
@@ -51,7 +50,7 @@ module.exports = class MarkdownFileParser {
         const data = await this.#getData(file);
         const markdown = await files.readFileAsString(file);
         const body = await this.renderer.render(mustache.render(markdown, data));
-        const heading = await this.definitionParser.parse(this.headingTemplateRenderer({...data}));
+        const heading = this.headingTemplateRenderer({...data});
        
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.html`, body.outerHTML);
