@@ -6,17 +6,17 @@ module.exports = class BPMNFileParser {
     constructor({ options, sitemap }) {
         this.options = options;
         this.sitemap = sitemap;
-        
+
         const xmlOptions = {
             ignoreAttributes: false,
-            attributeNamePrefix : "@_",
+            attributeNamePrefix: "@_",
             indentBy: "  ",
             format: true,
             suppressBooleanAttributes: false
         };
 
         this.parser = new XMLParser(xmlOptions);
-        this.builder =  new XMLBuilder(xmlOptions);
+        this.builder = new XMLBuilder(xmlOptions);
     }
 
     async parse(file) {
@@ -41,34 +41,34 @@ module.exports = class BPMNFileParser {
     }
 
     async #checkElement(elementName, el) {
-        if(!el?.hasOwnProperty("@_name") || elementName === "bizdevops:link") {
+        if (!el?.hasOwnProperty("@_name") || elementName === "bizdevops:link") {
             return;
         }
-        
+
         const links = await this.#findLinks(el["@_name"]);
 
-        if(links?.length === 0) {
+        if (links?.length === 0) {
             return;
         }
 
-        if(!el.hasOwnProperty("bpmn:extensionElements")) {
+        if (!el.hasOwnProperty("bpmn:extensionElements")) {
             el["bpmn:extensionElements"] = {};
         }
 
         el["bpmn:extensionElements"]["bizdevops:links"] = {
             "bizdevops:link": links.map(link => ({
-                    "@_value": link.url,
-                    "@_name": link.name
+                "@_value": link.url,
+                "@_name": link.name
             }))
         };
     }
 
     async #findLinks(name) {
-        if(!this.sitemapArray) {
+        if (!this.sitemapArray) {
             this.sitemapArray = await this.sitemap.items();
         }
-        
-        return this.sitemapArray.find(name).map(m => ({ 
+
+        return this.sitemapArray.find(name).map(m => ({
             name: m.name,
             url: m.url
         }));
@@ -81,6 +81,10 @@ async function traverseJsonObject(objKey, obj, callback) {
     }
 
     for (const key in obj) {
+        if (key === "bpmn:extensionElements") {
+            return true;
+        }
+
         await callback(Array.isArray(obj) ? objKey : key, obj[key]);
 
         if (typeof obj[key] === 'object') {
