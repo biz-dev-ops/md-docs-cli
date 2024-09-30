@@ -25,7 +25,7 @@ module.exports = class BPMNFileParser {
 
         const xml = await this.#addLinksToBPMN(file);
 
-        await fs.writeFile(file, xml);
+        await fs.writeFile(`${file.slice(0, -5)}.docs.bpmn`, xml);
     }
 
     async #addLinksToBPMN(file) {
@@ -36,7 +36,6 @@ module.exports = class BPMNFileParser {
         xmlObject["bpmn:definitions"]["@_xmlns:bizdevops"] = "https://github.com/biz-dev-ops/web-components/schema/1.0";
 
         await traverseJsonObject(null, xmlObject, this.#checkElement.bind(this));
-
         return this.builder.build(xmlObject);
     }
 
