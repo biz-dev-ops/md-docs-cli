@@ -37,7 +37,7 @@
     "@cucumber/gherkin-streams": "^5.0.1",
     "@iframe-resizer/child": "^5.1.5",
     "@iframe-resizer/parent": "^5.1.5",
-    "awilix": "^11.0.0",
+    "awilix": "^12.0.2",
     "bpmn-js": "^17.0.0",
     "colors": "^1.4.0",
     "dmn-js": "^16.4.0",
