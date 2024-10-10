@@ -50,9 +50,11 @@ module.exports = class BPMNFileParser {
             return;
         }
 
-        if (!el.hasOwnProperty("bpmn:extensionElements")) {
+        if (!el.hasOwnProperty("bpmn:extensionElements") || el["bpmn:extensionElements"] === '') {
             el["bpmn:extensionElements"] = {};
         }
+
+        console.dir({ el, extensionElements: el["bpmn:extensionElements"]})
 
         el["bpmn:extensionElements"]["bizdevops:links"] = {
             "bizdevops:link": links.map(link => ({
