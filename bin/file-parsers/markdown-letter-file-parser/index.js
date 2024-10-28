@@ -100,7 +100,8 @@ module.exports = class MarkdownLetterFileParser {
             locale: await this.locale.get(),
             baseHref: this.pageUtil.relativeBaseHref().replace(/\\/g, "/"),
             root: this.pageUtil.relativeRootFromBaseHref().replace(/\\/g, "/"),
-            title: this.pageUtil.getTitleFromUrl(path.basename(file))
+            title: this.pageUtil.getTitleFromUrl(path.basename(file)),
+            version: this.options.version
         });
 
         data.subject = data.subject ?? {};

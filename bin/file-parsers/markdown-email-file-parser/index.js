@@ -50,7 +50,8 @@ module.exports = class MarkdownEmailFileParser {
             locale: await this.locale.get(),
             baseHref: this.pageUtil.relativeBaseHref(),
             root: this.pageUtil.relativeRootFromBaseHref(),
-            title: this.pageUtil.getTitleFromUrl(path.basename(file))
+            title: this.pageUtil.getTitleFromUrl(path.basename(file)),
+            version: this.options.version
         });
 
         const ymlFile = `${file}.yml`;    

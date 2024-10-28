@@ -4,7 +4,7 @@ html
     base(href=baseHref target='_top')
     meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
     title !{title}
-    link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/letter/style.css')
+    link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/letter/style.css?_v=' + version)
 
     if(data.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
@@ -16,12 +16,12 @@ html
       header.page-header
         .wrapper
           .brand-logo
-            img(src=data.root + 'assets/images/letter/logo.svg' alt=title)
+            img(src=data.root + 'assets/images/letter/logo.svg?_v=' + version, alt=title)
       
       header.page-header.page-header--first
         .wrapper
           .brand-logo
-            img(src=data.root + 'assets/images/letter/logo.svg' alt=title)
+            img(src=data.root + 'assets/images/letter/logo.svg?_v=' + version, alt=title)
           
           .intro
             h1=data.subject.title
@@ -35,10 +35,10 @@ html
           .contact
             | !{data.contact}
           .brand-logo
-            img(src=data.root + 'assets/images/letter/logo.svg' alt=title)
+            img(src=data.root + 'assets/images/letter/logo.svg?_v=' + version, alt=title)
       
       .page-barcode
-        img(src=data.root + 'assets/images/letter/page-id.svg' alt=referenceId)
+        img(src=data.root + 'assets/images/letter/page-id.svg?_v=' + version, alt=referenceId)
       
       .page-attributes
         dl.attribute
