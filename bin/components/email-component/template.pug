@@ -5,7 +5,7 @@ html
     meta(charset='UTF-8')
     title=data.title
     
-    link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/email/style.css')
+    link(rel='stylesheet' type='text/css' href=data.root + 'assets/style/email/style.css?_v=' + version)
 
     if(data.googleFont)
       link(rel='preconnect' href='https://fonts.googleapis.com')
@@ -27,7 +27,7 @@ html
       article
         header
           figure
-            img(src=data.root + 'assets/images/message/logo.svg')
+            img(src=data.root + 'assets/images/message/logo.svg?_v=' + version)
 
         main
           | !{data.message}
@@ -43,4 +43,4 @@ html
               each attachment in data.attachments
                 li=attachment.name
 
-    script(src=data.root + 'assets/iframe-resizer/child/index.umd.js' charset='UTF-8')
+    script(src=data.root + 'assets/iframe-resizer/child/index.umd.js?_v=' + version, charset='UTF-8')

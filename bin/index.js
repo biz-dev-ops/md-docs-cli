@@ -7,6 +7,7 @@ const colors = require('colors');
 const path = require('path');
 const yaml = require('js-yaml');
 const { cwd } = require('process');
+const packageJson = require('../package.json');
 
 const files = require('./utils/files');
 const App = require('./app');
@@ -26,6 +27,7 @@ async function run(o) {
     options.testExecutionLocation = path.resolve(cwd(), `.temp/executions`);
     options.assets = await find(__dirname, 'assets');
     options.nodeModules = await find(__dirname, 'node_modules');
+    options.version = packageJson.version;
 
     const app = new App(options);
     await app.run();

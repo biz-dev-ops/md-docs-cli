@@ -46,6 +46,11 @@
       <bpmn:outgoing>Flow_0qw6evh</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:subProcess id="Activity_16oc5ne" name="h3">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:input source="=1+1" target="dashboard" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1d1sws2</bpmn:incoming>
       <bpmn:outgoing>Flow_02oshra</bpmn:outgoing>
       <bpmn:startEvent id="Event_080kwvy">
