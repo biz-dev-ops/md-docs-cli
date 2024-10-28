@@ -54,8 +54,6 @@ module.exports = class BPMNFileParser {
             el["bpmn:extensionElements"] = {};
         }
 
-        console.dir({ el, extensionElements: el["bpmn:extensionElements"]})
-
         el["bpmn:extensionElements"]["bizdevops:links"] = {
             "bizdevops:link": links.map(link => ({
                 "@_value": link.url,

@@ -78,7 +78,8 @@ module.exports = class MarkdownFileParser {
             gitSourceFile: mustache.render(this.options.git.urlTemplate, { repository: this.gitInfo.branch.repository, branch: this.gitInfo.branch.name, file: path.relative(this.options.dst, file) }),
             options: this.options.page || {},
             menu: menuItems,
-            locale: await this.locale.get()
+            locale: await this.locale.get(),
+            version: this.options.version
         };
 
         return this.component.render(pageData);
