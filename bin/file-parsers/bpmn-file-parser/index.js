@@ -80,14 +80,12 @@ async function traverseJsonObject(objKey, obj, callback) {
     }
 
     for (const key in obj) {
-        if (key === "bpmn:extensionElements") {
-            return true;
-        }
+        if (key !== "bpmn:extensionElements") {
+            await callback(Array.isArray(obj) ? objKey : key, obj[key]);
 
-        await callback(Array.isArray(obj) ? objKey : key, obj[key]);
-
-        if (typeof obj[key] === 'object') {
-            await traverseJsonObject(key, obj[key], callback);
+            if (typeof obj[key] === 'object') {
+                await traverseJsonObject(key, obj[key], callback);
+            }
         }
     }
 }
