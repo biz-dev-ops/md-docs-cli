@@ -54,17 +54,8 @@ module.exports = class YmlFileParser {
         if(json.name)
             return yml;
 
-        json.name = this.#getNameFromFile(file);
+        json.name = this.pageUtil.getTitleFromUrl(file);
         return yaml.dump(json);
-    }
-
-    #getNameFromFile(file) {
-        const name = path.basename(file).split(".")[0];
-        if(name !== "index") {
-            return this.pageUtil.createTitle(name);
-        }
-
-        return this.pageUtil.createTitle(path.basename(path.dirname(file)));
     }
 
     #isLiteralObject = function(a) {

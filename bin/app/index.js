@@ -283,7 +283,7 @@ module.exports = class App {
 
     async #rename(dir) {
         const entries = await fs.readdir(dir, { withFileTypes: true });
-
+        
         for (let entry of entries) {
             if (entry.isDirectory()) {
                 const src = path.resolve(dir, entry.name);

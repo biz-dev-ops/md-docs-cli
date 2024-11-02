@@ -106,7 +106,7 @@ class Sitemap {
     async #getMenuItem(src) {
         await fs.access(src);
         const entries = await fs.readdir(src, { withFileTypes: true });
-        const name = await this.pageUtil.getTitleFromUrl(src);
+        const name = await this.pageUtil.getTitleFromUrl(path.join(src, "index.md"));
 
         const item = {
             type: "page",
