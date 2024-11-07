@@ -38,7 +38,7 @@
     "@iframe-resizer/child": "^5.1.5",
     "@iframe-resizer/parent": "^5.1.5",
     "awilix": "^12.0.2",
-    "bpmn-js": "^17.0.0",
+    "bpmn-js": "^18.0.0",
     "colors": "^1.4.0",
     "dmn-js": "^16.4.0",
     "fast-xml-parser": "^4.4.0",
