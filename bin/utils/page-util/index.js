@@ -29,7 +29,7 @@ module.exports = class PageUtil {
         if(title === "index") {
             const dirname = path.dirname(url);
             if (this.options.dst === dirname) {
-                return "Home";
+                title = "Home";
             }
             else {
                 title = path.basename(dirname);

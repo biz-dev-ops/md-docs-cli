@@ -51,7 +51,7 @@ module.exports = class MarkdownFileParser {
         const markdown = await files.readFileAsString(file);
         const body = await this.renderer.render(mustache.render(markdown, data));
         const heading = this.headingTemplateRenderer({...data});
-       
+        
         if (env.NODE_ENV === 'development')
             await fs.writeFile(`${file}.html`, body.outerHTML);
 
