@@ -1,8 +1,7 @@
 #! /usr/bin/env node
 
-const util = require('util');
 const yargs = require('yargs');
-const figlet = util.promisify(require('figlet'));
+const figlet = require('figlet');
 const colors = require('colors');
 const path = require('path');
 const yaml = require('js-yaml');
