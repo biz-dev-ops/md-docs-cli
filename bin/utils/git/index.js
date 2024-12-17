@@ -8,46 +8,65 @@ exports.info = async function (options) {
     const info = {
         type: options.git.type
     };
-    try {
-        const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
-    
-        console.info(colors.green(`\t* current branch: ${branch}`));
 
-        const repository = await parseGitRepository();
-        const remote = await parseRemoteOrigin();
+    let run = 0;
+    let exception = null;
 
-        const localBranches = (await __exec(`git branch -a`))
-            .split(/\r?\n/)
-            .map(b => b.replace(/\*/g, "").trim());
-                
-        const branches = remote.branches
-            .concat(localBranches.filter(b => !remote.branches.includes(b)))
-            .filter(b =>
-                !b.includes('remotes/') &&
-                !b.includes('HEAD detached') &&
-                (options.args.skip == undefined || !options.args.skip.some(s => b.wildcardTest(s)))
-            )
-            .map(b => ({
-                name: b,
-                repository: repository,
-                mainBranch: remote.mainBranch === b,
-            }))
-            .map(b => Object.assign(b, {
-                path: createPath(b)
-            }))
-            .sort((a, b) => `${a.mainBranch ? 'a' : 'z'}${a.name}`.localeCompare(`${b.mainBranch ? 'a' : 'z'}${b.name}`));
+    do {
+        exception = null;
+        run++;
+        try {
+            const branch = await __exec(`git rev-parse --abbrev-ref HEAD`);
+        
+            console.info(colors.green(`\t* current branch: ${branch}`));
 
-        info.branch = branches.find(b => b.name === branch);
-        if (!info.branch) {
-            console.warn(colors.brightYellow(`\t* branch not found falling back to default branch.`));
-            info.branch = branches.find(b => b.mainBranch === true);
+            const repository = await parseGitRepository();
+            const remote = await parseRemoteOrigin();
+
+            const localBranches = (await __exec(`git branch -a`))
+                .split(/\r?\n/)
+                .map(b => b.replace(/\*/g, "").trim());
+                    
+            const branches = remote.branches
+                .concat(localBranches.filter(b => !remote.branches.includes(b)))
+                .filter(b =>
+                    !b.includes('remotes/') &&
+                    !b.includes('HEAD detached') &&
+                    (options.args.skip == undefined || !options.args.skip.some(s => b.wildcardTest(s)))
+                )
+                .map(b => ({
+                    name: b,
+                    repository: repository,
+                    mainBranch: remote.mainBranch === b,
+                }))
+                .map(b => Object.assign(b, {
+                    path: createPath(b)
+                }))
+                .sort((a, b) => `${a.mainBranch ? 'a' : 'z'}${a.name}`.localeCompare(`${b.mainBranch ? 'a' : 'z'}${b.name}`));
+
+            info.branch = branches.find(b => b.name === branch);
+            if (!info.branch) {
+                console.warn(colors.brightYellow(`\t* branch not found falling back to default branch.`));
+                info.branch = branches.find(b => b.mainBranch === true);
+            }
+            info.branches = branches;
         }
-        info.branches = branches;
+        catch (ex) {
+            exception = ex;
+            console.warn(colors.brightYellow(`\t* git command failed, retry policy is active.`));
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
     }
-    catch (ex) {
-        if (!ex?.message?.includes('fatal: not a git repository')) {
+    while(exception != null && run < 5)
+    
+    if(exception) {
+        if(options.args.failFast) {
+            throw exception;
+        }
+
+        if (!exception?.message?.includes('fatal: not a git repository')) {
             console.warn(colors.brightYellow(`\t* git command failed, falling back to default.`));
-            console.error(colors.brightRed(ex));
+            console.error(colors.brightRed(exception));
         }
         else {
             console.warn(colors.brightYellow(`\t* directory is not a git repository, falling back to default.`));
