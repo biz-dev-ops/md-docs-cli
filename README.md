@@ -144,6 +144,14 @@ You can override all assets files by adding the same files to docs folder:  docs
 md-docs -s branch1 branch2
 ```
 
+### Fail fast
+
+Throws exception and exits the application on the first exception.
+
+```
+md-docs -f
+```
+
 ## To debug
 
 Set the environment to development. All intermediate steps are saved as files in the dist directory.
