@@ -229,7 +229,7 @@ module.exports = class App {
                     {
                         await this.#onFileParseError(file, fileParser, error);
 
-                        if (process.env.NODE_ENV === 'development') {
+                        if (options.args.failFast) {
                             throw (error);
                         }
                     }

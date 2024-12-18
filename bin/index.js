@@ -52,6 +52,7 @@ const options = yargs
     .option("b", { alias: "branches", describe: "Output banches only", type: "boolean", demandOption: false })
     .option("s", { alias: "skip", describe: "Branches to skip", array: true, type: "string", demandOption: false })
     .option("r", { alias: "release", describe: "Create release", type: "boolean", demandOption: false })
+    .option("f", { alias: "failFast", describe: "Throws the error when it occurs which causes the application to quit and fail.", type: "boolean", demandOption: false })
     .argv;
 
 async function createOptions(options) {
