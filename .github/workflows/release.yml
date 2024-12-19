@@ -78,6 +78,7 @@ jobs:
         if: ${{ steps.version.outputs.value != steps.tag_version.outputs.tag }}
         run: |
           npm ci
+          npm shrinkwrap
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}

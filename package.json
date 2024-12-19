@@ -29,7 +29,8 @@
   "homepage": "https://github.com/synionnl/md-docs-cli/blob/main/README.md",
   "files": [
     "assets/",
-    "bin/"
+    "bin/",
+    "npm-shrinkwrap.json"
   ],
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
