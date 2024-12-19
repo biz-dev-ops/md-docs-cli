@@ -1,6 +1,6 @@
 {
   "name": "@biz-dev-ops/md-docs",
-  "version": "1.1.43",
+  "version": "1.1.42",
   "description": "Business driven living documentation static site generator.",
   "keywords": [
     "cli",
@@ -29,8 +29,7 @@
   "homepage": "https://github.com/synionnl/md-docs-cli/blob/main/README.md",
   "files": [
     "assets/",
-    "bin/",
-    "npm-shrinkwrap.json"
+    "bin/"
   ],
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.1.0",
