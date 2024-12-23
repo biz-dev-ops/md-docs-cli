@@ -27,8 +27,8 @@ jobs:
 
       - name: Install
         run: |
+          apt install libgif7
           npm ci
-          npm shrinkwrap
 
       - name: Build
         working-directory: tests
