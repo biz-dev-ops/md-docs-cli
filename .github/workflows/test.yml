@@ -33,4 +33,4 @@ jobs:
       - name: Build
         working-directory: tests
         run: |
-          node ../bin/index.js
+          node ../bin/index.js -f
