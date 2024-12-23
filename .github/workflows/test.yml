@@ -28,9 +28,8 @@ jobs:
       - name: Install
         run: |
           npm ci
-          npm shrinkwrap
 
       - name: Build
         working-directory: tests
         run: |
-          node ../bin/index.js
+          node ../bin/index.js -f
