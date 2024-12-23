@@ -27,7 +27,7 @@ jobs:
 
       - name: Install
         run: |
-          apt install libgif7
+          sudo apt install libgif7
           npm ci
 
       - name: Build
