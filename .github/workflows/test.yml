@@ -33,7 +33,7 @@ jobs:
           # sudo dpkg -i libffi7_3.3-4_amd64.deb
           
           # ldconfig -p |  grep ffi
-          udo apt-get install \
+          sudo apt-get install \
             libxml2 \
             pixman \
             tiff \
