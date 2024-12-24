@@ -28,7 +28,7 @@ jobs:
       - name: Install
         run: |
           npm ci
-          ./node_modules/prince/prince/install.sh
+          sudo ./node_modules/prince/prince/install.sh
 
       - name: Build
         working-directory: tests
