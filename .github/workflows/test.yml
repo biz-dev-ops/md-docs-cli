@@ -27,12 +27,23 @@ jobs:
 
       - name: Install
         run: |
-          ldconfig -p |  grep ffi
+          # ldconfig -p |  grep ffi
           
-          wget http://es.archive.ubuntu.com/ubuntu/pool/main/libf/libffi/libffi7_3.3-4_amd64.deb
-          sudo dpkg -i libffi7_3.3-4_amd64.deb
+          # wget http://es.archive.ubuntu.com/ubuntu/pool/main/libf/libffi/libffi7_3.3-4_amd64.deb
+          # sudo dpkg -i libffi7_3.3-4_amd64.deb
           
-          ldconfig -p |  grep ffi
+          # ldconfig -p |  grep ffi
+          apk add --no-cache \
+            libxml2 \
+            pixman \
+            tiff \
+            giflib \
+            libpng \
+            lcms2 \
+            libjpeg-turbo \
+            fontconfig \
+            freetype \
+            libgomp
 
           npm ci
           
