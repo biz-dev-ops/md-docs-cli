@@ -27,41 +27,45 @@ jobs:
 
       - name: Install PrinceXml
         run: |
-          wget http://archive.ubuntu.com/ubuntu/pool/main/g/giflib/libgif7_5.1.9-2ubuntu0.1_amd64.deb
-          sudo dpkg -i libgif7_5.1.9-2ubuntu0.1_amd64.deb
-          rm libgif7_5.1.9-2ubuntu0.1_amd64.deb
+          sudo add-apt-repository deb http://archive.ubuntu.com/ubuntu
+          sudo apt update
+          sudo apt install giflib libavif
+          
+          # wget http://archive.ubuntu.com/ubuntu/pool/main/g/giflib/libgif7_5.1.9-2ubuntu0.1_amd64.deb
+          # sudo dpkg -i libgif7_5.1.9-2ubuntu0.1_amd64.deb
+          # rm libgif7_5.1.9-2ubuntu0.1_amd64.deb
 
-          wget http://ftp.de.debian.org/debian/pool/main/d/dav1d/libdav1d7_1.5.0-1+b1_amd64.deb
-          sudo dpkg -i libdav1d7_1.5.0-1+b1_amd64.deb
-          rm libdav1d7_1.5.0-1+b1_amd64.deb
+          # wget http://ftp.de.debian.org/debian/pool/main/d/dav1d/libdav1d7_1.5.0-1+b1_amd64.deb
+          # sudo dpkg -i libdav1d7_1.5.0-1+b1_amd64.deb
+          # rm libdav1d7_1.5.0-1+b1_amd64.deb
 
-          wget http://ftp.de.debian.org/debian/pool/main/a/abseil/libabsl20230802_20230802.1-4_amd64.deb
-          sudo dpkg -i libabsl20230802_20230802.1-4_amd64.deb
-          rm libabsl20230802_20230802.1-4_amd64.deb
+          # wget http://ftp.de.debian.org/debian/pool/main/a/abseil/libabsl20230802_20230802.1-4_amd64.deb
+          # sudo dpkg -i libabsl20230802_20230802.1-4_amd64.deb
+          # rm libabsl20230802_20230802.1-4_amd64.deb
 
-          wget http://ftp.de.debian.org/debian/pool/main/libg/libgav1/libgav1-1_0.19.0-2+b2_amd64.deb
-          sudo dpkg -i libgav1-1_0.19.0-2+b2_amd64.deb
-          rm libgav1-1_0.19.0-2+b2_amd64.deb
+          # wget http://ftp.de.debian.org/debian/pool/main/libg/libgav1/libgav1-1_0.19.0-2+b2_amd64.deb
+          # sudo dpkg -i libgav1-1_0.19.0-2+b2_amd64.deb
+          # rm libgav1-1_0.19.0-2+b2_amd64.deb
 
-          wget 	http://archive.ubuntu.com/ubuntu/pool/universe/r/rust-rav1e/librav1e0.7_0.7.1-7_amd64.deb
-          sudo dpkg -i librav1e0.7_0.7.1-7_amd64.deb
-          rm librav1e0.7_0.7.1-7_amd64.deb
+          # wget 	http://archive.ubuntu.com/ubuntu/pool/universe/r/rust-rav1e/librav1e0.7_0.7.1-7_amd64.deb
+          # sudo dpkg -i librav1e0.7_0.7.1-7_amd64.deb
+          # rm librav1e0.7_0.7.1-7_amd64.deb
 
-          wget http://archive.ubuntu.com/ubuntu/pool/universe/s/svt-av1/libsvtav1enc1d1_1.7.0+dfsg-2build1_amd64.deb
-          sudo dpkg -i libsvtav1enc1d1_1.7.0+dfsg-2build1_amd64.deb
-          rm libsvtav1enc1d1_1.7.0+dfsg-2build1_amd64.deb
+          # wget http://archive.ubuntu.com/ubuntu/pool/universe/s/svt-av1/libsvtav1enc1d1_1.7.0+dfsg-2build1_amd64.deb
+          # sudo dpkg -i libsvtav1enc1d1_1.7.0+dfsg-2build1_amd64.deb
+          # rm libsvtav1enc1d1_1.7.0+dfsg-2build1_amd64.deb
 
-          wget http://archive.ubuntu.com/ubuntu/pool/universe/liby/libyuv/libyuv0_0.0~git202401110.af6ac82-1_amd64.deb
-          sudo dpkg -i libyuv0_0.0~git202401110.af6ac82-1_amd64.deb
-          rm libyuv0_0.0~git202401110.af6ac82-1_amd64.deb
+          # wget http://archive.ubuntu.com/ubuntu/pool/universe/liby/libyuv/libyuv0_0.0~git202401110.af6ac82-1_amd64.deb
+          # sudo dpkg -i libyuv0_0.0~git202401110.af6ac82-1_amd64.deb
+          # rm libyuv0_0.0~git202401110.af6ac82-1_amd64.deb
 
-          wget http://archive.ubuntu.com/ubuntu/pool/universe/liba/libavif/libavif16_1.0.4-1ubuntu3_amd64.deb
-          sudo dpkg -i libavif16_1.0.4-1ubuntu3_amd64.deb
-          rm ibavif16_1.0.4-1ubuntu3_amd64.deb
+          # wget http://archive.ubuntu.com/ubuntu/pool/universe/liba/libavif/libavif16_1.0.4-1ubuntu3_amd64.deb
+          # sudo dpkg -i libavif16_1.0.4-1ubuntu3_amd64.deb
+          # rm ibavif16_1.0.4-1ubuntu3_amd64.deb
 
-          wget https://www.princexml.com/download/prince_20241206-1_ubuntu24.04_amd64.deb
-          sudo dpkg -i prince_20241206-1_ubuntu24.04_amd64.deb
-          rm prince_20241206-1_ubuntu24.04_amd64.deb
+          # wget https://www.princexml.com/download/prince_20241206-1_ubuntu24.04_amd64.deb
+          # sudo dpkg -i prince_20241206-1_ubuntu24.04_amd64.deb
+          # rm prince_20241206-1_ubuntu24.04_amd64.deb
 
       - name: Install md-docs
         run: |
