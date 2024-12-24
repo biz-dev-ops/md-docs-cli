@@ -27,14 +27,17 @@ jobs:
 
       - name: Install PrinceXml
         run: |
-          wget http://archive.ubuntu.com/ubuntu/pool/universe/liba/libavif/libavif16_1.0.4-1ubuntu3_amd64.deb
-          sudo dpkg -i libavif16_1.0.4-1ubuntu3_amd64.deb
-
           wget http://archive.ubuntu.com/ubuntu/pool/main/g/giflib/libgif7_5.1.9-2ubuntu0.1_amd64.deb
           sudo dpkg -i libgif7_5.1.9-2ubuntu0.1_amd64.deb
-          
+          rm libgif7_5.1.9-2ubuntu0.1_amd64.deb
+
+          wget http://archive.ubuntu.com/ubuntu/pool/universe/liba/libavif/libavif16_1.0.4-1ubuntu3_amd64.deb
+          sudo dpkg -i libavif16_1.0.4-1ubuntu3_amd64.deb
+          rm ibavif16_1.0.4-1ubuntu3_amd64.deb
+
           wget https://www.princexml.com/download/prince_20241206-1_ubuntu24.04_amd64.deb
           sudo dpkg -i prince_20241206-1_ubuntu24.04_amd64.deb
+          rm prince_20241206-1_ubuntu24.04_amd64.deb
 
       - name: Install md-docs
         run: |
