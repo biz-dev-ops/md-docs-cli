@@ -35,6 +35,10 @@ jobs:
           sudo dpkg -i libdav1d7_1.5.0-1+b1_amd64.deb
           rm libdav1d7_1.5.0-1+b1_amd64.deb
 
+          wget http://ftp.de.debian.org/debian/pool/main/a/abseil/libabsl20230802_20230802.1-4_amd64.deb
+          sudo dpkg -i libabsl20230802_20230802.1-4_amd64.deb
+          rm libabsl20230802_20230802.1-4_amd64.deb
+
           wget http://ftp.de.debian.org/debian/pool/main/libg/libgav1/libgav1-1_0.19.0-2+b2_amd64.deb
           sudo dpkg -i libgav1-1_0.19.0-2+b2_amd64.deb
           rm libgav1-1_0.19.0-2+b2_amd64.deb
