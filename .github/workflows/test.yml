@@ -19,7 +19,7 @@ jobs:
 
       - name: Install PrinceXml
         run: |
-          sudo add-apt-repository deb http://archive.ubuntu.com/ubuntu
+          sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu focal multiverse'
           sudo apt update
           sudo apt install giflib libavif
           
