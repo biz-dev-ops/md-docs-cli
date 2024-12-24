@@ -27,12 +27,8 @@ jobs:
 
       - name: Install
         run: |
-          ldconfig -p |  grep prince
-          
           wget https://www.princexml.com/download/prince_20241206-1_ubuntu24.04_amd64.deb
           sudo dpkg -i prince_20241206-1_ubuntu24.04_amd64.deb
-          
-          ldconfig -p |  grep prince
 
           npm ci
           
