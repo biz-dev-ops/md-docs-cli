@@ -55,13 +55,17 @@ jobs:
           sudo dpkg -i libyuv0_0.0~git202401110.af6ac82-1_amd64.deb
           rm libyuv0_0.0~git202401110.af6ac82-1_amd64.deb
 
+          wget http://ftp.de.debian.org/debian/pool/main/r/rust-rav1e/librav1e0.7_0.7.1-7+b3_amd64.deb
+          sudo dpkg -i librav1e0.7_0.7.1-7+b3_amd64.deb
+          rm librav1e0.7_0.7.1-7+b3_amd64.deb
+
           wget http://archive.ubuntu.com/ubuntu/pool/universe/liba/libavif/libavif16_1.0.4-1ubuntu3_amd64.deb
           sudo dpkg -i libavif16_1.0.4-1ubuntu3_amd64.deb
           rm ibavif16_1.0.4-1ubuntu3_amd64.deb
 
-      #     wget https://www.princexml.com/download/prince_20241206-1_ubuntu24.04_amd64.deb
-      #     sudo dpkg -i prince_20241206-1_ubuntu24.04_amd64.deb
-      #     rm prince_20241206-1_ubuntu24.04_amd64.deb
+          wget https://www.princexml.com/download/prince_20241206-1_ubuntu24.04_amd64.deb
+          sudo dpkg -i prince_20241206-1_ubuntu24.04_amd64.deb
+          rm prince_20241206-1_ubuntu24.04_amd64.deb
 
       - name: Install md-docs
         run: |
