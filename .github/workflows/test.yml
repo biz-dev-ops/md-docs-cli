@@ -33,7 +33,7 @@ jobs:
           # sudo dpkg -i libffi7_3.3-4_amd64.deb
           
           # ldconfig -p |  grep ffi
-          apt install --no-cache \
+          udo apt-get install \
             libxml2 \
             pixman \
             tiff \
@@ -44,10 +44,6 @@ jobs:
             fontconfig \
             freetype \
             libgomp
-
-          apt install --no-cache add msttcorefonts-installer fontconfig && \
-            update-ms-fonts && \
-            fc-cache -f
 
           npm ci
           
