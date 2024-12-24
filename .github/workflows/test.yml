@@ -27,8 +27,8 @@ jobs:
 
       - name: Install
         run: |
-          sudo apt install libgif7
-          npm ci
+          npm ci --loglevel verbose
+          ls -R node_modules/prince/
 
       - name: Build
         working-directory: tests
