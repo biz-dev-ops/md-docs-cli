@@ -27,24 +27,12 @@ jobs:
 
       - name: Install
         run: |
-          # ldconfig -p |  grep ffi
+          ldconfig -p |  grep prince
           
-          # wget http://es.archive.ubuntu.com/ubuntu/pool/main/libf/libffi/libffi7_3.3-4_amd64.deb
-          # sudo dpkg -i libffi7_3.3-4_amd64.deb
+          wget https://www.princexml.com/download/prince_20241206-1_ubuntu24.04_amd64.deb
+          sudo dpkg -i prince_20241206-1_ubuntu24.04_amd64.deb
           
-          # ldconfig -p |  grep ffi
-          sudo apt-get update
-          sudo apt-get install \
-            libxml2 \
-            pixman \
-            tiff \
-            giflib \
-            libpng \
-            lcms2 \
-            libjpeg-turbo \
-            fontconfig \
-            freetype \
-            libgomp
+          ldconfig -p |  grep prince
 
           npm ci
           
