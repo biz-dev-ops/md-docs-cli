@@ -27,8 +27,15 @@ jobs:
 
       - name: Install
         run: |
+          ldconfig -p |  grep ffi
+          
+          wget http://es.archive.ubuntu.com/ubuntu/pool/main/libf/libffi/libffi7_3.3-4_amd64.deb
+          sudo dpkg -i libffi7_3.3-4_amd64.deb
+          
+          ldconfig -p |  grep ffi
+
           npm ci
-          sudo ./node_modules/prince/prince/install.sh
+          
 
       - name: Build
         working-directory: tests
