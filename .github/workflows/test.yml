@@ -9,7 +9,7 @@ jobs:
   
   build:
     
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: github.event.pull_request.merged == false
     timeout-minutes: 5
   
@@ -27,9 +27,7 @@ jobs:
 
       - name: Install
         run: |
-          sudo apt-get install libffi7
-          npm ci --loglevel verbose
-          ls -R node_modules/prince/
+          npm ci
 
       - name: Build
         working-directory: tests
