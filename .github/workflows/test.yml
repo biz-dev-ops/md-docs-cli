@@ -17,8 +17,10 @@ jobs:
       
       - uses: actions/checkout@v2
 
-      # - name: Install PrinceXml
-      #   run: |
+      - name: Install PrinceXml
+        run: |
+          apt install libgif7
+          
       #     # sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu noble multiverse'
       #     # sudo add-apt-repository 'deb http://ftp.de.debian.org/debian noble multiverse'
       #     # sudo apt update
