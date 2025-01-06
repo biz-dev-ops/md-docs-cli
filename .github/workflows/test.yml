@@ -19,8 +19,8 @@ jobs:
 
       - name: Install PrinceXml
         run: |
-          apt install libgif7
-          
+          sudo apt-get install libgif7
+
       #     # sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu noble multiverse'
       #     # sudo add-apt-repository 'deb http://ftp.de.debian.org/debian noble multiverse'
       #     # sudo apt update
