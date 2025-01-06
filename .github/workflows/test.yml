@@ -19,10 +19,13 @@ jobs:
 
       - name: Install PrinceXml
         run: |
-          sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu noble multiverse'
-          sudo add-apt-repository 'deb http://ftp.de.debian.org/debian noble multiverse'
-          sudo apt update
-          sudo apt install giflib libavif
+          apk --no-cache add msttcorefonts-installer fontconfig && update-ms-fonts && fc-cache -f 
+          apk add graphviz libxkbcommon mesa-gbm
+
+          # sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu noble multiverse'
+          # sudo add-apt-repository 'deb http://ftp.de.debian.org/debian noble multiverse'
+          # sudo apt update
+          # sudo apt install giflib libavif
           
           # wget http://archive.ubuntu.com/ubuntu/pool/main/g/giflib/libgif7_5.1.9-2ubuntu0.1_amd64.deb
           # sudo dpkg -i libgif7_5.1.9-2ubuntu0.1_amd64.deb
@@ -59,20 +62,19 @@ jobs:
           # wget https://www.princexml.com/download/prince_20241206-1_ubuntu24.04_amd64.deb
           # sudo dpkg -i prince_20241206-1_ubuntu24.04_amd64.deb
           # rm prince_20241206-1_ubuntu24.04_amd64.deb
-        
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v1
+
+      # - name: Setup Graphviz
+      #   uses: ts-graphviz/setup-graphviz@v1
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20.x'
 
-      
-
       - name: Install md-docs
         run: |
-          npm ci       
+          npm i @biz-dev-ops/md-docs@latest
+          node node_modules/@biz-dev-ops/md-docs/node_modules/prince/prince-npm.js install
 
       - name: Build
         working-directory: tests
