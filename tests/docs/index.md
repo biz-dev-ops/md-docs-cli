@@ -17,6 +17,10 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 * [business reference architecture](./business-reference-architecture.yml)
 * [dynamic](./dynamic.business-reference-architecture.yml)
 
+## Decision model
+
+[dmn](test.dmn)
+
 ## Model
 
 [model](test.model.yml)

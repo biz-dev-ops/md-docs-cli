@@ -131,10 +131,6 @@ body[data-fullscreen-active="true"] {
     height: auto !important;
 }
 
-[data-fullscreen="true"] bpmn-viewer {
-    height: 100% !important;
-}
-
 [data-fullscreen="true"] svg {
     max-width: none;
 }
