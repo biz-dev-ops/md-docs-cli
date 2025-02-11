@@ -6,7 +6,7 @@ const files = require('../../utils/files')
 const HtmlParser = require('../html-parser');
 
 module.exports = class ImageHtmlParser extends HtmlParser {
-    constructor({ imageComponent }) { 
+    constructor({ imageComponent }) {
         super();
 
         this.component = imageComponent;
@@ -28,7 +28,7 @@ module.exports = class ImageHtmlParser extends HtmlParser {
         console.info(colors.green(`\t* parsing ${elements.length} image or svg elements:`));
 
         for (let element of elements) {
-            console.info(colors.green(`\t\t* parsing ${element.nodeName}`));            
+            console.info(colors.green(`\t\t* parsing ${element.nodeName}`));
 
             if (element.parentNode.nodeName === 'A') {
                 const parent = element.parentNode;
@@ -62,9 +62,9 @@ module.exports = class ImageHtmlParser extends HtmlParser {
         console.info(colors.green(`\t* parsing ${elements.length} embed elements:`));
 
         for (let element of elements) {
-            console.info(colors.green(`\t\t* parsing ${element.nodeName}`));            
+            console.info(colors.green(`\t\t* parsing ${element.nodeName}`));
 
-            const svg = await files.readFileAsString(path.resolve(cwd(), element.src));
+            const svg = await files.readFileAsString(path.resolve(cwd(), element.src.split("?")[0]));
 
             const html = this.component.render({
                 html: svg,
@@ -77,7 +77,7 @@ module.exports = class ImageHtmlParser extends HtmlParser {
 
     #getAlign (element) {
         const url = new URL(`https://example.org/${element.getAttribute('src')}`);
-    
+
         const align = url.searchParams.get('align');
         return align;
     }
