@@ -64,9 +64,6 @@ module.exports = class ImageHtmlParser extends HtmlParser {
         for (let element of elements) {
             console.info(colors.green(`\t\t* parsing ${element.nodeName}`));
 
-            console.log(element.src);
-            console.log(element.src.split("?")[0]);
-
             const svg = await files.readFileAsString(path.resolve(cwd(), element.src.split("?")[0]));
 
             const html = this.component.render({
