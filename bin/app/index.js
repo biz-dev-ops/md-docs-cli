@@ -699,5 +699,3 @@ function disbableLog() {
 
     process.stdout.write("\nLogging is disabled. To enable logging set NODE_ENV to development or debug: export NODE_ENV=debug\n\n");
 }
-
-function sleep( ms ) { return new Promise( resolve => setTimeout( resolve, ms ) ); }
