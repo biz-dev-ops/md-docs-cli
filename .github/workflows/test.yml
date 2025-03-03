@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo apt-get install libgif7
           sudo apt-get install libavif16
-          node node_modules/@biz-dev-ops/md-docs/node_modules/prince/prince-npm.js install
+          node ./node_modules/prince/prince-npm.js install
 
       - name: Build
         working-directory: tests
