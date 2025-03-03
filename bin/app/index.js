@@ -289,18 +289,27 @@ module.exports = class App {
                 const dst = path.resolve(dir, entry.name.replace(/(\d+[_])/ig, ''));
                 
                 if (src != dst) {
+                    console.info(colors.green(`\tcopying ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
+                    await fs.cp(src, dst, {recursive: true});
+
                     for (let attempt = 0; attempt < 10; ++attempt) {
                         if (attempt > 0) {
                             await sleep(2000);
                         }
                         try {
-                            console.info(colors.green(`\trenaming ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
-                            await fs.rename(src, dst);
+                            console.info(colors.green(`\tdeleting ${path.relative(dir, src)}`));
+                            await fs.rm(src, { recursive: true, force: true });
+                            //await fs.unlink(src);
                             break;
                         } 
                         catch(e) {
-                            console.info(colors.red(`\terror renaming ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
-                            console.dir(e);
+                            if(attempt < 9) {
+                                console.info(colors.red(`\terror deleting ${path.relative(dir, src)}`));
+                                console.dir(e);
+                            }
+                            else {
+                                throw e;
+                            }
                         }
                     }
                 }
