@@ -27,7 +27,7 @@ jobs:
 
       - name: Install md-docs
         run: |
-          npm i @biz-dev-ops/md-docs@latest
+          npm i
 
       - name: Install PrinceXml
         run: |
