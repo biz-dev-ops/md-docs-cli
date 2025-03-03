@@ -289,8 +289,20 @@ module.exports = class App {
                 const dst = path.resolve(dir, entry.name.replace(/(\d+[_])/ig, ''));
                 
                 if (src != dst) {
-                    console.info(colors.green(`\trenaming ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
-                    await fs.rename(src, dst);
+                    for (let attempt = 0; attempt < 10; ++attempt) {
+                        if (attempt > 0) {
+                            await sleep(2000);
+                        }
+                        try {
+                            console.info(colors.green(`\trenaming ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
+                            await fs.rename(src, dst);
+                            break;
+                        } 
+                        catch(e) {
+                            console.info(colors.red(`\terror renaming ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
+                            console.dir(e);
+                        }
+                    }
                 }
                 await this.#rename(dst);
             }
@@ -696,3 +708,5 @@ function disbableLog() {
 
     process.stdout.write("\nLogging is disabled. To enable logging set NODE_ENV to development or debug: export NODE_ENV=debug\n\n");
 }
+
+function sleep( ms ) { return new Promise( resolve => setTimeout( resolve, ms ) ); }
