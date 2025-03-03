@@ -290,10 +290,10 @@ module.exports = class App {
                 
                 if (src != dst) {
                     console.info(colors.green(`\tcopying ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
-                    await fs.cp(src, dst, {recursive: true});
+                    await fs.cp(src, dst, { recursive: true });
 
                     console.info(colors.green(`\tdeleting ${path.relative(dir, src)}`));
-                    await fs.rm(src, { recursive: true, force: true });
+                    await fs.rm(src, { recursive: true, force: true, maxRetries: 10 });
                 }
                 await this.#rename(dst);
             }
