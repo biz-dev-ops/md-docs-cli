@@ -292,26 +292,8 @@ module.exports = class App {
                     console.info(colors.green(`\tcopying ${path.relative(dir, src)} => ${path.relative(dir, dst)}`));
                     await fs.cp(src, dst, {recursive: true});
 
-                    for (let attempt = 0; attempt < 10; ++attempt) {
-                        if (attempt > 0) {
-                            await sleep(2000);
-                        }
-                        try {
-                            console.info(colors.green(`\tdeleting ${path.relative(dir, src)}`));
-                            await fs.rm(src, { recursive: true, force: true });
-                            //await fs.unlink(src);
-                            break;
-                        } 
-                        catch(e) {
-                            if(attempt < 9) {
-                                console.info(colors.red(`\terror deleting ${path.relative(dir, src)}`));
-                                console.dir(e);
-                            }
-                            else {
-                                throw e;
-                            }
-                        }
-                    }
+                    console.info(colors.green(`\tdeleting ${path.relative(dir, src)}`));
+                    await fs.rm(src, { recursive: true, force: true });
                 }
                 await this.#rename(dst);
             }
