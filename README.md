@@ -118,6 +118,12 @@ md-docs depends on java to render UML diagrams. Make sure that the java is insta
 
 PrinceXML is used to transform letter specifications in markdown into PDF files. It uses the latest official build. If you want to use a different PrinceXML version, just install it and make sure that the prince executable path is your PATH environment variable.
 
+```bash
+export NODE_TLS_REJECT_UNAUTHORIZED=0
+node ./node_modules/prince/prince-npm.js install
+```
+
+
 ## Options
 
 ### Create release
