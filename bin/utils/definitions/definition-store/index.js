@@ -21,8 +21,6 @@ module.exports = class DefinitionStore {
         if (this.#data != null)
             return this.#data;
 
-        console.info();
-
         const pages = await this.sitemap.items();
         this.#data = [];
 
@@ -45,7 +43,7 @@ module.exports = class DefinitionStore {
                     target.push(item);
                 else
                     target[index] = item;
-                
+
                 return target;
             }, [])
 
@@ -53,20 +51,20 @@ module.exports = class DefinitionStore {
                 pages
                     .find(page => page.type === "page" && page.meta?.description)
                     .map(page => ({
-                        name: page.name.toLowerCase(),
-                        text: page.meta.description,
-                        alias: page.alias,
+                        name: page.meta?.name?.toLowerCase() || page.name.toLowerCase(),
+                        text: page.meta?.description,
+                        alias: page.meta?.alias,
                         link: page.url
                     }))
             )
             .flatMap(definition => {
                 const aliasses = [ definition.name ];
-                
+
                 if (definition.alias) {
                     aliasses.push(...definition.alias);
                 }
 
-                return aliasses.map(alias => { 
+                return aliasses.map(alias => {
                     const newDef = Object.assign({}, definition, {name: alias});
                     delete newDef.alias;
                     return newDef;
@@ -99,7 +97,7 @@ module.exports = class DefinitionStore {
                 return definition;
             }
         }
-        
+
         definition.link = pages.findFirst(definition.name)?.url;
         if(!definition.link) {
             delete definition.link;
