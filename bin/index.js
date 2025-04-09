@@ -43,7 +43,7 @@ async function find(src, folder, index = 0) {
     if (await files.exists(directory)) {
         return directory;
     }
-    
+
     return await find(path.resolve(src, '..'), folder, index++);
 }
 
@@ -57,12 +57,16 @@ const options = yargs
 
 async function createOptions(options) {
     var file = path.resolve(cwd(), `options.yml`);
+
+    if (!await files.exists(file))
+        file = path.resolve(cwd(), `docs/options.yml`);
+
     if (!await files.exists(file))
         return options;
-    
+
     const content = await files.readFileAsString(file);
     const json = yaml.load(content);
-    
+
     return {
         ...{ args: options },
         ...json
