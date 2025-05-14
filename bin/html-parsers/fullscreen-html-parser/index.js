@@ -3,15 +3,17 @@ const colors = require('colors');
 const HtmlParser = require('../html-parser');
 
 module.exports = class FullscreenHtmlParser extends HtmlParser {
-    constructor({ fullscreenComponent }) { 
+    constructor({ fullscreenComponent }) {
         super();
 
         this.component = fullscreenComponent
     }
 
     async parse(element) {
-        Array.from(element.querySelectorAll('code')).forEach(e => e.parentNode.setAttribute('data-fullscreen', 'fullscreen'));
-        
+        Array.from(element.querySelectorAll('code'))
+            .filter(e => !hasListAncestor(e))
+            .forEach(e => e.parentNode.setAttribute('data-fullscreen', 'fullscreen'));
+
         const elements = element.querySelectorAll('[data-fullscreen]');
 
         if (elements.length === 0) {
@@ -28,8 +30,21 @@ module.exports = class FullscreenHtmlParser extends HtmlParser {
             const html = this.component.render({
                 html: element.outerHTML
             });
-            
+
             this._replace(element, html);
         }
     }
 }
+
+function hasListAncestor(element) {
+    let currentAncestor = element.parentNode;
+
+    while (currentAncestor) {
+      if (currentAncestor.tagName === 'LI') {
+        return true;
+      }
+      currentAncestor = currentAncestor.parentNode;
+    }
+
+    return false;
+  }
