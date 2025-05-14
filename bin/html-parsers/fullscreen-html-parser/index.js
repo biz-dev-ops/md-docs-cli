@@ -11,7 +11,7 @@ module.exports = class FullscreenHtmlParser extends HtmlParser {
 
     async parse(element) {
         Array.from(element.querySelectorAll('code'))
-            .filter(e => !hasListAncestor(e))
+            .filter(e => !hasParagraphAncestor(e))
             .forEach(e => e.parentNode.setAttribute('data-fullscreen', 'fullscreen'));
 
         const elements = element.querySelectorAll('[data-fullscreen]');
@@ -36,11 +36,11 @@ module.exports = class FullscreenHtmlParser extends HtmlParser {
     }
 }
 
-function hasListAncestor(element) {
+function hasParagraphAncestor(element) {
     let currentAncestor = element.parentNode;
 
     while (currentAncestor) {
-      if (currentAncestor.tagName === 'LI') {
+      if (currentAncestor.tagName === 'P') {
         return true;
       }
       currentAncestor = currentAncestor.parentNode;
